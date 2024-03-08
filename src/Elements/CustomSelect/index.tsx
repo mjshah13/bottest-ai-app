@@ -41,9 +41,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     <>
       <Select
         optionLabelProp="label"
-        style={{
-          width: 210,
-        }}
+        className="w-full"
         onSelect={onSelectChange}
         onChange={onChange}
         dropdownRender={(menu) => (
@@ -84,7 +82,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 style={{ color: "#E1654A" }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDeleteOption(task.value);
+                  // onDeleteOption(task.value);
                 }}
               />
             </span>
