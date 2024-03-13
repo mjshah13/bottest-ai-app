@@ -1,7 +1,6 @@
 "use client";
-
-import React from "react";
-import { Fragment, useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -12,18 +11,41 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  { name: "Analytics", href: "/analytics", icon: UsersIcon, current: false },
+interface NavigationItem {
+  name: string;
+  href: string;
+  icon: React.ElementType;
+  current: boolean;
+}
+
+interface ServiceItem {
+  id: number;
+  name: string;
+  href: string;
+  icon: React.ElementType;
+  current: boolean;
+}
+
+const navigation: NavigationItem[] = [
+  { name: "Dashboard", href: "/app/dashboard", icon: HomeIcon, current: true },
+  {
+    name: "Analytics",
+    href: "/app/analytics",
+    icon: UsersIcon,
+    current: false,
+  },
   {
     name: "Organization",
-    href: "/organization",
+    href: "/app/organization",
     icon: FolderIcon,
     current: false,
   },
 ];
-const services = [
+
+const services: ServiceItem[] = [
   { id: 1, name: "Help", href: "#", icon: HomeIcon, current: false },
   { id: 2, name: "Documentation", href: "#", icon: UsersIcon, current: false },
 ];
@@ -37,9 +59,15 @@ const Sidenav = ({ children }: { children: any }) => {
   const pathname = usePathname();
   const [active, setActive] = useState(pathname); // Initialize with the active item
 
-  const handleNavigationClick = (item: any) => {
-    setActive(item?.href);
+  const handleNavigationClick = (item: NavigationItem) => {
+    setActive(item.href);
   };
+
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
 
   return (
     <div>
@@ -109,28 +137,27 @@ const Sidenav = ({ children }: { children: any }) => {
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
-                            <li key={item.name}>
-                              <Link
-                                href={item.href}
+                            <Link
+                              onClick={() => handleNavigationClick(item)}
+                              href={item.href}
+                              className={classNames(
+                                item?.href === active
+                                  ? "text-secondary bg-primary font-normal"
+                                  : "text-black hover:text-black hover:bg-lightgray",
+                                "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 "
+                              )}
+                            >
+                              <item.icon
                                 className={classNames(
-                                  item?.href === active
-                                    ? "text-secondary bg-primary font-normal"
-                                    : "text-black hover:text-black hover:bg-lightgray",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm  "
+                                  // isActive === item?.href
+                                  //   ? "text-[#314F8F]"
+                                  //   : "text-white group-hover:text-[#212427]",
+                                  "h-6 w-6 shrink-0"
                                 )}
-                              >
-                                <item.icon
-                                  className={classNames(
-                                    // isActive === item?.href
-                                    //   ? "text-[#314F8F]"
-                                    //   : "text-white group-hover:text-[#212427]",
-                                    "h-6 w-6 shrink-0"
-                                  )}
-                                  aria-hidden="true"
-                                />
-                                {item.name}
-                              </Link>
-                            </li>
+                                aria-hidden="true"
+                              />
+                              {item.name}
+                            </Link>
                           ))}
                         </ul>
                       </li>
@@ -138,9 +165,11 @@ const Sidenav = ({ children }: { children: any }) => {
                         <div className="text-xs font-semibold leading-6 text-gray-400">
                           Your teams
                         </div>
+
                         <ul role="list" className="-mx-2 mt-2 space-y-1">
                           {services?.map((item) => (
                             <Link
+                           
                               href={item.href}
                               className={classNames(
                                 item?.href === active
@@ -174,7 +203,6 @@ const Sidenav = ({ children }: { children: any }) => {
 
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col ">
-        {/* Sidebar component, swap this element with another sidebar if you like */}
         <div
           className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white px-4"
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
@@ -216,7 +244,10 @@ const Sidenav = ({ children }: { children: any }) => {
                 </ul>
               </div>
               <div className="">
-                <ul role="list" className=" py-4 space-y-1 border-b-2 border-[#f0f0f0]">
+                <ul
+                  role="list"
+                  className=" py-4 space-y-1 border-b-2 border-[#f0f0f0]"
+                >
                   {services.map((item) => (
                     <Link
                       href={item.href}
@@ -241,24 +272,13 @@ const Sidenav = ({ children }: { children: any }) => {
                   ))}
                 </ul>
 
-                <div className="my-4 ">
-                <a
-                  href="#"
-                  className="flex items-center gap-x-4  py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
-                >
-                  <img
-                    className="h-8 w-8 rounded-full bg-gray-50"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <span className="sr-only">Your profile</span>
-                  <h1 className="font-normal text-black font-poppin" >Hady Hayman</h1>
-                </a>
+                <div className="my-4 flex items-center gap-4">
+                  <UserButton afterSignOutUrl="/sign-in" />
+                  <h3 className="font-normal text-black font-poppin">
+                    {user.username}
+                  </h3>
+                </div>
               </div>
-               
-              </div>
-             
-             
             </div>
           </nav>
         </div>
@@ -276,18 +296,14 @@ const Sidenav = ({ children }: { children: any }) => {
         <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
           Dashboard
         </div>
-        <a href="#">
-          <span className="sr-only">Your profile</span>
-          <img
-            className="h-8 w-8 rounded-full bg-gray-50"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-        </a>
+        <UserButton afterSignOutUrl="/sign-in" />
       </div>
 
-      <main className="py-10 lg:pl-72">
-        <div className="px-4 sm:px-6 lg:px-8">{children}</div>
+      <main className=" relative py-12 lg:pl-64 ">
+        <div className="absolute right-2 top-2">
+          <OrganizationSwitcher />
+        </div>
+        <div className=" px-4 sm:px-6 lg:px-7  h-full">{children}</div>
       </main>
     </div>
   );

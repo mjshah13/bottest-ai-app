@@ -28,10 +28,10 @@ const CustomInput: React.FC<InputProps> = ({
     };
 
     return (
-        <div className="mb-1">
+        <div >
             {label && <label className="block font-poppins font-[300] mb-2 text-base">{label}</label>}
             <Input
-                  className={`w-full  px-3  border rounded-md focus:outline-none text-[#212427] focus:ring-none focus:shadow-none focus:border   !important ${type === 'number' && '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !important'}`}
+                  className={`w-full px-3 py-1.5  border rounded-md focus:outline-none text-[#212427] focus:ring-none focus:shadow-none focus:border   !important ${type === 'number' && '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !important'}`}
 
                 type={type === "password" ? inputType : type}
                 placeholder={placeholder}
