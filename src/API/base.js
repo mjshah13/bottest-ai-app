@@ -16,10 +16,9 @@ const onError = async (error) => {
 };
 const request = async (options, isAuth, isMultipart) => {
   let baseURL = ROOT_API_URL;
-  const token = getCookie("accesstoken");
+  const token = getCookie("clerk-db-jwt");
 
-  // console.log(token , 'accesstoken')
-
+  
 
   let headers = {};
 

@@ -3,8 +3,7 @@
 import CustomSelect from "@/Elements/CustomSelect";
 import React, { useState } from "react";
 import { BaseService } from "../../../API/base";
-import { useAuth, useUser } from "@clerk/nextjs";
-import { setCookie } from "@/Utils/StorageVariables";
+import { useUser } from "@clerk/nextjs";
 import CustomButton from "@/Elements/Button";
 import { ReloadOutlined } from "@ant-design/icons";
 import CustomInput from "@/Elements/Input";
@@ -24,37 +23,24 @@ interface UserResource {
 }
 
 const Dashboard = (props: DashboardProps) => {
-  // const { getToken } = useAuth(); // Call useAuth hook inside a React component
+  const { isLoaded, isSignedIn, user } = useUser();
 
-  // const fetchDataFromExternalResource = async () => {
-  //   const token = await getToken();
-  //   setCookie("accesstoken", token);
-  // };
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
 
-  // useEffect(() => {
-  //   fetchDataFromExternalResource();
-  // }, []);
+  const Userbot = async (user: UserResource) => {
+    try {
+      const response = await BaseService.get(`/v1/users/${user?.id}/bots`);
+      if (response?.status === 200) {
+       
+      }
+    } catch (error) {
+      console.error({ error });
+    }
+  };
 
-  // const { isLoaded, isSignedIn, user } = useUser();
-
-  // if (!isLoaded || !isSignedIn) {
-  //   return null;
-  // }
-
-  // const Userbot = async (user: UserResource) => {
-  //   try {
-  //     const response = await BaseService.get(`/v1/users/${user?.id}/bots`);
-  //     if (response?.status === 200) {
-  //       // Do something with the response if needed
-  //     }
-  //   } catch (error) {
-  //     console.error({ error });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (isSignedIn) Userbot(user);
-  // }, []);
+  // Userbot(user);
 
   const initialBotsData = [
     {
@@ -64,7 +50,18 @@ const Dashboard = (props: DashboardProps) => {
       lastRunText: "Last 10 runs",
       progress: "Running",
       progressResult: "Test in progress",
-      statuses: ["success", "failed", "success", "failed", "failed" , "success" , "success" ,"failed", "success", "success" ],
+      statuses: [
+        "success",
+        "failed",
+        "success",
+        "failed",
+        "failed",
+        "success",
+        "success",
+        "failed",
+        "success",
+        "success",
+      ],
       isDisabledtestResult: false,
       svg: (
         <svg
@@ -89,7 +86,18 @@ const Dashboard = (props: DashboardProps) => {
       lastRunText: "Last 10 runs",
       progress: "Pass",
       progressResult: "View full result",
-      statuses: ["success", "failed", "success", "failed", "failed" , "success" , "success" ,"failed", "success", "success" ],
+      statuses: [
+        "success",
+        "failed",
+        "success",
+        "failed",
+        "failed",
+        "success",
+        "success",
+        "failed",
+        "success",
+        "success",
+      ],
       isDisabledtestResult: true,
       svg: (
         <svg
@@ -118,7 +126,18 @@ const Dashboard = (props: DashboardProps) => {
       progress: "Fail",
       progressResult: "View full result",
       isDisabledtestResult: false,
-      statuses: ["success", "failed", "success", "failed", "failed" , "success" , "success" ,"failed", "success", "success" ],
+      statuses: [
+        "success",
+        "failed",
+        "success",
+        "failed",
+        "failed",
+        "success",
+        "success",
+        "failed",
+        "success",
+        "success",
+      ],
       svg: (
         <svg
           width="24"
@@ -405,7 +424,7 @@ const Dashboard = (props: DashboardProps) => {
               {Botsdata?.map((item) => (
                 <div className="mb-5" key={item?.title}>
                   <BottestReport
-                statuses = {item?.statuses}
+                    statuses={item?.statuses}
                     isDisabled={item?.isDisabledtestResult}
                     title={item?.title}
                     olderText={item?.olderText}
@@ -414,7 +433,6 @@ const Dashboard = (props: DashboardProps) => {
                     progress={item?.progress}
                     progressResult={item?.progressResult}
                     svg={item?.svg}
-                    
                   />
                 </div>
               ))}
