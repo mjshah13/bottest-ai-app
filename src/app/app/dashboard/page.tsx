@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-
-import CustomSelect from "@/Elements/CustomSelect";
-import React, { useState } from "react";
-import { BaseService } from "../../../API/base";
+import CustomSelect from "@/elements/CustomSelect";
+import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import CustomButton from "@/Elements/Button";
+import CustomButton from "@/elements/Button";
 import { ReloadOutlined } from "@ant-design/icons";
-import CustomInput from "@/Elements/Input";
+import CustomInput from "@/elements/Input";
 import BottestReport from "@/app/components/BottestReport/BottestReport";
 import { Col, Row } from "antd";
-
+import { useSession } from "@clerk/clerk-react";
+import { useApi } from "@/hooks/useApi";
 interface DashboardProps {}
 
 interface Item {
@@ -24,23 +24,24 @@ interface UserResource {
 
 const Dashboard = (props: DashboardProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
-
-  if (!isLoaded || !isSignedIn) {
-    return null;
-  }
+  const { loading, error, request } = useApi();
 
   const Userbot = async (user: UserResource) => {
     try {
-      const response = await BaseService.get(`/v1/users/${user?.id}/bots`);
-      if (response?.status === 200) {
-       
-      }
+      const data = await request({
+        url: `/v1/users/${user?.id}/bots`,
+        method: "GET",
+      });
+      console.log({ data });
     } catch (error) {
       console.error({ error });
     }
   };
 
-  // Userbot(user);
+  useEffect(() => {
+    if (!user) return;
+    Userbot(user);
+  }, [user]);
 
   const initialBotsData = [
     {
@@ -233,6 +234,7 @@ const Dashboard = (props: DashboardProps) => {
     },
   ]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [selectSuite, setselectSuite] = useState<Item[]>([
     {
       id: 1,

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -12,7 +12,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
-import { useAuth } from "@clerk/nextjs";
 
 interface NavigationItem {
   name: string;
@@ -68,7 +67,6 @@ const Sidenav = ({ children }: { children: any }) => {
   if (!isLoaded || !isSignedIn) {
     return null;
   }
-
   return (
     <div>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -136,8 +134,9 @@ const Sidenav = ({ children }: { children: any }) => {
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
-                          {navigation.map((item) => (
+                          {navigation.map((item, i) => (
                             <Link
+                              key={i}
                               onClick={() => handleNavigationClick(item)}
                               href={item.href}
                               className={classNames(
@@ -167,9 +166,9 @@ const Sidenav = ({ children }: { children: any }) => {
                         </div>
 
                         <ul role="list" className="-mx-2 mt-2 space-y-1">
-                          {services?.map((item) => (
+                          {services?.map((item, i) => (
                             <Link
-                           
+                              key={i}
                               href={item.href}
                               className={classNames(
                                 item?.href === active
@@ -218,8 +217,9 @@ const Sidenav = ({ children }: { children: any }) => {
             <div className="flex flex-col h-full justify-between">
               <div className="">
                 <ul role="list" className=" space-y-1">
-                  {navigation.map((item) => (
+                  {navigation.map((item, i) => (
                     <Link
+                      key={i}
                       onClick={() => handleNavigationClick(item)}
                       href={item.href}
                       className={classNames(
@@ -248,8 +248,9 @@ const Sidenav = ({ children }: { children: any }) => {
                   role="list"
                   className=" py-4 space-y-1 border-b-2 border-[#f0f0f0]"
                 >
-                  {services.map((item) => (
+                  {services.map((item, i) => (
                     <Link
+                      key={i}
                       href={item.href}
                       className={classNames(
                         item?.href === active

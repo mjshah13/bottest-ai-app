@@ -3,7 +3,7 @@ import React from "react";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-[#fdfcfa]"  >
+    <div className="bg-[#fdfcfa]">
       <Sidenav>{children}</Sidenav>
     </div>
   );
