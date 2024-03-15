@@ -3,19 +3,17 @@
 import React from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import { Button, Select } from "antd";
-
-interface Item {
-  id: number;
-  value: string;
-  label: string;
-}
+import { Item } from "@/Utils/interface";
 
 interface CustomSelectProps {
   onChange?: (value: string) => void;
-  onSelectChange?: (value: string) => void;
+  onSelectChange?: (selectedOption: Item) => void; 
   onClick?: () => void;
   selectData?: Item[];
   Btntext?: string;
+  disabled?: boolean;
+  selectedValue?: string; 
+  placeholder?: string
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -24,9 +22,25 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   selectData,
   onChange,
   Btntext,
+  disabled,
+  selectedValue,
+  placeholder
+
 }) => {
   const { Option } = Select;
 
+
+  const handleSelectChange = (selectedValue: string) => {
+    // if (onChange) onChange(selectedValue); 
+    
+    if (onSelectChange && selectData) {
+      const selectedOption = selectData.find((item) => item.value === selectedValue);
+      if (selectedOption) {
+        onSelectChange(selectedOption); 
+      }
+    }
+  };
+  
   // const addBots = () => {
   //   const newSelectData = {
   //     id: selectData.length + 1,
@@ -40,11 +54,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   return (
     <>
       <Select
-    
         className="w-full h-[35px]"
-        onSelect={onSelectChange}
+        onSelect={handleSelectChange}
         onChange={onChange}
-        placeholder=""
+        value={selectedValue}
+        placeholder={placeholder}
+        disabled={disabled}
         dropdownRender={(menu) => (
           <>
             {menu}
@@ -73,7 +88,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       >
         {selectData?.map((task) => (
           <Option key={task.id} value={task.value} label={task.label}>
-            <span>{task.label}</span>
+            <span>{task?.value}</span>
           </Option>
         ))}
       </Select>

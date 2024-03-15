@@ -1,47 +1,48 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import CustomSelect from "@/elements/CustomSelect";
+
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import CustomButton from "@/elements/Button";
 import { ReloadOutlined } from "@ant-design/icons";
-import CustomInput from "@/elements/Input";
 import BottestReport from "@/app/components/BottestReport/BottestReport";
 import { Col, Row } from "antd";
 import { useSession } from "@clerk/clerk-react";
 import { useApi } from "@/hooks/useApi";
+import CustomSelect from "@/Elements/CustomSelect";
+import CustomButton from "@/Elements/Button";
+import CustomInput from "@/Elements/Input";
+import { Item, UserResource } from "@/Utils/interface";
+
 interface DashboardProps {}
-
-interface Item {
-  id: number;
-  value: string;
-  label: string;
-}
-
-interface UserResource {
-  id: string;
-}
 
 const Dashboard = (props: DashboardProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
   const { loading, error, request } = useApi();
+  const [filters, setFilters] = useState({
+    tab: "View all",
+  });
 
-  const Userbot = async (user: UserResource) => {
-    try {
-      const data = await request({
-        url: `/v1/users/${user?.id}/bots`,
-        method: "GET",
-      });
-      console.log({ data });
-    } catch (error) {
-      console.error({ error });
+  const filterData = (status: any) => {
+    if (status === "View all") {
+      return initialBotsData;
     }
+
+    const filteredItems = initialBotsData.filter((item) => {
+      return item.progress === status;
+    });
+
+    return filteredItems;
   };
 
-  useEffect(() => {
-    if (!user) return;
-    Userbot(user);
-  }, [user]);
+  const handleButtonClick = (status: any) => {
+    setFilters({
+      ...filters,
+      tab: status,
+    });
+
+    const filteredData = filterData(status);
+    setBotsdata(filteredData);
+  };
 
   const initialBotsData = [
     {
@@ -167,6 +168,8 @@ const Dashboard = (props: DashboardProps) => {
     },
   ];
 
+  const [Botsdata, setBotsdata] = useState(initialBotsData);
+
   const botsTest = [
     {
       key: 1,
@@ -205,115 +208,143 @@ const Dashboard = (props: DashboardProps) => {
     },
   ];
 
+  // ################################### Select Api Workingggg here ##########################################################
+
+  interface UserBotType {
+    id: string;
+    name: string;
+  }
+
+  interface UserSuiteType {
+    id: string;
+    name: string;
+  }
+
+  const [selectBotdata, setSelectBotData] = useState<Item[]>([]);
+  const [userBot, setUserbot] = useState<UserBotType[]>([]);
+  // const [suites, setSuites] = useState<UserSuiteType[]>([]);
+  const [selectSuite, setselectSuite] = useState<Item[]>([]);
+  const [isDisabled, setisDisabled] = useState(false);
+  const [selectEnvironment, setselectEnvironment] = useState<Item[]>([]);
+  const [testData, setTestData] = useState();
   const [selectedValues, setSelectedValues] = useState({
     bots: "",
     suites: "",
     environment: "",
   });
-  console.log(selectedValues, "selectedValues");
-  const [selectData, setselectData] = useState<Item[]>([
-    {
-      id: 1,
-      value: "My first bot",
-      label: "My first bot",
-    },
-    {
-      id: 2,
-      value: "My second bot",
-      label: "My second bot",
-    },
-    {
-      id: 3,
-      value: "My third bot",
-      label: "My third bot",
-    },
-    {
-      id: 4,
-      value: "My fourth bot",
-      label: "My fourth bot",
-    },
-  ]);
+
+  const bot = async (user: UserResource) => {
+    try {
+      const data = await request({
+        url: `/v1/users/${user?.id}/bots`,
+        method: "GET",
+      });
+      setUserbot(data?.data);
+      const selectDataItems: Item[] = data?.data?.map((bots: UserBotType) => ({
+        id: bots.id,
+        value: bots.name,
+        label: bots.name,
+      }));
+
+      setSelectBotData(selectDataItems);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
+  const userSuite = async (userBot: any) => {
+    try {
+      const data = await request({
+        url: `/v1/bots/${userBot}/suites`,
+        method: "GET",
+      });
+
+      const selectDataItems: Item[] =
+        data?.data?.map((bots: UserSuiteType) => ({
+          id: bots.id,
+          value: bots.name,
+          label: bots.name,
+        })) || [];
+      setisDisabled(data?.data?.length <= 1);
+      setselectSuite(selectDataItems);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
+  const userEnvironment = async (userBot: any) => {
+    try {
+      const data = await request({
+        url: `/v1/bots/${userBot}/environments`,
+        method: "GET",
+      });
+      const selectDataItems: Item[] =
+        data?.data?.map((bots: UserBotType) => ({
+          id: bots.id,
+          value: bots.name,
+          label: bots.name,
+        })) || [];
+      setisDisabled(data?.data?.length <= 1);
+      setselectEnvironment(selectDataItems);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [selectSuite, setselectSuite] = useState<Item[]>([
-    {
-      id: 1,
-      value: "Test suite 1",
-      label: "Test suite 1",
-    },
-    {
-      id: 2,
-      value: "Test suite 1",
-      label: "Test suite 1",
-    },
-    {
-      id: 3,
-      value: "Test suite 1",
-      label: "Test suite 1",
-    },
-  ]);
-
-  const [selectEnvironment, setselectEnvironment] = useState<Item[]>([
-    {
-      id: 1,
-      value: "Example (www.example.bottest...)",
-      label: "Example (www.example.bottest...)",
-    },
-    {
-      id: 2,
-      value: "Production (www.production.botte...)",
-      label: "Production (www.production.botte...)",
-    },
-    {
-      id: 3,
-      value: "Staging (www.staging.bottest.ai/ch...)",
-      label: "Staging (www.staging.bottest.ai/ch...)",
-    },
-    {
-      id: 4,
-      value: "Staging 2 (www.staging.bottest.ai/ch...)",
-      label: "Staging 2 (www.staging.bottest.ai/ch...)",
-    },
-  ]);
-
-  const [isData, setisData] = useState(false);
-  const [Botsdata, setBotsdata] = useState(initialBotsData);
-  const [filters, setFilters] = useState({
-    tab: "View all",
-  });
-
-  // const handleSelect = (key: string, value: string) => {
-  // console.log(`Selected ${value} for ${key}`);
+  // const handleChange = (key: string, value: string) => {
+  //   setSelectedValues((prevState) => ({
+  //     ...prevState,
+  //     [key]: value,
+  //   }));
   // };
 
-  const handleChange = (key: string, value: string) => {
-    setSelectedValues((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
-  };
-
-  const filterData = (status: any) => {
-    if (status === "View all") {
-      return initialBotsData;
+  const suiteTest = async (suite: any) => {
+    try {
+      const data = await request({
+        url: `/v1/suites/${suite}/tests`,
+        method: "GET",
+      });
+      setTestData(data?.data);
+    } catch (error) {
+      console.error({ error });
     }
-
-    const filteredItems = initialBotsData.filter((item) => {
-      return item.progress === status;
-    });
-
-    return filteredItems;
   };
 
-  const handleButtonClick = (status: any) => {
-    setFilters({
-      ...filters,
-      tab: status,
-    });
-
-    const filteredData = filterData(status);
-    setBotsdata(filteredData);
+  const handleSelect = (key: string, selectedOption: Item) => {
+    if (key === "bots") {
+      userSuite(selectedOption?.id);
+      userEnvironment(selectedOption?.id);
+    }
+    if (key === "suites") suiteTest(selectedOption?.id);
   };
+
+  useEffect(() => {
+    if (!user) return;
+    bot(user);
+  }, [user]);
+
+  useEffect(() => {
+    if (userBot && userBot.length === 1) {
+      const botName = userBot[0].name;
+      const botId = userBot[0].id;
+      setSelectedValues({ ...selectedValues, bots: botName });
+      userSuite(botId);
+      userEnvironment(botId);
+    }
+  }, [userBot]);
+
+  // useEffect(() => {
+  //   if (userBot && selectBotdata) {
+  //     userBot.forEach((bot) => {
+  //       const filteredBot = selectBotdata.find((item) => item.id === bot?.id);
+  //       if (filteredBot) {
+  //         userSuite(filteredBot.id);
+  //         userEnvironment(filteredBot.id);
+  //       }
+  //     });
+  //   }
+  // }, [selectedValues?.bots]);
 
   return (
     <div className="h-[90vh]  gap-5 flex flex-col">
@@ -325,49 +356,42 @@ const Dashboard = (props: DashboardProps) => {
           <div className="w-full">
             <CustomSelect
               Btntext="Add / Modify Bots"
-              selectData={selectData}
-              // onClick={addBots}
-              onChange={(value) => handleChange("bots", value)}
-              // onSelectChange={(value) => handleSelect('bots', value)}
+              selectData={selectBotdata}
+              selectedValue={selectedValues.bots}
+              placeholder="Select bots"
+              // onChange={(value) => handleChange("bots", value)}
+              onSelectChange={(selectedOption) =>
+                handleSelect("bots", selectedOption)
+              }
             />
           </div>
           <div className="w-full">
             <CustomSelect
+              disabled={isDisabled}
               Btntext="Add/Modify Suites"
+              placeholder="Select Suites"
               selectData={selectSuite}
-              // onClick={addBots}
-              onChange={(value) => handleChange("suites", value)}
-              // onSelectChange={(value) => handleSelect('suites', value)}
+              // onChange={(value) => handleChange("suites", value)}
+              onSelectChange={(selectedOption) =>
+                handleSelect("suites", selectedOption)
+              }
             />
           </div>
           <div className="w-full">
             <CustomSelect
+              disabled={isDisabled}
+              placeholder="Select environment"
               Btntext="Add / Modify environment"
               selectData={selectEnvironment}
               // onClick={addBots}
-              onChange={(value) => handleChange("environment", value)}
-              // onSelectChange={(value) => handleSelect('environment', value)}
+              // onChange={(value) => handleChange("environment", value)}
+              // onSelectChange={(selectedOption) => handleSelect("environment", selectedOption)}
             />
           </div>
         </div>
       </div>
       <div className="h-[80%] border-2 rounded-lg border-[#f0f0f0] bg-white">
-        {isData ? (
-          <>
-            <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
-              <h1 className="font-semibold font-poppin text-xl">Tests</h1>
-              <p className="text-black text-md">
-                Create a test and run it to see your results.
-              </p>
-            </div>
-            <div className=" h-[87%] w-full flex justify-center items-center flex-col gap-3">
-              <h1 className="font-normal font-poppin text-md">
-                You have no tests, create one below!
-              </h1>
-              <CustomButton type="primary">Create new test</CustomButton>
-            </div>
-          </>
-        ) : (
+        {testData ? (
           <>
             <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
               <div className="flex justify-between">
@@ -438,6 +462,21 @@ const Dashboard = (props: DashboardProps) => {
                   />
                 </div>
               ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
+              <h1 className="font-semibold font-poppin text-xl">Tests</h1>
+              <p className="text-black text-md">
+                Create a test and run it to see your results.
+              </p>
+            </div>
+            <div className=" h-[87%] w-full flex justify-center items-center flex-col gap-3">
+              <h1 className="font-normal font-poppin text-md">
+                You have no tests, create one below!
+              </h1>
+              <CustomButton type="primary">Create new test</CustomButton>
             </div>
           </>
         )}

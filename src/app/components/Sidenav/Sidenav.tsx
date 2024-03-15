@@ -12,21 +12,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
-
-interface NavigationItem {
-  name: string;
-  href: string;
-  icon: React.ElementType;
-  current: boolean;
-}
-
-interface ServiceItem {
-  id: number;
-  name: string;
-  href: string;
-  icon: React.ElementType;
-  current: boolean;
-}
+import { NavigationItem, ServiceItem } from "@/Utils/interface";
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/app/dashboard", icon: HomeIcon, current: true },

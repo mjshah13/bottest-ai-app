@@ -1,22 +1,9 @@
 "use client";
 
 import { Col, Row, Tooltip } from "antd";
-import React, { useState } from "react";
-
+import React from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
-
-interface BottestReportProps {
-  isDisabled?: boolean;
-  title?: string;
-  olderText?: string;
-  lastRunText?: string;
-  newerText?: string;
-  progress?: string;
-  progressResult?: string;
-  svg?: React.ReactNode;
-  statuses?: string[];
-  
-}
+import { BottestReportProps } from "@/Utils/interface";
 
 const BottestReport = ({
   isDisabled = false,
@@ -28,7 +15,6 @@ const BottestReport = ({
   progressResult,
   svg,
   statuses,
-  
 }: BottestReportProps) => {
   const getBackgroundColorClass = () => {
     switch (progress) {
@@ -64,12 +50,18 @@ const BottestReport = ({
         <Col span={8}>
           <div className="flex flex-col h-full justify-center items-center">
             <div className="flex  gap-3 mb-3 ">
-            {statuses?.map((status, index) => (
-          <div
-            key={index}
-            className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full ${status === 'success' ? 'bg-success' : status === 'failed' ? 'bg-danger' : 'bg-gray-400'}`}
-          />
-        ))}
+              {statuses?.map((status, index) => (
+                <div
+                  key={index}
+                  className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full ${
+                    status === "success"
+                      ? "bg-success"
+                      : status === "failed"
+                      ? "bg-danger"
+                      : "bg-gray-400"
+                  }`}
+                />
+              ))}
             </div>
             <div className="flex gap-12 xl:gap-14 lg:gap-10">
               <h3 className="text-[#909193] font-normal font-poppin">
