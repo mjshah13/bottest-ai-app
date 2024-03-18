@@ -6,9 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { ReloadOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
 import { useApi } from "@/hooks/useApi";
-import CustomSelect from "@/elements/CustomSelect";
-import CustomButton from "@/elements/Button";
-import CustomInput from "@/elements/Input";
+
 import {
   BotType,
   EnvironmentType,
@@ -16,9 +14,13 @@ import {
   SuiteType,
   TestType,
   UserResource,
-} from "@/utils/Interface";
+} from "@/Utils/Interface";
 import TestRun from "@/app/components/BottestReport/TestRun";
-import { botsTest } from "@/utils/Common";
+
+import CustomSelect from "@/Elements/CustomSelect";
+import CustomButton from "@/Elements/Button";
+import CustomInput from "@/Elements/Input";
+import { botsTest } from "@/Utils/Common";
 
 interface DashboardProps {}
 
@@ -176,7 +178,6 @@ const Dashboard = (props: DashboardProps) => {
   ];
 
   const [Botsdata, setBotsdata] = useState(initialBotsData);
-
   const [botLists, setBotLists] = useState<BotType[] | null>(null);
   const [suiteLists, setSuiteLists] = useState<SuiteType[] | null>(null);
   const [environmentLists, setEnvironmentLists] = useState<
@@ -281,7 +282,7 @@ const Dashboard = (props: DashboardProps) => {
   };
 
   return (
-    <div className="h-[90vh]  gap-5 flex flex-col">
+    <div className="h-full gap-5 flex flex-col">
       <div className="h-[20%] border-2 rounded-lg border-[#f0f0f0] bg-white">
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
           <h1 className="font-semibold font-poppin text-3xl">Dashboard</h1>
@@ -326,7 +327,11 @@ const Dashboard = (props: DashboardProps) => {
           </div>
         </div>
       </div>
-      <div className="h-auto min-h-80 border-2 rounded-lg border-[#f0f0f0] bg-white">
+      <div
+        className={` ${
+          testData ? "h-[80%] " : "min-h-[300px] h-full flex flex-col "
+        }  border-2 rounded-lg border-[#f0f0f0] bg-white`}
+      >
         {testData ? (
           <>
             <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
@@ -383,7 +388,7 @@ const Dashboard = (props: DashboardProps) => {
               </Row>
             </div>
 
-            <div className="px-5 py-6">
+            <div className="px-5 py-6 h-[415px] overflow-y-scroll ">
               {testData &&
                 testData?.map((item: TestType) => (
                   <div className="mb-5" key={item?.title}>
@@ -412,7 +417,7 @@ const Dashboard = (props: DashboardProps) => {
                 Create a test and run it to see your results.
               </p>
             </div>
-            <div className=" h-[87%] w-full flex justify-center items-center flex-col gap-3">
+            <div className="min-h-[520px] h-full w-full flex justify-center items-center flex-col gap-3">
               <h1 className="font-normal font-poppin text-md">
                 You have no tests, create one below!
               </h1>
