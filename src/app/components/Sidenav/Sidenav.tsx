@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton, useSession, useUser } from "@clerk/nextjs";
 import { NavigationItem, ServiceItem } from "@/Utils/Interface";
 
 
@@ -49,11 +49,11 @@ const Sidenav = ({ children }: { children: any }) => {
     setActive(item.href);
   };
 
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { session  } = useSession();
 
-  if (!isLoaded || !isSignedIn) {
-    return null;
-  }
+  // console.log(session?.user?.fullName)
+
+
   return (
     <div>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -261,9 +261,9 @@ const Sidenav = ({ children }: { children: any }) => {
                 </ul>
 
                 <div className="my-4 flex items-center gap-4">
-                  <UserButton afterSignOutUrl="/" />
+                  <UserButton afterSignOutUrl="/sign-in" />
                   <h3 className="font-normal text-black font-poppin">
-                    {user.username ? user.username : user?.fullName }
+                    {session?.user?.fullName ? session?.user?.fullName : session?.user?.username}
                   </h3>
                 </div>
               </div>
@@ -281,7 +281,7 @@ const Sidenav = ({ children }: { children: any }) => {
           <span className="sr-only">Open sidebar</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
-        <UserButton afterSignOutUrl="/" />
+        <UserButton afterSignOutUrl="/sign-in" />
       </div>
 
       <main className="relative pt-12 pb-11 lg:pl-64 ">
