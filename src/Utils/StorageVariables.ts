@@ -1,4 +1,4 @@
-import { CookieFunctions } from "./interface";
+import { CookieFunctions } from "./Interface";
 
 const CookieUtil: CookieFunctions = {
   getCookie: (key) => {

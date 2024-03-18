@@ -1,11 +1,12 @@
 "use client";
 
 import { Col, Row, Tooltip } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
-import { BottestReportProps } from "@/Utils/interface";
+import { BottestReportProps } from "@/utils/Interface";
+import { useApi } from "@/hooks/useApi";
 
-const BottestReport = ({
+const TestRun = ({
   isDisabled = false,
   title,
   olderText,
@@ -15,7 +16,35 @@ const BottestReport = ({
   progressResult,
   svg,
   statuses,
+  testId,
+  environmentId,
 }: BottestReportProps) => {
+  const { loading, error, request } = useApi();
+  const [testDetails, setTestDetails] = useState(null);
+
+  const getTestDetails = async (testId: string, environmentId: string) => {
+    try {
+      let query = "";
+      if (environmentId) {
+        query = `?environment_id=${environmentId}`;
+      }
+      const data = await request({
+        url: `/v1/test/${testId}/test_runs${query}
+
+`,
+        method: "GET",
+      });
+
+      setTestDetails(data.data);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
+  useEffect(() => {
+    getTestDetails(testId, environmentId);
+  }, [testId, environmentId]);
+
   const getBackgroundColorClass = () => {
     switch (progress) {
       case "Running":
@@ -30,7 +59,6 @@ const BottestReport = ({
   };
 
   // Get the background color class
-  const backgroundColorClass = getBackgroundColorClass();
 
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] rounded-lg">
@@ -79,7 +107,7 @@ const BottestReport = ({
         <Col span={5}>
           <div className="h-full flex items-center justify-center">
             <div
-              className={`w-[192px] h-[68px] rounded-lg flex items-center justify-center gap-3 ${backgroundColorClass}`}
+              className={`w-[192px] h-[68px] rounded-lg flex items-center justify-center gap-3 ${getBackgroundColorClass()}`}
             >
               {svg}
               <div>
@@ -114,4 +142,4 @@ const BottestReport = ({
   );
 };
 
-export default BottestReport;
+export default TestRun;

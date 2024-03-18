@@ -1,17 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ReloadOutlined } from "@ant-design/icons";
-import BottestReport from "@/app/components/BottestReport/BottestReport";
 import { Col, Row } from "antd";
-import { useSession } from "@clerk/clerk-react";
 import { useApi } from "@/hooks/useApi";
-import CustomSelect from "@/Elements/CustomSelect";
-import CustomButton from "@/Elements/Button";
-import CustomInput from "@/Elements/Input";
-import { Item, UserResource } from "@/Utils/interface";
+import CustomSelect from "@/elements/CustomSelect";
+import CustomButton from "@/elements/Button";
+import CustomInput from "@/elements/Input";
+import {
+  BotType,
+  EnvironmentType,
+  Option,
+  SuiteType,
+  TestType,
+  UserResource,
+} from "@/utils/Interface";
+import TestRun from "@/app/components/BottestReport/TestRun";
+import { botsTest } from "@/utils/Common";
 
 interface DashboardProps {}
 
@@ -170,136 +177,71 @@ const Dashboard = (props: DashboardProps) => {
 
   const [Botsdata, setBotsdata] = useState(initialBotsData);
 
-  const botsTest = [
-    {
-      key: 1,
-      label: "View all",
-      status: "View all",
-    },
-    {
-      key: 2,
-      label: "Failed",
-      status: "Fail",
-    },
-    {
-      key: 3,
-      label: "Passed",
-      status: "Pass",
-    },
-    {
-      key: 4,
-      label: "Mixed",
-      status: "Mixed",
-    },
-    {
-      key: 5,
-      label: "Newly failed",
-      status: "Newly failed",
-    },
-    {
-      key: 6,
-      label: "Newly passed",
-      status: "Newly passed",
-    },
-    {
-      key: 7,
-      label: "Newly mixed",
-      status: " Newly mixed",
-    },
-  ];
-
-  // ################################### Select Api Workingggg here ##########################################################
-
-  interface UserBotType {
-    id: string;
-    name: string;
-  }
-
-  interface UserSuiteType {
-    id: string;
-    name: string;
-  }
-
-  const [selectBotdata, setSelectBotData] = useState<Item[]>([]);
-  const [userBot, setUserbot] = useState<UserBotType[]>([]);
-  // const [suites, setSuites] = useState<UserSuiteType[]>([]);
-  const [selectSuite, setselectSuite] = useState<Item[]>([]);
-  const [isDisabled, setisDisabled] = useState(false);
-  const [selectEnvironment, setselectEnvironment] = useState<Item[]>([]);
-  const [testData, setTestData] = useState();
+  const [botLists, setBotLists] = useState<BotType[] | null>(null);
+  const [suiteLists, setSuiteLists] = useState<SuiteType[] | null>(null);
+  const [environmentLists, setEnvironmentLists] = useState<
+    EnvironmentType[] | null
+  >(null);
+  const [testData, setTestData] = useState<TestType | null>(null);
   const [selectedValues, setSelectedValues] = useState({
-    bots: "",
-    suites: "",
-    environment: "",
+    bot: { name: "", id: "" },
+    suite: { name: "", id: "" },
+    environment: { name: "", id: "" },
   });
 
-  const bot = async (user: UserResource) => {
+  const getBots = async (user: UserResource) => {
     try {
       const data = await request({
         url: `/v1/users/${user?.id}/bots`,
         method: "GET",
       });
-      setUserbot(data?.data);
-      const selectDataItems: Item[] = data?.data?.map((bots: UserBotType) => ({
+      const formatedData = data?.data?.map((bots: BotType) => ({
         id: bots.id,
-        value: bots.name,
-        label: bots.name,
+        name: bots.name,
       }));
-
-      setSelectBotData(selectDataItems);
+      setBotLists(formatedData);
+      if (data?.data?.length === 1) return handleSelect("bot", formatedData[0]);
     } catch (error) {
       console.error({ error });
     }
   };
 
-  const userSuite = async (userBot: any) => {
+  const getSuites = async (userBot: string) => {
     try {
       const data = await request({
         url: `/v1/bots/${userBot}/suites`,
         method: "GET",
       });
 
-      const selectDataItems: Item[] =
-        data?.data?.map((bots: UserSuiteType) => ({
-          id: bots.id,
-          value: bots.name,
-          label: bots.name,
+      const selectDataItems: SuiteType[] =
+        data?.data?.map(({ id, name }: SuiteType) => ({
+          id,
+          name,
         })) || [];
-      setisDisabled(data?.data?.length <= 1);
-      setselectSuite(selectDataItems);
+      setSuiteLists(selectDataItems);
     } catch (error) {
       console.error({ error });
     }
   };
 
-  const userEnvironment = async (userBot: any) => {
+  const getEnvironment = async (userBot: string) => {
     try {
       const data = await request({
         url: `/v1/bots/${userBot}/environments`,
         method: "GET",
       });
-      const selectDataItems: Item[] =
-        data?.data?.map((bots: UserBotType) => ({
-          id: bots.id,
-          value: bots.name,
-          label: bots.name,
+      const selectDataItems: EnvironmentType[] =
+        data?.data?.map(({ id, name }: EnvironmentType) => ({
+          id,
+          name,
         })) || [];
-      setisDisabled(data?.data?.length <= 1);
-      setselectEnvironment(selectDataItems);
+      setEnvironmentLists(selectDataItems);
     } catch (error) {
       console.error({ error });
     }
   };
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  // const handleChange = (key: string, value: string) => {
-  //   setSelectedValues((prevState) => ({
-  //     ...prevState,
-  //     [key]: value,
-  //   }));
-  // };
-
-  const suiteTest = async (suite: any) => {
+  const getTests = async (suite: string) => {
     try {
       const data = await request({
         url: `/v1/suites/${suite}/tests`,
@@ -311,40 +253,32 @@ const Dashboard = (props: DashboardProps) => {
     }
   };
 
-  const handleSelect = (key: string, selectedOption: Item) => {
-    if (key === "bots") {
-      userSuite(selectedOption?.id);
-      userEnvironment(selectedOption?.id);
-    }
-    if (key === "suites") suiteTest(selectedOption?.id);
-  };
-
   useEffect(() => {
     if (!user) return;
-    bot(user);
+    getBots(user);
   }, [user]);
 
   useEffect(() => {
-    if (userBot && userBot.length === 1) {
-      const botName = userBot[0].name;
-      const botId = userBot[0].id;
-      setSelectedValues({ ...selectedValues, bots: botName });
-      userSuite(botId);
-      userEnvironment(botId);
-    }
-  }, [userBot]);
+    if (!selectedValues?.bot?.id) return;
+    getSuites(selectedValues.bot.id);
+    getEnvironment(selectedValues.bot.id);
+  }, [selectedValues.bot.id]);
 
-  // useEffect(() => {
-  //   if (userBot && selectBotdata) {
-  //     userBot.forEach((bot) => {
-  //       const filteredBot = selectBotdata.find((item) => item.id === bot?.id);
-  //       if (filteredBot) {
-  //         userSuite(filteredBot.id);
-  //         userEnvironment(filteredBot.id);
-  //       }
-  //     });
-  //   }
-  // }, [selectedValues?.bots]);
+  useEffect(() => {
+    if (suiteLists && suiteLists?.length === 1)
+      handleSelect("suite", suiteLists[0]);
+    if (environmentLists && environmentLists?.length === 1)
+      return handleSelect("environment", environmentLists[0]);
+  }, [suiteLists, environmentLists]);
+
+  useEffect(() => {
+    if (!selectedValues?.suite?.id) return;
+    getTests(selectedValues?.suite?.id);
+  }, [selectedValues?.suite?.id]);
+
+  const handleSelect = (key: string, selectedOption: Option) => {
+    setSelectedValues({ ...selectedValues, [key]: selectedOption });
+  };
 
   return (
     <div className="h-[90vh]  gap-5 flex flex-col">
@@ -355,42 +289,44 @@ const Dashboard = (props: DashboardProps) => {
         <div className=" h-[100px] gap-7 px-4 flex justify-between items-center">
           <div className="w-full">
             <CustomSelect
+              // disabled={botLists?.length === 1 || !botLists}
               Btntext="Add / Modify Bots"
-              selectData={selectBotdata}
-              selectedValue={selectedValues.bots}
+              options={botLists || []}
+              selectedValue={selectedValues?.bot?.name}
               placeholder="Select bots"
               // onChange={(value) => handleChange("bots", value)}
-              onSelectChange={(selectedOption) =>
-                handleSelect("bots", selectedOption)
-              }
+              onSelectChange={(selectedOption) => {
+                handleSelect("bot", selectedOption);
+              }}
             />
           </div>
           <div className="w-full">
             <CustomSelect
-              disabled={isDisabled}
+              disabled={suiteLists?.length === 1 || !suiteLists}
               Btntext="Add/Modify Suites"
+              selectedValue={selectedValues?.suite?.name}
               placeholder="Select Suites"
-              selectData={selectSuite}
-              // onChange={(value) => handleChange("suites", value)}
-              onSelectChange={(selectedOption) =>
-                handleSelect("suites", selectedOption)
-              }
+              options={suiteLists || []}
+              onSelectChange={(selectedOption) => {
+                handleSelect("suite", selectedOption);
+              }}
             />
           </div>
           <div className="w-full">
             <CustomSelect
-              disabled={isDisabled}
+              disabled={environmentLists?.length === 1 || !environmentLists}
               placeholder="Select environment"
               Btntext="Add / Modify environment"
-              selectData={selectEnvironment}
-              // onClick={addBots}
-              // onChange={(value) => handleChange("environment", value)}
-              // onSelectChange={(selectedOption) => handleSelect("environment", selectedOption)}
+              selectedValue={selectedValues?.environment?.name}
+              options={environmentLists || []}
+              onSelectChange={(selectedOption) =>
+                handleSelect("environment", selectedOption)
+              }
             />
           </div>
         </div>
       </div>
-      <div className="h-[80%] border-2 rounded-lg border-[#f0f0f0] bg-white">
+      <div className="h-auto min-h-80 border-2 rounded-lg border-[#f0f0f0] bg-white">
         {testData ? (
           <>
             <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
@@ -419,23 +355,24 @@ const Dashboard = (props: DashboardProps) => {
               <Row>
                 <Col lg={19} md={20}>
                   <div className=" border-[#d9d9d9] border rounded-lg w-max ">
-                    {botsTest?.map((item, i) => (
-                      <button
-                        key={item.key}
-                        className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
-                          i === 0 ? "rounded-l-lg" : ""
-                        } ${i === botsTest.length - 1 ? "border-r-0" : ""} ${
-                          filters.tab === item.status
-                            ? "bg-[#f5f5f5] text-black "
-                            : ""
-                        }`}
-                        onClick={() => {
-                          handleButtonClick(item.status);
-                        }}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
+                    {botsTest &&
+                      botsTest?.map((item, i) => (
+                        <button
+                          key={item.key}
+                          className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
+                            i === 0 ? "rounded-l-lg" : ""
+                          } ${i === botsTest.length - 1 ? "border-r-0" : ""} ${
+                            filters.tab === item.status
+                              ? "bg-[#f5f5f5] text-black "
+                              : ""
+                          }`}
+                          onClick={() => {
+                            handleButtonClick(item.status);
+                          }}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
                   </div>
                 </Col>
                 <Col lg={5} md={4}>
@@ -447,21 +384,24 @@ const Dashboard = (props: DashboardProps) => {
             </div>
 
             <div className="px-5 py-6">
-              {Botsdata?.map((item) => (
-                <div className="mb-5" key={item?.title}>
-                  <BottestReport
-                    statuses={item?.statuses}
-                    isDisabled={item?.isDisabledtestResult}
-                    title={item?.title}
-                    olderText={item?.olderText}
-                    newerText={item?.newerText}
-                    lastRunText={item?.lastRunText}
-                    progress={item?.progress}
-                    progressResult={item?.progressResult}
-                    svg={item?.svg}
-                  />
-                </div>
-              ))}
+              {testData &&
+                testData?.map((item: TestType) => (
+                  <div className="mb-5" key={item?.title}>
+                    <TestRun
+                      statuses={item?.statuses}
+                      isDisabled={!item?.full_run_enabled}
+                      title={item?.name}
+                      testId={item?.id}
+                      olderText={item?.olderText}
+                      newerText={item?.newerText}
+                      lastRunText={item?.lastRunText}
+                      progress={item?.progress}
+                      progressResult={item?.progressResult}
+                      svg={item?.svg}
+                      environmentId={selectedValues?.environment?.id}
+                    />
+                  </div>
+                ))}
             </div>
           </>
         ) : (

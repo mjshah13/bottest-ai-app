@@ -1,6 +1,6 @@
 // useApi.ts
 
-import { ROOT_API_URL } from "@/Utils/Common";
+import { ROOT_API_URL } from "@/utils/Common";
 import { useSession } from "@clerk/nextjs";
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { useState, useCallback } from "react";

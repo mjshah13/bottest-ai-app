@@ -3,44 +3,42 @@
 import React from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import { Button, Select } from "antd";
-import { Item } from "@/Utils/interface";
+import { Option } from "@/utils/Interface";
 
 interface CustomSelectProps {
   onChange?: (value: string) => void;
-  onSelectChange?: (selectedOption: Item) => void; 
+  onSelectChange?: (selectedOption: Option) => void;
   onClick?: () => void;
-  selectData?: Item[];
+  options?: Option[];
   Btntext?: string;
   disabled?: boolean;
-  selectedValue?: string; 
-  placeholder?: string
+  selectedValue?: string;
+  placeholder?: string;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
   onSelectChange,
   onClick,
-  selectData,
+  options,
   onChange,
   Btntext,
   disabled,
   selectedValue,
-  placeholder
-
+  placeholder,
 }) => {
   const { Option } = Select;
 
-
   const handleSelectChange = (selectedValue: string) => {
-    // if (onChange) onChange(selectedValue); 
-    
-    if (onSelectChange && selectData) {
-      const selectedOption = selectData.find((item) => item.value === selectedValue);
+    if (onSelectChange && options) {
+      const selectedOption = options.find(
+        (item) => item.name === selectedValue
+      );
       if (selectedOption) {
-        onSelectChange(selectedOption); 
+        onSelectChange(selectedOption);
       }
     }
   };
-  
+
   // const addBots = () => {
   //   const newSelectData = {
   //     id: selectData.length + 1,
@@ -86,9 +84,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           </>
         )}
       >
-        {selectData?.map((task) => (
-          <Option key={task.id} value={task.value} label={task.label}>
-            <span>{task?.value}</span>
+        {options?.map((option) => (
+          <Option key={option.id} value={option.name} label={option.name}>
+            <span>{option?.name}</span>
           </Option>
         ))}
       </Select>
