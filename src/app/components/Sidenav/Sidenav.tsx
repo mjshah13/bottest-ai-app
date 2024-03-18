@@ -12,7 +12,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton, useUser } from "@clerk/nextjs";
-import { NavigationItem, ServiceItem } from "@/utils/Interface";
+import { NavigationItem, ServiceItem } from "@/Utils/Interface";
+
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/app/dashboard", icon: HomeIcon, current: true },
@@ -260,9 +261,9 @@ const Sidenav = ({ children }: { children: any }) => {
                 </ul>
 
                 <div className="my-4 flex items-center gap-4">
-                  <UserButton afterSignOutUrl="/sign-in" />
+                  <UserButton afterSignOutUrl="/" />
                   <h3 className="font-normal text-black font-poppin">
-                    {user.username}
+                    {user.username ? user.username : user?.fullName }
                   </h3>
                 </div>
               </div>
@@ -280,17 +281,14 @@ const Sidenav = ({ children }: { children: any }) => {
           <span className="sr-only">Open sidebar</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
-        <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
-          Dashboard
-        </div>
-        <UserButton afterSignOutUrl="/sign-in" />
+        <UserButton afterSignOutUrl="/" />
       </div>
 
-      <main className=" relative py-12 lg:pl-64 ">
+      <main className="relative pt-12 pb-11 lg:pl-64 ">
         <div className="absolute right-2 top-2">
           <OrganizationSwitcher />
         </div>
-        <div className=" px-4 sm:px-6 lg:px-7  h-full">{children}</div>
+        <div className=" px-4 sm:px-6 lg:px-7 h-[90vh]">{children}</div>
       </main>
     </div>
   );
