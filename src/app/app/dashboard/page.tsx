@@ -11,14 +11,15 @@ import CustomButton from "../../../elements/Button";
 import CustomInput from "../../../elements/Input";
 import { useApi } from "../../../hooks/useApi";
 import { botsTest } from "../../../utils/common";
-import { UserResource, BotType,
+import {
+  UserResource,
+  BotType,
   EnvironmentType,
   Option,
   SuiteType,
   TestType,
- } from "../../../utils/Interface";
+} from "../../../utils/Interface";
 import TestRun from "../../components/BottestReport/TestRun";
-
 
 interface DashboardProps {}
 
@@ -400,7 +401,6 @@ const Dashboard = (props: DashboardProps) => {
                       lastRunText={item?.lastRunText}
                       progress={item?.progress}
                       progressResult={item?.progressResult}
-                      svg={item?.svg}
                       environmentId={selectedValues?.environment?.id}
                     />
                   </div>
