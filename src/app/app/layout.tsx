@@ -1,5 +1,6 @@
-import Sidenav from "@/app/components/Sidenav/Sidenav";
+
 import React from "react";
+import Sidenav from "../components/Sidenav/Sidenav";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (

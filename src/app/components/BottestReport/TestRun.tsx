@@ -3,8 +3,9 @@
 import { Col, Row, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
-import { useApi } from "@/hooks/useApi";
-import { BottestReportProps } from "@/Utils/Interface";
+import { BottestReportProps } from "../../../Utils/Interface";
+import { useApi } from "../../../hooks/useApi";
+
 
 const TestRun = ({
   isDisabled = false,

@@ -5,22 +5,20 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ReloadOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
-import { useApi } from "@/hooks/useApi";
 
-import {
-  BotType,
+import CustomSelect from "../../../Elements/CustomSelect";
+import CustomButton from "../../../Elements/Button";
+import CustomInput from "../../../Elements/Input";
+import { useApi } from "../../../hooks/useApi";
+import { botsTest } from "../../../Utils/Common";
+import { UserResource, BotType,
   EnvironmentType,
   Option,
   SuiteType,
   TestType,
-  UserResource,
-} from "@/Utils/Interface";
-import TestRun from "@/app/components/BottestReport/TestRun";
+ } from "../../../Utils/Interface";
+import TestRun from "../../components/BottestReport/TestRun";
 
-import CustomSelect from "@/Elements/CustomSelect";
-import CustomButton from "@/Elements/Button";
-import CustomInput from "@/Elements/Input";
-import { botsTest } from "@/Utils/Common";
 
 interface DashboardProps {}
 

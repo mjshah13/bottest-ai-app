@@ -1,5 +1,6 @@
 import { authMiddleware } from "@clerk/nextjs";
 import { PageConfig } from "./Utils/Interface";
+
 // import { PageConfig } from "./utils/Interface";
 
 // Your middleware configuration remains the same

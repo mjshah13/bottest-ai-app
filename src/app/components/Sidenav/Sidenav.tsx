@@ -11,8 +11,9 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { OrganizationSwitcher, UserButton, useSession, useUser } from "@clerk/nextjs";
-import { NavigationItem, ServiceItem } from "@/Utils/Interface";
+import { OrganizationSwitcher, UserButton, useSession } from "@clerk/nextjs";
+import { NavigationItem, ServiceItem } from "../../../Utils/Interface";
+
 
 
 const navigation: NavigationItem[] = [
