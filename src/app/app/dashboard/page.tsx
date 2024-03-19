@@ -6,17 +6,17 @@ import { useUser } from "@clerk/nextjs";
 import { ReloadOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
 
-import CustomSelect from "../../../Elements/CustomSelect";
-import CustomButton from "../../../Elements/Button";
-import CustomInput from "../../../Elements/Input";
+import CustomSelect from "../../../elements/CustomSelect";
+import CustomButton from "../../../elements/Button";
+import CustomInput from "../../../elements/Input";
 import { useApi } from "../../../hooks/useApi";
-import { botsTest } from "../../../Utils/Common";
+import { botsTest } from "../../../utils/common";
 import { UserResource, BotType,
   EnvironmentType,
   Option,
   SuiteType,
   TestType,
- } from "../../../Utils/Interface";
+ } from "../../../utils/Interface";
 import TestRun from "../../components/BottestReport/TestRun";
 
 

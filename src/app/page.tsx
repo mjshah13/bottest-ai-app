@@ -1,11 +1,12 @@
 "use client";
-import { UserButton, useAuth } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useSession } from "@clerk/clerk-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  // const { sessionId } = useAuth();
   const { session } = useSession();
+  const router = useRouter();
 
   console.log(session);
 
@@ -32,26 +33,35 @@ export default function Home() {
                     ? session?.user?.fullName
                     : session?.user?.username}
                 </div>
+                <div className="mt-3">
+                  <button
+                    onClick={() => router.push("/app/dashboard")}
+                    className=" px-4 py-2 border flex w-full items-center justify-center h-full  border-secondary rounded-md  bg-indigo-600 text-base font-medium text-secondary shadow-sm hover:bg-indigo-700"
+                  >
+                    Go to Dashboard
+                  </button>
+                </div>
               </div>
             ) : (
               <>
                 <div className="w-full flex px-3 gap-2">
                   <div className="w-[50%]">
-                    <a
-                      href="/sign-in"
+                    <button
+                      onClick={() => router.push("/sign-in")}
                       className=" border flex w-full items-center justify-center h-full  border-secondary rounded-md  bg-indigo-600 text-base font-medium text-secondary shadow-sm hover:bg-indigo-700"
                     >
                       Sign in
-                    </a>
+                    </button>
                   </div>
 
                   <div className="w-[50%]">
-                    <a
-                      href="/sign-up"
+                    <button
+                      onClick={() => router.push("/sign-up")}
+                      // href="/sign-up"
                       className=" border flex w-full items-center justify-center h-full   border-secondary   rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-secondary shadow-sm hover:bg-indigo-700"
                     >
                       Sign up
-                    </a>
+                    </button>
                   </div>
                 </div>
               </>

@@ -1,5 +1,5 @@
 import { authMiddleware } from "@clerk/nextjs";
-import { PageConfig } from "./Utils/Interface";
+import { PageConfig } from "./utils/Interface";
 
 // import { PageConfig } from "./utils/Interface";
 

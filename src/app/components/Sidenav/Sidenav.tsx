@@ -9,12 +9,10 @@ import {
   UsersIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton, useSession } from "@clerk/nextjs";
-import { NavigationItem, ServiceItem } from "../../../Utils/Interface";
-
-
+import { NavigationItem, ServiceItem } from "../../../utils/Interface";
+import { useRouter } from "next/navigation";
 
 const navigation: NavigationItem[] = [
   { name: "Dashboard", href: "/app/dashboard", icon: HomeIcon, current: true },
@@ -34,7 +32,7 @@ const navigation: NavigationItem[] = [
 
 const services: ServiceItem[] = [
   { id: 1, name: "Help", href: "#", icon: HomeIcon, current: false },
-  { id: 2, name: "Documentation", href: "#", icon: UsersIcon, current: false },
+  { id: 2, name: "Documentation", href: "", icon: UsersIcon, current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -42,18 +40,19 @@ function classNames(...classes: string[]) {
 }
 
 const Sidenav = ({ children }: { children: any }) => {
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const [active, setActive] = useState(pathname); // Initialize with the active item
 
   const handleNavigationClick = (item: NavigationItem) => {
     setActive(item.href);
+    router.push(item.href);
   };
 
-  const { session  } = useSession();
+  const { session } = useSession();
 
   // console.log(session?.user?.fullName)
-
 
   return (
     <div>
@@ -123,28 +122,23 @@ const Sidenav = ({ children }: { children: any }) => {
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item, i) => (
-                            <Link
+                            <button
                               key={i}
                               onClick={() => handleNavigationClick(item)}
-                              href={item.href}
                               className={classNames(
                                 item?.href === active
                                   ? "text-secondary bg-primary font-normal"
                                   : "text-black hover:text-black hover:bg-lightgray",
-                                "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 "
+                                "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full"
                               )}
+                              type="button"
                             >
                               <item.icon
-                                className={classNames(
-                                  // isActive === item?.href
-                                  //   ? "text-[#314F8F]"
-                                  //   : "text-white group-hover:text-[#212427]",
-                                  "h-6 w-6 shrink-0"
-                                )}
+                                className={classNames("h-6 w-6 shrink-0")}
                                 aria-hidden="true"
                               />
                               {item.name}
-                            </Link>
+                            </button>
                           ))}
                         </ul>
                       </li>
@@ -155,27 +149,22 @@ const Sidenav = ({ children }: { children: any }) => {
 
                         <ul role="list" className="-mx-2 mt-2 space-y-1">
                           {services?.map((item, i) => (
-                            <Link
+                            <button
                               key={i}
-                              href={item.href}
+                              onClick={() => handleNavigationClick(item)}
                               className={classNames(
                                 item?.href === active
-                                  ? "text-secondary bg-primary font-normal"
+                                  ? "text-secondary bg-primary font-normal "
                                   : "text-black hover:text-black hover:bg-lightgray",
-                                "group flex gap-x-3 rounded-md p-2 text-sm  "
+                                " flex items-center gap-x-3 rounded-md p-2 text-sm w-full "
                               )}
                             >
                               <item.icon
-                                className={classNames(
-                                  // isActive === item?.href
-                                  //   ? "text-[#314F8F]"
-                                  //   : "text-white group-hover:text-[#212427]",
-                                  "h-6 w-6 shrink-0"
-                                )}
+                                className={classNames("h-6 w-6 shrink-0")}
                                 aria-hidden="true"
                               />
                               {item.name}
-                            </Link>
+                            </button>
                           ))}
                         </ul>
                       </li>
@@ -206,28 +195,23 @@ const Sidenav = ({ children }: { children: any }) => {
               <div className="">
                 <ul role="list" className=" space-y-1">
                   {navigation.map((item, i) => (
-                    <Link
+                    <button
                       key={i}
                       onClick={() => handleNavigationClick(item)}
-                      href={item.href}
                       className={classNames(
                         item?.href === active
                           ? "text-secondary bg-primary font-normal"
                           : "text-black hover:text-black hover:bg-lightgray",
-                        "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 "
+                        "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full"
                       )}
+                      type="button" // Add type="button" to prevent form submission behavior
                     >
                       <item.icon
-                        className={classNames(
-                          // isActive === item?.href
-                          //   ? "text-[#314F8F]"
-                          //   : "text-white group-hover:text-[#212427]",
-                          "h-6 w-6 shrink-0"
-                        )}
+                        className={classNames("h-6 w-6 shrink-0")}
                         aria-hidden="true"
                       />
                       {item.name}
-                    </Link>
+                    </button>
                   ))}
                 </ul>
               </div>
@@ -237,34 +221,31 @@ const Sidenav = ({ children }: { children: any }) => {
                   className=" py-4 space-y-1 border-b-2 border-[#f0f0f0]"
                 >
                   {services.map((item, i) => (
-                    <Link
+                    <button
                       key={i}
-                      href={item.href}
+                      onClick={() => handleNavigationClick(item)}
                       className={classNames(
                         item?.href === active
                           ? "text-secondary bg-primary font-normal"
                           : "text-black hover:text-black hover:bg-lightgray",
-                        "group flex items-center gap-x-3 rounded-md p-2 text-sm  "
+                        "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full"
                       )}
                     >
                       <item.icon
-                        className={classNames(
-                          // isActive === item?.href
-                          //   ? "text-[#314F8F]"
-                          //   : "text-white group-hover:text-[#212427]",
-                          "h-6 w-6 shrink-0"
-                        )}
+                        className={classNames("h-6 w-6 shrink-0")}
                         aria-hidden="true"
                       />
                       {item.name}
-                    </Link>
+                    </button>
                   ))}
                 </ul>
 
                 <div className="my-4 flex items-center gap-4">
                   <UserButton afterSignOutUrl="/sign-in" />
                   <h3 className="font-normal text-black font-poppin">
-                    {session?.user?.fullName ? session?.user?.fullName : session?.user?.username}
+                    {session?.user?.fullName
+                      ? session?.user?.fullName
+                      : session?.user?.username}
                   </h3>
                 </div>
               </div>

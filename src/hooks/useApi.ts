@@ -3,7 +3,7 @@
 import { useSession } from "@clerk/nextjs";
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { useState, useCallback } from "react";
-import { ROOT_API_URL } from "../Utils/Common";
+import { ROOT_API_URL } from "../utils/common";
 
 type UseApiOptions = {
   isAuth?: boolean;
