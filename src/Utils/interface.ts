@@ -75,7 +75,7 @@ export interface PageConfig {
   matcher?: string[];
 }
 
-export interface TestData {
-  created_at: string;
-  status: string;
-}
+// export interface TestData {
+//   created_at: string;
+//   status: string;
+// }

@@ -1,9 +1,9 @@
 "use client";
 
 import { Col, Row, Tooltip } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
-import { BottestReportProps, TestData } from "../../../utils/Interface";
+import { BottestReportProps } from "../../../utils/Interface";
 import { useApi } from "../../../hooks/useApi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -18,6 +18,11 @@ const TestRun = ({
   const [testDetails, setTestDetails] = useState<TestData[]>([]);
   const [recentTest, setRecentTest] = useState<TestData | null>(null);
 
+  interface TestData {
+    created_at: string;
+    status: string;
+  }
+
   const getTestDetails = async (testId: string, environmentId: string) => {
     try {
       let query = "";
@@ -29,14 +34,19 @@ const TestRun = ({
         method: "GET",
       });
 
-      const [mostRecentTest, ...sortedTestData] = data?.data?.sort(
-        (a: TestData, b: TestData) =>
-          new Date(b?.created_at)?.getTime() -
-          new Date(a?.created_at)?.getTime()
-      );
+      const sorted = data?.data?.sort((a: TestData, b: TestData) => {
+        const dateA = new Date(a?.created_at);
+        const dateB = new Date(b?.created_at);
 
-      setTestDetails(sortedTestData);
-      setRecentTest(mostRecentTest);
+        const timeA = dateA.getHours() * 60 + dateA.getMinutes();
+        const timeB = dateB.getHours() * 60 + dateB.getMinutes();
+
+        return timeA - timeB;
+      });
+
+      setTestDetails(data?.data);
+
+      setRecentTest(sorted[sorted.length - 1]);
     } catch (error) {
       console.error({ error });
     } finally {
@@ -257,6 +267,11 @@ const TestRun = ({
 
   const { backgroundColor, text, icon } = getBackgroundColorClass();
 
+  function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
+    return <span style={{ marginRight: '0.5rem' }}>{children}</span>
+}
+
+
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] rounded-lg">
       <Row className="h-full">
@@ -307,15 +322,24 @@ const TestRun = ({
               )}
             </div>
             <div className="flex gap-12 xl:gap-14 lg:gap-10">
+            {loading ? (
+                <Skeleton count={3}
+                wrapper={InlineWrapperWithMargin}
+                inline
+                width={78} />
+              ) : <>
+            
               <h3 className="text-[#909193] font-normal font-poppin">
                 {"Older"}
               </h3>
               <h1 className="font-medium  text-black font-poppin">
-                {"Last 10 runs"}
+                {`Last ${testDetails.length} runs`}
               </h1>
               <h3 className="text-[#909193] font-normal font-poppin">
                 {"Newer"}
               </h3>
+              </>
+}
             </div>
           </div>
         </Col>

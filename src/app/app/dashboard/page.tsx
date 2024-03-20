@@ -6,9 +6,9 @@ import { useUser } from "@clerk/nextjs";
 import { ReloadOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
 
-import CustomSelect from "../../../elements/CustomSelect";
-import CustomButton from "../../../elements/Button";
-import CustomInput from "../../../elements/Input";
+import CustomSelect from "../../../elements/customselect";
+import CustomButton from "../../../elements/button";
+import CustomInput from "../../../elements/input";
 import { useApi } from "../../../hooks/useApi";
 import { botsTest } from "../../../utils/common";
 import {
@@ -19,7 +19,7 @@ import {
   SuiteType,
   TestType,
 } from "../../../utils/Interface";
-import TestRun from "../../components/BottestReport/TestRun";
+import TestRun from "../../components/bottestreport/TestRun";
 
 interface DashboardProps {}
 
