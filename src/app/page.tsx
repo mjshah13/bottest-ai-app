@@ -1,14 +1,16 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { useSession } from "@clerk/clerk-react";
+import { useSession , useSessionList } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { session } = useSession();
   const router = useRouter();
 
-  console.log(session);
+  
+
+  
 
   return (
     <div className="h-screen bg-[#fdfcfa] flex items-center justify-center">

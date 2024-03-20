@@ -10,40 +10,62 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
-import { OrganizationSwitcher, UserButton, useSession } from "@clerk/nextjs";
+import { UserButton, useSession } from "@clerk/nextjs";
 import { NavigationItem, ServiceItem } from "../../../utils/Interface";
 import { useRouter } from "next/navigation";
 
 const navigation: NavigationItem[] = [
-  { name: "Dashboard", href: "/app/dashboard", icon: HomeIcon, current: true },
+  {
+    name: "Dashboard",
+    href: "/app/dashboard",
+    icon: HomeIcon,
+    current: true,
+    isDisabled: false,
+  },
   {
     name: "Analytics",
     href: "/app/analytics",
     icon: UsersIcon,
     current: false,
+    isDisabled: true,
   },
   {
     name: "Organization",
     href: "/app/organization",
     icon: FolderIcon,
     current: false,
+    isDisabled: true,
   },
 ];
 
 const services: ServiceItem[] = [
-  { id: 1, name: "Help", href: "#", icon: HomeIcon, current: false },
-  { id: 2, name: "Documentation", href: "", icon: UsersIcon, current: false },
+  {
+    id: 1,
+    name: "Help",
+    href: "#",
+    icon: HomeIcon,
+    current: false,
+    isDisabled: true,
+  },
+  {
+    id: 2,
+    name: "Documentation",
+    href: "",
+    icon: UsersIcon,
+    current: false,
+    isDisabled: true,
+  },
 ];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Sidenav = ({ children }: { children: any }) => {
+const Sidenav = () => {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const [active, setActive] = useState(pathname); // Initialize with the active item
+  const [active, setActive] = useState(pathname);
 
   const handleNavigationClick = (item: NavigationItem) => {
     setActive(item.href);
@@ -51,8 +73,6 @@ const Sidenav = ({ children }: { children: any }) => {
   };
 
   const { session } = useSession();
-
-  // console.log(session?.user?.fullName)
 
   return (
     <div>
@@ -108,7 +128,8 @@ const Sidenav = ({ children }: { children: any }) => {
                     </button>
                   </div>
                 </Transition.Child>
-                {/* Sidebar component, swap this element with another sidebar if you like */}
+                {/* Sidebar component, swap this element with another sidebar if you
+                like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                   <div className="flex h-16 shrink-0 items-center">
                     <img
@@ -124,10 +145,13 @@ const Sidenav = ({ children }: { children: any }) => {
                           {navigation.map((item, i) => (
                             <button
                               key={i}
+                              disabled={item?.isDisabled}
                               onClick={() => handleNavigationClick(item)}
                               className={classNames(
                                 item?.href === active
                                   ? "text-secondary bg-primary font-normal"
+                                  : item?.isDisabled
+                                  ? "text-[#b6b8b7]  hover:bg-lightgray"
                                   : "text-black hover:text-black hover:bg-lightgray",
                                 "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full"
                               )}
@@ -142,6 +166,7 @@ const Sidenav = ({ children }: { children: any }) => {
                           ))}
                         </ul>
                       </li>
+
                       <li>
                         <div className="text-xs font-semibold leading-6 text-gray-400">
                           Your teams
@@ -151,10 +176,13 @@ const Sidenav = ({ children }: { children: any }) => {
                           {services?.map((item, i) => (
                             <button
                               key={i}
+                              disabled={item?.isDisabled}
                               onClick={() => handleNavigationClick(item)}
                               className={classNames(
                                 item?.href === active
                                   ? "text-secondary bg-primary font-normal "
+                                  : item?.isDisabled
+                                  ? "text-[#b6b8b7]  hover:bg-lightgray"
                                   : "text-black hover:text-black hover:bg-lightgray",
                                 " flex items-center gap-x-3 rounded-md p-2 text-sm w-full "
                               )}
@@ -176,7 +204,6 @@ const Sidenav = ({ children }: { children: any }) => {
           </div>
         </Dialog>
       </Transition.Root>
-
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col ">
         <div
@@ -196,15 +223,18 @@ const Sidenav = ({ children }: { children: any }) => {
                 <ul role="list" className=" space-y-1">
                   {navigation.map((item, i) => (
                     <button
+                      disabled={item?.isDisabled}
                       key={i}
                       onClick={() => handleNavigationClick(item)}
                       className={classNames(
                         item?.href === active
                           ? "text-secondary bg-primary font-normal"
+                          : item?.isDisabled
+                          ? "text-[#b6b8b7]  hover:bg-lightgray"
                           : "text-black hover:text-black hover:bg-lightgray",
                         "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full"
                       )}
-                      type="button" // Add type="button" to prevent form submission behavior
+                      type="button"
                     >
                       <item.icon
                         className={classNames("h-6 w-6 shrink-0")}
@@ -222,11 +252,14 @@ const Sidenav = ({ children }: { children: any }) => {
                 >
                   {services.map((item, i) => (
                     <button
+                      disabled={item?.isDisabled}
                       key={i}
                       onClick={() => handleNavigationClick(item)}
                       className={classNames(
                         item?.href === active
                           ? "text-secondary bg-primary font-normal"
+                          : item?.isDisabled
+                          ? "text-[#b6b8b7]  hover:bg-lightgray"
                           : "text-black hover:text-black hover:bg-lightgray",
                         "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full"
                       )}
@@ -253,7 +286,6 @@ const Sidenav = ({ children }: { children: any }) => {
           </nav>
         </div>
       </div>
-
       <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
         <button
           type="button"
@@ -265,13 +297,6 @@ const Sidenav = ({ children }: { children: any }) => {
         </button>
         <UserButton afterSignOutUrl="/sign-in" />
       </div>
-
-      <main className="relative pt-12 pb-11 lg:pl-64 ">
-        <div className="absolute right-2 top-2">
-          <OrganizationSwitcher />
-        </div>
-        <div className=" px-4 sm:px-6 lg:px-7 h-[90vh]">{children}</div>
-      </main>
     </div>
   );
 };

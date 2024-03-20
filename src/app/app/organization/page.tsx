@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const Organization = () => {
   return (
-    <div>hello Organization</div>
-  )
-}
+    <div className="h-[90vh] flex justify-center items-center">
+      Organization
+    </div>
+  );
+};
 
-export default Organization
+export default Organization;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ClerkProvider } from "@clerk/nextjs";
+import "./globals.css";
 
 
 export default function RootLayout({

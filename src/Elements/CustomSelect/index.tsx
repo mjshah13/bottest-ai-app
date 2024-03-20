@@ -5,7 +5,6 @@ import { SettingOutlined } from "@ant-design/icons";
 import { Button, Select } from "antd";
 import { Option } from "../../utils/Interface";
 
-
 interface CustomSelectProps {
   onChange?: (value: string) => void;
   onSelectChange?: (selectedOption: Option) => void;

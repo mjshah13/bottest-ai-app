@@ -3,7 +3,7 @@
 import { Col, Row, Tooltip } from "antd";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
-import { BottestReportProps } from "../../../utils/Interface";
+import { BottestReportProps, TestType } from "../../../utils/Interface";
 import { useApi } from "../../../hooks/useApi";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -13,15 +13,11 @@ const TestRun = ({
   title,
   testId,
   environmentId,
+  getRecentTest,
 }: BottestReportProps) => {
   const { loading, error, request } = useApi();
-  const [testDetails, setTestDetails] = useState<TestData[]>([]);
-  const [recentTest, setRecentTest] = useState<TestData | null>(null);
-
-  interface TestData {
-    created_at: string;
-    status: string;
-  }
+  const [testDetails, setTestDetails] = useState<TestType[]>([]);
+  const [recentTest, setRecentTest] = useState<TestType | null>(null);
 
   const getTestDetails = async (testId: string, environmentId: string) => {
     try {
@@ -34,7 +30,7 @@ const TestRun = ({
         method: "GET",
       });
 
-      const sorted = data?.data?.sort((a: TestData, b: TestData) => {
+      const sorted = data?.data?.sort((a: TestType, b: TestType) => {
         const dateA = new Date(a?.created_at);
         const dateB = new Date(b?.created_at);
 
@@ -56,6 +52,12 @@ const TestRun = ({
   useEffect(() => {
     getTestDetails(testId, environmentId);
   }, [testId, environmentId]);
+
+  useEffect(() => {
+    if (recentTest && getRecentTest) {
+      getRecentTest(recentTest);
+    }
+  }, [recentTest]);
 
   const getBackgroundColorClass = () => {
     switch (recentTest?.status) {
@@ -103,7 +105,6 @@ const TestRun = ({
           ),
         };
       case "Fail":
-      case "Error":
         return {
           backgroundColor: "bg-dangerLight",
           text: "View full result",
@@ -129,6 +130,26 @@ const TestRun = ({
                 stroke-width="1.33333"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+              />
+            </svg>
+          ),
+        };
+      case "Error":
+        return {
+          backgroundColor: "bg-dangerLight",
+          text: "View error",
+          icon: (
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="24" height="24" rx="12" fill="#E1654A" />
+              <path
+                d="M12.975 6.185L12.754 14.43H11.139L10.918 6.185H12.975ZM12.006 18.119C11.6547 18.119 11.36 18 11.122 17.762C10.884 17.524 10.765 17.2293 10.765 16.878C10.765 16.5267 10.884 16.232 11.122 15.994C11.36 15.756 11.6547 15.637 12.006 15.637C12.346 15.637 12.635 15.756 12.873 15.994C13.111 16.232 13.23 16.5267 13.23 16.878C13.23 17.2293 13.111 17.524 12.873 17.762C12.635 18 12.346 18.119 12.006 18.119Z"
+                fill="white"
               />
             </svg>
           ),
@@ -268,9 +289,8 @@ const TestRun = ({
   const { backgroundColor, text, icon } = getBackgroundColorClass();
 
   function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
-    return <span style={{ marginRight: '0.5rem' }}>{children}</span>
-}
-
+    return <span style={{ marginRight: "0.5rem" }}>{children}</span>;
+  }
 
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] rounded-lg">
@@ -322,24 +342,26 @@ const TestRun = ({
               )}
             </div>
             <div className="flex gap-12 xl:gap-14 lg:gap-10">
-            {loading ? (
-                <Skeleton count={3}
-                wrapper={InlineWrapperWithMargin}
-                inline
-                width={78} />
-              ) : <>
-            
-              <h3 className="text-[#909193] font-normal font-poppin">
-                {"Older"}
-              </h3>
-              <h1 className="font-medium  text-black font-poppin">
-                {`Last ${testDetails.length} runs`}
-              </h1>
-              <h3 className="text-[#909193] font-normal font-poppin">
-                {"Newer"}
-              </h3>
-              </>
-}
+              {loading ? (
+                <Skeleton
+                  count={3}
+                  wrapper={InlineWrapperWithMargin}
+                  inline
+                  width={78}
+                />
+              ) : (
+                <>
+                  <h3 className="text-[#909193] font-normal font-poppin">
+                    {"Older"}
+                  </h3>
+                  <h1 className="font-medium  text-black font-poppin">
+                    {`Last ${testDetails.length} runs`}
+                  </h1>
+                  <h3 className="text-[#909193] font-normal font-poppin">
+                    {"Newer"}
+                  </h3>
+                </>
+              )}
             </div>
           </div>
         </Col>
@@ -356,13 +378,14 @@ const TestRun = ({
                   <h1 className="text-black font-normal font-poppin text-md">
                     {recentTest?.status}
                   </h1>
-                  <p
+                  <button
                     className={`text-[#909193] ${
-                      text === "View full result" && "font-semibold text-black"
+                      text === "View full result" &&
+                      "font-semibold text-black hover:underline "
                     }  font-poppin text-md`}
                   >
                     {text}
-                  </p>
+                  </button>
                 </div>
               </div>
             )}

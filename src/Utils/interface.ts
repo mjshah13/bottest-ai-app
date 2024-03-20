@@ -19,6 +19,7 @@ export interface NavigationItem {
   href: string;
   icon: React.ElementType;
   current: boolean;
+  isDisabled?: boolean
 }
 
 export interface ServiceItem {
@@ -27,6 +28,7 @@ export interface ServiceItem {
   href: string;
   icon: React.ElementType;
   current: boolean;
+  isDisabled?: boolean
 }
 
 export interface BottestReportProps {
@@ -41,6 +43,7 @@ export interface BottestReportProps {
   statuses?: string[];
   testId: string;
   environmentId: string;
+  getRecentTest?: ((TestData: TestType) => void) | null
 }
 
 export interface BotType {
@@ -75,7 +78,4 @@ export interface PageConfig {
   matcher?: string[];
 }
 
-// export interface TestData {
-//   created_at: string;
-//   status: string;
-// }
+

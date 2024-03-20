@@ -19,26 +19,26 @@ import {
   SuiteType,
   TestType,
 } from "../../../utils/Interface";
-import TestRun from "../../components/bottestreport/TestRun";
+import TestRun from "../../components/testrun/TestRun";
 
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
   const { loading, error, request } = useApi();
+  const [recentTests, setrecentTests] = useState<TestType[] | []>([]);
+
   const [filters, setFilters] = useState({
     tab: "View all",
   });
 
   const filterData = (status: any) => {
     if (status === "View all") {
-      return initialBotsData;
+      return recentTests;
     }
-
-    const filteredItems = initialBotsData.filter((item) => {
-      return item.progress === status;
+    const filteredItems = recentTests.filter((item) => {
+      return item.status === status;
     });
-
     return filteredItems;
   };
 
@@ -49,7 +49,7 @@ const Dashboard = (props: DashboardProps) => {
     });
 
     const filteredData = filterData(status);
-    setBotsdata(filteredData);
+    console.log(filteredData, "filteredData");
   };
 
   const initialBotsData = [
@@ -189,6 +189,8 @@ const Dashboard = (props: DashboardProps) => {
     environment: { name: "", id: "" },
   });
 
+  // console.log(recentTests , 'recentTests')
+
   const getBots = async (user: UserResource) => {
     try {
       const data = await request({
@@ -282,7 +284,7 @@ const Dashboard = (props: DashboardProps) => {
 
   return (
     <div className="h-full gap-5 flex flex-col">
-      <div className="h-[20%] border-2 rounded-lg border-[#f0f0f0] bg-white">
+      <div className="h-[23%] border-2 rounded-lg border-[#f0f0f0] bg-white">
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
           <h1 className="font-semibold font-poppin text-3xl">Dashboard</h1>
         </div>
@@ -328,7 +330,7 @@ const Dashboard = (props: DashboardProps) => {
       </div>
       <div
         className={` ${
-          testData ? "h-[80%] " : "min-h-[300px] h-full flex flex-col "
+          testData ? "h-[77%] " : "min-h-[300px] h-full flex flex-col "
         }  border-2 rounded-lg border-[#f0f0f0] bg-white`}
       >
         {testData ? (
@@ -392,6 +394,9 @@ const Dashboard = (props: DashboardProps) => {
                 testData?.map((item: TestType) => (
                   <div className="mb-5" key={item?.title}>
                     <TestRun
+                      getRecentTest={(test) =>
+                        setrecentTests([...recentTests, test])
+                      }
                       statuses={item?.statuses}
                       isDisabled={!item?.full_run_enabled}
                       title={item?.name}
