@@ -19,7 +19,7 @@ export interface NavigationItem {
   href: string;
   icon: React.ElementType;
   current: boolean;
-  isDisabled?: boolean
+  isDisabled?: boolean;
 }
 
 export interface ServiceItem {
@@ -28,22 +28,15 @@ export interface ServiceItem {
   href: string;
   icon: React.ElementType;
   current: boolean;
-  isDisabled?: boolean
+  isDisabled?: boolean;
 }
 
 export interface BottestReportProps {
   isDisabled?: boolean;
   title?: string;
-  olderText?: string;
-  lastRunText?: string;
-  newerText?: string;
-  progress?: string;
-  progressResult?: string;
-  svg?: React.ReactNode;
-  statuses?: string[];
-  testId: string;
-  environmentId: string;
-  getRecentTest?: ((TestData: TestType) => void) | null
+  lastTestRuns?: TestType[];
+  status: string;
+  loading?: boolean;
 }
 
 export interface BotType {
@@ -72,10 +65,10 @@ export interface TestType {
   suite_id: string;
   use_default_iteration_count: boolean;
   use_default_success_criteria: boolean;
+  lastTests?: any;
+  status: string;
 }
 
 export interface PageConfig {
   matcher?: string[];
 }
-
-

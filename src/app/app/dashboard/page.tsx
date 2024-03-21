@@ -5,12 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { ReloadOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
-
-import CustomSelect from "../../../elements/customselect";
-import CustomButton from "../../../elements/button";
-import CustomInput from "../../../elements/input";
 import { useApi } from "../../../hooks/useApi";
-import { botsTest } from "../../../utils/common";
 import {
   UserResource,
   BotType,
@@ -18,178 +13,60 @@ import {
   Option,
   SuiteType,
   TestType,
-} from "../../../utils/Interface";
-import TestRun from "../../components/testrun/TestRun";
+} from "../../../utils/typesInterface";
+import TestRun from "../../components/testRun";
+import CustomSelect from "../../../elements/select";
+import CustomButton from "../../../elements/button";
+import CustomInput from "../../../elements/input";
+import { filterOptions } from "../../../utils/common";
 
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const { loading, error, request } = useApi();
-  const [recentTests, setrecentTests] = useState<TestType[] | []>([]);
-
+  const { user } = useUser();
+  const { request } = useApi();
+  const [botLists, setBotLists] = useState<BotType[] | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [suiteLists, setSuiteLists] = useState<SuiteType[] | null>(null);
+  const [environmentLists, setEnvironmentLists] = useState<
+    EnvironmentType[] | null
+  >(null);
+  const [testData, setTestData] = useState<TestType[] | null>(null);
+  const [filteredData, setFilteredData] = useState<
+    TestType[] | null | undefined
+  >(null);
+  const [selectedValues, setSelectedValues] = useState({
+    bot: { name: "", id: "" },
+    suite: { name: "", id: "" },
+    environment: { name: "", id: "" },
+  });
   const [filters, setFilters] = useState({
     tab: "View all",
   });
-
-  const filterData = (status: any) => {
+  const filterData = (status: string) => {
     if (status === "View all") {
-      return recentTests;
+      return testData;
     }
-    const filteredItems = recentTests.filter((item) => {
+    const filteredItems = testData?.filter((item: TestType) => {
       return item.status === status;
     });
     return filteredItems;
   };
+
+  const passedTests = filterData("Pass");
+  const failedTests = filterData("Fail");
+  // const mixedTests = filterData("Mixed");
+  // const runningTests = filterData("Running");
+  // const skippedTests = filterData("Skipped");
+  // const stoppedTests = filterData("Stopped");
 
   const handleButtonClick = (status: any) => {
     setFilters({
       ...filters,
       tab: status,
     });
-
-    const filteredData = filterData(status);
-    console.log(filteredData, "filteredData");
+    setFilteredData(filterData(status));
   };
-
-  const initialBotsData = [
-    {
-      title: "My first test",
-      olderText: "Older",
-      newerText: "Newer",
-      lastRunText: "Last 10 runs",
-      progress: "Running",
-      progressResult: "Test in progress",
-      statuses: [
-        "success",
-        "failed",
-        "success",
-        "failed",
-        "failed",
-        "success",
-        "success",
-        "failed",
-        "success",
-        "success",
-      ],
-      isDisabledtestResult: false,
-      svg: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M11.9997 1.71433C14.034 1.71433 16.0227 2.31758 17.7142 3.44778C19.4056 4.57799 20.724 6.18439 21.5025 8.06386C22.281 9.94332 22.4847 12.0114 22.0878 14.0067C21.6909 16.0019 20.7113 17.8346 19.2728 19.2731C17.8343 20.7116 16.0016 21.6912 14.0064 22.0881C12.0111 22.485 9.94303 22.2813 8.06357 21.5028C6.1841 20.7243 4.5777 19.4059 3.44749 17.7144C2.31728 16.023 1.71404 14.0343 1.71404 12"
-            stroke="#E7C200"
-            stroke-width="3.42856"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "My second test",
-      olderText: "Older",
-      newerText: "Newer",
-      lastRunText: "Last 10 runs",
-      progress: "Pass",
-      progressResult: "View full result",
-      statuses: [
-        "success",
-        "failed",
-        "success",
-        "failed",
-        "failed",
-        "success",
-        "success",
-        "failed",
-        "success",
-        "success",
-      ],
-      isDisabledtestResult: true,
-      svg: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect width="24" height="24" rx="12" fill="#54CA6E" />
-          <path
-            d="M17.3334 8L10.0001 15.3333L6.66675 12"
-            stroke="white"
-            stroke-width="1.33333"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      ),
-    },
-    {
-      title: "My third test",
-      olderText: "Older",
-      newerText: "Newer",
-      lastRunText: "Last 10 runs",
-      progress: "Fail",
-      progressResult: "View full result",
-      isDisabledtestResult: false,
-      statuses: [
-        "success",
-        "failed",
-        "success",
-        "failed",
-        "failed",
-        "success",
-        "success",
-        "failed",
-        "success",
-        "success",
-      ],
-      svg: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect width="24" height="24" rx="12" fill="#E1654A" />
-          <path
-            d="M16 8L8 16"
-            stroke="white"
-            stroke-width="1.33333"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M8 8L16 16"
-            stroke="white"
-            stroke-width="1.33333"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      ),
-    },
-  ];
-
-  const [Botsdata, setBotsdata] = useState(initialBotsData);
-  const [botLists, setBotLists] = useState<BotType[] | null>(null);
-  const [suiteLists, setSuiteLists] = useState<SuiteType[] | null>(null);
-  const [environmentLists, setEnvironmentLists] = useState<
-    EnvironmentType[] | null
-  >(null);
-  const [testData, setTestData] = useState<TestType | null>(null);
-  const [selectedValues, setSelectedValues] = useState({
-    bot: { name: "", id: "" },
-    suite: { name: "", id: "" },
-    environment: { name: "", id: "" },
-  });
-
-  // console.log(recentTests , 'recentTests')
 
   const getBots = async (user: UserResource) => {
     try {
@@ -242,16 +119,57 @@ const Dashboard = (props: DashboardProps) => {
       console.error({ error });
     }
   };
+  const enrichDataWithLastTests = async (dataArray: TestType[]) => {
+    // Map over the array to convert it into an array of promises using the ids to call the API.
+    const promises = dataArray.map(async (item: TestType) => {
+      // Extract the id from the current item.
+      const { id } = item;
 
+      try {
+        // Make the API call for the current id.
+        const lastTestsData = await getTestDetails(
+          id,
+          selectedValues?.environment?.id
+        );
+        const lastTests = lastTestsData?.data?.sort(
+          (a: TestType, b: TestType) => {
+            const dateA = new Date(a?.created_at);
+            const dateB = new Date(b?.created_at);
+
+            const timeA = dateA.getHours() * 60 + dateA.getMinutes();
+            const timeB = dateB.getHours() * 60 + dateB.getMinutes();
+
+            return timeA - timeB;
+          }
+        );
+        const status = lastTests[lastTests.length - 1]?.status;
+
+        // Assign the API response to a new property `lastTests` in the current item.
+        return { ...item, lastTests, status };
+      } catch (error) {
+        // Handle any possible errors. You could also choose to return the item without lastTests.
+        console.error(`Failed to fetch lastTests for ID ${id}:`, error);
+        return item; // Return the item without `lastTests`.
+      }
+    });
+
+    // Wait for all promises to settle, then return the new data array with lastTests added to each item.
+    return Promise.all(promises);
+  };
   const getTests = async (suite: string) => {
     try {
+      setIsLoading(true);
       const data = await request({
         url: `/v1/suites/${suite}/tests`,
         method: "GET",
       });
-      setTestData(data?.data);
+      const enhancedData = await enrichDataWithLastTests(data?.data);
+      setTestData(enhancedData);
     } catch (error) {
+      setIsLoading(false);
       console.error({ error });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -259,6 +177,11 @@ const Dashboard = (props: DashboardProps) => {
     if (!user) return;
     getBots(user);
   }, [user]);
+
+  useEffect(() => {
+    if (!testData) return;
+    setFilteredData(testData);
+  }, [testData]);
 
   useEffect(() => {
     if (!selectedValues?.bot?.id) return;
@@ -274,13 +197,39 @@ const Dashboard = (props: DashboardProps) => {
   }, [suiteLists, environmentLists]);
 
   useEffect(() => {
-    if (!selectedValues?.suite?.id) return;
+    if (!selectedValues?.suite?.id || !selectedValues?.environment?.id) return;
     getTests(selectedValues?.suite?.id);
-  }, [selectedValues?.suite?.id]);
+  }, [selectedValues?.suite?.id, selectedValues?.environment?.id]);
 
   const handleSelect = (key: string, selectedOption: Option) => {
     setSelectedValues({ ...selectedValues, [key]: selectedOption });
   };
+  const getTestDetails = (testId: string, environmentId: string) => {
+    try {
+      let query = "";
+      if (environmentId) {
+        query = `?environment_id=${environmentId}`;
+      }
+      return request({
+        url: `/v1/tests/${testId}/test_runs${query}`,
+        method: "GET",
+      });
+    } catch (error) {
+      console.error({ error });
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    if (!testData) return;
+    enrichDataWithLastTests(testData)
+      .then((enhancedData) => {
+        console.log("Data with lastTests:", enhancedData);
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  }, [testData]);
 
   return (
     <div className="h-full gap-5 flex flex-col">
@@ -333,7 +282,7 @@ const Dashboard = (props: DashboardProps) => {
           testData ? "h-[77%] " : "min-h-[300px] h-full flex flex-col "
         }  border-2 rounded-lg border-[#f0f0f0] bg-white`}
       >
-        {testData ? (
+        {filteredData ? (
           <>
             <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
               <div className="flex justify-between">
@@ -352,8 +301,13 @@ const Dashboard = (props: DashboardProps) => {
               <div>
                 <p className="text-black">
                   In your most recent run of all your tests,{" "}
-                  <span className="text-success font-medium">1 passed</span> and{" "}
-                  <span className="text-danger font-medium">1 failed</span>
+                  <span className="text-success font-medium">
+                    {passedTests?.length} passed
+                  </span>{" "}
+                  and{" "}
+                  <span className="text-danger font-medium">
+                    {failedTests?.length} failed
+                  </span>
                 </p>
               </div>
             </div>
@@ -361,13 +315,15 @@ const Dashboard = (props: DashboardProps) => {
               <Row>
                 <Col lg={19} md={20}>
                   <div className=" border-[#d9d9d9] border rounded-lg w-max ">
-                    {botsTest &&
-                      botsTest?.map((item, i) => (
+                    {filterOptions &&
+                      filterOptions?.map((item, i) => (
                         <button
                           key={item.key}
                           className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
                             i === 0 ? "rounded-l-lg" : ""
-                          } ${i === botsTest.length - 1 ? "border-r-0" : ""} ${
+                          } ${
+                            i === filterOptions.length - 1 ? "border-r-0" : ""
+                          } ${
                             filters.tab === item.status
                               ? "bg-[#f5f5f5] text-black "
                               : ""
@@ -383,30 +339,32 @@ const Dashboard = (props: DashboardProps) => {
                 </Col>
                 <Col lg={5} md={4}>
                   <div>
-                    <CustomInput type="text" placeholder="Search for a test" />
+                    <CustomInput
+                      // onChange={(value) =>
+                      //   setFilteredData(
+                      //     testData?.filter(
+                      //       (item: TestType) => item?.name === value
+                      //     )
+                      //   )
+                      // }
+                      type="text"
+                      placeholder="Search for a test"
+                    />
                   </div>
                 </Col>
               </Row>
             </div>
 
             <div className="px-5 py-6 h-[415px] overflow-y-scroll ">
-              {testData &&
-                testData?.map((item: TestType) => (
+              {filteredData &&
+                filteredData?.map((item: TestType) => (
                   <div className="mb-5" key={item?.title}>
                     <TestRun
-                      getRecentTest={(test) =>
-                        setrecentTests([...recentTests, test])
-                      }
-                      statuses={item?.statuses}
                       isDisabled={!item?.full_run_enabled}
                       title={item?.name}
-                      testId={item?.id}
-                      olderText={item?.olderText}
-                      newerText={item?.newerText}
-                      lastRunText={item?.lastRunText}
-                      progress={item?.progress}
-                      progressResult={item?.progressResult}
-                      environmentId={selectedValues?.environment?.id}
+                      lastTestRuns={item?.lastTests}
+                      status={item?.status}
+                      loading={isLoading}
                     />
                   </div>
                 ))}

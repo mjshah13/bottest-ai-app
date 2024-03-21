@@ -1,14 +1,13 @@
 import { authMiddleware } from "@clerk/nextjs";
-import { PageConfig } from "./utils/Interface";
+import { PageConfig } from "./utils/typesInterface";
 
 // import { PageConfig } from "./utils/Interface";
 
 // Your middleware configuration remains the same
 export default authMiddleware({
-  publicRoutes: ["/" ],
-  
+  publicRoutes: ["/"],
 });
 
-export const config: PageConfig= {
+export const config: PageConfig = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
