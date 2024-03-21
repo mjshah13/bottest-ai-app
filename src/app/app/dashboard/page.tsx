@@ -16,6 +16,9 @@ import useBots from "../../../hooks/useBots";
 import useSuites from "../../../hooks/useSuites";
 import useEnvironment from "../../../hooks/useEnvironment";
 import useTests from "../../../hooks/useTests";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
@@ -147,7 +150,20 @@ const Dashboard = (props: DashboardProps) => {
         }  border-2 rounded-lg border-[#f0f0f0] bg-white`}
       >
         {isLoading && !filteredData ? (
-          <h1>Loading</h1>
+          <>
+            <div className=" flex flex-col py-5 px-4 border-b-2 border-[#f0f0f0]">
+              <Skeleton count={1} width={200} height={30} />
+              <Skeleton count={1} width={350} height={30} />
+            </div>
+
+            <div className="min-h-[520px] h-full w-full flex justify-center items-center flex-col gap-3">
+              <Skeleton count={1} width={200} height={30} />
+              <Skeleton count={1} width={300} height={30} />
+            </div>
+            {/* <Skeleton  />
+           <Skeleton  /> */}
+            {/* <Skeleton  /> */}
+          </>
         ) : (
           <>
             {filteredData ? (

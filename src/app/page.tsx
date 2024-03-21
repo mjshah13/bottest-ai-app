@@ -1,14 +1,13 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton , useAuth, useSession } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { useSession , useSessionList } from "@clerk/clerk-react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { session } = useSession();
   const router = useRouter();
 
-  
+  const {userId } = useAuth();
 
   
 
@@ -24,7 +23,7 @@ export default function Home() {
             </p>
           </div>
           <div className=" h-3/4 flex items-center justify-center">
-            {session ? (
+            {userId ? (
               <div className="flex gap-2 items-center flex-col">
                 <h1 className="text-xl text-black font-semibold">
                   {session && "You're Already Sign in as!"}

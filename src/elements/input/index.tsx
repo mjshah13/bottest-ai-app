@@ -48,7 +48,7 @@ const CustomInput: React.FC<InputProps> = ({
               onClick={handleTogglePasswordVisibility}
               className="cursor-pointer"
             >
-              {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+              {/* {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} */}
             </span>
           )
         }

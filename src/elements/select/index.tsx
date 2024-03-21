@@ -1,5 +1,6 @@
 "use client";
 
+
 import React from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import { Button, Select } from "antd";
@@ -72,9 +73,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 className="w-full border border-[#F0F0F0] hover:bg-transparent font-semibold !important"
                 type="text"
                 icon={
-                  <SettingOutlined
-                    style={{ fontSize: "12px", fontWeight: 900 }}
-                  />
+                
+                  <SettingOutlined  
+                    style={{ fontSize: "12px", fontWeight: 900 }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  />
                 }
                 onClick={onClick}
               >
