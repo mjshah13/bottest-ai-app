@@ -55,10 +55,6 @@ const Dashboard = (props: DashboardProps) => {
 
   const passedTests = filterData("Pass");
   const failedTests = filterData("Fail");
-  // const mixedTests = filterData("Mixed");
-  // const runningTests = filterData("Running");
-  // const skippedTests = filterData("Skipped");
-  // const stoppedTests = filterData("Stopped");
 
   const handleButtonClick = (status: any) => {
     setFilters({
@@ -224,16 +220,37 @@ const Dashboard = (props: DashboardProps) => {
     if (!testData) return;
     enrichDataWithLastTests(testData)
       .then((enhancedData) => {
-        console.log("Data with lastTests:", enhancedData);
+        // console.log("Data with lastTests:", enhancedData);
       })
       .catch((error) => {
-        console.error("An error occurred:", error);
+        // console.error("An error occurred:", error);
       });
   }, [testData]);
 
+
+
+
+  const handleFilteredData = (value : string) =>{
+    console.log(value)
+    if (value.trim() === "") {
+      setFilteredData(testData);
+    } else {
+      const filteredTest = testData?.filter((item) =>
+        item?.name
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      );
+      console.log(filteredTest)
+      setFilteredData(filteredTest);
+    
+      
+    }
+  
+  }
+
   return (
     <div className="h-full gap-5 flex flex-col">
-      <div className="h-[23%] border-2 rounded-lg border-[#f0f0f0] bg-white">
+      <div className="h-[23%] border-2 rounded-lg border-[#f0f0f0] bg-white mt-7">
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
           <h1 className="font-semibold font-poppin text-3xl">Dashboard</h1>
         </div>
@@ -340,13 +357,9 @@ const Dashboard = (props: DashboardProps) => {
                 <Col lg={5} md={4}>
                   <div>
                     <CustomInput
-                      // onChange={(value) =>
-                      //   setFilteredData(
-                      //     testData?.filter(
-                      //       (item: TestType) => item?.name === value
-                      //     )
-                      //   )
-                      // }
+                      onChange={(value) => {
+                       handleFilteredData(value)
+                      }}
                       type="text"
                       placeholder="Search for a test"
                     />

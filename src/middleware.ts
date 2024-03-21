@@ -2,8 +2,8 @@ import { authMiddleware } from "@clerk/nextjs";
 import { PageConfig } from "./utils/typesInterface";
 
 // import { PageConfig } from "./utils/Interface";
-
 // Your middleware configuration remains the same
+
 export default authMiddleware({
   publicRoutes: ["/"],
 });

@@ -205,7 +205,8 @@ const Sidenav = () => {
         </Dialog>
       </Transition.Root>
       {/* Static sidebar for desktop */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col ">
+
+      <div className="hidden h-screen lg:z-50 lg:flex lg:w-64 lg:flex-col ">
         <div
           className="flex grow flex-col gap-y-5 overflow-y-auto  bg-white px-4"
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
@@ -286,6 +287,7 @@ const Sidenav = () => {
           </nav>
         </div>
       </div>
+
       <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
         <button
           type="button"

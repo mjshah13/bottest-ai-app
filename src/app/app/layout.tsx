@@ -5,16 +5,26 @@ import Sidenav from "../components/sidenav";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-[#fdfcfa]">
+    <div className="relative lg:flex w-full">
       <Sidenav />
-      <main className="relative pt-12 pb-11 lg:pl-64 ">
-        <div className="absolute right-8 top-2 ">
-          <OrganizationSwitcher />
+      <main className="bg-[#fdfcfa] w-full">
+        <div className="">
+          <div className="  fixed w-full  ">
+            <div className="w-full bg-white h-[45px] flex items-center" 
+            style={{ boxShadow: "0px 1px 1px 0px rgba(102, 106, 110, 0.08)" }}
+            >
+              <div className="absolute right-72">
+                <OrganizationSwitcher />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className=" px-4 sm:px-6 lg:px-7 h-[90vh] ">{children}</div>
+        <div className="mt-10 sm:px-6 lg:px-7 h-[90vh] w-full">{children}</div>
       </main>
     </div>
   );
 }
 
 export default Layout;
+
+// fdfcf
