@@ -25,7 +25,6 @@ const Dashboard = (props: DashboardProps) => {
   const handleSelect = (key: string, selectedOption: Option) => {
     setSelectedValues({ ...selectedValues, [key]: selectedOption });
   };
-  const { request } = useApi();
   const { botLists } = useBots(handleSelect);
   const { suiteLists, fetchSuites } = useSuites();
   const { environmentLists, fetchEnvironment } = useEnvironment();
@@ -97,6 +96,10 @@ const Dashboard = (props: DashboardProps) => {
     }, 250),
     [testData]
   );
+  useEffect(() => {
+    if (!testData) return;
+    setFilters({ tab: "View all" });
+  }, [testData]);
 
   return (
     <div className="h-full gap-5 flex flex-col">
@@ -252,7 +255,7 @@ const Dashboard = (props: DashboardProps) => {
                         <TestRun
                           isDisabled={!item?.full_run_enabled}
                           title={item?.name}
-                          lastTestRuns={item?.lastTests}
+                          lastTestRuns={item?.recent_test_runs}
                           status={item?.status}
                           loading={isLoading}
                         />
