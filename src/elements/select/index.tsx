@@ -1,6 +1,5 @@
 "use client";
 
-
 import React from "react";
 import { SettingOutlined } from "@ant-design/icons";
 import { Button, Select } from "antd";
@@ -14,6 +13,7 @@ interface CustomSelectProps {
   Btntext?: string;
   disabled?: boolean;
   selectedValue?: string;
+  Label?: string;
   placeholder?: string;
 }
 
@@ -26,6 +26,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   disabled,
   selectedValue,
   placeholder,
+  Label,
 }) => {
   const { Option } = Select;
 
@@ -51,7 +52,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   // };
 
   return (
-    <>
+    <div className="flex flex-col justify-start gap-1">
+      <label className="font-poppin text-sm font-normal text-black">
+        {" "}
+        {Label}
+      </label>
       <Select
         className="w-full h-[35px]"
         onSelect={handleSelectChange}
@@ -73,9 +78,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 className="w-full border border-[#F0F0F0] hover:bg-transparent font-semibold !important"
                 type="text"
                 icon={
-                
-                  <SettingOutlined  
-                    style={{ fontSize: "12px", fontWeight: 900 }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  />
+                  <SettingOutlined
+                    style={{ fontSize: "12px", fontWeight: 900 }}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 }
                 onClick={onClick}
               >
@@ -91,7 +98,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           </Option>
         ))}
       </Select>
-    </>
+    </div>
   );
 };
 

@@ -1,10 +1,11 @@
 "use client";
-import { Col, Row, Tooltip } from "antd";
+import { Col, Row, Spin, Tooltip } from "antd";
 import React, { PropsWithChildren } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import { BottestReportProps } from "../../../utils/typesInterface";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const TestRun = ({
   isDisabled = false,
@@ -48,20 +49,21 @@ const TestRun = ({
                   {lastTestRuns?.map((item, index) => (
                     <div
                       key={index}
-                      className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full ${
-                        item.status === "Pass"
+                      className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full 
+                      ${
+                        item?.status === "Pass"
                           ? "bg-success"
                           : item?.status === "Mixed"
                           ? "bg-[#E7C200]"
-                          : item?.status === "Fail" || "Error"
+                          : item?.status === "Fail" || item?.status === "Error"
                           ? "bg-danger"
                           : item?.status === "Running"
                           ? "bg-[#388aeb]"
                           : item?.status === "Skipped"
-                          ? "bg-black"
+                          ? "bg-[#212427]"
                           : item?.status === "Stopped"
-                          ? "bg-black"
-                          : null
+                          ? "bg-[#212427]"
+                          : ""
                       }`}
                     />
                   ))}
@@ -98,10 +100,10 @@ const TestRun = ({
               <Skeleton count={1} inline width={200} height={70} />
             ) : (
               <div
-                className={`w-[192px] h-[68px] rounded-lg flex items-center justify-center gap-3 ${backgroundColor}`}
+                className={`w-[192px] h-[68px] pl-5 rounded-lg flex items-center justify-start gap-4 ${backgroundColor}`}
               >
                 {icon}
-                <div>
+                <div className="flex flex-col justify-start">
                   <h1 className="text-black font-normal font-poppin text-md">
                     {status}
                   </h1>
@@ -148,19 +150,16 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-primary",
         text: "Test in progress",
         icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M11.9997 1.71433C14.034 1.71433 16.0227 2.31758 17.7142 3.44778C19.4056 4.57799 20.724 6.18439 21.5025 8.06386C22.281 9.94332 22.4847 12.0114 22.0878 14.0067C21.6909 16.0019 20.7113 17.8346 19.2728 19.2731C17.8343 20.7116 16.0016 21.6912 14.0064 22.0881C12.0111 22.485 9.94303 22.2813 8.06357 21.5028C6.1841 20.7243 4.5777 19.4059 3.44749 17.7144C2.31728 16.023 1.71404 14.0343 1.71404 12"
-              stroke="#388AEB"
-              stroke-width="3.42856"
-            />
-          </svg>
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{ fontSize: 24 }}
+                spin
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
+            }
+          />
         ),
       };
     case "Pass":
@@ -337,29 +336,41 @@ const getBackgroundColorClass = (status: string) => {
         text: "No result",
         icon: (
           <svg
+            xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
           >
             <g opacity="0.8">
               <rect width="24" height="24" rx="12" fill="#212427" />
-              <path
-                d="M8 15.3333L11.3333 12L8 8.66666"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M12.6667 15.3333L16.0001 12L12.6667 8.66666"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
+              <g clip-path="url(#clip0_3009_5065)">
+                <path
+                  d="M11.9999 18.6667C15.6818 18.6667 18.6666 15.6819 18.6666 12C18.6666 8.31811 15.6818 5.33334 11.9999 5.33334C8.31802 5.33334 5.33325 8.31811 5.33325 12C5.33325 15.6819 8.31802 18.6667 11.9999 18.6667Z"
+                  stroke="white"
+                  stroke-width="1.33333"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.2666 7.26666L16.7333 16.7333"
+                  stroke="white"
+                  stroke-width="1.33333"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </g>
             </g>
+            <defs>
+              <clipPath id="clip0_3009_5065">
+                <rect
+                  width="16"
+                  height="16"
+                  fill="white"
+                  transform="translate(4 4)"
+                />
+              </clipPath>
+            </defs>
           </svg>
         ),
       };

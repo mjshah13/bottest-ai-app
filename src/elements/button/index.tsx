@@ -1,18 +1,18 @@
-import React, { Children } from "react";
-import { SearchOutlined } from "@ant-design/icons";
+import React from "react";
 import { Button } from "antd";
 
 type Props = {
     type?: "link" | "text" | "default" | "primary" | "dashed" | undefined;
     children?: string;
-    icon?: React.ReactNode;
+    svgIcon?: React.ReactNode;
 
 };
 
-const CustomButton = ({type , children , icon}: Props) => {
+const CustomButton = ({type , children  , svgIcon}: Props) => {
   return (
     <>
-        <Button type={type}  icon={icon}>
+        <Button className="flex items-center gap-2" type={type}>
+        {svgIcon && <>{svgIcon}</>}
         {children}
       </Button>
      

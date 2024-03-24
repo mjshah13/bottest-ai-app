@@ -38,4 +38,14 @@ export const filterOptions = [
     label: "Skipped",
     status: "Skipped",
   },
+  {
+    key: 1,
+    label: "Error",
+    status: "Error",
+  },
 ];
+
+
+
+
+
