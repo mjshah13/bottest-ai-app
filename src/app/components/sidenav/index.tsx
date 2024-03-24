@@ -2,206 +2,38 @@
 import React from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import { UserButton, useSession } from "@clerk/nextjs";
 import { NavigationItem, ServiceItem } from "../../../utils/typesInterface";
 import { useRouter } from "next/navigation";
-
-interface NavigationIconProps {
-  isActive: any;
-  disabled: boolean;
-}
-
-export const AnalyticsIcon: React.FC<NavigationIconProps> = ({
-  isActive,
-  disabled,
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <g opacity="0.75">
-      <path
-        d="M3 3V21H21"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M10 10H8C7.44772 10 7 10.4477 7 11V16C7 16.5523 7.44772 17 8 17H10C10.5523 17 11 16.5523 11 16V11C11 10.4477 10.5523 10 10 10Z"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M18 5H16C15.4477 5 15 5.44772 15 6V16C15 16.5523 15.4477 17 16 17H18C18.5523 17 19 16.5523 19 16V6C19 5.44772 18.5523 5 18 5Z"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </g>
-  </svg>
-);
-
-export const DashboardIcon: React.FC<NavigationIconProps> = ({ isActive }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-      stroke={isActive ? "#314F8F" : "#212427"}
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M9 22V12H15V22"
-      stroke={isActive ? "#314F8F" : "#212427"}
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
-
-export const OrganizationIcon: React.FC<NavigationIconProps> = ({
-  isActive,
-  disabled,
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <g opacity="0.75">
-      <path
-        d="M6 22V4C6 3.46957 6.21071 2.96086 6.58579 2.58579C6.96086 2.21071 7.46957 2 8 2H16C16.5304 2 17.0391 2.21071 17.4142 2.58579C17.7893 2.96086 18 3.46957 18 4V22H6Z"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M6 12H4C3.46957 12 2.96086 12.2107 2.58579 12.5858C2.21071 12.9609 2 13.4696 2 14V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H6"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M18 9H20C20.5304 9 21.0391 9.21071 21.4142 9.58579C21.7893 9.96086 22 10.4696 22 11V20C22 20.5304 21.7893 21.0391 21.4142 21.4142C21.0391 21.7893 20.5304 22 20 22H18"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M10 6H14"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M10 10H14"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M10 14H14"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M10 18H14"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </g>
-  </svg>
-);
-
-export const HelpIcon: React.FC<NavigationIconProps> = ({
-  isActive,
-  disabled,
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <g opacity="0.75">
-      <path
-        d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M9.09003 9C9.32513 8.33167 9.78918 7.7681 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15848 13.7588 7.52152 14.2151 8.06353C14.6714 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M12 17H12.01"
-        stroke={disabled ? "#b6b8b7" : isActive ? "#314F8F" : "#212427"}
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </g>
-  </svg>
-);
+import {
+  Home,
+  BarChartBig,
+  Building2,
+  CircleHelp,
+  X,
+  Menu,
+} from "lucide-react";
 
 const navigation: NavigationItem[] = [
   {
     name: "Dashboard",
     href: "/app/dashboard",
-    icon: DashboardIcon,
+    icon: <Home />,
     current: true,
     isDisabled: false,
   },
   {
     name: "Analytics",
     href: "/app/analytics",
-    icon: AnalyticsIcon,
+    icon: <BarChartBig />,
     current: false,
     isDisabled: true,
   },
   {
     name: "Organization",
     href: "/app/organization",
-    icon: OrganizationIcon,
+    icon: <Building2 />,
     current: false,
     isDisabled: true,
   },
@@ -212,7 +44,7 @@ const services: ServiceItem[] = [
     id: 1,
     name: "Help",
     href: "#",
-    icon: HelpIcon,
+    icon: <CircleHelp />,
     current: false,
     isDisabled: true,
   },
@@ -220,7 +52,7 @@ const services: ServiceItem[] = [
     id: 2,
     name: "Documentation",
     href: "",
-    icon: OrganizationIcon,
+    icon: <Building2 />,
     current: false,
     isDisabled: true,
   },
@@ -290,10 +122,7 @@ const Sidenav = () => {
                       onClick={() => setSidebarOpen(false)}
                     >
                       <span className="sr-only">Close sidebar</span>
-                      <XMarkIcon
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
+                      <X color="#b6b8b7" />
                     </button>
                   </div>
                 </Transition.Child>
@@ -326,12 +155,13 @@ const Sidenav = () => {
                               )}
                               type="button"
                             >
-                              <item.icon
+                              {item?.icon}
+                              {/* <item.icon
                                 disabled={item?.isDisabled}
                                 isActive={item?.href === active}
                                 className={classNames("h-6 w-6 shrink-0")}
                                 aria-hidden="true"
-                              />
+                              /> */}
                               {item.name}
                             </button>
                           ))}
@@ -358,12 +188,13 @@ const Sidenav = () => {
                                 " flex items-center gap-x-3 rounded-md p-2 text-sm w-full "
                               )}
                             >
-                              <item.icon
+                              {item?.icon}
+                              {/* <item.icon
                                 disabled={item?.isDisabled}
                                 isActive={item?.href === active}
                                 className={classNames("h-6 w-6 shrink-0")}
                                 aria-hidden="true"
-                              />
+                              /> */}
                               {item.name}
                             </button>
                           ))}
@@ -410,12 +241,13 @@ const Sidenav = () => {
                       )}
                       type="button"
                     >
-                      <item.icon
+                      {item?.icon}
+                      {/* <item.icon
                         disabled={item?.isDisabled}
                         isActive={item?.href === active}
                         className={classNames("h-6 w-6 shrink-0")}
                         aria-hidden="true"
-                      />
+                      /> */}
                       {item.name}
                     </button>
                   ))}
@@ -440,12 +272,13 @@ const Sidenav = () => {
                         "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full"
                       )}
                     >
-                      <item.icon
+                      {item?.icon}
+                      {/* <item.icon
                         disabled={item?.isDisabled}
                         isActive={item?.href === active}
                         className={classNames("h-6 w-6 shrink-0")}
                         aria-hidden="true"
-                      />
+                      /> */}
                       {item.name}
                     </button>
                   ))}
@@ -472,7 +305,7 @@ const Sidenav = () => {
           onClick={() => setSidebarOpen(true)}
         >
           <span className="sr-only">Open sidebar</span>
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          <Menu />
         </button>
         <UserButton afterSignOutUrl="/sign-in" />
       </div>

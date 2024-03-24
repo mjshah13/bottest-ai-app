@@ -3,7 +3,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "antd";
-import { useApi } from "../../../hooks/useApi";
 import { Option, TestType } from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
@@ -17,50 +16,9 @@ import useEnvironment from "../../../hooks/useEnvironment";
 import useTests from "../../../hooks/useTests";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useOrganization } from "@clerk/nextjs";
+import { RefreshCw } from "lucide-react";
 
 interface DashboardProps {}
-
-interface Prop {}
-
-export const ButtonIcon: React.FC<Prop> = ({}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-  >
-    <path
-      d="M2 8C2 6.4087 2.63214 4.88258 3.75736 3.75736C4.88258 2.63214 6.4087 2 8 2C9.67737 2.00631 11.2874 2.66082 12.4933 3.82667L14 5.33333"
-      stroke="#FDFCFA"
-      stroke-width="1.33333"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M14.0001 2V5.33333H10.6667"
-      stroke="#FDFCFA"
-      stroke-width="1.33333"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M14 8C14 9.5913 13.3679 11.1174 12.2426 12.2426C11.1174 13.3679 9.5913 14 8 14C6.32263 13.9937 4.71265 13.3392 3.50667 12.1733L2 10.6667"
-      stroke="#FDFCFA"
-      stroke-width="1.33333"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M5.33333 10.6667H2V14"
-      stroke="#FDFCFA"
-      stroke-width="1.33333"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
 
 const Dashboard = (props: DashboardProps) => {
   const handleSelect = (key: string, selectedOption: Option) => {
@@ -227,7 +185,7 @@ const Dashboard = (props: DashboardProps) => {
               <Skeleton count={1} width={350} height={30} />
             </div>
 
-            <div className=" h-[370px] w-full flex justify-center items-center flex-col gap-3">
+            <div className=" w-full h-[85%] flex justify-center items-center flex-col gap-3">
               <Skeleton count={1} width={200} height={30} />
               <Skeleton count={1} width={300} height={30} />
             </div>
@@ -245,7 +203,10 @@ const Dashboard = (props: DashboardProps) => {
                     </div>
                     <div className="gap-4 flex ">
                       <CustomButton>Create new test</CustomButton>
-                      <CustomButton type="primary" svgIcon={<ButtonIcon />}>
+                      <CustomButton
+                        type="primary"
+                        svgIcon={<RefreshCw size={17} />}
+                      >
                         Run all tests
                       </CustomButton>
                     </div>

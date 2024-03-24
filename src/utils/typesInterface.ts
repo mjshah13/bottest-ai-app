@@ -17,7 +17,7 @@ export interface Option {
 export interface NavigationItem {
   name: string;
   href: string;
-  icon: React.ElementType;
+  icon: JSX.Element;
   current: boolean;
   isDisabled?: boolean;
 }
@@ -26,7 +26,7 @@ export interface ServiceItem {
   id: number;
   name: string;
   href: string;
-  icon: React.ElementType;
+  icon: JSX.Element;
   current: boolean;
   isDisabled?: boolean;
 }
