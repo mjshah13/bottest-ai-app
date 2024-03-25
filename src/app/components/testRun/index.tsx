@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Box, Grid } from "@radix-ui/themes";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import LoadingSpin from "react-loading-spin";
+import { Ban, Check, ChevronsRight, Shuffle, X } from "lucide-react";
 
 const TestRun = ({
   isDisabled = false,
@@ -185,22 +186,9 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-successLight",
         text: "View full result",
         icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="24" height="24" rx="12" fill="#54CA6E" />
-            <path
-              d="M17.3334 8L10.0001 15.3333L6.66675 12"
-              stroke="white"
-              stroke-width="1.33333"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <div className="bg-[#54CA6E] p-1.5 rounded-2xl flex items-center justify-center ">
+            <Check color="#ffffff" size={15} />
+          </div>
         ),
       };
     case "Fail":
@@ -208,29 +196,9 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-dangerLight",
         text: "View full result",
         icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="24" height="24" rx="12" fill="#E1654A" />
-            <path
-              d="M16 8L8 16"
-              stroke="white"
-              stroke-width="1.33333"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M8 8L16 16"
-              stroke="white"
-              stroke-width="1.33333"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <div className="bg-[#E1654A] p-1.5 rounded-2xl flex items-center justify-center ">
+            <X color="#ffffff" size={15} />
+          </div>
         ),
       };
     case "Error":
@@ -239,8 +207,8 @@ const getBackgroundColorClass = (status: string) => {
         text: "View error",
         icon: (
           <svg
-            width="24"
-            height="24"
+            width="26"
+            height="26"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -258,62 +226,9 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-warningLight",
         text: "View full result",
         icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="24" height="24" rx="12" fill="#E7C200" />
-            <g clip-path="url(#clip0_2971_4445)">
-              <path
-                d="M5.3335 16H6.26683C7.1335 16 7.9335 15.6 8.46683 14.8667L12.5335 9.13333C13.0002 8.4 13.8668 8 14.7335 8H18.6668"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M16 5.33331L18.6667 7.99998L16 10.6666"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M5.3335 8H6.60016C7.60016 8 8.5335 8.6 9.00016 9.46667"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M18.6669 16H14.7335C13.8669 16 13.0002 15.5333 12.5335 14.8L12.2002 14.2667"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M16 13.3333L18.6667 16L16 18.6666"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_2971_4445">
-                <rect
-                  width="16"
-                  height="16"
-                  fill="white"
-                  transform="translate(4 4)"
-                />
-              </clipPath>
-            </defs>
-          </svg>
+          <div className="bg-[#E7C200] p-1.5 rounded-2xl flex items-center justify-center ">
+            <Shuffle color="#ffffff" size={15} />
+          </div>
         ),
       };
     case "Skipped":
@@ -321,31 +236,9 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-[#f2f2f2]",
         text: "No result",
         icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g opacity="0.8">
-              <rect width="24" height="24" rx="12" fill="#212427" />
-              <path
-                d="M8 15.3333L11.3333 12L8 8.66666"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M12.6667 15.3333L16.0001 12L12.6667 8.66666"
-                stroke="white"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </g>
-          </svg>
+          <div className="bg-[#212427] p-1.5 rounded-2xl flex items-center justify-center ">
+            <Ban color="#ffffff" size={15} />
+          </div>
         ),
       };
     case "Stopped":
@@ -353,43 +246,9 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-[#f2f2f2]",
         text: "No result",
         icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <g opacity="0.8">
-              <rect width="24" height="24" rx="12" fill="#212427" />
-              <g clip-path="url(#clip0_3009_5065)">
-                <path
-                  d="M11.9999 18.6667C15.6818 18.6667 18.6666 15.6819 18.6666 12C18.6666 8.31811 15.6818 5.33334 11.9999 5.33334C8.31802 5.33334 5.33325 8.31811 5.33325 12C5.33325 15.6819 8.31802 18.6667 11.9999 18.6667Z"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M7.2666 7.26666L16.7333 16.7333"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </g>
-            </g>
-            <defs>
-              <clipPath id="clip0_3009_5065">
-                <rect
-                  width="16"
-                  height="16"
-                  fill="white"
-                  transform="translate(4 4)"
-                />
-              </clipPath>
-            </defs>
-          </svg>
+          <div className="bg-[#212427] p-1.5 rounded-2xl flex items-center justify-center ">
+            <ChevronsRight color="#ffffff" size={15} />
+          </div>
         ),
       };
     default:

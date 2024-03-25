@@ -5,7 +5,6 @@ import React, { useState } from "react";
 
 type InputType = "text" | "password" | "email" | "number";
 type ResponsiveSize = "1" | "2" | "3";
-
 interface InputProps {
   type?: InputType;
   label?: string;
