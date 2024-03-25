@@ -1,10 +1,12 @@
 "use client";
-import { Col, Row, Spin, Tooltip } from "antd";
 import React, { PropsWithChildren } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import { BottestReportProps } from "../../../utils/typesInterface";
 import Skeleton from "react-loading-skeleton";
-import { LoadingOutlined } from "@ant-design/icons";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Box, Grid } from "@radix-ui/themes";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import LoadingSpin from "react-loading-spin";
 
 const TestRun = ({
   isDisabled = false,
@@ -21,8 +23,8 @@ const TestRun = ({
 
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] rounded-lg">
-      <Row className="h-full">
-        <Col span={7}>
+      <Grid columns="7fr 8fr 5fr 4fr" gap="16px" className="h-full">
+        <Box>
           <div className="h-full gap-2 flex flex-col justify-center px-5 ">
             <h1 className="text-black font-semibold text-lg font-poppin">
               {loading ? (
@@ -37,8 +39,8 @@ const TestRun = ({
               </div>
             ) : null}
           </div>
-        </Col>
-        <Col span={8}>
+        </Box>
+        <Box>
           <div className="flex flex-col h-full justify-center items-center">
             <div className="flex  gap-3 mb-3 ">
               {loading ? (
@@ -92,8 +94,8 @@ const TestRun = ({
               )}
             </div>
           </div>
-        </Col>
-        <Col span={5}>
+        </Box>
+        <Box>
           <div className="h-full flex items-center justify-center">
             {loading ? (
               <Skeleton count={1} inline width={200} height={70} />
@@ -118,24 +120,45 @@ const TestRun = ({
               </div>
             )}
           </div>
-        </Col>
-        <Col span={4}>
+        </Box>
+        <Box>
           <div className="h-full flex items-center justify-center   ">
             <div className=" w-full flex justify-center gap-7">
-              <Tooltip title="Setting">
-                <button className="outline-none border-none bg-transparent">
-                  <Cog6ToothIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />
-                </button>
-              </Tooltip>
-              <Tooltip title="Run test">
-                <button className="outline-none border-none bg-transparent">
-                  <PlayCircleIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />
-                </button>
-              </Tooltip>
+              <Tooltip.Provider>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button className="outline-none border-none bg-transparent">
+                      <Cog6ToothIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                      Setting
+                      <Tooltip.Arrow className="TooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
+
+              <Tooltip.Provider>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button className="outline-none border-none bg-transparent">
+                      <PlayCircleIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                      Run test
+                      <Tooltip.Arrow className="TooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
             </div>
           </div>
-        </Col>
-      </Row>
+        </Box>
+      </Grid>
     </div>
   );
 };
@@ -149,15 +172,11 @@ const getBackgroundColorClass = (status: string) => {
         backgroundColor: "bg-primary",
         text: "Test in progress",
         icon: (
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{ fontSize: 24 }}
-                spin
-                onPointerEnterCapture={undefined}
-                onPointerLeaveCapture={undefined}
-              />
-            }
+          <LoadingSpin
+            size="27px"
+            primaryColor="#388aeb"
+            secondaryColor="#dde4ee"
+            width={"3px"}
           />
         ),
       };

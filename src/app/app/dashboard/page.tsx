@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { Col, Row } from "antd";
 import { Option, TestType } from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
@@ -17,6 +16,7 @@ import useTests from "../../../hooks/useTests";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
+import { Box, Grid } from "@radix-ui/themes";
 
 interface DashboardProps {}
 
@@ -209,9 +209,12 @@ const Dashboard = (props: DashboardProps) => {
                       </h1>
                     </div>
                     <div className="gap-4 flex ">
-                      <CustomButton>Create new test</CustomButton>
+                      <CustomButton variant="outline" color="gray">
+                        Create new test
+                      </CustomButton>
                       <CustomButton
-                        type="primary"
+                        color="blue"
+                        variant="solid"
                         svgIcon={<RefreshCw size={17} />}
                       >
                         Run all tests
@@ -232,8 +235,12 @@ const Dashboard = (props: DashboardProps) => {
                   </div>
                 </div>
                 <div className=" py-5 px-4 border-b-2 border-[#f0f0f0]">
-                  <Row>
-                    <Col lg={19} md={20}>
+                  <Grid
+                    columns={{ lg: "3fr 1fr", md: "3fr 1fr" }}
+                    gap="3"
+                    width="auto"
+                  >
+                    <Box>
                       <div className=" border-[#d9d9d9] border rounded-lg w-max ">
                         {filterOptions &&
                           filterOptions?.map((item, i) => (
@@ -258,19 +265,20 @@ const Dashboard = (props: DashboardProps) => {
                             </button>
                           ))}
                       </div>
-                    </Col>
-                    <Col lg={5} md={4}>
+                    </Box>
+                    <Box>
                       <div>
                         <CustomInput
                           onChange={(value) => {
                             handleFilteredData(value);
                           }}
+                          size="3"
                           type="text"
                           placeholder="Search for a test"
                         />
                       </div>
-                    </Col>
-                  </Row>
+                    </Box>
+                  </Grid>
                 </div>
 
                 <div
@@ -306,7 +314,10 @@ const Dashboard = (props: DashboardProps) => {
                   <h1 className="font-normal font-poppin text-md">
                     You have no tests, create one below!
                   </h1>
-                  <CustomButton type="primary">Create new test</CustomButton>
+
+                  <CustomButton color="blue" variant="solid">
+                    Create new test
+                  </CustomButton>
                 </div>
               </>
             )}

@@ -1,10 +1,10 @@
 import "./globals.css";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
-import { ToastContainer } from "react-toastify";
+import "@radix-ui/themes/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
+import { ToastContainer } from "react-toastify";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Theme } from "@radix-ui/themes";
 
 export default function RootLayout({
   children,
@@ -15,7 +15,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-          <AntdRegistry>{children}</AntdRegistry>
+          <Theme>{children}</Theme>
           <ToastContainer
             position="top-right"
             autoClose={5000}

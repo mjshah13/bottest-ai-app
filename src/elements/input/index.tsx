@@ -1,15 +1,17 @@
 "use client";
 
+import { TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
-import { Input } from "antd";
 
 type InputType = "text" | "password" | "email" | "number";
+type ResponsiveSize = "1" | "2" | "3";
 
 interface InputProps {
   type?: InputType;
   label?: string;
   placeholder?: string;
   onChange?: (value: string) => void;
+  size?: ResponsiveSize;
 }
 
 const CustomInput: React.FC<InputProps> = ({
@@ -17,14 +19,9 @@ const CustomInput: React.FC<InputProps> = ({
   label,
   placeholder,
   onChange,
+  size = "2",
 }) => {
   const [inputType, setInputType] = useState<InputType>(type);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-    setInputType(showPassword ? "password" : "text");
-  };
 
   return (
     <div>
@@ -33,25 +30,14 @@ const CustomInput: React.FC<InputProps> = ({
           {label}
         </label>
       )}
-      <Input
-        className={`w-full px-3 py-1.5  border rounded-md focus:outline-none text-[#212427] focus:ring-none focus:shadow-none focus:border   !important ${
-          type === "number" &&
-          "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none !important"
-        }`}
+      <TextField.Root
+        size={size}
         type={type === "password" ? inputType : type}
-        placeholder={placeholder}
         onChange={(e) => onChange && onChange(e.target.value)}
-        suffix={
-          type === "password" && (
-            <span
-              onClick={handleTogglePasswordVisibility}
-              className="cursor-pointer"
-            >
-              {/* {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />} */}
-            </span>
-          )
-        }
-      />
+        placeholder={placeholder}
+      >
+        <TextField.Slot></TextField.Slot>
+      </TextField.Root>
     </div>
   );
 };

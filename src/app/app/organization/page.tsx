@@ -1,10 +1,14 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 
 const Organization = () => {
   return (
-    <div className="h-[90vh] flex justify-center items-center">
-      Organization
-    </div>
+    <>
+      <div className="h-[90vh] flex justify-center items-center">
+        <h1>Organization</h1>
+      </div>
+    </>
   );
 };
 
