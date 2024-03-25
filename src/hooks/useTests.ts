@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { TestType } from "../utils/typesInterface";
-import { useUser } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
+import { toast } from "react-toastify";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
@@ -12,6 +13,7 @@ const useTests = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { user } = useUser();
+  const { organization } = useOrganization();
 
   const { request } = useApi();
   const fetchTests = useCallback(
@@ -45,14 +47,16 @@ const useTests = () => {
           return { ...test, status, recent_test_runs: lastTests };
         });
         setTestData(treatedData);
-      } catch (error) {
+      } catch (error: any) {
         setIsLoading(false);
         console.error({ error });
+        setTestData(null);
+        toast.error(`Tests: ${error?.response?.data?.message}`);
       } finally {
         setIsLoading(false);
       }
     },
-    [user?.id]
+    [user, organization]
   );
 
   return { testData, fetchTests, error, isLoading };

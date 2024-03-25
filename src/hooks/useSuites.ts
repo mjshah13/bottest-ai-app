@@ -1,12 +1,15 @@
 import { useState, useCallback } from "react";
 import { SuiteType } from "../utils/typesInterface";
-import { useUser } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
+import { toast } from "react-toastify";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useSuites = () => {
+  const { organization } = useOrganization();
+
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
@@ -31,9 +34,10 @@ const useSuites = () => {
       } catch (error: any) {
         console.error({ error });
         setError(error);
+        toast.error(`Suites: ${error?.response?.data?.message}`);
       }
     },
-    [user?.id]
+    [user, organization]
   );
 
   return { suiteLists, fetchSuites, error };

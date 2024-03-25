@@ -2,17 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { BotType } from "../utils/typesInterface";
 import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
+import { toast } from "react-toastify";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useBots = (handleSelect: any) => {
   const { organization } = useOrganization();
-  console.log(organization, "organization");
-
-  // const {userId , orgId } = useAuth()
-
-  // console.log({userId , orgId} , "auth")
 
   const [botLists, setBotLists] = useState<BotType[]>([]);
   const [error, setError] = useState<Error | null>(null);
@@ -48,8 +44,9 @@ const useBots = (handleSelect: any) => {
     } catch (error: any) {
       console.error({ error });
       setError(error);
+      toast.error(`Bots: ${error?.response?.data?.message}`);
     }
-  }, [user?.id, organization]);
+  }, [user, organization]);
 
   useEffect(() => {
     fetchBots();

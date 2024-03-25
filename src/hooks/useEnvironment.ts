@@ -1,12 +1,15 @@
 import { useState, useCallback } from "react";
 import { EnvironmentType } from "../utils/typesInterface";
-import { useUser } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
+import { toast } from "react-toastify";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useEnvironment = () => {
+  const { organization } = useOrganization();
+
   const [environmentLists, setEnvironmentLists] = useState<
     EnvironmentType[] | null
   >(null);
@@ -32,9 +35,10 @@ const useEnvironment = () => {
       } catch (error: any) {
         console.error({ error });
         setError(error);
+        toast.error(`Environment: ${error?.response?.data?.message}`);
       }
     },
-    [user?.id]
+    [user, organization]
   );
 
   return { environmentLists, fetchEnvironment, error };

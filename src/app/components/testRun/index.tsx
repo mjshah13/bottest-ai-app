@@ -4,7 +4,6 @@ import React, { PropsWithChildren } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import { BottestReportProps } from "../../../utils/typesInterface";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const TestRun = ({

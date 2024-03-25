@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Input } from "antd";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 
 type InputType = "text" | "password" | "email" | "number";
 

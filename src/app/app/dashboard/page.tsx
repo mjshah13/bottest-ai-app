@@ -21,13 +21,6 @@ import { RefreshCw } from "lucide-react";
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
-  const handleSelect = (key: string, selectedOption: Option) => {
-    setSelectedValues({ ...selectedValues, [key]: selectedOption });
-  };
-  const { botLists } = useBots(handleSelect);
-  const { suiteLists, fetchSuites } = useSuites();
-  const { environmentLists, fetchEnvironment } = useEnvironment();
-  const { testData, fetchTests, isLoading } = useTests();
   const [containerHeight, setContainerHeight] = useState(0);
   const [filteredData, setFilteredData] = useState<
     TestType[] | null | undefined
@@ -40,6 +33,14 @@ const Dashboard = (props: DashboardProps) => {
   const [filters, setFilters] = useState({
     tab: "View all",
   });
+  const handleSelect = (key: string, selectedOption: Option) => {
+    setSelectedValues({ ...selectedValues, [key]: selectedOption });
+  };
+  const { botLists } = useBots(handleSelect);
+  const { suiteLists, fetchSuites } = useSuites();
+  const { environmentLists, fetchEnvironment } = useEnvironment();
+  const { testData, fetchTests, isLoading } = useTests();
+
   const filterData = (status: string) => {
     if (status === "View all") {
       return testData;
@@ -79,9 +80,15 @@ const Dashboard = (props: DashboardProps) => {
   }, [suiteLists, environmentLists]);
 
   useEffect(() => {
-    if (!selectedValues?.suite?.id || !selectedValues?.environment?.id) return;
+    if (
+      !selectedValues?.suite?.id ||
+      !selectedValues?.environment?.id ||
+      !selectedValues?.bot?.id ||
+      isLoading
+    )
+      return;
     fetchTests(selectedValues?.suite?.id, selectedValues?.environment?.id);
-  }, [selectedValues?.suite?.id, selectedValues?.environment?.id]);
+  }, [selectedValues]);
 
   const handleFilteredData = useCallback(
     _.debounce((value: string) => {
