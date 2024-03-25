@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
-import { SettingOutlined } from "@ant-design/icons";
-import { Button, Select } from "antd";
+import { Button, Select } from "@radix-ui/themes";
+import * as React from "react";
 import { Option } from "../../utils/typesInterface";
+import { Settings } from "lucide-react";
 
 interface CustomSelectProps {
-  onChange?: (value: string) => void;
   onSelectChange?: (selectedOption: Option) => void;
   onClick?: () => void;
   options?: Option[];
@@ -21,83 +20,57 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   onSelectChange,
   onClick,
   options,
-  onChange,
   Btntext,
   disabled,
   selectedValue,
-  placeholder,
   Label,
+  placeholder,
 }) => {
-  const { Option } = Select;
-
-  const handleSelectChange = (selectedValue: string) => {
-    if (onSelectChange && options) {
-      const selectedOption = options.find(
-        (item) => item.name === selectedValue
-      );
-      if (selectedOption) {
-        onSelectChange(selectedOption);
-      }
-    }
-  };
-
-  // const addBots = () => {
-  //   const newSelectData = {
-  //     id: selectData.length + 1,
-  //     value: `new${selectData.length + 1}`,
-  //     label: `New Option ${selectData.length + 1}`,
-  //   };
-  //   setselectData([...selectData, newSelectData]);
-  //   setSelectedValue(newSelectData.value);
-  // };
-
   return (
     <div className="flex flex-col justify-start gap-1">
       <label className="font-poppin text-sm font-normal text-black">
-        {" "}
         {Label}
       </label>
-      <Select
-        className="w-full h-[35px]"
-        onSelect={handleSelectChange}
-        onChange={onChange}
-        value={selectedValue}
-        placeholder={placeholder}
+      <Select.Root
         disabled={disabled}
-        dropdownRender={(menu) => (
-          <>
-            {menu}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "8px",
-              }}
-            >
-              <Button
-                className="w-full border border-[#F0F0F0] hover:bg-transparent font-semibold !important"
-                type="text"
-                icon={
-                  <SettingOutlined
-                    style={{ fontSize: "12px", fontWeight: 900 }}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
-                }
-                onClick={onClick}
-              >
-                {Btntext}
-              </Button>
-            </div>
-          </>
-        )}
+        value={selectedValue}
+        onValueChange={(newValue) => {
+          const selectedOption = options?.find(
+            (option) => option?.name === newValue
+          );
+          if (selectedOption && onSelectChange) {
+            onSelectChange(selectedOption);
+          }
+        }}
       >
-        {options?.map((option) => (
-          <Option key={option.id} value={option.name} label={option.name}>
-            <span>{option?.name}</span>
-          </Option>
-        ))}
-      </Select>
+        <Select.Trigger placeholder={placeholder}>
+          {selectedValue}
+        </Select.Trigger>
+        <Select.Content position="popper">
+          {options?.map((option) => (
+            <Select.Item
+              className={`${
+                option.name === selectedValue
+                  ? "bg-primary text-black font-semibold "
+                  : "bg-white text-black px-1.5"
+              } mb-1.5 hover:bg-primary hover:text-black  font-poppin`}
+              key={option.id}
+              value={option.name}
+            >
+              {option.name}
+            </Select.Item>
+          ))}
+          <Button
+            color="gray"
+            variant="surface"
+            className="w-full py-2.5 text-black bg-transparent cursor-pointer  !important"
+            onClick={onClick}
+          >
+            <Settings />
+            {Btntext}
+          </Button>
+        </Select.Content>
+      </Select.Root>
     </div>
   );
 };
