@@ -3,6 +3,7 @@ import * as React from "react";
 
 interface Props {
   variant?: "classic" | "solid" | "soft" | "surface" | "outline" | "ghost";
+  onClick?: () => void;
   children?: React.ReactNode;
   svgIcon?: React.ReactNode;
   color?:
@@ -40,9 +41,11 @@ const CustomButton: React.FC<Props> = ({
   children,
   svgIcon,
   color,
+  onClick,
 }) => {
   return (
     <Button
+      onClick={onClick}
       className="flex items-center gap-2 min-w-[143px] py-3 cursor-pointer"
       color={color}
       variant={variant}

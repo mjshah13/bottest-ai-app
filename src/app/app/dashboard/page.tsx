@@ -16,7 +16,12 @@ import useTests from "../../../hooks/useTests";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
-import { Box, Grid } from "@radix-ui/themes";
+import { Box, Callout, Grid } from "@radix-ui/themes";
+import CustomModal from "../../../elements/modal";
+import { Table, TableColumnsType } from "antd";
+import { CopyPlus, Trash } from "lucide-react";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import { CircleAlert } from "lucide-react";
 
 interface DashboardProps {}
 
@@ -40,6 +45,8 @@ const Dashboard = (props: DashboardProps) => {
   const { suiteLists, fetchSuites } = useSuites();
   const { environmentLists, fetchEnvironment } = useEnvironment();
   const { testData, fetchTests, isLoading } = useTests();
+
+  console.log({ suiteLists, environmentLists }, "lists");
 
   const filterData = (status: string) => {
     if (status === "View all") {
@@ -126,6 +133,180 @@ const Dashboard = (props: DashboardProps) => {
     };
   }, []);
 
+  // ################## Modal Content ########################
+
+  interface DataType {
+    key: React.Key;
+    name: string;
+    info: string;
+    description: string;
+  }
+
+  const botsColumns: TableColumnsType<DataType> = [
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Description", dataIndex: "info", key: "info" },
+    {
+      dataIndex: "",
+      key: "x",
+      render: () => (
+        <div className="flex justify-center items-center gap-3">
+          <Tooltip.Provider>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
+                  <CopyPlus size={18} />
+                </button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                  Create a copy of Suite and existing tests.
+                  <Tooltip.Arrow className="TooltipArrow" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
+
+          <button>
+            <Trash color="#E1654A" size={18} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+  const suiteColumns: TableColumnsType<DataType> = [
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Default Success Criteria", dataIndex: "info", key: "info" },
+    {
+      dataIndex: "",
+      key: "x",
+      render: () => (
+        <div className="flex justify-center items-center gap-3">
+          <Tooltip.Provider>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
+                  <CopyPlus size={18} />
+                </button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                  Create a copy of Suite and existing tests.
+                  <Tooltip.Arrow className="TooltipArrow" />
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
+
+          <button>
+            <Trash color="#E1654A" size={18} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+  const environmentColumns: TableColumnsType<DataType> = [
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "URL", dataIndex: "info", key: "info" },
+    {
+      dataIndex: "",
+      key: "x",
+      render: () => (
+        <div className="flex justify-center items-center gap-3">
+          <button>
+            <Trash color="#E1654A" size={18} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const botTableData: DataType[] = [
+    {
+      key: 1,
+      name: "My first bot",
+      info: "This is an example bot description.",
+      description:
+        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
+    },
+    {
+      key: 2,
+      name: "My second bot",
+      info: "This is an example bot description.",
+      description:
+        "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
+    },
+    {
+      key: 4,
+      name: "My third bot",
+      info: "This is an example bot description.",
+      description:
+        "My name is Joe Black, I am 32 years old, living in Sydney No. 1 Lake Park.",
+    },
+  ];
+
+  const suiteTableData: DataType[] = [
+    {
+      key: 1,
+      name: "Test suite 1",
+      info: "Determine if each response to the user is similar to the baseline in i...",
+      description:
+        "Determine if each response to the user is similar to the baseline in i...",
+    },
+    {
+      key: 2,
+      name: "Test suite 2",
+      info: "Determine if each response to the user is similar to the baseline in i...",
+      description:
+        "Determine if each response to the user is similar to the baseline in i...",
+    },
+    {
+      key: 4,
+      name: "Test suite 3",
+      info: "Determine if each response to the user is similar to the baseline in i...",
+      description:
+        "Determine if each response to the user is similar to the baseline in i...",
+    },
+  ];
+  const environmentTableData: DataType[] = [
+    {
+      key: 1,
+      name: "Production",
+      info: "www.example.bottest.ai/chatbot/version3",
+      description:
+        "Determine if each response to the user is similar to the baseline in i...",
+    },
+    {
+      key: 2,
+      name: "Staging",
+      info: "www.example.bottest.ai/chatbot/version3",
+      description:
+        "Determine if each response to the user is similar to the baseline in i...",
+    },
+  ];
+
+  const [isBotsModalopen, setIsBotsModalopen] = useState(false);
+  const [isSuiteModalopen, setIsSuiteModalopen] = useState(false);
+  const [isEnvironmentModalopen, setIsEnvironmentModalopen] = useState(false);
+  const [addBots, setAddbots] = useState<DataType[]>(botTableData);
+
+  const handleDiscard = () => {
+    setIsBotsModalopen(false);
+    setIsSuiteModalopen(false);
+    setIsEnvironmentModalopen(false);
+  };
+
+  const handleAddNewRow = () => {
+    setAddbots([
+      ...addBots,
+      {
+        key: addBots?.length + 1,
+        name: "",
+        info: "",
+        description: "",
+      },
+    ]);
+  };
+
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
       <div className="  border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">
@@ -135,6 +316,7 @@ const Dashboard = (props: DashboardProps) => {
         <div className="gap-7 py-6 px-4 flex justify-between items-center">
           <div className="w-full">
             <CustomSelect
+              onClick={() => setIsBotsModalopen(true)}
               // disabled={botLists?.length === 1 || !botLists}
               Btntext="Add / Modify Bots"
               Label={"Select Bot"}
@@ -149,6 +331,7 @@ const Dashboard = (props: DashboardProps) => {
           </div>
           <div className="w-full">
             <CustomSelect
+              onClick={() => setIsSuiteModalopen(true)}
               Label={"Select Suites"}
               disabled={suiteLists?.length === 1 || !suiteLists}
               Btntext="Add/Modify Suites"
@@ -162,6 +345,7 @@ const Dashboard = (props: DashboardProps) => {
           </div>
           <div className="w-full">
             <CustomSelect
+              onClick={() => setIsEnvironmentModalopen(true)}
               Label={"Select Environment"}
               disabled={environmentLists?.length === 1 || !environmentLists}
               placeholder="Select environment"
@@ -324,6 +508,111 @@ const Dashboard = (props: DashboardProps) => {
           </>
         )}
       </div>
+
+      <CustomModal
+        isOpen={isBotsModalopen}
+        title="Add / Modify Bots"
+        handleDiscard={handleDiscard}
+      >
+        <>
+          <div className="px-5 pt-4 pb-7">
+            <Table
+              bordered
+              pagination={false}
+              columns={botsColumns}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <p style={{ margin: 0 }}>{record?.description}</p>
+                ),
+              }}
+              dataSource={addBots}
+              footer={() => (
+                <button
+                  className="w-full text-[#388aeb]"
+                  onClick={handleAddNewRow}
+                >
+                  + Add new blank Bot
+                </button>
+              )}
+            />
+          </div>
+        </>
+      </CustomModal>
+
+      <CustomModal
+        isOpen={isSuiteModalopen}
+        title="Add / Modify Suites"
+        handleDiscard={handleDiscard}
+      >
+        <>
+          <div className="px-5 pt-4 pb-7">
+            <Table
+              bordered
+              pagination={false}
+              columns={suiteColumns}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <p style={{ margin: 0 }}>{record?.description}</p>
+                ),
+              }}
+              dataSource={suiteTableData}
+              footer={() => (
+                <button
+                  className="w-full text-[#388aeb]"
+                  onClick={handleAddNewRow}
+                >
+                  + Add new blank Suite
+                </button>
+              )}
+            />
+          </div>
+        </>
+      </CustomModal>
+
+      <CustomModal
+        isOpen={isEnvironmentModalopen}
+        title="Add / Modify Environments for “Test suite 1”"
+        handleDiscard={handleDiscard}
+      >
+        <>
+          <div className="px-5 pt-4 pb-7">
+            <div className="border border-warning bg-warningLight px-4 py-3 rounded-lg mb-5 flex gap-2">
+              <div>
+                <CircleAlert fill="#E7C200" color="white" />
+              </div>
+              <div className="flex flex-col ">
+                <h1 className="text-black text-normal font-poppin">Note</h1>
+                <p className="text-black text-sm font-poppin w-[80%]">
+                  The UI of a different environment should match the UI of
+                  original recorded tests. Attempting to run tests on
+                  environments where the UI does not match may result in tests
+                  failing due to inability to replay or capture data correctly!
+                </p>
+              </div>
+            </div>
+
+            <Table
+              bordered
+              pagination={false}
+              columns={environmentColumns}
+              // expandable={{
+              //   expandedRowRender: (record) => (
+              //     <p style={{ margin: 0 }}>{record?.description}</p>
+              //   ),
+              // }}
+              dataSource={environmentTableData}
+              footer={() => (
+                <button
+                  className="w-full text-[#388aeb]"
+                  onClick={handleAddNewRow}
+                >
+                  + Add new environment
+                </button>
+              )}
+            />
+          </div>
+        </>
+      </CustomModal>
     </div>
   );
 };

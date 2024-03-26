@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { BotType } from "../utils/typesInterface";
-import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
 
@@ -11,6 +11,7 @@ const useBots = (handleSelect: any) => {
   const { organization } = useOrganization();
 
   const [botLists, setBotLists] = useState<BotType[]>([]);
+
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
   const { request } = useApi();

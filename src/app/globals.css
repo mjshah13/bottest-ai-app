@@ -20,3 +20,25 @@
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   user-select: none;
 }
+
+.rt-BaseDialogContent {
+  padding: 0;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th,
+:where(.css-dev-only-do-not-override-42nv3w).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > td {
+  background: #fdfcfa !important;
+}
+
+.ant-table-wrapper .ant-table-footer {
+  background: #fdfcfa !important;
+}
+
+.ant-table-wrapper .ant-table-row-expand-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 2px !important;
+}
