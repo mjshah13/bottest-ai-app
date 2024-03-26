@@ -10,8 +10,8 @@ export interface UserResource {
 }
 
 export interface Option {
-  id: string;
-  name: string;
+  id: string | null;
+  name: string | null;
 }
 
 export interface NavigationItem {

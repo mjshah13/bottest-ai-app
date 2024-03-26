@@ -17,28 +17,31 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
+import { useOrganization } from "@clerk/nextjs";
 
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
+  const [selectedSuite, setSelectedSuite] = useState<Option | null>(null);
+  const [selectedEnvironment, setSelectedEnvironment] = useState<Option | null>(
+    null
+  );
+  const [selectedBot, setSelectedBot] = useState<Option | null>(null);
+
   const [filteredData, setFilteredData] = useState<
     TestType[] | null | undefined
   >(null);
-  const [selectedValues, setSelectedValues] = useState({
-    bot: { name: "", id: "" },
-    suite: { name: "", id: "" },
-    environment: { name: "", id: "" },
-  });
+
   const [filters, setFilters] = useState({
     tab: "View all",
   });
-  const handleSelect = (key: string, selectedOption: Option) => {
-    setSelectedValues({ ...selectedValues, [key]: selectedOption });
-  };
-  const { botLists } = useBots(handleSelect);
-  const { suiteLists, fetchSuites } = useSuites();
-  const { environmentLists, fetchEnvironment } = useEnvironment();
+  const { organization } = useOrganization();
+  const { botLists } = useBots(setSelectedBot);
+  const { suiteLists, fetchSuites } = useSuites(setSelectedSuite);
+  const { environmentLists, fetchEnvironment } = useEnvironment(
+    setSelectedEnvironment
+  );
   const { testData, fetchTests, isLoading } = useTests();
 
   const filterData = (status: string) => {
@@ -67,28 +70,23 @@ const Dashboard = (props: DashboardProps) => {
   }, [testData]);
 
   useEffect(() => {
-    if (!selectedValues?.bot?.id) return;
-    fetchSuites(selectedValues.bot.id);
-    fetchEnvironment(selectedValues.bot.id);
-  }, [selectedValues.bot.id]);
+    setSelectedBot(null);
+    setSelectedSuite(null);
+    setSelectedEnvironment(null);
+    setFilteredData(null);
+  }, [organization]);
 
   useEffect(() => {
-    if (suiteLists && suiteLists?.length === 1)
-      handleSelect("suite", suiteLists[0]);
-    if (environmentLists && environmentLists?.length === 1)
-      return handleSelect("environment", environmentLists[0]);
-  }, [suiteLists, environmentLists]);
+    if (!selectedBot) return;
+    fetchSuites(selectedBot?.id);
+    fetchEnvironment(selectedBot.id);
+  }, [selectedBot]);
 
   useEffect(() => {
-    if (
-      !selectedValues?.suite?.id ||
-      !selectedValues?.environment?.id ||
-      !selectedValues?.bot?.id ||
-      isLoading
-    )
+    if (!selectedBot || !selectedSuite || !selectedEnvironment || isLoading)
       return;
-    fetchTests(selectedValues?.suite?.id, selectedValues?.environment?.id);
-  }, [selectedValues]);
+    fetchTests(selectedSuite?.id, selectedEnvironment?.id);
+  }, [selectedBot, selectedEnvironment, selectedSuite]);
 
   const handleFilteredData = useCallback(
     _.debounce((value: string) => {
@@ -139,11 +137,11 @@ const Dashboard = (props: DashboardProps) => {
               Btntext="Add / Modify Bots"
               Label={"Select Bot"}
               options={botLists || []}
-              selectedValue={selectedValues?.bot?.name}
+              selectedValue={selectedBot}
               placeholder="Select bots"
               // onChange={(value) => handleChange("bots", value)}
               onSelectChange={(selectedOption) => {
-                handleSelect("bot", selectedOption);
+                setSelectedBot(selectedOption);
               }}
             />
           </div>
@@ -152,11 +150,11 @@ const Dashboard = (props: DashboardProps) => {
               Label={"Select Suites"}
               disabled={suiteLists?.length === 1 || !suiteLists}
               Btntext="Add/Modify Suites"
-              selectedValue={selectedValues?.suite?.name}
+              selectedValue={selectedSuite}
               placeholder="Select Suites"
               options={suiteLists || []}
               onSelectChange={(selectedOption) => {
-                handleSelect("suite", selectedOption);
+                setSelectedSuite(selectedOption);
               }}
             />
           </div>
@@ -166,10 +164,10 @@ const Dashboard = (props: DashboardProps) => {
               disabled={environmentLists?.length === 1 || !environmentLists}
               placeholder="Select environment"
               Btntext="Add / Modify environment"
-              selectedValue={selectedValues?.environment?.name}
+              selectedValue={selectedEnvironment}
               options={environmentLists || []}
               onSelectChange={(selectedOption) =>
-                handleSelect("environment", selectedOption)
+                setSelectedEnvironment(selectedOption)
               }
             />
           </div>

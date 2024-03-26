@@ -17,7 +17,7 @@ const useTests = () => {
 
   const { request } = useApi();
   const fetchTests = useCallback(
-    async (suite: string, environmentId: string) => {
+    async (suite: string | null, environmentId: string | null) => {
       if (!user?.id) {
         return;
       }
@@ -50,7 +50,7 @@ const useTests = () => {
       } catch (error: any) {
         setIsLoading(false);
         console.error({ error });
-        setTestData(null);
+        setTestData([]);
         toast.error(`Tests: ${error?.response?.data?.message}`);
       } finally {
         setIsLoading(false);

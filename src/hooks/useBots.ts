@@ -1,19 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import { BotType } from "../utils/typesInterface";
-import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useBots = (handleSelect: any) => {
+const useBots = (setSelectedBot: any) => {
   const { organization } = useOrganization();
-
-  const [botLists, setBotLists] = useState<BotType[]>([]);
-  const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
   const { request } = useApi();
+  const [botLists, setBotLists] = useState<BotType[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchBots = useCallback(async () => {
     if (!user?.id) {
@@ -39,7 +38,7 @@ const useBots = (handleSelect: any) => {
       setBotLists(formattedData);
       if (formattedData.length === 1) {
         // Assuming handleSelect is a function that needs to be called when there is only one bot
-        handleSelect("bot", formattedData[0]);
+        setSelectedBot(formattedData[0]);
       }
     } catch (error: any) {
       console.error({ error });

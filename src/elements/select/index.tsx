@@ -11,7 +11,7 @@ interface CustomSelectProps {
   options?: Option[];
   Btntext?: string;
   disabled?: boolean;
-  selectedValue?: string;
+  selectedValue?: Option | null;
   Label?: string;
   placeholder?: string;
 }
@@ -32,11 +32,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         {Label}
       </label>
       <Select.Root
+        key={selectedValue?.id}
         disabled={disabled}
-        value={selectedValue}
+        value={selectedValue?.id || ""}
         onValueChange={(newValue) => {
           const selectedOption = options?.find(
-            (option) => option?.name === newValue
+            (option) => option?.id === newValue
           );
           if (selectedOption && onSelectChange) {
             onSelectChange(selectedOption);
@@ -44,18 +45,18 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         }}
       >
         <Select.Trigger placeholder={placeholder}>
-          {selectedValue}
+          {selectedValue?.name}
         </Select.Trigger>
         <Select.Content position="popper">
           {options?.map((option) => (
             <Select.Item
               className={`${
-                option.name === selectedValue
+                option.id === selectedValue?.id
                   ? "bg-primary text-black font-semibold "
                   : "bg-white text-black px-1.5"
               } mb-1.5 hover:bg-primary hover:text-black  font-poppin`}
               key={option.id}
-              value={option.name}
+              value={option.id || ""}
             >
               {option.name}
             </Select.Item>
