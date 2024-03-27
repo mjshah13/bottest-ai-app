@@ -25,6 +25,7 @@ const useTests = () => {
       if (environmentId) {
         query = `?environment_id=${environmentId}`;
       }
+
       try {
         setIsLoading(true);
         const data = await request({

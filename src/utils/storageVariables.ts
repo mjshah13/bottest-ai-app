@@ -1,6 +1,6 @@
 import { CookieFunctions } from "./typesInterface";
 
-const CookieUtil: CookieFunctions = {
+export const CookieUtil: CookieFunctions = {
   getCookie: (key) => {
     return localStorage.getItem(key);
   },

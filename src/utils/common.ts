@@ -45,7 +45,11 @@ export const filterOptions = [
   },
 ];
 
-
-
-
-
+export const teststatus: { [key: string]: string } = {
+  Pass: "passed",
+  Fail: "failed",
+  Skipped: "skipped",
+  Mixed: "mixed",
+  Stopped: "stopped",
+  Running: "running",
+};

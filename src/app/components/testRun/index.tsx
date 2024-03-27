@@ -35,7 +35,7 @@ const TestRun = ({
               )}
             </h1>
             {isDisabled ? (
-              <div className=" bg-[#fafafa] flex justify-center rounded-md border border-[#dcdcdc] max-w-[170px] w-full  py-0.5  ">
+              <div className=" bg-[#fafafa] flex font-poppin justify-center rounded-md border border-[#dcdcdc] max-w-[170px] w-full  py-0.5  ">
                 Disabled in full test runs
               </div>
             ) : null}
@@ -51,7 +51,7 @@ const TestRun = ({
                   {lastTestRuns?.map((item, index) => (
                     <div
                       key={index}
-                      className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full 
+                      className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full font-poppin
                       ${
                         item?.status === "Pass"
                           ? "bg-success"
@@ -82,13 +82,13 @@ const TestRun = ({
                 />
               ) : (
                 <>
-                  <h3 className="text-[#909193] font-normal font-poppin">
+                  <h3 className="text-[#909193] font-normal   font-poppin">
                     {"Older"}
                   </h3>
-                  <h1 className="font-medium  text-black font-poppin">
+                  <h1 className="font-medium  text-black  font-poppin">
                     {`Last ${lastTestRuns?.length} runs`}
                   </h1>
-                  <h3 className="text-[#909193] font-normal font-poppin">
+                  <h3 className="text-[#909193] font-normal  font-poppin">
                     {"Newer"}
                   </h3>
                 </>
@@ -106,14 +106,14 @@ const TestRun = ({
               >
                 {icon}
                 <div className="flex flex-col justify-start">
-                  <h1 className="text-black font-normal font-poppin text-md">
+                  <h1 className="text-black font-normal font-poppin text-sm">
                     {status}
                   </h1>
                   <button
                     className={`text-[#909193] ${
                       text === "View full result" &&
                       "font-semibold text-black hover:underline "
-                    }  font-poppin text-md`}
+                    }  font-poppin text-sm`}
                   >
                     {text}
                   </button>

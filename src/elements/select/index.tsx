@@ -44,7 +44,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           }
         }}
       >
-        <Select.Trigger placeholder={placeholder}>
+        <Select.Trigger placeholder={placeholder} className="font-poppin">
           {selectedValue?.name}
         </Select.Trigger>
         <Select.Content position="popper">
@@ -52,8 +52,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             <Select.Item
               className={`${
                 option.id === selectedValue?.id
-                  ? "bg-primary text-black font-semibold "
-                  : "bg-white text-black px-1.5"
+                  ? "bg-primary text-black font-semibold font-poppin "
+                  : "bg-white text-black px-1.5 font-poppin"
               } mb-1.5 hover:bg-primary hover:text-black  font-poppin`}
               key={option.id}
               value={option.id || ""}
@@ -64,10 +64,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           <Button
             color="gray"
             variant="surface"
-            className="w-full py-2.5 text-black bg-transparent cursor-pointer  !important"
+            className="w-full py-2.5 text-black bg-transparent cursor-pointer font-poppin "
             onClick={onClick}
           >
-            <Settings />
+            <Settings size={17} />
             {Btntext}
           </Button>
         </Select.Content>

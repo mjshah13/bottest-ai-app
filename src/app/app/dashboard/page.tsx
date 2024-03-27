@@ -7,7 +7,7 @@ import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
 import CustomButton from "../../../elements/button";
 import CustomInput from "../../../elements/input";
-import { filterOptions } from "../../../utils/common";
+import { filterOptions, teststatus } from "../../../utils/common";
 import _ from "lodash";
 import useBots from "../../../hooks/useBots";
 import useSuites from "../../../hooks/useSuites";
@@ -18,6 +18,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
 import { useOrganization } from "@clerk/nextjs";
+import { useApi } from "../../../hooks/useApi";
+import { CookieUtil } from "../../../utils/storageVariables";
+import useSuiteRuns from "../../../hooks/useSuiteRuns";
 
 interface DashboardProps {}
 
@@ -42,7 +45,9 @@ const Dashboard = (props: DashboardProps) => {
   const { environmentLists, fetchEnvironment } = useEnvironment(
     setSelectedEnvironment
   );
+
   const { testData, fetchTests, isLoading } = useTests();
+  const { suiteTestRuns, fetchSuiteRuns } = useSuiteRuns();
 
   const filterData = (status: string) => {
     if (status === "View all") {
@@ -53,8 +58,6 @@ const Dashboard = (props: DashboardProps) => {
     });
     return filteredItems;
   };
-  const passedTests = filterData("Pass");
-  const failedTests = filterData("Fail");
 
   const handleButtonClick = (status: any) => {
     setFilters({
@@ -86,6 +89,7 @@ const Dashboard = (props: DashboardProps) => {
     if (!selectedBot || !selectedSuite || !selectedEnvironment || isLoading)
       return;
     fetchTests(selectedSuite?.id, selectedEnvironment?.id);
+    fetchSuiteRuns(selectedSuite?.id, selectedEnvironment?.id);
   }, [selectedBot, selectedEnvironment, selectedSuite]);
 
   const handleFilteredData = useCallback(
@@ -124,9 +128,26 @@ const Dashboard = (props: DashboardProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    const storedSelectedSuite = CookieUtil.getCookie("selectedSuite");
+    const storedSelectedEnvironment = CookieUtil.getCookie(
+      "selectedEnvironment"
+    );
+    if (storedSelectedSuite) {
+      setSelectedSuite(JSON.parse(storedSelectedSuite));
+    }
+    if (storedSelectedEnvironment) {
+      setSelectedEnvironment(JSON.parse(storedSelectedEnvironment));
+    }
+  }, []);
+
+  const countStatus = (status: string) => {
+    return suiteTestRuns?.filter((test) => test?.status === status).length;
+  };
+
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
-      <div className="  border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">
+      <div className=" border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
           <h1 className="font-semibold font-poppin text-3xl">Dashboard</h1>
         </div>
@@ -155,6 +176,10 @@ const Dashboard = (props: DashboardProps) => {
               options={suiteLists || []}
               onSelectChange={(selectedOption) => {
                 setSelectedSuite(selectedOption);
+                CookieUtil.setCookie(
+                  "selectedSuite",
+                  JSON.stringify(selectedOption)
+                );
               }}
             />
           </div>
@@ -166,9 +191,13 @@ const Dashboard = (props: DashboardProps) => {
               Btntext="Add / Modify environment"
               selectedValue={selectedEnvironment}
               options={environmentLists || []}
-              onSelectChange={(selectedOption) =>
-                setSelectedEnvironment(selectedOption)
-              }
+              onSelectChange={(selectedOption) => {
+                setSelectedEnvironment(selectedOption);
+                CookieUtil.setCookie(
+                  "selectedEnvironment",
+                  JSON.stringify(selectedOption)
+                );
+              }}
             />
           </div>
         </div>
@@ -197,126 +226,172 @@ const Dashboard = (props: DashboardProps) => {
           </>
         ) : (
           <>
-            {filteredData ? (
+            {testData && testData?.length === 0 ? (
               <>
                 <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
-                  <div className="flex justify-between">
-                    <div>
-                      <h1 className="font-semibold font-poppin text-xl">
-                        Bot Tests
-                      </h1>
-                    </div>
-                    <div className="gap-4 flex ">
-                      <CustomButton variant="outline" color="gray">
-                        Create new test
-                      </CustomButton>
-                      <CustomButton
-                        color="blue"
-                        variant="solid"
-                        svgIcon={<RefreshCw size={17} />}
-                      >
-                        Run all tests
-                      </CustomButton>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-black">
-                      In your most recent run of all your tests,{" "}
-                      <span className="text-success font-medium">
-                        {passedTests?.length} passed
-                      </span>{" "}
-                      and{" "}
-                      <span className="text-danger font-medium">
-                        {failedTests?.length} failed
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <div className=" py-5 px-4 border-b-2 border-[#f0f0f0]">
-                  <Grid
-                    columns={{ lg: "3fr 1fr", md: "3fr 1fr" }}
-                    gap="3"
-                    width="auto"
-                  >
-                    <Box>
-                      <div className=" border-[#d9d9d9] border rounded-lg w-max ">
-                        {filterOptions &&
-                          filterOptions?.map((item, i) => (
-                            <button
-                              key={item.key}
-                              className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
-                                i === 0 ? "rounded-l-lg" : ""
-                              } ${
-                                i === filterOptions.length - 1
-                                  ? "border-r-0"
-                                  : ""
-                              } ${
-                                filters.tab === item.status
-                                  ? "bg-[#f5f5f5] text-black "
-                                  : ""
-                              }`}
-                              onClick={() => {
-                                handleButtonClick(item.status);
-                              }}
-                            >
-                              {item.label}
-                            </button>
-                          ))}
-                      </div>
-                    </Box>
-                    <Box>
-                      <div>
-                        <CustomInput
-                          onChange={(value) => {
-                            handleFilteredData(value);
-                          }}
-                          size="3"
-                          type="text"
-                          placeholder="Search for a test"
-                        />
-                      </div>
-                    </Box>
-                  </Grid>
-                </div>
-
-                <div
-                  className="px-5 py-6  "
-                  style={{
-                    maxHeight: `${containerHeight - 200}px`,
-                    overflowY: "auto",
-                  }}
-                >
-                  {filteredData &&
-                    filteredData?.map((item: TestType) => (
-                      <div className="mb-5" key={item?.title}>
-                        <TestRun
-                          isDisabled={!item?.full_run_enabled}
-                          title={item?.name}
-                          lastTestRuns={item?.recent_test_runs}
-                          status={item?.status}
-                          loading={isLoading}
-                        />
-                      </div>
-                    ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
-                  <h1 className="font-semibold font-poppin text-xl">Tests</h1>
-                  <p className="text-black text-md">
+                  <h1 className="font-semibold font-poppin text-xl">
+                    {" "}
+                    {selectedSuite &&
+                      selectedEnvironment &&
+                      `${selectedSuite.name}/${selectedEnvironment.name}`}
+                  </h1>
+                  <p className="text-black text-md  font-poppin">
                     Create a test and run it to see your results.
                   </p>
                 </div>
-                <div className=" w-full flex h-[85%] justify-center items-center flex-col gap-3">
-                  <h1 className="font-normal font-poppin text-md">
+                <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
+                  <h1 className="font-normal font-poppin text-md ">
                     You have no tests, create one below!
                   </h1>
-
                   <CustomButton color="blue" variant="solid">
                     Create new test
                   </CustomButton>
                 </div>
+              </>
+            ) : (
+              <>
+                {filteredData ? (
+                  <>
+                    <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
+                      <div className="flex justify-between">
+                        <div>
+                          <h1 className="font-semibold font-poppin text-xl">
+                            {selectedSuite &&
+                              selectedEnvironment &&
+                              `${selectedSuite.name}/${selectedEnvironment.name}`}
+                          </h1>
+                        </div>
+                        <div className="gap-4 flex ">
+                          <CustomButton variant="outline" color="gray">
+                            Create new test
+                          </CustomButton>
+                          <CustomButton
+                            color="blue"
+                            variant="solid"
+                            svgIcon={<RefreshCw size={17} />}
+                          >
+                            Run all tests
+                          </CustomButton>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-black gap-2 font-poppin">
+                          In your most recent run of all your tests,{" "}
+                          {Object.keys(teststatus).map(
+                            (status, index) =>
+                              countStatus(status) > 0 && (
+                                <span
+                                  key={index}
+                                  className={`${
+                                    status === "Pass"
+                                      ? "text-success"
+                                      : status === "Mixed"
+                                      ? "text-[#E7C200]"
+                                      : status === "Fail" || status === "Error"
+                                      ? "text-danger"
+                                      : status === "Running"
+                                      ? "text-[#388aeb]"
+                                      : status === "Skipped"
+                                      ? "text-[#212427]"
+                                      : status === "Stopped"
+                                      ? "text-[#212427]"
+                                      : ""
+                                  } font-medium font-poppin mr-2`}
+                                >
+                                  {countStatus(status)} {teststatus[status]}
+                                </span>
+                              )
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div className=" py-5 px-4 border-b-2 border-[#f0f0f0]">
+                      <Grid
+                        columns={{ lg: "3fr 1fr", md: "3fr 1fr" }}
+                        gap="3"
+                        width="auto"
+                      >
+                        <Box>
+                          <div className=" border-[#d9d9d9] border rounded-lg w-max ">
+                            {filterOptions &&
+                              filterOptions?.map((item, i) => (
+                                <button
+                                  key={item.key}
+                                  className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
+                                    i === 0 ? "rounded-l-lg" : ""
+                                  } ${
+                                    i === filterOptions.length - 1
+                                      ? "border-r-0"
+                                      : ""
+                                  } ${
+                                    filters.tab === item.status
+                                      ? "bg-[#f5f5f5] text-black "
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    handleButtonClick(item.status);
+                                  }}
+                                >
+                                  {item.label}
+                                </button>
+                              ))}
+                          </div>
+                        </Box>
+                        <Box>
+                          <div>
+                            <CustomInput
+                              onChange={(value) => {
+                                handleFilteredData(value);
+                              }}
+                              size="3"
+                              type="text"
+                              placeholder="Search for a test"
+                            />
+                          </div>
+                        </Box>
+                      </Grid>
+                    </div>
+
+                    <div
+                      className="px-5 py-6  "
+                      style={{
+                        maxHeight: `${containerHeight - 200}px`,
+                        overflowY: "auto",
+                      }}
+                    >
+                      {filteredData &&
+                        filteredData?.map((item: TestType) => (
+                          <div className="mb-5" key={item?.title}>
+                            <TestRun
+                              isDisabled={!item?.full_run_enabled}
+                              title={item?.name}
+                              lastTestRuns={item?.recent_test_runs}
+                              status={item?.status}
+                              loading={isLoading}
+                            />
+                          </div>
+                        ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="py-7 px-4 border-b-2 border-[#f0f0f0]">
+                      {/* <h1 className="font-semibold font-poppin text-xl">Tests</h1> */}
+                      {/* <p className="text-black text-md  font-poppin">
+                    Create a test and run it to see your results.
+                  </p> */}
+                    </div>
+                    <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
+                      <h1 className="font-normal font-poppin text-md ">
+                        Please select the suites and environment.
+                      </h1>
+
+                      {/* <CustomButton color="blue" variant="solid">
+                    Create new test
+                  </CustomButton> */}
+                    </div>
+                  </>
+                )}
               </>
             )}
           </>

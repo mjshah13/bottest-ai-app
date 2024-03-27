@@ -72,3 +72,7 @@ export interface TestType {
 export interface PageConfig {
   matcher?: string[];
 }
+
+export interface TestRunType {
+  status?: string;
+}
