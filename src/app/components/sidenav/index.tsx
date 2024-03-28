@@ -35,7 +35,7 @@ const navigation: NavigationItem[] = [
     href: "/app/organization",
     icon: <Building2 />,
     current: false,
-    isDisabled: true,
+    isDisabled: false,
   },
 ];
 

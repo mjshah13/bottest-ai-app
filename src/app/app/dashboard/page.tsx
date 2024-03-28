@@ -77,6 +77,7 @@ const Dashboard = (props: DashboardProps) => {
     setSelectedSuite(null);
     setSelectedEnvironment(null);
     setFilteredData(null);
+    CookieUtil.removeAllCookie();
   }, [organization]);
 
   useEffect(() => {
@@ -133,6 +134,10 @@ const Dashboard = (props: DashboardProps) => {
     const storedSelectedEnvironment = CookieUtil.getCookie(
       "selectedEnvironment"
     );
+    const storedSelectedBot = CookieUtil.getCookie("selectedBot");
+    if (storedSelectedBot) {
+      setSelectedBot(JSON.parse(storedSelectedBot));
+    }
     if (storedSelectedSuite) {
       setSelectedSuite(JSON.parse(storedSelectedSuite));
     }
@@ -182,6 +187,8 @@ const Dashboard = (props: DashboardProps) => {
     return displayWithCommas;
   };
 
+  console.log({ filteredData }, "filteredData");
+
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">
@@ -200,6 +207,10 @@ const Dashboard = (props: DashboardProps) => {
               // onChange={(value) => handleChange("bots", value)}
               onSelectChange={(selectedOption) => {
                 setSelectedBot(selectedOption);
+                CookieUtil.setCookie(
+                  "selectedBot",
+                  JSON.stringify(selectedOption)
+                );
               }}
             />
           </div>
@@ -263,7 +274,22 @@ const Dashboard = (props: DashboardProps) => {
           </>
         ) : (
           <>
-            {testData && testData?.length === 0 ? (
+            {(!selectedSuite && !selectedEnvironment) ||
+            (selectedSuite && !selectedEnvironment) ||
+            (!selectedSuite && selectedEnvironment) ? (
+              <>
+                <div className="py-7 px-4 border-b-2 border-[#f0f0f0]"></div>
+                <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
+                  <h1 className="font-normal font-poppin text-md ">
+                    Please select the suites and environment.
+                  </h1>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+
+            {selectedSuite && selectedEnvironment && testData?.length === 0 ? (
               <>
                 <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
                   <h1 className="font-semibold font-poppin text-xl">
@@ -287,7 +313,7 @@ const Dashboard = (props: DashboardProps) => {
               </>
             ) : (
               <>
-                {filteredData ? (
+                {filteredData && (
                   <>
                     <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
                       <div className="flex justify-between">
@@ -384,24 +410,6 @@ const Dashboard = (props: DashboardProps) => {
                             />
                           </div>
                         ))}
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="py-7 px-4 border-b-2 border-[#f0f0f0]">
-                      {/* <h1 className="font-semibold font-poppin text-xl">Tests</h1> */}
-                      {/* <p className="text-black text-md  font-poppin">
-                    Create a test and run it to see your results.
-                  </p> */}
-                    </div>
-                    <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
-                      <h1 className="font-normal font-poppin text-md ">
-                        Please select the suites and environment.
-                      </h1>
-
-                      {/* <CustomButton color="blue" variant="solid">
-                    Create new test
-                  </CustomButton> */}
                     </div>
                   </>
                 )}

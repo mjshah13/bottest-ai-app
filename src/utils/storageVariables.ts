@@ -11,13 +11,9 @@ export const CookieUtil: CookieFunctions = {
     return localStorage.removeItem(key);
   },
   removeAllCookie: () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("userData");
-    localStorage.removeItem("UpdateData");
-    localStorage.removeItem("globalState");
-    localStorage.removeItem("remotePartispant");
-    localStorage.removeItem("localPartispant");
-    localStorage.removeItem("room");
-    localStorage.removeItem("redirect");
+    // localStorage.removeItem("accessToken");
+    localStorage.removeItem("selectedBot");
+    localStorage.removeItem("selectedSuite");
+    localStorage.removeItem("selectedEnvironment");
   },
 };
