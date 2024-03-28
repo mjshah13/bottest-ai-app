@@ -17,8 +17,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
-import { useOrganization } from "@clerk/nextjs";
-import { CookieUtil } from "../../../utils/storageVariables";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 
 interface DashboardProps {}
@@ -39,7 +38,8 @@ const Dashboard = (props: DashboardProps) => {
     tab: "View all",
   });
   const { organization } = useOrganization();
-  const { botLists } = useBots(setSelectedBot);
+  const { user } = useUser();
+  const { botLists, fetchBots } = useBots(setSelectedBot);
   const { suiteLists, fetchSuites } = useSuites(setSelectedSuite);
   const { environmentLists, fetchEnvironment } = useEnvironment(
     setSelectedEnvironment
@@ -76,9 +76,12 @@ const Dashboard = (props: DashboardProps) => {
     setSelectedSuite(null);
     setSelectedEnvironment(null);
     setFilteredData(null);
-    // CookieUtil.removeAllCookie();
-  }, [organization]);
+  }, [organization?.id]);
 
+  useEffect(() => {
+    fetchBots();
+    // Place the code that should run when the value changes here
+  }, [organization?.id]);
   useEffect(() => {
     if (!selectedBot) return;
     fetchSuites(selectedBot?.id);
@@ -103,7 +106,7 @@ const Dashboard = (props: DashboardProps) => {
         setFilteredData(filteredTest);
       }
     }, 250),
-    [testData]
+    [testData, filters]
   );
 
   useEffect(() => {
@@ -127,23 +130,6 @@ const Dashboard = (props: DashboardProps) => {
       window.removeEventListener("resize", updateContainerHeight);
     };
   }, []);
-
-  // useEffect(() => {
-  //   const storedSelectedSuite = CookieUtil.getCookie("selectedSuite");
-  //   const storedSelectedEnvironment = CookieUtil.getCookie(
-  //     "selectedEnvironment"
-  //   );
-  //   const storedSelectedBot = CookieUtil.getCookie("selectedBot");
-  //   if (storedSelectedBot) {
-  //     setSelectedBot(JSON.parse(storedSelectedBot));
-  //   }
-  //   if (storedSelectedSuite) {
-  //     setSelectedSuite(JSON.parse(storedSelectedSuite));
-  //   }
-  //   if (storedSelectedEnvironment) {
-  //     setSelectedEnvironment(JSON.parse(storedSelectedEnvironment));
-  //   }
-  // }, []);
 
   const countStatus = (status: string) => {
     return suiteTestRuns?.filter((test) => test?.status === status).length;
@@ -204,10 +190,6 @@ const Dashboard = (props: DashboardProps) => {
               // onChange={(value) => handleChange("bots", value)}
               onSelectChange={(selectedOption) => {
                 setSelectedBot(selectedOption);
-                CookieUtil.setCookie(
-                  "selectedBot",
-                  JSON.stringify(selectedOption)
-                );
               }}
             />
           </div>
@@ -221,10 +203,6 @@ const Dashboard = (props: DashboardProps) => {
               options={suiteLists || []}
               onSelectChange={(selectedOption) => {
                 setSelectedSuite(selectedOption);
-                CookieUtil.setCookie(
-                  "selectedSuite",
-                  JSON.stringify(selectedOption)
-                );
               }}
             />
           </div>
@@ -238,10 +216,6 @@ const Dashboard = (props: DashboardProps) => {
               options={environmentLists || []}
               onSelectChange={(selectedOption) => {
                 setSelectedEnvironment(selectedOption);
-                CookieUtil.setCookie(
-                  "selectedEnvironment",
-                  JSON.stringify(selectedOption)
-                );
               }}
             />
           </div>

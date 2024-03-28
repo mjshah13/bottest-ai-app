@@ -28,14 +28,14 @@ const navigation: NavigationItem[] = [
     href: "/app/analytics",
     icon: <BarChartBig />,
     current: false,
-    isDisabled: false,
+    isDisabled: true,
   },
   {
     name: "Organization",
     href: "/app/organization",
     icon: <Building2 />,
     current: false,
-    isDisabled: false,
+    isDisabled: true,
   },
 ];
 

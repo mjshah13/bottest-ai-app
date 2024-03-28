@@ -3,7 +3,6 @@ import { EnvironmentType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
-import { CookieUtil } from "../utils/storageVariables";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
@@ -36,10 +35,6 @@ const useEnvironment = (setSelectedEnvironment: any) => {
         if (selectDataItems.length === 1) {
           // Assuming handleSelect is a function that needs to be called when there is only one bot
           setSelectedEnvironment(selectDataItems[0]);
-          CookieUtil.setCookie(
-            "selectedEnvironment",
-            JSON.stringify(selectDataItems[0])
-          );
         }
       } catch (error: any) {
         console.error({ error });

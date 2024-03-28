@@ -47,14 +47,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         <Select.Trigger placeholder={placeholder} className="font-poppin">
           {selectedValue?.name}
         </Select.Trigger>
-        <Select.Content position="popper">
+        <Select.Content position="popper" className="font-poppin">
           {options?.map((option) => (
             <Select.Item
-              className={`${
-                option.id === selectedValue?.id
-                  ? "bg-primary text-black font-semibold font-poppin "
-                  : "bg-white text-black px-1.5 font-poppin"
-              } mb-1.5 hover:bg-primary hover:text-black  font-poppin`}
+              className={`
+              font-poppin
+                ${
+                  option.id === selectedValue?.id
+                    ? "bg-primary text-black font-semibold"
+                    : "bg-white text-black px-1.5 "
+                } mb-1.5 hover:bg-primary hover:text-black`}
               key={option.id}
               value={option.id || ""}
             >
