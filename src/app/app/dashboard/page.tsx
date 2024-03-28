@@ -145,6 +145,43 @@ const Dashboard = (props: DashboardProps) => {
     return suiteTestRuns?.filter((test) => test?.status === status).length;
   };
 
+  const generateStatusDisplayWithCommas = () => {
+    const statusDisplays = Object.keys(teststatus)
+      .filter((status) => countStatus(status) > 0)
+      .map((status) => (
+        <span
+          key={status}
+          className={`${
+            status === "Pass"
+              ? "text-success"
+              : status === "Mixed"
+              ? "text-[#E7C200]"
+              : status === "Fail" || status === "Error"
+              ? "text-danger"
+              : status === "Running"
+              ? "text-[#388aeb]"
+              : status === "Skipped" || status === "Stopped"
+              ? "text-[#212427]"
+              : ""
+          } font-medium font-poppin px-1`}
+        >
+          {countStatus(status)} {teststatus[status]}
+        </span>
+      ));
+
+    const displayWithCommas = statusDisplays.reduce(
+      (acc: any, curr: any, index: any) => {
+        const isSecondLastitem = index === statusDisplays.length - 2;
+        const isLastitem = index === statusDisplays.length - 1;
+        const separator = isSecondLastitem ? "and " : isLastitem ? "." : ",";
+        return acc.concat(curr, separator);
+      },
+      []
+    );
+
+    return displayWithCommas;
+  };
+
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">
@@ -277,31 +314,7 @@ const Dashboard = (props: DashboardProps) => {
                       <div>
                         <p className="text-black gap-2 font-poppin">
                           In your most recent run of all your tests,{" "}
-                          {Object.keys(teststatus).map(
-                            (status, index) =>
-                              countStatus(status) > 0 && (
-                                <span
-                                  key={index}
-                                  className={`${
-                                    status === "Pass"
-                                      ? "text-success"
-                                      : status === "Mixed"
-                                      ? "text-[#E7C200]"
-                                      : status === "Fail" || status === "Error"
-                                      ? "text-danger"
-                                      : status === "Running"
-                                      ? "text-[#388aeb]"
-                                      : status === "Skipped"
-                                      ? "text-[#212427]"
-                                      : status === "Stopped"
-                                      ? "text-[#212427]"
-                                      : ""
-                                  } font-medium font-poppin mr-2`}
-                                >
-                                  {countStatus(status)} {teststatus[status]}
-                                </span>
-                              )
-                          )}
+                          {generateStatusDisplayWithCommas()}
                         </p>
                       </div>
                     </div>
