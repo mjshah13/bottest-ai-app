@@ -7,7 +7,7 @@ import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
 import CustomButton from "../../../elements/button";
 import CustomInput from "../../../elements/input";
-import { filterOptions, teststatus } from "../../../utils/common";
+import { filterOptions, getStatuses } from "../../../utils/common";
 import _ from "lodash";
 import useBots from "../../../hooks/useBots";
 import useSuites from "../../../hooks/useSuites";
@@ -18,7 +18,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
 import { useOrganization } from "@clerk/nextjs";
-import { useApi } from "../../../hooks/useApi";
 import { CookieUtil } from "../../../utils/storageVariables";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 
@@ -47,7 +46,7 @@ const Dashboard = (props: DashboardProps) => {
   );
 
   const { testData, fetchTests, isLoading } = useTests();
-  const { suiteTestRuns, fetchSuiteRuns } = useSuiteRuns();
+  const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
 
   const filterData = (status: string) => {
     if (status === "View all") {
@@ -77,7 +76,7 @@ const Dashboard = (props: DashboardProps) => {
     setSelectedSuite(null);
     setSelectedEnvironment(null);
     setFilteredData(null);
-    CookieUtil.removeAllCookie();
+    // CookieUtil.removeAllCookie();
   }, [organization]);
 
   useEffect(() => {
@@ -129,29 +128,29 @@ const Dashboard = (props: DashboardProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    const storedSelectedSuite = CookieUtil.getCookie("selectedSuite");
-    const storedSelectedEnvironment = CookieUtil.getCookie(
-      "selectedEnvironment"
-    );
-    const storedSelectedBot = CookieUtil.getCookie("selectedBot");
-    if (storedSelectedBot) {
-      setSelectedBot(JSON.parse(storedSelectedBot));
-    }
-    if (storedSelectedSuite) {
-      setSelectedSuite(JSON.parse(storedSelectedSuite));
-    }
-    if (storedSelectedEnvironment) {
-      setSelectedEnvironment(JSON.parse(storedSelectedEnvironment));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedSelectedSuite = CookieUtil.getCookie("selectedSuite");
+  //   const storedSelectedEnvironment = CookieUtil.getCookie(
+  //     "selectedEnvironment"
+  //   );
+  //   const storedSelectedBot = CookieUtil.getCookie("selectedBot");
+  //   if (storedSelectedBot) {
+  //     setSelectedBot(JSON.parse(storedSelectedBot));
+  //   }
+  //   if (storedSelectedSuite) {
+  //     setSelectedSuite(JSON.parse(storedSelectedSuite));
+  //   }
+  //   if (storedSelectedEnvironment) {
+  //     setSelectedEnvironment(JSON.parse(storedSelectedEnvironment));
+  //   }
+  // }, []);
 
   const countStatus = (status: string) => {
     return suiteTestRuns?.filter((test) => test?.status === status).length;
   };
 
   const generateStatusDisplayWithCommas = () => {
-    const statusDisplays = Object.keys(teststatus)
+    const statusDisplays = getStatuses
       .filter((status) => countStatus(status) > 0)
       .map((status) => (
         <span
@@ -170,7 +169,7 @@ const Dashboard = (props: DashboardProps) => {
               : ""
           } font-medium font-poppin px-1`}
         >
-          {countStatus(status)} {teststatus[status]}
+          {countStatus(status)} {status}
         </span>
       ));
 
@@ -178,7 +177,7 @@ const Dashboard = (props: DashboardProps) => {
       (acc: any, curr: any, index: any) => {
         const isSecondLastitem = index === statusDisplays.length - 2;
         const isLastitem = index === statusDisplays.length - 1;
-        const separator = isSecondLastitem ? "and " : isLastitem ? "." : ",";
+        const separator = isSecondLastitem ? "and" : isLastitem ? "." : ",";
         return acc.concat(curr, separator);
       },
       []
@@ -186,8 +185,6 @@ const Dashboard = (props: DashboardProps) => {
 
     return displayWithCommas;
   };
-
-  console.log({ filteredData }, "filteredData");
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
@@ -217,7 +214,7 @@ const Dashboard = (props: DashboardProps) => {
           <div className="w-full">
             <CustomSelect
               Label={"Select Suites"}
-              disabled={suiteLists?.length === 1 || !suiteLists}
+              // disabled={suiteLists?.length === 1 || !suiteLists}
               Btntext="Add/Modify Suites"
               selectedValue={selectedSuite}
               placeholder="Select Suites"
@@ -234,7 +231,7 @@ const Dashboard = (props: DashboardProps) => {
           <div className="w-full">
             <CustomSelect
               Label={"Select Environment"}
-              disabled={environmentLists?.length === 1 || !environmentLists}
+              // disabled={environmentLists?.length === 1 || !environmentLists}
               placeholder="Select environment"
               Btntext="Add / Modify environment"
               selectedValue={selectedEnvironment}
@@ -274,9 +271,7 @@ const Dashboard = (props: DashboardProps) => {
           </>
         ) : (
           <>
-            {(!selectedSuite && !selectedEnvironment) ||
-            (selectedSuite && !selectedEnvironment) ||
-            (!selectedSuite && selectedEnvironment) ? (
+            {!selectedSuite || !selectedEnvironment ? (
               <>
                 <div className="py-7 px-4 border-b-2 border-[#f0f0f0]"></div>
                 <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
@@ -286,131 +281,129 @@ const Dashboard = (props: DashboardProps) => {
                 </div>
               </>
             ) : (
-              ""
-            )}
-
-            {selectedSuite && selectedEnvironment && testData?.length === 0 ? (
               <>
-                <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
-                  <h1 className="font-semibold font-poppin text-xl">
-                    {" "}
-                    {selectedSuite &&
-                      selectedEnvironment &&
-                      `${selectedSuite.name}/${selectedEnvironment.name}`}
-                  </h1>
-                  <p className="text-black text-md  font-poppin">
-                    Create a test and run it to see your results.
-                  </p>
-                </div>
-                <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
-                  <h1 className="font-normal font-poppin text-md ">
-                    You have no tests, create one below!
-                  </h1>
-                  <CustomButton color="blue" variant="solid">
-                    Create new test
-                  </CustomButton>
-                </div>
-              </>
-            ) : (
-              <>
-                {filteredData && (
+                {!testData ? (
                   <>
                     <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
-                      <div className="flex justify-between">
-                        <div>
-                          <h1 className="font-semibold font-poppin text-xl">
-                            {selectedSuite &&
-                              selectedEnvironment &&
-                              `${selectedSuite.name}/${selectedEnvironment.name}`}
-                          </h1>
-                        </div>
-                        <div className="gap-4 flex ">
-                          <CustomButton variant="outline" color="gray">
-                            Create new test
-                          </CustomButton>
-                          <CustomButton
-                            color="blue"
-                            variant="solid"
-                            svgIcon={<RefreshCw size={17} />}
-                          >
-                            Run all tests
-                          </CustomButton>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-black gap-2 font-poppin">
-                          In your most recent run of all your tests,{" "}
-                          {generateStatusDisplayWithCommas()}
-                        </p>
-                      </div>
+                      <h1 className="font-semibold font-poppin text-xl">
+                        {" "}
+                        {`${selectedSuite?.name} - ${selectedEnvironment?.name}`}
+                      </h1>
+                      <p className="text-black text-md  font-poppin">
+                        Create a test and run it to see your results.
+                      </p>
                     </div>
-                    <div className=" py-5 px-4 border-b-2 border-[#f0f0f0]">
-                      <Grid
-                        columns={{ lg: "3fr 1fr", md: "3fr 1fr" }}
-                        gap="3"
-                        width="auto"
-                      >
-                        <Box>
-                          <div className=" border-[#d9d9d9] border rounded-lg w-max ">
-                            {filterOptions &&
-                              filterOptions?.map((item, i) => (
-                                <button
-                                  key={item.key}
-                                  className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
-                                    i === 0 ? "rounded-l-lg" : ""
-                                  } ${
-                                    i === filterOptions.length - 1
-                                      ? "border-r-0"
-                                      : ""
-                                  } ${
-                                    filters.tab === item.status
-                                      ? "bg-[#f5f5f5] text-black "
-                                      : ""
-                                  }`}
-                                  onClick={() => {
-                                    handleButtonClick(item.status);
-                                  }}
-                                >
-                                  {item.label}
-                                </button>
-                              ))}
+                    <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
+                      <h1 className="font-normal font-poppin text-md ">
+                        You have no tests, create one below!
+                      </h1>
+                      <CustomButton color="blue" variant="solid">
+                        Create new test
+                      </CustomButton>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {testData && (
+                      <>
+                        <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
+                          <div className="flex justify-between">
+                            <div>
+                              <h1 className="font-semibold font-poppin text-xl">
+                                {`${selectedSuite?.name} - ${selectedEnvironment?.name}`}
+                              </h1>
+                            </div>
+                            <div className="gap-4 flex ">
+                              <CustomButton variant="outline" color="gray">
+                                Create new test
+                              </CustomButton>
+                              <CustomButton
+                                color="blue"
+                                variant="solid"
+                                svgIcon={<RefreshCw size={17} />}
+                              >
+                                Run all tests
+                              </CustomButton>
+                            </div>
                           </div>
-                        </Box>
-                        <Box>
                           <div>
-                            <CustomInput
-                              onChange={(value) => {
-                                handleFilteredData(value);
-                              }}
-                              size="3"
-                              type="text"
-                              placeholder="Search for a test"
-                            />
+                            {suiteTestRuns?.length > 0 && !loading && (
+                              <p className="text-black gap-2 font-poppin">
+                                In your most recent run of all your tests,{" "}
+                                {generateStatusDisplayWithCommas()}
+                              </p>
+                            )}
                           </div>
-                        </Box>
-                      </Grid>
-                    </div>
+                        </div>
+                        <div className=" py-5 px-4 border-b-2 border-[#f0f0f0]">
+                          <Grid
+                            columns={{ lg: "3fr 1fr", md: "3fr 1fr" }}
+                            gap="3"
+                            width="auto"
+                          >
+                            <Box>
+                              <div className=" border-[#d9d9d9] border rounded-lg w-max ">
+                                {filterOptions &&
+                                  filterOptions?.map((item, i) => (
+                                    <button
+                                      key={item.key}
+                                      className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
+                                        i === 0 ? "rounded-l-lg" : ""
+                                      } ${
+                                        i === filterOptions.length - 1
+                                          ? "border-r-0"
+                                          : ""
+                                      } ${
+                                        filters.tab === item.status
+                                          ? "bg-[#f5f5f5] text-black "
+                                          : ""
+                                      }`}
+                                      onClick={() => {
+                                        handleButtonClick(item.status);
+                                      }}
+                                    >
+                                      {item.label}
+                                    </button>
+                                  ))}
+                              </div>
+                            </Box>
+                            <Box>
+                              <div>
+                                <CustomInput
+                                  onChange={(value) => {
+                                    handleFilteredData(value);
+                                  }}
+                                  size="3"
+                                  type="text"
+                                  placeholder="Search for a test"
+                                />
+                              </div>
+                            </Box>
+                          </Grid>
+                        </div>
 
-                    <div
-                      className="px-5 py-6  "
-                      style={{
-                        maxHeight: `${containerHeight - 200}px`,
-                        overflowY: "auto",
-                      }}
-                    >
-                      {filteredData &&
-                        filteredData?.map((item: TestType) => (
-                          <div className="mb-5" key={item?.title}>
-                            <TestRun
-                              isDisabled={!item?.full_run_enabled}
-                              title={item?.name}
-                              lastTestRuns={item?.recent_test_runs}
-                              status={item?.status}
-                              loading={isLoading}
-                            />
-                          </div>
-                        ))}
-                    </div>
+                        <div
+                          className="px-5 py-6  "
+                          style={{
+                            maxHeight: `${containerHeight - 200}px`,
+                            overflowY: "auto",
+                          }}
+                        >
+                          {filteredData &&
+                            filteredData?.map((item: TestType) => (
+                              <div className="mb-5" key={item?.title}>
+                                <TestRun
+                                  isDisabled={!item?.full_run_enabled}
+                                  title={item?.name}
+                                  lastTestRuns={item?.recent_test_runs}
+                                  status={item?.status}
+                                  loading={isLoading}
+                                />
+                              </div>
+                            ))}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </>

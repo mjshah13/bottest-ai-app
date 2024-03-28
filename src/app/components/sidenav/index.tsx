@@ -28,7 +28,7 @@ const navigation: NavigationItem[] = [
     href: "/app/analytics",
     icon: <BarChartBig />,
     current: false,
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     name: "Organization",

@@ -12,6 +12,7 @@ const useSuiteRuns = () => {
 
   const fetchSuiteRuns = useCallback(
     async (suite: string | null, environmentId: string | null) => {
+      setIsLoading(true);
       if (!user?.id) {
         return;
       }
@@ -29,7 +30,9 @@ const useSuiteRuns = () => {
         setSuiteTestRuns(data?.data?.[0]?.test_runs || []);
       } catch (error: any) {
         console.error({ error });
+        setIsLoading(false);
       } finally {
+        setIsLoading(false);
       }
     },
     [user]
