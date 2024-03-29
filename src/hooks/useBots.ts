@@ -45,7 +45,11 @@ const useBots = (setSelectedBot: any) => {
       setError(error);
       toast.error(`Bots: ${error?.response?.data?.message}`);
     }
-  }, [organization]);
+  }, [organization?.id, user?.id]);
+
+  useEffect(() => {
+    fetchBots();
+  }, [organization?.id, user?.id]);
 
   return { botLists, fetchBots, error };
 };

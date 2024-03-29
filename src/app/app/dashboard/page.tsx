@@ -38,7 +38,6 @@ const Dashboard = (props: DashboardProps) => {
     tab: "View all",
   });
   const { organization } = useOrganization();
-  const { user } = useUser();
   const { botLists, fetchBots } = useBots(setSelectedBot);
   const { suiteLists, fetchSuites } = useSuites(setSelectedSuite);
   const { environmentLists, fetchEnvironment } = useEnvironment(
@@ -78,10 +77,6 @@ const Dashboard = (props: DashboardProps) => {
     setFilteredData(null);
   }, [organization?.id]);
 
-  useEffect(() => {
-    fetchBots();
-    // Place the code that should run when the value changes here
-  }, [organization?.id]);
   useEffect(() => {
     if (!selectedBot) return;
     fetchSuites(selectedBot?.id);
