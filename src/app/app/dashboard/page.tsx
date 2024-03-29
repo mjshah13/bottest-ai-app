@@ -2,7 +2,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { Option, TestType } from "../../../utils/typesInterface";
+import {
+  EnvironmentModaldata,
+  ModifyModaldata,
+  Option,
+  TestType,
+} from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
 import CustomButton from "../../../elements/button";
@@ -41,12 +46,11 @@ const Dashboard = (props: DashboardProps) => {
   const handleSelect = (key: string, selectedOption: Option) => {
     setSelectedValues({ ...selectedValues, [key]: selectedOption });
   };
-  const { botLists } = useBots(handleSelect);
-  const { suiteLists, fetchSuites } = useSuites();
-  const { environmentLists, fetchEnvironment } = useEnvironment();
+  const { botLists, botModaldata } = useBots(handleSelect);
+  const { suiteLists, fetchSuites, suiteModaldata } = useSuites();
+  const { environmentLists, fetchEnvironment, environmentModaldata } =
+    useEnvironment();
   const { testData, fetchTests, isLoading } = useTests();
-
-  console.log({ suiteLists, environmentLists }, "lists");
 
   const filterData = (status: string) => {
     if (status === "View all") {
@@ -135,14 +139,7 @@ const Dashboard = (props: DashboardProps) => {
 
   // ################## Modal Content ########################
 
-  interface DataType {
-    key: React.Key;
-    name: string;
-    info: string;
-    description: string;
-  }
-
-  const botsColumns: TableColumnsType<DataType> = [
+  const botsColumns: TableColumnsType<ModifyModaldata> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "info", key: "info" },
     {
@@ -159,7 +156,7 @@ const Dashboard = (props: DashboardProps) => {
               </Tooltip.Trigger>
               <Tooltip.Portal>
                 <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                  Create a copy of Suite and existing tests.
+                  Create a copy of bots and existing tests.
                   <Tooltip.Arrow className="TooltipArrow" />
                 </Tooltip.Content>
               </Tooltip.Portal>
@@ -173,7 +170,8 @@ const Dashboard = (props: DashboardProps) => {
       ),
     },
   ];
-  const suiteColumns: TableColumnsType<DataType> = [
+
+  const suiteColumns: TableColumnsType<ModifyModaldata> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Default Success Criteria", dataIndex: "info", key: "info" },
     {
@@ -204,9 +202,9 @@ const Dashboard = (props: DashboardProps) => {
       ),
     },
   ];
-  const environmentColumns: TableColumnsType<DataType> = [
+  const environmentColumns: TableColumnsType<EnvironmentModaldata> = [
     { title: "Name", dataIndex: "name", key: "name" },
-    { title: "URL", dataIndex: "info", key: "info" },
+    { title: "URL", dataIndex: "url", key: "url" },
     {
       dataIndex: "",
       key: "x",
@@ -220,74 +218,81 @@ const Dashboard = (props: DashboardProps) => {
     },
   ];
 
-  const botTableData: DataType[] = [
-    {
-      key: 1,
-      name: "My first bot",
-      info: "This is an example bot description.",
-      description:
-        "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-    },
-    {
-      key: 2,
-      name: "My second bot",
-      info: "This is an example bot description.",
-      description:
-        "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
-    },
-    {
-      key: 4,
-      name: "My third bot",
-      info: "This is an example bot description.",
-      description:
-        "My name is Joe Black, I am 32 years old, living in Sydney No. 1 Lake Park.",
-    },
-  ];
+  // const botTableData: DataType[] = [
+  //   {
+  //     key: 1,
+  //     name: "My first bot",
+  //     info: "This is an example bot description.",
+  //     description:
+  //       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
+  //   },
+  //   {
+  //     key: 2,
+  //     name: "My second bot",
+  //     info: "This is an example bot description.",
+  //     description:
+  //       "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
+  //   },
+  //   {
+  //     key: 4,
+  //     name: "My third bot",
+  //     info: "This is an example bot description.",
+  //     description:
+  //       "My name is Joe Black, I am 32 years old, living in Sydney No. 1 Lake Park.",
+  //   },
+  // ];
 
-  const suiteTableData: DataType[] = [
-    {
-      key: 1,
-      name: "Test suite 1",
-      info: "Determine if each response to the user is similar to the baseline in i...",
-      description:
-        "Determine if each response to the user is similar to the baseline in i...",
-    },
-    {
-      key: 2,
-      name: "Test suite 2",
-      info: "Determine if each response to the user is similar to the baseline in i...",
-      description:
-        "Determine if each response to the user is similar to the baseline in i...",
-    },
-    {
-      key: 4,
-      name: "Test suite 3",
-      info: "Determine if each response to the user is similar to the baseline in i...",
-      description:
-        "Determine if each response to the user is similar to the baseline in i...",
-    },
-  ];
-  const environmentTableData: DataType[] = [
-    {
-      key: 1,
-      name: "Production",
-      info: "www.example.bottest.ai/chatbot/version3",
-      description:
-        "Determine if each response to the user is similar to the baseline in i...",
-    },
-    {
-      key: 2,
-      name: "Staging",
-      info: "www.example.bottest.ai/chatbot/version3",
-      description:
-        "Determine if each response to the user is similar to the baseline in i...",
-    },
-  ];
-
+  // const suiteTableData: DataType[] = [
+  //   {
+  //     key: 1,
+  //     name: "Test suite 1",
+  //     info: "Determine if each response to the user is similar to the baseline in i...",
+  //     description:
+  //       "Determine if each response to the user is similar to the baseline in i...",
+  //   },
+  //   {
+  //     key: 2,
+  //     name: "Test suite 2",
+  //     info: "Determine if each response to the user is similar to the baseline in i...",
+  //     description:
+  //       "Determine if each response to the user is similar to the baseline in i...",
+  //   },
+  //   {
+  //     key: 4,
+  //     name: "Test suite 3",
+  //     info: "Determine if each response to the user is similar to the baseline in i...",
+  //     description:
+  //       "Determine if each response to the user is similar to the baseline in i...",
+  //   },
+  // ];
+  // const environmentTableData: EnvironmentModaldata[] = [
+  //   {
+  //     id: 1,
+  //     name: "Production",
+  //     url: (
+  //       <a href="https://www.example.bottest.ai/chatbot/version3">
+  //         www.example.bottest.ai/chatbot/version3
+  //       </a>
+  //     ),
+  //     description:
+  //       "Determine if each response to the user is similar to the baseline in i...",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Staging",
+  //     url: (
+  //       <a href="https://www.example.bottest.ai/chatbot/version3">
+  //         www.example.bottest.ai/chatbot/version3
+  //       </a>
+  //     ),
+  //     description:
+  //       "Determine if each response to the user is similar to the baseline in i...",
+  //   },
+  // ];
   const [isBotsModalopen, setIsBotsModalopen] = useState(false);
   const [isSuiteModalopen, setIsSuiteModalopen] = useState(false);
   const [isEnvironmentModalopen, setIsEnvironmentModalopen] = useState(false);
-  const [addBots, setAddbots] = useState<DataType[]>(botTableData);
+  const [addBots, setAddbots] = useState<ModifyModaldata[]>(botModaldata);
 
   const handleDiscard = () => {
     setIsBotsModalopen(false);
@@ -299,7 +304,7 @@ const Dashboard = (props: DashboardProps) => {
     setAddbots([
       ...addBots,
       {
-        key: addBots?.length + 1,
+        id: addBots?.length + 1,
         name: "",
         info: "",
         description: "",
@@ -525,7 +530,7 @@ const Dashboard = (props: DashboardProps) => {
                   <p style={{ margin: 0 }}>{record?.description}</p>
                 ),
               }}
-              dataSource={addBots}
+              dataSource={botModaldata}
               footer={() => (
                 <button
                   className="w-full text-[#388aeb]"
@@ -550,16 +555,16 @@ const Dashboard = (props: DashboardProps) => {
               bordered
               pagination={false}
               columns={suiteColumns}
-              expandable={{
-                expandedRowRender: (record) => (
-                  <p style={{ margin: 0 }}>{record?.description}</p>
-                ),
-              }}
-              dataSource={suiteTableData}
+              // expandable={{
+              //   expandedRowRender: (record) => (
+              //     <p style={{ margin: 0 }}>{record?.description}</p>
+              //   ),
+              // }}
+              dataSource={suiteModaldata}
               footer={() => (
                 <button
                   className="w-full text-[#388aeb]"
-                  onClick={handleAddNewRow}
+                  // onClick={handleAddNewRow}
                 >
                   + Add new blank Suite
                 </button>
@@ -600,11 +605,22 @@ const Dashboard = (props: DashboardProps) => {
               //     <p style={{ margin: 0 }}>{record?.description}</p>
               //   ),
               // }}
-              dataSource={environmentTableData}
+              dataSource={[
+                ...environmentModaldata.map(({ url, ...rest }) => {
+                  return {
+                    ...rest,
+                    url: (
+                      <a href={`${url}`} target="_blank">
+                        {url}
+                      </a>
+                    ),
+                  };
+                }),
+              ]}
               footer={() => (
                 <button
                   className="w-full text-[#388aeb]"
-                  onClick={handleAddNewRow}
+                  // onClick={handleAddNewRow}
                 >
                   + Add new environment
                 </button>

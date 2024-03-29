@@ -72,3 +72,17 @@ export interface TestType {
 export interface PageConfig {
   matcher?: string[];
 }
+
+export interface ModifyModaldata {
+  id: React.Key;
+  name: string;
+  info: string;
+  description: string;
+}
+
+export interface EnvironmentModaldata {
+  id: React.Key;
+  name: string;
+  url?: string | JSX.Element;
+  description: string;
+}
