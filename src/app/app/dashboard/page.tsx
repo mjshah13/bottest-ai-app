@@ -151,7 +151,7 @@ const Dashboard = (props: DashboardProps) => {
     setIsEnvironmentModalopen(false);
   };
 
-  const addBlankBotRow = () => {
+  const addBlankBot = () => {
     const newBotRow = {
       id: uuidv4(),
       name: "",
@@ -162,7 +162,7 @@ const Dashboard = (props: DashboardProps) => {
     setBotModalData([...botModaldata, newBotRow]);
   };
 
-  const addBlankSuiteRow = () => {
+  const addBlankSuite = () => {
     const newSuiteRow = {
       id: uuidv4(),
       name: "",
@@ -173,7 +173,7 @@ const Dashboard = (props: DashboardProps) => {
     setSuiteModalData([...suiteModaldata, newSuiteRow]);
   };
 
-  const addBlankEnvironmentRow = () => {
+  const addBlankEnvironment = () => {
     const newEnvironmentRow = {
       id: uuidv4(),
       name: "",
@@ -389,7 +389,7 @@ const Dashboard = (props: DashboardProps) => {
       <ModifyBot
         isBotsModalopen={isBotsModalopen}
         setIsBotsModalopen={setIsBotsModalopen}
-        handleAddBlankRow={addBlankBotRow}
+        handleAddBlankRow={addBlankBot}
         title="Add / Modify Bots"
         handleDiscard={handleDiscard}
         botModaldata={botModaldata}
@@ -400,7 +400,7 @@ const Dashboard = (props: DashboardProps) => {
         isSuiteModalopen={isSuiteModalopen}
         setIsSuiteModalopen={setIsSuiteModalopen}
         // selectedValue={selectedValues?.bot?.id}
-        handleAddBlankRow={addBlankSuiteRow}
+        handleAddBlankRow={addBlankSuite}
         // isOpen={isSuiteModalopen}
         title="Add / Modify Suites"
         handleDiscard={handleDiscard}
@@ -411,7 +411,7 @@ const Dashboard = (props: DashboardProps) => {
       <ModifyEnvironment
         setIsEnvironmentModalopen={setIsEnvironmentModalopen}
         isEnvironmentModalopen={isEnvironmentModalopen}
-        handleAddBlankRow={addBlankEnvironmentRow}
+        handleAddBlankRow={addBlankEnvironment}
         environmentModaldata={environmentModaldata}
         // isOpen={isEnvironmentModalopen}
         title={`Add / Modify Environments for ${selectedValues?.suite?.name}`}
