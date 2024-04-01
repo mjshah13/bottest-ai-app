@@ -73,16 +73,20 @@ export interface PageConfig {
   matcher?: string[];
 }
 
-export interface ModifyModaldata {
-  id: React.Key;
-  name: string;
+export interface BotandSuiteModalType {
+  id: React.Key | string;
+  name?: string | JSX.Element;
   info: string;
   description: string;
+  isNew?: boolean;
+  isEdit?: boolean;
 }
 
-export interface EnvironmentModaldata {
-  id: React.Key;
-  name: string;
+export interface EnvironmentModalType {
+  id: React.Key | string;
+  name: string | JSX.Element;
   url?: string | JSX.Element;
-  description: string;
+  isNew?: boolean;
+  isEdit?: boolean;
+  // description: string;
 }

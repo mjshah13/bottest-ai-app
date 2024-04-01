@@ -2,12 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  EnvironmentModaldata,
-  ModifyModaldata,
-  Option,
-  TestType,
-} from "../../../utils/typesInterface";
+import { Option, TestType } from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
 import CustomButton from "../../../elements/button";
@@ -21,12 +16,13 @@ import useTests from "../../../hooks/useTests";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
-import { Box, Callout, Grid } from "@radix-ui/themes";
-import CustomModal from "../../../elements/modal";
+import { Box, Grid } from "@radix-ui/themes";
 import { Table, TableColumnsType } from "antd";
 import { CopyPlus, Trash } from "lucide-react";
-import * as Tooltip from "@radix-ui/react-tooltip";
-import { CircleAlert } from "lucide-react";
+import ModifyBot from "../../components/modifyBot";
+import ModifySuite from "../../components/modifySuite";
+import ModifyEnvironment from "../../components/modifyEnvironment";
+import { v4 as uuidv4 } from "uuid";
 
 interface DashboardProps {}
 
@@ -46,10 +42,15 @@ const Dashboard = (props: DashboardProps) => {
   const handleSelect = (key: string, selectedOption: Option) => {
     setSelectedValues({ ...selectedValues, [key]: selectedOption });
   };
-  const { botLists, botModaldata } = useBots(handleSelect);
-  const { suiteLists, fetchSuites, suiteModaldata } = useSuites();
-  const { environmentLists, fetchEnvironment, environmentModaldata } =
-    useEnvironment();
+  const { botLists, botModaldata, setBotModalData } = useBots(handleSelect);
+  const { suiteLists, fetchSuites, suiteModaldata, setSuiteModalData } =
+    useSuites();
+  const {
+    environmentLists,
+    fetchEnvironment,
+    environmentModaldata,
+    setEnvironmentModaldata,
+  } = useEnvironment();
   const { testData, fetchTests, isLoading } = useTests();
 
   const filterData = (status: string) => {
@@ -139,160 +140,10 @@ const Dashboard = (props: DashboardProps) => {
 
   // ################## Modal Content ########################
 
-  const botsColumns: TableColumnsType<ModifyModaldata> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Description", dataIndex: "info", key: "info" },
-    {
-      dataIndex: "",
-      key: "x",
-      render: () => (
-        <div className="flex justify-center items-center gap-3">
-          <Tooltip.Provider>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-                  <CopyPlus size={18} />
-                </button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                  Create a copy of bots and existing tests.
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
-
-          <button>
-            <Trash color="#E1654A" size={18} />
-          </button>
-        </div>
-      ),
-    },
-  ];
-
-  const suiteColumns: TableColumnsType<ModifyModaldata> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Default Success Criteria", dataIndex: "info", key: "info" },
-    {
-      dataIndex: "",
-      key: "x",
-      render: () => (
-        <div className="flex justify-center items-center gap-3">
-          <Tooltip.Provider>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-                  <CopyPlus size={18} />
-                </button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                  Create a copy of Suite and existing tests.
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
-
-          <button>
-            <Trash color="#E1654A" size={18} />
-          </button>
-        </div>
-      ),
-    },
-  ];
-  const environmentColumns: TableColumnsType<EnvironmentModaldata> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "URL", dataIndex: "url", key: "url" },
-    {
-      dataIndex: "",
-      key: "x",
-      render: () => (
-        <div className="flex justify-center items-center gap-3">
-          <button>
-            <Trash color="#E1654A" size={18} />
-          </button>
-        </div>
-      ),
-    },
-  ];
-
-  // const botTableData: DataType[] = [
-  //   {
-  //     key: 1,
-  //     name: "My first bot",
-  //     info: "This is an example bot description.",
-  //     description:
-  //       "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-  //   },
-  //   {
-  //     key: 2,
-  //     name: "My second bot",
-  //     info: "This is an example bot description.",
-  //     description:
-  //       "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
-  //   },
-  //   {
-  //     key: 4,
-  //     name: "My third bot",
-  //     info: "This is an example bot description.",
-  //     description:
-  //       "My name is Joe Black, I am 32 years old, living in Sydney No. 1 Lake Park.",
-  //   },
-  // ];
-
-  // const suiteTableData: DataType[] = [
-  //   {
-  //     key: 1,
-  //     name: "Test suite 1",
-  //     info: "Determine if each response to the user is similar to the baseline in i...",
-  //     description:
-  //       "Determine if each response to the user is similar to the baseline in i...",
-  //   },
-  //   {
-  //     key: 2,
-  //     name: "Test suite 2",
-  //     info: "Determine if each response to the user is similar to the baseline in i...",
-  //     description:
-  //       "Determine if each response to the user is similar to the baseline in i...",
-  //   },
-  //   {
-  //     key: 4,
-  //     name: "Test suite 3",
-  //     info: "Determine if each response to the user is similar to the baseline in i...",
-  //     description:
-  //       "Determine if each response to the user is similar to the baseline in i...",
-  //   },
-  // ];
-  // const environmentTableData: EnvironmentModaldata[] = [
-  //   {
-  //     id: 1,
-  //     name: "Production",
-  //     url: (
-  //       <a href="https://www.example.bottest.ai/chatbot/version3">
-  //         www.example.bottest.ai/chatbot/version3
-  //       </a>
-  //     ),
-  //     description:
-  //       "Determine if each response to the user is similar to the baseline in i...",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Staging",
-  //     url: (
-  //       <a href="https://www.example.bottest.ai/chatbot/version3">
-  //         www.example.bottest.ai/chatbot/version3
-  //       </a>
-  //     ),
-  //     description:
-  //       "Determine if each response to the user is similar to the baseline in i...",
-  //   },
-  // ];
-  const [isBotsModalopen, setIsBotsModalopen] = useState(false);
-  const [isSuiteModalopen, setIsSuiteModalopen] = useState(false);
-  const [isEnvironmentModalopen, setIsEnvironmentModalopen] = useState(false);
-  const [addBots, setAddbots] = useState<ModifyModaldata[]>(botModaldata);
+  const [isBotsModalopen, setIsBotsModalopen] = useState<boolean>(false);
+  const [isSuiteModalopen, setIsSuiteModalopen] = useState<boolean>(false);
+  const [isEnvironmentModalopen, setIsEnvironmentModalopen] =
+    useState<boolean>(false);
 
   const handleDiscard = () => {
     setIsBotsModalopen(false);
@@ -300,16 +151,37 @@ const Dashboard = (props: DashboardProps) => {
     setIsEnvironmentModalopen(false);
   };
 
-  const handleAddNewRow = () => {
-    setAddbots([
-      ...addBots,
-      {
-        id: addBots?.length + 1,
-        name: "",
-        info: "",
-        description: "",
-      },
-    ]);
+  const addBlankBotRow = () => {
+    const newBotRow = {
+      id: uuidv4(),
+      name: "",
+      info: "",
+      description: "",
+      isNew: true,
+    };
+    setBotModalData([...botModaldata, newBotRow]);
+  };
+
+  const addBlankSuiteRow = () => {
+    const newSuiteRow = {
+      id: uuidv4(),
+      name: "",
+      info: "",
+      description: "",
+      isNew: true,
+    };
+    setSuiteModalData([...suiteModaldata, newSuiteRow]);
+  };
+
+  const addBlankEnvironmentRow = () => {
+    const newEnvironmentRow = {
+      id: uuidv4(),
+      name: "",
+      info: "",
+      description: "",
+      isNew: true,
+    };
+    setEnvironmentModaldata([...environmentModaldata, newEnvironmentRow]);
   };
 
   return (
@@ -514,121 +386,38 @@ const Dashboard = (props: DashboardProps) => {
         )}
       </div>
 
-      <CustomModal
-        isOpen={isBotsModalopen}
+      <ModifyBot
+        isBotsModalopen={isBotsModalopen}
+        setIsBotsModalopen={setIsBotsModalopen}
+        handleAddBlankRow={addBlankBotRow}
         title="Add / Modify Bots"
         handleDiscard={handleDiscard}
-      >
-        <>
-          <div className="px-5 pt-4 pb-7">
-            <Table
-              bordered
-              pagination={false}
-              columns={botsColumns}
-              expandable={{
-                expandedRowRender: (record) => (
-                  <p style={{ margin: 0 }}>{record?.description}</p>
-                ),
-              }}
-              dataSource={botModaldata}
-              footer={() => (
-                <button
-                  className="w-full text-[#388aeb]"
-                  onClick={handleAddNewRow}
-                >
-                  + Add new blank Bot
-                </button>
-              )}
-            />
-          </div>
-        </>
-      </CustomModal>
+        botModaldata={botModaldata}
+        setBotModalData={setBotModalData}
+      />
 
-      <CustomModal
-        isOpen={isSuiteModalopen}
+      <ModifySuite
+        isSuiteModalopen={isSuiteModalopen}
+        setIsSuiteModalopen={setIsSuiteModalopen}
+        // selectedValue={selectedValues?.bot?.id}
+        handleAddBlankRow={addBlankSuiteRow}
+        // isOpen={isSuiteModalopen}
         title="Add / Modify Suites"
         handleDiscard={handleDiscard}
-      >
-        <>
-          <div className="px-5 pt-4 pb-7">
-            <Table
-              bordered
-              pagination={false}
-              columns={suiteColumns}
-              // expandable={{
-              //   expandedRowRender: (record) => (
-              //     <p style={{ margin: 0 }}>{record?.description}</p>
-              //   ),
-              // }}
-              dataSource={suiteModaldata}
-              footer={() => (
-                <button
-                  className="w-full text-[#388aeb]"
-                  // onClick={handleAddNewRow}
-                >
-                  + Add new blank Suite
-                </button>
-              )}
-            />
-          </div>
-        </>
-      </CustomModal>
+        suiteModaldata={suiteModaldata}
+        setSuiteModalData={setSuiteModalData}
+      />
 
-      <CustomModal
-        isOpen={isEnvironmentModalopen}
-        title="Add / Modify Environments for “Test suite 1”"
+      <ModifyEnvironment
+        setIsEnvironmentModalopen={setIsEnvironmentModalopen}
+        isEnvironmentModalopen={isEnvironmentModalopen}
+        handleAddBlankRow={addBlankEnvironmentRow}
+        environmentModaldata={environmentModaldata}
+        // isOpen={isEnvironmentModalopen}
+        title={`Add / Modify Environments for ${selectedValues?.suite?.name}`}
         handleDiscard={handleDiscard}
-      >
-        <>
-          <div className="px-5 pt-4 pb-7">
-            <div className="border border-warning bg-warningLight px-4 py-3 rounded-lg mb-5 flex gap-2">
-              <div>
-                <CircleAlert fill="#E7C200" color="white" />
-              </div>
-              <div className="flex flex-col ">
-                <h1 className="text-black text-normal font-poppin">Note</h1>
-                <p className="text-black text-sm font-poppin w-[80%]">
-                  The UI of a different environment should match the UI of
-                  original recorded tests. Attempting to run tests on
-                  environments where the UI does not match may result in tests
-                  failing due to inability to replay or capture data correctly!
-                </p>
-              </div>
-            </div>
-
-            <Table
-              bordered
-              pagination={false}
-              columns={environmentColumns}
-              // expandable={{
-              //   expandedRowRender: (record) => (
-              //     <p style={{ margin: 0 }}>{record?.description}</p>
-              //   ),
-              // }}
-              dataSource={[
-                ...environmentModaldata.map(({ url, ...rest }) => {
-                  return {
-                    ...rest,
-                    url: (
-                      <a href={`${url}`} target="_blank">
-                        {url}
-                      </a>
-                    ),
-                  };
-                }),
-              ]}
-              footer={() => (
-                <button
-                  className="w-full text-[#388aeb]"
-                  // onClick={handleAddNewRow}
-                >
-                  + Add new environment
-                </button>
-              )}
-            />
-          </div>
-        </>
-      </CustomModal>
+        setEnvironmentModaldata={setEnvironmentModaldata}
+      />
     </div>
   );
 };

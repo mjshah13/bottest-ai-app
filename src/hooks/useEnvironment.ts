@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { EnvironmentModaldata, EnvironmentType } from "../utils/typesInterface";
+import { EnvironmentModalType, EnvironmentType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ import React from "react";
 const useEnvironment = () => {
   const { organization } = useOrganization();
   const [environmentModaldata, setEnvironmentModaldata] = useState<
-    EnvironmentModaldata[]
+    EnvironmentModalType[]
   >([]);
   const [environmentLists, setEnvironmentLists] = useState<
     EnvironmentType[] | null
@@ -30,12 +30,12 @@ const useEnvironment = () => {
           method: "GET",
         });
 
-        const check: EnvironmentModaldata[] = data.data.map(
-          (bot: EnvironmentModaldata) => ({
-            key: bot.id,
+        const check: EnvironmentModalType[] = data.data.map(
+          (bot: EnvironmentModalType) => ({
+            id: bot.id,
             name: bot.name,
             url: bot.url,
-            description: bot.description,
+            // description: bot.description,
           })
         );
 
@@ -56,7 +56,13 @@ const useEnvironment = () => {
     [user, organization]
   );
 
-  return { environmentLists, environmentModaldata, fetchEnvironment, error };
+  return {
+    environmentLists,
+    environmentModaldata,
+    setEnvironmentModaldata,
+    fetchEnvironment,
+    error,
+  };
 };
 
 export default useEnvironment;

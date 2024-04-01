@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ModifyModaldata, SuiteType } from "../utils/typesInterface";
+import { BotandSuiteModalType, SuiteType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -11,7 +11,9 @@ const useSuites = () => {
   const { organization } = useOrganization();
 
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
-  const [suiteModaldata, setSuiteModalData] = useState<ModifyModaldata[]>([]);
+  const [suiteModaldata, setSuiteModalData] = useState<BotandSuiteModalType[]>(
+    []
+  );
 
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
@@ -27,8 +29,8 @@ const useSuites = () => {
           method: "GET",
         });
         setSuiteModalData(
-          data.data.map((bot: ModifyModaldata) => ({
-            key: bot.id,
+          data.data.map((bot: BotandSuiteModalType) => ({
+            id: bot.id,
             name: bot.name,
             info: `this is ${bot.name}`,
             description: "",
@@ -49,7 +51,7 @@ const useSuites = () => {
     [user, organization]
   );
 
-  return { suiteLists, suiteModaldata, fetchSuites, error };
+  return { suiteLists, suiteModaldata, setSuiteModalData, fetchSuites, error };
 };
 
 export default useSuites;

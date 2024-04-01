@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ModifyModaldata, BotType } from "../utils/typesInterface";
+import { BotandSuiteModalType, BotType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ const useBots = (handleSelect: any) => {
   const { organization } = useOrganization();
 
   const [botLists, setBotLists] = useState<BotType[]>([]);
-  const [botModaldata, setBotModalData] = useState<ModifyModaldata[]>([]);
+  const [botModaldata, setBotModalData] = useState<BotandSuiteModalType[]>([]);
 
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
@@ -36,11 +36,11 @@ const useBots = (handleSelect: any) => {
       }
 
       setBotModalData(
-        data.data.map((bot: ModifyModaldata) => ({
-          key: bot.id,
+        data.data.map((bot: BotandSuiteModalType) => ({
+          id: bot.id,
           name: bot.name,
           info: `this is ${bot.name}`,
-          description: "",
+          description: `this is ${bot.name}`,
         }))
       );
       const formattedData: BotType[] = data.data.map((bot: BotType) => ({
@@ -63,7 +63,7 @@ const useBots = (handleSelect: any) => {
     fetchBots();
   }, [user, organization]);
 
-  return { botLists, fetchBots, botModaldata, error };
+  return { botLists, fetchBots, botModaldata, error, setBotModalData };
 };
 
 export default useBots;
