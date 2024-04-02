@@ -80,15 +80,15 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   };
 
   const handleSave = () => {
-    const filteredEnvironment = environmentModaldata?.find(
+    const filteredEnvironment = environmentModaldata?.filter(
       (environment) => environment?.isEdit
     );
     if (filteredEnvironment) {
-      updateEnvironment(
-        filteredEnvironment?.id as string,
-        filteredEnvironment?.name as string
-      );
-      setIsEnvironmentModalopen?.(false);
+      filteredEnvironment?.map((item) => {
+        updateEnvironment(item?.id as string, item?.name as string);
+      });
+
+      // setIsEnvironmentModalopen?.(false);
     }
   };
 

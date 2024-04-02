@@ -100,10 +100,12 @@ const ModifySuite: React.FC<ModalProps> = ({
   };
 
   const handleSave = () => {
-    const filteredSuite = suiteModaldata?.find((suite) => suite?.isEdit);
+    const filteredSuite = suiteModaldata?.filter((suite) => suite?.isEdit);
     if (filteredSuite) {
-      updateSuite(filteredSuite?.id as string, filteredSuite?.name as string);
-      setIsSuiteModalopen?.(false);
+      filteredSuite?.map((item) => {
+        updateSuite(item?.id as string, item?.name as string);
+      });
+      // setIsSuiteModalopen?.(false);
     }
   };
 

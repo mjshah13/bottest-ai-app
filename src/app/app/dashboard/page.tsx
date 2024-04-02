@@ -184,6 +184,8 @@ const Dashboard = (props: DashboardProps) => {
     setEnvironmentModaldata([...environmentModaldata, newEnvironmentRow]);
   };
 
+  console.log(botModaldata, "botModaldata");
+
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
       <div className="  border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">

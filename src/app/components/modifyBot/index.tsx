@@ -7,6 +7,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Edit, Trash } from "lucide-react";
 import { BotandSuiteModalType } from "../../../utils/typesInterface";
 import { useApi } from "../../../hooks/useApi";
+import { useOrganization, useUser } from "@clerk/nextjs";
 
 interface ModalProps {
   title?: string;
@@ -15,7 +16,7 @@ interface ModalProps {
   // isOpen?: boolean;
   // setIsOpen?: (isOpen: boolean) => void;
   isBotsModalopen?: boolean;
-  setIsBotsModalopen?: (isBotsModalopen: boolean) => void;
+  setIsBotsModalopen?: (isBotsModalopen: boolean) => void | undefined;
   botModaldata?: BotandSuiteModalType[];
   handleAddBlankRow?: () => void;
   setBotModalData: React.Dispatch<React.SetStateAction<BotandSuiteModalType[]>>;
@@ -66,6 +67,8 @@ const ModifyBot: React.FC<ModalProps> = ({
   ];
 
   const { request } = useApi();
+  const { organization } = useOrganization();
+  const { user } = useUser();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,7 +77,9 @@ const ModifyBot: React.FC<ModalProps> = ({
     const value = e.target.value;
     setBotModalData((prevData) =>
       prevData.map((bot) =>
-        bot.id === id ? { ...bot, name: value, isEdit: true } : bot
+        bot.id === id
+          ? { ...bot, name: value, isEdit: bot?.isNew ? false : true }
+          : bot
       )
     );
   };
@@ -94,11 +99,44 @@ const ModifyBot: React.FC<ModalProps> = ({
     }
   };
 
+  const addBot = async (name: string) => {
+    try {
+      let organizationPayload = {
+        name,
+        organization_id: organization?.id,
+      };
+      let userPayload = {
+        name,
+        user_id: user?.id,
+      };
+
+      const data = await request({
+        url: `/v1/bots`,
+        method: "POST",
+        data: organization?.id ? organizationPayload : userPayload,
+      });
+      console.log(data?.data, "hhhh");
+    } catch (error: any) {
+      console.error({ error });
+    }
+  };
+
   const handleSave = () => {
-    const filteredBot = botModaldata?.find((bot) => bot?.isEdit);
-    if (filteredBot) {
-      updateBot(filteredBot?.id as string, filteredBot?.name as string);
-      setIsBotsModalopen?.(false);
+    const filteredUpdateBot = botModaldata?.filter((bot) => bot?.isEdit);
+    if (filteredUpdateBot) {
+      filteredUpdateBot?.map((item) => {
+        updateBot(item?.id as string, item?.name as string);
+      });
+
+      // setIsBotsModalopen?.(false);
+    }
+    const filteredNewBot = botModaldata?.filter((bot) => bot?.isNew);
+    if (filteredNewBot) {
+      filteredNewBot?.map((item) => {
+        addBot(item?.name as string);
+      });
+
+      // setIsBotsModalopen?.(false);
     }
   };
 
