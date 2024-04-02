@@ -8,7 +8,7 @@ import React from "react";
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useEnvironment = () => {
+const useEnvironment = (setSelectedEnvironment: any) => {
   const { organization } = useOrganization();
   const [environmentModaldata, setEnvironmentModaldata] = useState<
     EnvironmentModalType[]
@@ -20,7 +20,7 @@ const useEnvironment = () => {
   const { user } = useUser();
   const { request } = useApi();
   const fetchEnvironment = useCallback(
-    async (userBot: string) => {
+    async (userBot: string | null) => {
       if (!user?.id) {
         return;
       }
@@ -47,6 +47,10 @@ const useEnvironment = () => {
             name,
           })) || [];
         setEnvironmentLists(selectDataItems);
+        if (selectDataItems.length === 1) {
+          // Assuming handleSelect is a function that needs to be called when there is only one bot
+          setSelectedEnvironment(selectDataItems[0]);
+        }
       } catch (error: any) {
         console.error({ error });
         setError(error);

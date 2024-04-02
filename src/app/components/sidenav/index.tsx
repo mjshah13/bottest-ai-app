@@ -151,7 +151,7 @@ const Sidenav = () => {
                                   : item?.isDisabled
                                   ? "text-[#b6b8b7]  hover:bg-lightgray"
                                   : "text-black hover:text-black hover:bg-lightgray",
-                                "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full"
+                                "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full  font-poppin"
                               )}
                               type="button"
                             >
@@ -173,7 +173,10 @@ const Sidenav = () => {
                           Your teams
                         </div>
 
-                        <ul role="list" className="-mx-2 mt-2 space-y-1">
+                        <ul
+                          role="list"
+                          className="-mx-2 mt-2 space-y-1 font-poppin"
+                        >
                           {services?.map((item, i) => (
                             <button
                               key={i}
@@ -185,7 +188,7 @@ const Sidenav = () => {
                                   : item?.isDisabled
                                   ? "text-[#b6b8b7]  hover:bg-lightgray"
                                   : "text-black hover:text-black hover:bg-lightgray",
-                                " flex items-center gap-x-3 rounded-md p-2 text-sm w-full "
+                                " flex items-center gap-x-3 rounded-md p-2 text-sm w-full  font-poppin "
                               )}
                             >
                               {item?.icon}
@@ -237,7 +240,7 @@ const Sidenav = () => {
                           : item?.isDisabled
                           ? "text-[#b6b8b7]  hover:bg-lightgray"
                           : "text-black hover:text-black hover:bg-lightgray",
-                        "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full"
+                        "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full  font-poppin"
                       )}
                       type="button"
                     >
@@ -269,7 +272,7 @@ const Sidenav = () => {
                           : item?.isDisabled
                           ? "text-[#b6b8b7]  hover:bg-lightgray"
                           : "text-black hover:text-black hover:bg-lightgray",
-                        "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full"
+                        "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full  font-poppin"
                       )}
                     >
                       {item?.icon}

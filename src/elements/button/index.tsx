@@ -46,7 +46,7 @@ const CustomButton: React.FC<Props> = ({
   return (
     <Button
       onClick={onClick}
-      className="flex items-center gap-2 min-w-[143px] py-3 cursor-pointer"
+      className="flex items-center gap-2 min-w-[143px] py-3 cursor-pointer  font-poppin"
       color={color}
       variant={variant}
     >

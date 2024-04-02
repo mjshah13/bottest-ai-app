@@ -7,15 +7,13 @@ import { toast } from "react-toastify";
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useBots = (handleSelect: any) => {
-  const { organization } = useOrganization();
-
-  const [botLists, setBotLists] = useState<BotType[]>([]);
-  const [botModaldata, setBotModalData] = useState<BotandSuiteModalType[]>([]);
-
-  const [error, setError] = useState<Error | null>(null);
+const useBots = (setSelectedBot: any) => {
   const { user } = useUser();
   const { request } = useApi();
+  const { organization } = useOrganization();
+  const [botLists, setBotLists] = useState<BotType[]>([]);
+  const [botModaldata, setBotModalData] = useState<BotandSuiteModalType[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchBots = useCallback(async () => {
     if (!user?.id) {
@@ -50,18 +48,18 @@ const useBots = (handleSelect: any) => {
       setBotLists(formattedData);
       if (formattedData.length === 1) {
         // Assuming handleSelect is a function that needs to be called when there is only one bot
-        handleSelect("bot", formattedData[0]);
+        setSelectedBot(formattedData[0]);
       }
     } catch (error: any) {
       console.error({ error });
       setError(error);
       toast.error(`Bots: ${error?.response?.data?.message}`);
     }
-  }, [user, organization]);
+  }, [organization?.id, user?.id]);
 
   useEffect(() => {
     fetchBots();
-  }, [user, organization]);
+  }, [organization?.id, user?.id]);
 
   return { botLists, fetchBots, botModaldata, error, setBotModalData };
 };

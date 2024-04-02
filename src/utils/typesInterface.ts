@@ -10,8 +10,8 @@ export interface UserResource {
 }
 
 export interface Option {
-  id: string;
-  name: string;
+  id: string | null;
+  name: string | null;
 }
 
 export interface NavigationItem {
@@ -89,4 +89,7 @@ export interface EnvironmentModalType {
   isNew?: boolean;
   isEdit?: boolean;
   // description: string;
+}
+export interface TestRunType {
+  status?: string;
 }

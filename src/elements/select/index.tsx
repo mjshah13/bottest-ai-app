@@ -11,7 +11,7 @@ interface CustomSelectProps {
   options?: Option[];
   Btntext?: string;
   disabled?: boolean;
-  selectedValue?: string;
+  selectedValue?: Option | null;
   Label?: string;
   placeholder?: string;
 }
@@ -32,30 +32,33 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         {Label}
       </label>
       <Select.Root
+        key={selectedValue?.id}
         disabled={disabled}
-        value={selectedValue}
+        value={selectedValue?.id || ""}
         onValueChange={(newValue) => {
           const selectedOption = options?.find(
-            (option) => option?.name === newValue
+            (option) => option?.id === newValue
           );
           if (selectedOption && onSelectChange) {
             onSelectChange(selectedOption);
           }
         }}
       >
-        <Select.Trigger placeholder={placeholder}>
-          {selectedValue}
+        <Select.Trigger placeholder={placeholder} className="font-poppin">
+          {selectedValue?.name}
         </Select.Trigger>
-        <Select.Content position="popper">
+        <Select.Content position="popper" className="font-poppin">
           {options?.map((option) => (
             <Select.Item
-              className={`${
-                option.name === selectedValue
-                  ? "bg-primary text-black font-semibold "
-                  : "bg-white text-black px-1.5"
-              } mb-1.5 hover:bg-primary hover:text-black  font-poppin`}
+              className={`
+              font-poppin
+                ${
+                  option.id === selectedValue?.id
+                    ? "bg-primary text-black font-semibold"
+                    : "bg-white text-black px-1.5 "
+                } mb-1.5 hover:bg-primary hover:text-black`}
               key={option.id}
-              value={option.name}
+              value={option.id || ""}
             >
               {option.name}
             </Select.Item>
@@ -63,10 +66,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           <Button
             color="gray"
             variant="surface"
-            className="w-full py-2.5 text-black bg-transparent cursor-pointer  !important"
+            className="w-full py-2.5 text-black bg-transparent cursor-pointer font-poppin "
             onClick={onClick}
           >
-            <Settings />
+            <Settings size={17} />
             {Btntext}
           </Button>
         </Select.Content>

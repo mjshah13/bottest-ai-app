@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useSuites = () => {
+const useSuites = (setSelectedSuite: any) => {
   const { organization } = useOrganization();
 
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
@@ -19,7 +19,7 @@ const useSuites = () => {
   const { user } = useUser();
   const { request } = useApi();
   const fetchSuites = useCallback(
-    async (userBot: string) => {
+    async (userBot: string | null) => {
       if (!user?.id) {
         return;
       }
@@ -42,6 +42,10 @@ const useSuites = () => {
             name,
           })) || [];
         setSuiteLists(selectDataItems);
+        if (selectDataItems.length === 1) {
+          // Assuming handleSelect is a function that needs to be called when there is only one bot
+          setSelectedSuite(selectDataItems[0]);
+        }
       } catch (error: any) {
         console.error({ error });
         setError(error);
