@@ -17,8 +17,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
-import { Table, TableColumnsType } from "antd";
-import { CopyPlus, Trash } from "lucide-react";
 import ModifyBot from "../../components/modifyBot";
 import ModifySuite from "../../components/modifySuite";
 import ModifyEnvironment from "../../components/modifyEnvironment";
@@ -44,14 +42,14 @@ const Dashboard = (props: DashboardProps) => {
     tab: "View all",
   });
   const { organization } = useOrganization();
-  const { botLists, setBotModalData, botModaldata } = useBots(setSelectedBot);
-  const { suiteLists, fetchSuites, suiteModaldata, setSuiteModalData } =
+  const { botLists, setBotModalData, botModalData } = useBots(setSelectedBot);
+  const { suiteLists, fetchSuites, suiteModalData, setSuiteModalData } =
     useSuites(setSelectedSuite);
   const {
     environmentLists,
     fetchEnvironment,
-    environmentModaldata,
-    setEnvironmentModaldata,
+    environmentModalData,
+    setEnvironmentModalData,
   } = useEnvironment(setSelectedEnvironment);
 
   const { testData, fetchTests, isLoading } = useTests();
@@ -138,51 +136,49 @@ const Dashboard = (props: DashboardProps) => {
 
   // ################## Modal Content ########################
 
-  const [isBotsModalopen, setIsBotsModalopen] = useState<boolean>(false);
-  const [isSuiteModalopen, setIsSuiteModalopen] = useState<boolean>(false);
-  const [isEnvironmentModalopen, setIsEnvironmentModalopen] =
+  const [isBotsModalOpen, setIsBotsModalOpen] = useState<boolean>(false);
+  const [isSuiteModalOpen, setIsSuiteModalOpen] = useState<boolean>(false);
+  const [isEnvironmentModalOpen, setIsEnvironmentModalOpen] =
     useState<boolean>(false);
 
   const handleDiscard = () => {
-    setIsBotsModalopen(false);
-    setIsSuiteModalopen(false);
-    setIsEnvironmentModalopen(false);
+    setIsBotsModalOpen(false);
+    setIsSuiteModalOpen(false);
+    setIsEnvironmentModalOpen(false);
   };
 
   const addBlankBot = () => {
-    const newBotRow = {
+    const newBot = {
       id: uuidv4(),
       name: "",
       info: "",
       description: "",
       isNew: true,
     };
-    setBotModalData([...botModaldata, newBotRow]);
+    setBotModalData([...botModalData, newBot]);
   };
 
   const addBlankSuite = () => {
-    const newSuiteRow = {
+    const newSuite = {
       id: uuidv4(),
       name: "",
       info: "",
       description: "",
       isNew: true,
     };
-    setSuiteModalData([...suiteModaldata, newSuiteRow]);
+    setSuiteModalData([...suiteModalData, newSuite]);
   };
 
   const addBlankEnvironment = () => {
-    const newEnvironmentRow = {
+    const newEnvironment = {
       id: uuidv4(),
       name: "",
       info: "",
       description: "",
       isNew: true,
     };
-    setEnvironmentModaldata([...environmentModaldata, newEnvironmentRow]);
+    setEnvironmentModalData([...environmentModalData, newEnvironment]);
   };
-
-  console.log(botModaldata, "botModaldata");
 
   const countStatus = (status: string) => {
     return suiteTestRuns?.filter((test) => test?.status === status).length;
@@ -234,7 +230,7 @@ const Dashboard = (props: DashboardProps) => {
         <div className="gap-7 py-6 px-4 flex justify-between items-center">
           <div className="w-full">
             <CustomSelect
-              onClick={() => setIsBotsModalopen(true)}
+              onClick={() => setIsBotsModalOpen(true)}
               // disabled={botLists?.length === 1 || !botLists}
               Btntext="Add / Modify Bots"
               Label={"Select Bot"}
@@ -249,7 +245,7 @@ const Dashboard = (props: DashboardProps) => {
           </div>
           <div className="w-full">
             <CustomSelect
-              onClick={() => setIsSuiteModalopen(true)}
+              onClick={() => setIsSuiteModalOpen(true)}
               Label={"Select Suites"}
               // disabled={suiteLists?.length === 1 || !suiteLists}
               Btntext="Add/Modify Suites"
@@ -263,7 +259,7 @@ const Dashboard = (props: DashboardProps) => {
           </div>
           <div className="w-full">
             <CustomSelect
-              onClick={() => setIsEnvironmentModalopen(true)}
+              onClick={() => setIsEnvironmentModalOpen(true)}
               Label={"Select Environment"}
               // disabled={environmentLists?.length === 1 || !environmentLists}
               placeholder="Select environment"
@@ -443,36 +439,35 @@ const Dashboard = (props: DashboardProps) => {
       </div>
 
       <ModifyBot
-        isBotsModalopen={isBotsModalopen}
-        setIsBotsModalopen={setIsBotsModalopen}
-        handleAddBlankRow={addBlankBot}
+        isBotsModalOpen={isBotsModalOpen}
+        setIsBotsModalOpen={setIsBotsModalOpen}
+        handleAdd={addBlankBot}
         title="Add / Modify Bots"
         handleDiscard={handleDiscard}
-        botModaldata={botModaldata}
+        botModalData={botModalData}
         setBotModalData={setBotModalData}
       />
 
       <ModifySuite
-        isSuiteModalopen={isSuiteModalopen}
-        setIsSuiteModalopen={setIsSuiteModalopen}
-        // selectedValue={selectedValues?.bot?.id}
-        handleAddBlankRow={addBlankSuite}
-        // isOpen={isSuiteModalopen}
-        title={`Add / Modify Suites for  ${selectedBot?.name}`}
+        isSuiteModalOpen={isSuiteModalOpen}
+        setIsSuiteModalOpen={setIsSuiteModalOpen}
+        selectedBot={selectedBot}
+        handleAdd={addBlankSuite}
+        title={`Add / Modify Suites for ${selectedBot?.name}`}
         handleDiscard={handleDiscard}
-        suiteModaldata={suiteModaldata}
+        suiteModalData={suiteModalData}
         setSuiteModalData={setSuiteModalData}
       />
 
       <ModifyEnvironment
-        setIsEnvironmentModalopen={setIsEnvironmentModalopen}
-        isEnvironmentModalopen={isEnvironmentModalopen}
-        handleAddBlankRow={addBlankEnvironment}
-        environmentModaldata={environmentModaldata}
-        // isOpen={isEnvironmentModalopen}
+        selectedBot={selectedBot}
+        setIsEnvironmentModalOpen={setIsEnvironmentModalOpen}
+        isEnvironmentModalOpen={isEnvironmentModalOpen}
+        handleAdd={addBlankEnvironment}
+        environmentModalData={environmentModalData}
         title={`Add / Modify Environments for ${selectedSuite?.name}`}
         handleDiscard={handleDiscard}
-        setEnvironmentModaldata={setEnvironmentModaldata}
+        setEnvironmentModalData={setEnvironmentModalData}
       />
     </div>
   );

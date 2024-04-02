@@ -2,42 +2,38 @@ import { Dialog, Flex } from "@radix-ui/themes";
 import React, { useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
-import { BotandSuiteModalType } from "../../../utils/typesInterface";
+import { BotAndSuiteModalType, Option } from "../../../utils/typesInterface";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
-import { useApi } from "../../../hooks/useApi";
-import useSuites from "../../../hooks/useSuites";
+import useUpdateSuite from "../../../hooks/useUpdateSuite";
+import useAddSuite from "../../../hooks/useAddSuite";
 
 interface ModalProps {
   title?: string;
   handleDiscard?: () => void;
-  isSuiteModalopen?: boolean;
-  setIsSuiteModalopen?: (isSuiteModalopen: boolean) => void;
+  isSuiteModalOpen?: boolean;
+  setIsSuiteModalOpen?: (isSuiteModalopen: boolean) => void;
+  selectedBot?: Option | null;
   // handleSave?: () => void;
-  // isOpen?: boolean;
-  // setIsOpen?: (isOpen: boolean) => void;
-  suiteModaldata?: BotandSuiteModalType[];
-  handleAddBlankRow?: () => void;
-  // selectedValue?: string | undefined;
+  suiteModalData?: BotAndSuiteModalType[];
+  handleAdd?: () => void;
   setSuiteModalData: React.Dispatch<
-    React.SetStateAction<BotandSuiteModalType[]>
+    React.SetStateAction<BotAndSuiteModalType[]>
   >;
 }
 
 const ModifySuite: React.FC<ModalProps> = ({
   title,
   handleDiscard,
+  selectedBot,
   // handleSave,
-  // isOpen,
-  // setIsOpen,
-  suiteModaldata,
-  handleAddBlankRow,
+  suiteModalData,
+  handleAdd,
   setSuiteModalData,
-  // selectedValue,
-  isSuiteModalopen,
-  setIsSuiteModalopen,
+  isSuiteModalOpen,
+  setIsSuiteModalOpen,
 }: ModalProps) => {
-  const suiteColumns: TableColumnsType<BotandSuiteModalType> = [
+  const suiteColumns: TableColumnsType<BotAndSuiteModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Default Success Criteria", dataIndex: "info", key: "info" },
     {
@@ -69,7 +65,8 @@ const ModifySuite: React.FC<ModalProps> = ({
     },
   ];
 
-  const { request } = useApi();
+  const { fetchUpdateSuite } = useUpdateSuite();
+  const { fetchAddSuite } = useAddSuite();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -78,39 +75,32 @@ const ModifySuite: React.FC<ModalProps> = ({
     const value = e.target.value;
     setSuiteModalData((prevData) =>
       prevData.map((suite) =>
-        suite.id === id ? { ...suite, name: value, isEdit: true } : suite
+        suite.id === id
+          ? { ...suite, name: value, isEdit: suite?.isNew ? false : true }
+          : suite
       )
     );
   };
 
-  const updateSuite = async (suiteID: string, name: string) => {
-    try {
-      const data = await request({
-        url: `/v1/suites/${suiteID}`,
-        method: "PATCH",
-        data: {
-          name: name,
-        },
-      });
-
-      console.log(data?.data);
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
-
   const handleSave = () => {
-    const filteredSuite = suiteModaldata?.filter((suite) => suite?.isEdit);
+    const filteredSuite = suiteModalData?.filter((suite) => suite?.isEdit);
     if (filteredSuite) {
       filteredSuite?.map((item) => {
-        updateSuite(item?.id as string, item?.name as string);
+        fetchUpdateSuite(item?.id as string, item?.name as string);
+      });
+      // setIsSuiteModalopen?.(false);
+    }
+    const filteredNewSuite = suiteModalData?.filter((suite) => suite?.isNew);
+    if (filteredNewSuite) {
+      filteredNewSuite?.map((item) => {
+        fetchAddSuite(item?.name as string, selectedBot?.id as string);
       });
       // setIsSuiteModalopen?.(false);
     }
   };
 
   return (
-    <Dialog.Root open={isSuiteModalopen} onOpenChange={setIsSuiteModalopen}>
+    <Dialog.Root open={isSuiteModalOpen} onOpenChange={setIsSuiteModalOpen}>
       <Dialog.Content maxWidth={"860px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
@@ -123,13 +113,13 @@ const ModifySuite: React.FC<ModalProps> = ({
               bordered
               pagination={false}
               columns={suiteColumns}
-              dataSource={suiteModaldata?.map((suite) => {
+              dataSource={suiteModalData?.map((suite) => {
                 return {
                   ...suite,
                   name: (
                     <>
                       <input
-                        className=" py-2 pl-2 w-full "
+                        className=" py-2 pl-2 w-full outline-none "
                         type="text"
                         value={`${suite.name}` || ""}
                         onChange={(e) => handleChange(e, suite?.id)}
@@ -139,10 +129,7 @@ const ModifySuite: React.FC<ModalProps> = ({
                 };
               })}
               footer={() => (
-                <button
-                  className="w-full text-[#388aeb]"
-                  onClick={handleAddBlankRow}
-                >
+                <button className="w-full text-[#388aeb]" onClick={handleAdd}>
                   + Add new blank Suite
                 </button>
               )}

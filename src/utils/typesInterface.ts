@@ -73,7 +73,7 @@ export interface PageConfig {
   matcher?: string[];
 }
 
-export interface BotandSuiteModalType {
+export interface BotAndSuiteModalType {
   id: React.Key | string;
   name?: string | JSX.Element;
   info: string;

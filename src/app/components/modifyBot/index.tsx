@@ -2,39 +2,34 @@ import { Dialog, Flex } from "@radix-ui/themes";
 import React, { useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
-// import { ModifyModalType } from "../../../utils/typesInterface";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { CopyPlus, Edit, Trash } from "lucide-react";
-import { BotandSuiteModalType } from "../../../utils/typesInterface";
-import { useApi } from "../../../hooks/useApi";
-import { useOrganization, useUser } from "@clerk/nextjs";
+import { CopyPlus, Trash } from "lucide-react";
+import { BotAndSuiteModalType } from "../../../utils/typesInterface";
+import useAddBot from "../../../hooks/useAddBot";
+import useUpdateBot from "../../../hooks/useUpdateBot";
 
 interface ModalProps {
   title?: string;
   handleDiscard?: () => void;
   // handleSave?: () => void;
-  // isOpen?: boolean;
-  // setIsOpen?: (isOpen: boolean) => void;
-  isBotsModalopen?: boolean;
-  setIsBotsModalopen?: (isBotsModalopen: boolean) => void | undefined;
-  botModaldata?: BotandSuiteModalType[];
-  handleAddBlankRow?: () => void;
-  setBotModalData: React.Dispatch<React.SetStateAction<BotandSuiteModalType[]>>;
+  isBotsModalOpen?: boolean;
+  setIsBotsModalOpen?: (isBotsModalopen: boolean) => void | undefined;
+  botModalData?: BotAndSuiteModalType[];
+  handleAdd?: () => void;
+  setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
 }
 
 const ModifyBot: React.FC<ModalProps> = ({
   title,
   handleDiscard,
   // handleSave,
-  // isOpen,
-  // setIsOpen,
-  isBotsModalopen,
-  setIsBotsModalopen,
-  botModaldata,
-  handleAddBlankRow,
+  isBotsModalOpen,
+  setIsBotsModalOpen,
+  botModalData,
+  handleAdd,
   setBotModalData,
 }: ModalProps) => {
-  const botsColumns: TableColumnsType<BotandSuiteModalType> = [
+  const botsColumns: TableColumnsType<BotAndSuiteModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "info", key: "info" },
     {
@@ -66,9 +61,8 @@ const ModifyBot: React.FC<ModalProps> = ({
     },
   ];
 
-  const { request } = useApi();
-  const { organization } = useOrganization();
-  const { user } = useUser();
+  const { fetchAddBot } = useAddBot();
+  const { fetchUpdateBot } = useUpdateBot();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -84,64 +78,27 @@ const ModifyBot: React.FC<ModalProps> = ({
     );
   };
 
-  const updateBot = async (botID: string, name: string) => {
-    try {
-      const data = await request({
-        url: `/v1/bots/${botID}`,
-        method: "PATCH",
-        data: {
-          name: name,
-        },
-      });
-      console.log(data?.data, "hhhh");
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
-
-  const addBot = async (name: string) => {
-    try {
-      let organizationPayload = {
-        name,
-        organization_id: organization?.id,
-      };
-      let userPayload = {
-        name,
-        user_id: user?.id,
-      };
-
-      const data = await request({
-        url: `/v1/bots`,
-        method: "POST",
-        data: organization?.id ? organizationPayload : userPayload,
-      });
-      console.log(data?.data, "hhhh");
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
-
   const handleSave = () => {
-    const filteredUpdateBot = botModaldata?.filter((bot) => bot?.isEdit);
+    const filteredUpdateBot = botModalData?.filter((bot) => bot?.isEdit);
     if (filteredUpdateBot) {
       filteredUpdateBot?.map((item) => {
-        updateBot(item?.id as string, item?.name as string);
+        fetchUpdateBot(item?.id as string, item?.name as string);
       });
 
-      // setIsBotsModalopen?.(false);
+      // setIsBotsModalOpen?.(false);
     }
-    const filteredNewBot = botModaldata?.filter((bot) => bot?.isNew);
+    const filteredNewBot = botModalData?.filter((bot) => bot?.isNew);
     if (filteredNewBot) {
       filteredNewBot?.map((item) => {
-        addBot(item?.name as string);
+        fetchAddBot(item?.name as string);
       });
 
-      // setIsBotsModalopen?.(false);
+      // setIsBotsModalOpen?.(false);
     }
   };
 
   return (
-    <Dialog.Root open={isBotsModalopen} onOpenChange={setIsBotsModalopen}>
+    <Dialog.Root open={isBotsModalOpen} onOpenChange={setIsBotsModalOpen}>
       <Dialog.Content maxWidth={"860px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
@@ -160,13 +117,13 @@ const ModifyBot: React.FC<ModalProps> = ({
                   return <p style={{ margin: 0 }}>{record.description}</p>;
                 },
               }}
-              dataSource={botModaldata?.map((bot) => {
+              dataSource={botModalData?.map((bot) => {
                 return {
                   ...bot,
                   name: (
                     <>
                       <input
-                        className=" py-2 pl-2 w-full "
+                        className=" py-2 pl-2 w-full outline-none  "
                         type="text"
                         value={`${bot.name}` || ""}
                         onChange={(e) => handleChange(e, bot?.id)}
@@ -176,10 +133,7 @@ const ModifyBot: React.FC<ModalProps> = ({
                 };
               })}
               footer={() => (
-                <button
-                  className="w-full text-[#388aeb]"
-                  onClick={handleAddBlankRow}
-                >
+                <button className="w-full text-[#388aeb]" onClick={handleAdd}>
                   + Add new blank Bot
                 </button>
               )}

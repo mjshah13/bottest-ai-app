@@ -3,14 +3,13 @@ import { EnvironmentModalType, EnvironmentType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
-import React from "react";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useEnvironment = (setSelectedEnvironment: any) => {
   const { organization } = useOrganization();
-  const [environmentModaldata, setEnvironmentModaldata] = useState<
+  const [environmentModalData, setEnvironmentModalData] = useState<
     EnvironmentModalType[]
   >([]);
   const [environmentLists, setEnvironmentLists] = useState<
@@ -30,7 +29,7 @@ const useEnvironment = (setSelectedEnvironment: any) => {
           method: "GET",
         });
 
-        const check: EnvironmentModalType[] = data.data.map(
+        const EnvironmentData: EnvironmentModalType[] = data.data.map(
           (bot: EnvironmentModalType) => ({
             id: bot.id,
             name: bot.name,
@@ -39,7 +38,7 @@ const useEnvironment = (setSelectedEnvironment: any) => {
           })
         );
 
-        setEnvironmentModaldata(check);
+        setEnvironmentModalData(EnvironmentData);
 
         const selectDataItems: EnvironmentType[] =
           data?.data?.map(({ id, name }: EnvironmentType) => ({
@@ -62,8 +61,8 @@ const useEnvironment = (setSelectedEnvironment: any) => {
 
   return {
     environmentLists,
-    environmentModaldata,
-    setEnvironmentModaldata,
+    environmentModalData,
+    setEnvironmentModalData,
     fetchEnvironment,
     error,
   };

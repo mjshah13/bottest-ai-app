@@ -2,19 +2,21 @@ import { Dialog, Flex } from "@radix-ui/themes";
 import React, { useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
-import { EnvironmentModalType } from "../../../utils/typesInterface";
+import { EnvironmentModalType, Option } from "../../../utils/typesInterface";
 import { Trash, CircleAlert } from "lucide-react";
-import { useApi } from "../../../hooks/useApi";
+import useAddEnvironment from "../../../hooks/useAddEnvironment";
+import useUpdateEnvironment from "../../../hooks/useUpdateEnvironment";
 
 interface ModalProps {
   title?: string;
   handleDiscard?: () => void;
+  selectedBot?: Option | null;
   // handleSave?: () => void;
-  isEnvironmentModalopen?: boolean;
-  setIsEnvironmentModalopen?: (isEnvironmentModalopen: boolean) => void;
-  environmentModaldata?: EnvironmentModalType[];
-  handleAddBlankRow?: () => void;
-  setEnvironmentModaldata: React.Dispatch<
+  isEnvironmentModalOpen?: boolean;
+  setIsEnvironmentModalOpen?: (isEnvironmentModalopen: boolean) => void;
+  environmentModalData?: EnvironmentModalType[];
+  handleAdd?: () => void;
+  setEnvironmentModalData: React.Dispatch<
     React.SetStateAction<EnvironmentModalType[]>
   >;
 }
@@ -22,16 +24,16 @@ interface ModalProps {
 const ModifyEnvironment: React.FC<ModalProps> = ({
   title,
   handleDiscard,
+  selectedBot,
   // handleSave,
-  // isOpen,
-  // setIsOpen,
-  isEnvironmentModalopen,
-  setIsEnvironmentModalopen,
-  environmentModaldata,
-  handleAddBlankRow,
-  setEnvironmentModaldata,
+  isEnvironmentModalOpen,
+  setIsEnvironmentModalOpen,
+  environmentModalData,
+  handleAdd,
+  setEnvironmentModalData,
 }: ModalProps) => {
-  const { request } = useApi();
+  const { fetchAddEnvironment } = useAddEnvironment();
+  const { fetchUpdateEnvironment } = useUpdateEnvironment();
 
   const environmentColumns: TableColumnsType<EnvironmentModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
@@ -54,48 +56,46 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
     id: React.Key
   ) => {
     const value = e.target.value;
-    setEnvironmentModaldata((prevData) =>
+    setEnvironmentModalData((prevData) =>
       prevData.map((environment) =>
         environment.id === id
-          ? { ...environment, name: value, isEdit: true }
+          ? {
+              ...environment,
+              name: value,
+              isEdit: environment?.isNew ? false : true,
+            }
           : environment
       )
     );
   };
 
-  const updateEnvironment = async (environmentID: string, name: string) => {
-    try {
-      const data = await request({
-        url: `/v1/environments/${environmentID}`,
-        method: "PATCH",
-        data: {
-          name: name,
-        },
-      });
-
-      console.log(data?.data);
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
-
   const handleSave = () => {
-    const filteredEnvironment = environmentModaldata?.filter(
+    const filteredEnvironment = environmentModalData?.filter(
       (environment) => environment?.isEdit
     );
     if (filteredEnvironment) {
       filteredEnvironment?.map((item) => {
-        updateEnvironment(item?.id as string, item?.name as string);
+        fetchUpdateEnvironment(item?.id as string, item?.name as string);
       });
 
-      // setIsEnvironmentModalopen?.(false);
+      // setIsEnvironmentModalOpen?.(false);
+    }
+    const filteredNewEnvironment = environmentModalData?.filter(
+      (environment) => environment?.isNew
+    );
+    if (filteredNewEnvironment) {
+      filteredNewEnvironment?.map((item) => {
+        fetchAddEnvironment(item?.name as string, selectedBot?.id as string);
+      });
+
+      // setIsEnvironmentModalOpen?.(false);
     }
   };
 
   return (
     <Dialog.Root
-      open={isEnvironmentModalopen}
-      onOpenChange={setIsEnvironmentModalopen}
+      open={isEnvironmentModalOpen}
+      onOpenChange={setIsEnvironmentModalOpen}
     >
       <Dialog.Content maxWidth={"860px"}>
         <Dialog.Title>
@@ -127,7 +127,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                 pagination={false}
                 columns={environmentColumns}
                 dataSource={
-                  environmentModaldata?.map((environment) => ({
+                  environmentModalData?.map((environment) => ({
                     ...environment,
                     url: (
                       <a href={`${environment?.url}`} target="_blank">
@@ -137,7 +137,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                     name: (
                       <>
                         <input
-                          className=" py-2 pl-2 w-full "
+                          className=" py-2 pl-2 w-full outline-none "
                           type="text"
                           value={`${environment.name}` || ""}
                           onChange={(e) => handleChange(e, environment?.id)}
@@ -147,10 +147,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                   })) || []
                 }
                 footer={() => (
-                  <button
-                    className="w-full text-[#388aeb]"
-                    onClick={handleAddBlankRow}
-                  >
+                  <button className="w-full text-[#388aeb]" onClick={handleAdd}>
                     + Add new environment
                   </button>
                 )}
