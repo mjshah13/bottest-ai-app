@@ -20,7 +20,7 @@ import { Box, Grid } from "@radix-ui/themes";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 
-interface DashboardProps {}
+interface DashboardProps { }
 
 const Dashboard = (props: DashboardProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -136,19 +136,18 @@ const Dashboard = (props: DashboardProps) => {
       .map((status) => (
         <span
           key={status}
-          className={`${
-            status === "Pass"
-              ? "text-success"
-              : status === "Mixed"
+          className={`${status === "Pass"
+            ? "text-success"
+            : status === "Mixed"
               ? "text-[#E7C200]"
               : status === "Fail" || status === "Error"
-              ? "text-danger"
-              : status === "Running"
-              ? "text-[#388aeb]"
-              : status === "Skipped" || status === "Stopped"
-              ? "text-[#212427]"
-              : ""
-          } font-medium font-poppin px-1`}
+                ? "text-danger"
+                : status === "Running"
+                  ? "text-[#388aeb]"
+                  : status === "Skipped" || status === "Stopped"
+                    ? "text-[#212427]"
+                    : ""
+            } font-medium font-poppin`}
         >
           {countStatus(status)} {status}
         </span>
@@ -158,7 +157,7 @@ const Dashboard = (props: DashboardProps) => {
       (acc: any, curr: any, index: any) => {
         const isSecondLastitem = index === statusDisplays.length - 2;
         const isLastitem = index === statusDisplays.length - 1;
-        const separator = isSecondLastitem ? "and" : isLastitem ? "." : ",";
+        const separator = isSecondLastitem ? " and " : isLastitem ? "." : ", ";
         return acc.concat(curr, separator);
       },
       []
@@ -181,7 +180,7 @@ const Dashboard = (props: DashboardProps) => {
               Label={"Select Bot"}
               options={botLists || []}
               selectedValue={selectedBot}
-              placeholder="Select bots"
+              placeholder="Select Bots"
               // onChange={(value) => handleChange("bots", value)}
               onSelectChange={(selectedOption) => {
                 setSelectedBot(selectedOption);
@@ -192,7 +191,7 @@ const Dashboard = (props: DashboardProps) => {
             <CustomSelect
               Label={"Select Suites"}
               // disabled={suiteLists?.length === 1 || !suiteLists}
-              Btntext="Add/Modify Suites"
+              Btntext="Add / Modify Suites"
               selectedValue={selectedSuite}
               placeholder="Select Suites"
               options={suiteLists || []}
@@ -205,8 +204,8 @@ const Dashboard = (props: DashboardProps) => {
             <CustomSelect
               Label={"Select Environment"}
               // disabled={environmentLists?.length === 1 || !environmentLists}
-              placeholder="Select environment"
-              Btntext="Add / Modify environment"
+              placeholder="Select Environment"
+              Btntext="Add / Modify Environments"
               selectedValue={selectedEnvironment}
               options={environmentLists || []}
               onSelectChange={(selectedOption) => {
@@ -220,7 +219,7 @@ const Dashboard = (props: DashboardProps) => {
       <div
         className={`
         flex-1
-        
+
         bg-white
         border-2 rounded-lg border-[#f0f0f0]
            `}
@@ -258,7 +257,7 @@ const Dashboard = (props: DashboardProps) => {
                         {" "}
                         {`${selectedSuite?.name} - ${selectedEnvironment?.name}`}
                       </h1>
-                      <p className="text-black text-md  font-poppin">
+                      <p className="text-black text-md font-poppin">
                         Create a test and run it to see your results.
                       </p>
                     </div>
@@ -298,7 +297,7 @@ const Dashboard = (props: DashboardProps) => {
                           <div>
                             {suiteTestRuns?.length > 0 && !loading && (
                               <p className="text-black gap-2 font-poppin">
-                                In your most recent run of all your tests,{" "}
+                                Most recent Suite Run results: {" "}
                                 {generateStatusDisplayWithCommas()}
                               </p>
                             )}
@@ -316,17 +315,14 @@ const Dashboard = (props: DashboardProps) => {
                                   filterOptions?.map((item, i) => (
                                     <button
                                       key={item.key}
-                                      className={` cursor-pointer px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
-                                        i === 0 ? "rounded-l-lg" : ""
-                                      } ${
-                                        i === filterOptions.length - 1
+                                      className={`px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${i === 0 ? "rounded-l-lg" : ""
+                                        } ${i === filterOptions.length - 1
                                           ? "border-r-0"
                                           : ""
-                                      } ${
-                                        filters.tab === item.status
+                                        } ${filters.tab === item.status
                                           ? "bg-[#f5f5f5] text-black "
                                           : ""
-                                      }`}
+                                        }`}
                                       onClick={() => {
                                         handleButtonClick(item.status);
                                       }}
@@ -336,17 +332,15 @@ const Dashboard = (props: DashboardProps) => {
                                   ))}
                               </div>
                             </Box>
-                            <Box>
-                              <div>
-                                <CustomInput
-                                  onChange={(value) => {
-                                    handleFilteredData(value);
-                                  }}
-                                  size="3"
-                                  type="text"
-                                  placeholder="Search for a test"
-                                />
-                              </div>
+                            <Box className="mt-1">
+                              <CustomInput
+                                onChange={(value) => {
+                                  handleFilteredData(value);
+                                }}
+                                size="2"
+                                type="text"
+                                placeholder="Search for a test"
+                              />
                             </Box>
                           </Grid>
                         </div>

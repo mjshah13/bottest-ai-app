@@ -9,13 +9,19 @@ function Layout({ children }: { children: React.ReactNode }) {
       <Sidenav />
       <main className=" w-full  bg-[#fdfcfa]">
         <div className="">
-          <div className="fixed w-full py-2">
+          <div className="fixed w-full">
             <div
-              className="w-full bg-white h-[45px]  flex items-center"
+              className="w-full bg-white h-[72px]  flex items-center"
               style={{ boxShadow: "0px 1px 1px 0px rgba(102, 106, 110, 0.08)" }}
             >
-              <div className="absolute right-72 ">
-                <OrganizationSwitcher />
+              <div className="absolute right-72">
+                <OrganizationSwitcher
+                  appearance={{
+                    elements: {
+                      organizationSwitcherTrigger: "p-2"
+                    }
+                  }}
+                />
               </div>
             </div>
           </div>
