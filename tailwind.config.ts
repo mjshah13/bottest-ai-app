@@ -35,11 +35,6 @@ const config: Config = {
       minHeight: {
         "80": "80%", // Adds a `min-h-80` class with a min-height of 60%
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
     },
   },
   plugins: [],

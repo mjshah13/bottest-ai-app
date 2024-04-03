@@ -17,7 +17,7 @@ export default function Home() {
             <h1 className="text-2xl text-black font-semibold font-poppin">
               Welcome!
             </h1>
-            <p className="text-lg text-black font-normal font-poppin">
+            <p className="text-lg text-black font-poppin">
               Please click the button to go on Sign in.
             </p>
           </div>
@@ -29,7 +29,7 @@ export default function Home() {
                 </h1>
                 <div className="flex items-center gap-5">
                   <UserButton afterSignOutUrl="/" />
-                  <h3 className="font-normal text-black font-poppin">
+                  <h3 className="text-black font-poppin">
                     {session?.user?.fullName
                       ? session?.user?.fullName
                       : session?.user?.username}

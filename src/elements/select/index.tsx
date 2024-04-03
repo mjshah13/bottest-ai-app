@@ -28,7 +28,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 }) => {
   return (
     <div className="flex flex-col justify-start gap-1">
-      <label className="font-poppin text-sm font-normal text-black">
+      <label className="font-poppin text-sm text-black">
         {Label}
       </label>
       <Select.Root
@@ -52,10 +52,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             <Select.Item
               className={`
               font-poppin
-                ${
-                  option.id === selectedValue?.id
-                    ? "bg-primary text-black font-semibold"
-                    : "bg-white text-black px-1.5 "
+                ${option.id === selectedValue?.id
+                  ? "bg-primary text-black font-semibold"
+                  : "bg-white text-black px-1.5 "
                 } mb-1.5 hover:bg-primary hover:text-black`}
               key={option.id}
               value={option.id || ""}
@@ -66,7 +65,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           <Button
             color="gray"
             variant="surface"
-            className="w-full py-2.5 text-black bg-transparent cursor-pointer font-poppin "
+            className="w-full font-poppin"
             onClick={onClick}
           >
             <Settings size={17} />
