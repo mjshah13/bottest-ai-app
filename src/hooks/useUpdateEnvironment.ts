@@ -7,7 +7,7 @@ const useUpdateEnvironment = () => {
   const { request } = useApi();
   const { user } = useUser();
 
-  const fetchUpdateEnvironment = useCallback(
+  const updateEnvironment = useCallback(
     async (environmentID: string, name: string) => {
       try {
         const data = await request({
@@ -26,7 +26,7 @@ const useUpdateEnvironment = () => {
     [user]
   );
 
-  return { fetchUpdateEnvironment, isLoading };
+  return { updateEnvironment, isLoading };
 };
 
 export default useUpdateEnvironment;

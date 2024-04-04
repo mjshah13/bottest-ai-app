@@ -32,8 +32,8 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   handleAdd,
   setEnvironmentModalData,
 }: ModalProps) => {
-  const { fetchAddEnvironment } = useAddEnvironment();
-  const { fetchUpdateEnvironment } = useUpdateEnvironment();
+  const { addEnvironment } = useAddEnvironment();
+  const { updateEnvironment } = useUpdateEnvironment();
 
   const environmentColumns: TableColumnsType<EnvironmentModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
@@ -75,7 +75,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
     );
     if (filteredEnvironment) {
       filteredEnvironment?.map((item) => {
-        fetchUpdateEnvironment(item?.id as string, item?.name as string);
+        updateEnvironment(item?.id as string, item?.name as string);
       });
 
       // setIsEnvironmentModalOpen?.(false);
@@ -85,7 +85,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
     );
     if (filteredNewEnvironment) {
       filteredNewEnvironment?.map((item) => {
-        fetchAddEnvironment(item?.name as string, selectedBot?.id as string);
+        addEnvironment(item?.name as string, selectedBot?.id as string);
       });
 
       // setIsEnvironmentModalOpen?.(false);

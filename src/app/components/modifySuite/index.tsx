@@ -65,8 +65,8 @@ const ModifySuite: React.FC<ModalProps> = ({
     },
   ];
 
-  const { fetchUpdateSuite } = useUpdateSuite();
-  const { fetchAddSuite } = useAddSuite();
+  const { updateSuite } = useUpdateSuite();
+  const { addSuite } = useAddSuite();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -86,14 +86,14 @@ const ModifySuite: React.FC<ModalProps> = ({
     const filteredSuite = suiteModalData?.filter((suite) => suite?.isEdit);
     if (filteredSuite) {
       filteredSuite?.map((item) => {
-        fetchUpdateSuite(item?.id as string, item?.name as string);
+        updateSuite(item?.id as string, item?.name as string);
       });
       // setIsSuiteModalopen?.(false);
     }
     const filteredNewSuite = suiteModalData?.filter((suite) => suite?.isNew);
     if (filteredNewSuite) {
       filteredNewSuite?.map((item) => {
-        fetchAddSuite(item?.name as string, selectedBot?.id as string);
+        addSuite(item?.name as string, selectedBot?.id as string);
       });
       // setIsSuiteModalopen?.(false);
     }

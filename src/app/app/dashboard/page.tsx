@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 
-interface DashboardProps { }
+interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -190,18 +190,19 @@ const Dashboard = (props: DashboardProps) => {
       .map((status) => (
         <span
           key={status}
-          className={`${status === "Pass"
-            ? "text-success"
-            : status === "Mixed"
+          className={`${
+            status === "Pass"
+              ? "text-success"
+              : status === "Mixed"
               ? "text-[#E7C200]"
               : status === "Fail" || status === "Error"
-                ? "text-danger"
-                : status === "Running"
-                  ? "text-[#388aeb]"
-                  : status === "Skipped" || status === "Stopped"
-                    ? "text-[#212427]"
-                    : ""
-            } font-medium font-poppin`}
+              ? "text-danger"
+              : status === "Running"
+              ? "text-[#388aeb]"
+              : status === "Skipped" || status === "Stopped"
+              ? "text-[#212427]"
+              : ""
+          } font-medium font-poppin`}
         >
           {countStatus(status)} {status}
         </span>
@@ -307,7 +308,7 @@ const Dashboard = (props: DashboardProps) => {
               </>
             ) : (
               <>
-                {!testData ? (
+                {testData?.length === 0 ? (
                   <>
                     <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
                       <h1 className="font-semibold font-poppin text-xl">
@@ -354,7 +355,7 @@ const Dashboard = (props: DashboardProps) => {
                           <div>
                             {suiteTestRuns?.length > 0 && !loading && (
                               <p className="text-black gap-2 font-poppin">
-                                Most recent Suite Run results: {" "}
+                                Most recent Suite Run results:{" "}
                                 {generateStatusDisplayWithCommas()}
                               </p>
                             )}
@@ -372,14 +373,17 @@ const Dashboard = (props: DashboardProps) => {
                                   filterOptions?.map((item, i) => (
                                     <button
                                       key={item.key}
-                                      className={`px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${i === 0 ? "rounded-l-lg" : ""
-                                        } ${i === filterOptions.length - 1
+                                      className={`px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
+                                        i === 0 ? "rounded-l-lg" : ""
+                                      } ${
+                                        i === filterOptions.length - 1
                                           ? "border-r-0"
                                           : ""
-                                        } ${filters.tab === item.status
+                                      } ${
+                                        filters.tab === item.status
                                           ? "bg-[#f5f5f5] text-black "
                                           : ""
-                                        }`}
+                                      }`}
                                       onClick={() => {
                                         handleButtonClick(item.status);
                                       }}

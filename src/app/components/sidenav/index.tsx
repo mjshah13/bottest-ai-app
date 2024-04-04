@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { usePathname } from "next/navigation";
 import { UserButton, useSession } from "@clerk/nextjs";
 import { NavigationItem, ServiceItem } from "../../../utils/typesInterface";
-import { useRouter, Link } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Home,
   BarChartBig,
@@ -149,8 +149,8 @@ const Sidenav = () => {
                                 item?.href === active
                                   ? "text-secondary bg-primary font-normal"
                                   : item?.isDisabled
-                                    ? "text-[#b6b8b7]  hover:bg-lightgray"
-                                    : "text-black hover:text-black hover:bg-lightgray",
+                                  ? "text-[#b6b8b7]  hover:bg-lightgray"
+                                  : "text-black hover:text-black hover:bg-lightgray",
                                 "group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full  font-poppin"
                               )}
                               type="button"
@@ -182,8 +182,8 @@ const Sidenav = () => {
                                 item?.href === active
                                   ? "text-secondary bg-primary font-normal "
                                   : item?.isDisabled
-                                    ? "text-[#b6b8b7]  hover:bg-lightgray"
-                                    : "text-black hover:text-black hover:bg-lightgray",
+                                  ? "text-[#b6b8b7]  hover:bg-lightgray"
+                                  : "text-black hover:text-black hover:bg-lightgray",
                                 " flex items-center gap-x-3 rounded-md p-2 text-sm w-full  font-poppin "
                               )}
                             >
@@ -199,11 +199,11 @@ const Sidenav = () => {
               </Dialog.Panel>
             </Transition.Child>
           </div>
-        </Dialog >
-      </Transition.Root >
+        </Dialog>
+      </Transition.Root>
       {/* Static sidebar for desktop */}
 
-      < div className="hidden h-full lg:z-50 lg:flex lg:w-64 lg:flex-col " >
+      <div className="hidden h-full lg:z-50 lg:flex lg:w-64 lg:flex-col ">
         <div
           className="flex grow flex-col gap-y-5  bg-white px-4"
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
@@ -228,8 +228,8 @@ const Sidenav = () => {
                         item?.href === active
                           ? "text-secondary bg-primary font-normal"
                           : item?.isDisabled
-                            ? "text-[#b6b8b7]  hover:bg-lightgray"
-                            : "text-black hover:text-black hover:bg-lightgray",
+                          ? "text-[#b6b8b7]  hover:bg-lightgray"
+                          : "text-black hover:text-black hover:bg-lightgray",
                         "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full  font-poppin"
                       )}
                       type="button"
@@ -260,8 +260,8 @@ const Sidenav = () => {
                         item?.href === active
                           ? "text-secondary bg-primary font-normal"
                           : item?.isDisabled
-                            ? "text-[#b6b8b7]  hover:bg-lightgray"
-                            : "text-black hover:text-black hover:bg-lightgray",
+                          ? "text-[#b6b8b7]  hover:bg-lightgray"
+                          : "text-black hover:text-black hover:bg-lightgray",
                         "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full  font-poppin"
                       )}
                     >
@@ -289,7 +289,7 @@ const Sidenav = () => {
             </div>
           </nav>
         </div>
-      </div >
+      </div>
 
       <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
         <button
@@ -302,7 +302,7 @@ const Sidenav = () => {
         </button>
         <UserButton afterSignOutUrl="/sign-in" />
       </div>
-    </div >
+    </div>
   );
 };
 

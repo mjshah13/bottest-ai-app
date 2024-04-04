@@ -9,7 +9,7 @@ const useAddBot = () => {
 
   const { request } = useApi();
 
-  const fetchAddBot = useCallback(
+  const addBot = useCallback(
     async (name: string) => {
       try {
         let organizationPayload = {
@@ -36,7 +36,7 @@ const useAddBot = () => {
     [user, organization]
   );
 
-  return { fetchAddBot, isLoading };
+  return { addBot, isLoading };
 };
 
 export default useAddBot;

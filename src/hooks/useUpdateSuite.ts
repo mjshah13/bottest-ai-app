@@ -7,7 +7,7 @@ const useUpdateSuite = () => {
   const { request } = useApi();
   const { user } = useUser();
 
-  const fetchUpdateSuite = useCallback(
+  const updateSuite = useCallback(
     async (suiteID: string, name: string) => {
       try {
         const data = await request({
@@ -26,7 +26,7 @@ const useUpdateSuite = () => {
     [user]
   );
 
-  return { fetchUpdateSuite, isLoading };
+  return { updateSuite, isLoading };
 };
 
 export default useUpdateSuite;

@@ -9,7 +9,7 @@ const useAddSuite = () => {
 
   const { request } = useApi();
 
-  const fetchAddSuite = useCallback(
+  const addSuite = useCallback(
     async (name: string, botId: string) => {
       try {
         const data = await request({
@@ -28,7 +28,7 @@ const useAddSuite = () => {
     [user, organization]
   );
 
-  return { fetchAddSuite, isLoading };
+  return { addSuite, isLoading };
 };
 
 export default useAddSuite;

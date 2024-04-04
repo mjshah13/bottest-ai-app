@@ -7,7 +7,7 @@ const useUpdateBot = () => {
   const { request } = useApi();
   const { user } = useUser();
 
-  const fetchUpdateBot = useCallback(
+  const updateBot = useCallback(
     async (botID: string, name: string) => {
       try {
         const data = await request({
@@ -25,7 +25,7 @@ const useUpdateBot = () => {
     [user]
   );
 
-  return { fetchUpdateBot, isLoading };
+  return { updateBot, isLoading };
 };
 
 export default useUpdateBot;

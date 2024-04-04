@@ -9,7 +9,7 @@ const useAddEnvironment = () => {
 
   const { request } = useApi();
 
-  const fetchAddEnvironment = useCallback(
+  const addEnvironment = useCallback(
     async (name: string, botId: string) => {
       try {
         const data = await request({
@@ -29,7 +29,7 @@ const useAddEnvironment = () => {
     [user, organization]
   );
 
-  return { fetchAddEnvironment, isLoading };
+  return { addEnvironment, isLoading };
 };
 
 export default useAddEnvironment;

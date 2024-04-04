@@ -61,8 +61,8 @@ const ModifyBot: React.FC<ModalProps> = ({
     },
   ];
 
-  const { fetchAddBot } = useAddBot();
-  const { fetchUpdateBot } = useUpdateBot();
+  const { addBot } = useAddBot();
+  const { updateBot } = useUpdateBot();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -82,7 +82,7 @@ const ModifyBot: React.FC<ModalProps> = ({
     const filteredUpdateBot = botModalData?.filter((bot) => bot?.isEdit);
     if (filteredUpdateBot) {
       filteredUpdateBot?.map((item) => {
-        fetchUpdateBot(item?.id as string, item?.name as string);
+        updateBot(item?.id as string, item?.name as string);
       });
 
       // setIsBotsModalOpen?.(false);
@@ -90,7 +90,7 @@ const ModifyBot: React.FC<ModalProps> = ({
     const filteredNewBot = botModalData?.filter((bot) => bot?.isNew);
     if (filteredNewBot) {
       filteredNewBot?.map((item) => {
-        fetchAddBot(item?.name as string);
+        addBot(item?.name as string);
       });
 
       // setIsBotsModalOpen?.(false);
