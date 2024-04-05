@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback, useContext } from "react";
-import {
-  BotAndSuiteModalType,
-  BotType,
-  GlobalStateType,
-} from "../utils/typesInterface";
+import { BotType, GlobalStateType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -13,15 +9,10 @@ import { GlobalStateContext } from "../globalState";
 // Make sure to type it accordingly
 
 const useBots = (setSelectedBot: any) => {
-  const { botLists, setBotLists, botModalData, setBotModalData } = useContext(
-    GlobalStateContext
-  ) as GlobalStateType;
-
+  const { setBotLists } = useContext(GlobalStateContext) as GlobalStateType;
   const { user } = useUser();
   const { request } = useApi();
   const { organization } = useOrganization();
-  // const [botLists, setBotLists] = useState<BotType[]>([]);
-  // const [botModalData, setBotModalData] = useState<BotAndSuiteModalType[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchBots = useCallback(async () => {
@@ -42,14 +33,6 @@ const useBots = (setSelectedBot: any) => {
         });
       }
 
-      setBotModalData(
-        data.data.map((bot: BotAndSuiteModalType) => ({
-          id: bot.id,
-          name: bot.name,
-          info: `this is ${bot.name}`,
-          description: `this is ${bot.name}`,
-        }))
-      );
       const formattedData: BotType[] = data.data.map((bot: BotType) => ({
         id: bot.id,
         name: bot.name,
@@ -70,7 +53,7 @@ const useBots = (setSelectedBot: any) => {
     fetchBots();
   }, [organization?.id, user?.id]);
 
-  return { botLists, fetchBots, botModalData, error, setBotModalData };
+  return { error };
 };
 
 export default useBots;

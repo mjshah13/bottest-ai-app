@@ -12,9 +12,12 @@ import {
 } from "./utils/typesInterface";
 import { GlobalStateContext } from "./globalState";
 
-export const BotsProvider = ({ children }: { children: React.ReactNode }) => {
+export const GlobalStateProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [botLists, setBotLists] = useState<BotType[]>([]);
-  const [botModalData, setBotModalData] = useState<BotAndSuiteModalType[]>([]);
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
   const [suiteModalData, setSuiteModalData] = useState<BotAndSuiteModalType[]>(
     []
@@ -26,11 +29,23 @@ export const BotsProvider = ({ children }: { children: React.ReactNode }) => {
     EnvironmentType[] | null
   >(null);
 
+  const updateBotRow = (updatedBot: BotType, botList: BotType[]) => {
+    setBotLists(
+      botList.map((bot) => (bot.id === updatedBot.id ? updatedBot : bot))
+    );
+  };
+  const addBotRow = (addedBot: BotType, botList: BotType[]) => {
+    setBotLists([...botList, addedBot]);
+  };
+  const deleteBotRow = (deletedBot: string, botList: BotType[]) => {
+    setBotLists(botList.filter((bot) => bot.id !== deletedBot));
+  };
   const contextValue: GlobalStateType = {
     botLists,
     setBotLists,
-    botModalData,
-    setBotModalData,
+    updateBotRow,
+    addBotRow,
+    deleteBotRow,
     suiteLists,
     setSuiteLists,
     suiteModalData,

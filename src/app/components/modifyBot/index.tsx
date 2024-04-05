@@ -1,40 +1,31 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
 import {
   BotAndSuiteModalType,
+  BotType,
   GlobalStateType,
 } from "../../../utils/typesInterface";
 import useAddBot from "../../../hooks/useAddBot";
 import useUpdateBot from "../../../hooks/useUpdateBot";
 import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
+import { v4 as uuidv4 } from "uuid";
 
 interface ModalProps {
   title?: string;
-  handleDiscard?: () => void;
-  // handleSave?: () => void;
   isBotsModalOpen?: boolean;
-  setIsBotsModalOpen?: (isBotsModalopen: boolean) => void | undefined;
-  // botModalData?: BotAndSuiteModalType[];
-  handleAdd?: () => void;
-  // setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
+  setIsBotsModalOpen: (isBotsModalopen: boolean) => void;
 }
 
 const ModifyBot: React.FC<ModalProps> = ({
   title,
-  handleDiscard,
-  // handleSave,
   isBotsModalOpen,
   setIsBotsModalOpen,
-  // botModalData,
-  handleAdd,
-}: // setBotModalData,
-ModalProps) => {
-  const { request } = useApi();
+}: ModalProps) => {
   const botsColumns: TableColumnsType<BotAndSuiteModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "info", key: "info" },
@@ -70,56 +61,80 @@ ModalProps) => {
     },
   ];
 
-  const { botModalData, setBotModalData } = useContext(
+  const { request } = useApi();
+
+  const { botLists, deleteBotRow } = useContext(
     GlobalStateContext
   ) as GlobalStateType;
-
   const { addBot } = useAddBot();
   const { updateBot } = useUpdateBot();
+  const [botData, setBotData] = useState<BotAndSuiteModalType[]>([]);
+
+  useEffect(() => {
+    setBotData(
+      botLists?.map((bot: BotType) => ({
+        id: bot.id,
+        name: bot.name,
+        info: `this is ${bot.name}`,
+        description: `this is ${bot.name}`,
+      }))
+    );
+  }, [botLists]);
+
+  const handleDiscard = () => {
+    setBotData([]);
+    setIsBotsModalOpen(false);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     id: React.Key
   ) => {
     const value = e.target.value;
-    setBotModalData((prevData) =>
-      prevData.map((bot) =>
-        bot.id === id
-          ? { ...bot, name: value, isEdit: bot?.isNew ? false : true }
-          : bot
-      )
+    setBotData(
+      (prevData) =>
+        prevData &&
+        prevData.map((bot) =>
+          bot.id === id
+            ? { ...bot, name: value, isEdit: bot?.isNew ? false : true }
+            : bot
+        )
     );
   };
-
+  const addBlankBot = () => {
+    const newBot = {
+      id: uuidv4(),
+      name: "",
+      info: "",
+      description: "",
+      isNew: true,
+    };
+    setBotData([...botData, newBot]);
+  };
   const deleteBot = async (botId: string) => {
     try {
       const data = await request({
         url: `/v1/bots/${botId}`,
         method: "DELETE",
       });
-
-      console.log(data?.data);
+      deleteBotRow(botId, botLists);
     } catch (error: any) {
       console.error({ error });
     }
   };
 
   const handleSave = () => {
-    const filteredUpdateBot = botModalData?.filter((bot) => bot?.isEdit);
+    const filteredUpdateBot = botData?.filter((bot) => bot?.isEdit);
     if (filteredUpdateBot) {
       filteredUpdateBot?.map((item) => {
-        updateBot(item?.id as string, item?.name as string);
+        updateBot(item?.id as string, item?.name as string, botLists);
       });
-
-      // setIsBotsModalOpen?.(false);
     }
-    const filteredNewBot = botModalData?.filter((bot) => bot?.isNew);
+    const filteredNewBot = botData?.filter((bot) => bot?.isNew);
     if (filteredNewBot) {
       filteredNewBot?.map((item) => {
-        addBot(item?.name as string);
+        addBot(item?.name as string, botLists);
       });
-
-      // setIsBotsModalOpen?.(false);
     }
   };
 
@@ -143,7 +158,7 @@ ModalProps) => {
                   return <p style={{ margin: 0 }}>{record.description}</p>;
                 },
               }}
-              dataSource={botModalData?.map((bot) => {
+              dataSource={botData?.map((bot) => {
                 return {
                   ...bot,
                   name: (
@@ -159,7 +174,7 @@ ModalProps) => {
                 };
               })}
               footer={() => (
-                <button className="w-full text-[#388aeb]" onClick={handleAdd}>
+                <button className="w-full text-[#388aeb]" onClick={addBlankBot}>
                   + Add new blank Bot
                 </button>
               )}

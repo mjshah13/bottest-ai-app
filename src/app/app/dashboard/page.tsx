@@ -1,8 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
-import { Option, TestType } from "../../../utils/typesInterface";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import {
+  GlobalStateType,
+  Option,
+  TestType,
+} from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
 import CustomSelect from "../../../elements/select";
 import CustomButton from "../../../elements/button";
@@ -23,6 +27,7 @@ import ModifyEnvironment from "../../components/modifyEnvironment";
 import { v4 as uuidv4 } from "uuid";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
+import { GlobalStateContext } from "../../../globalState";
 
 interface DashboardProps {}
 
@@ -42,7 +47,10 @@ const Dashboard = (props: DashboardProps) => {
     tab: "View all",
   });
   const { organization } = useOrganization();
-  const { botLists, setBotModalData, botModalData } = useBots(setSelectedBot);
+  const { user } = useUser();
+  const { botLists } = useContext(GlobalStateContext) as GlobalStateType;
+
+  useBots(setSelectedBot);
   const { suiteLists, fetchSuites, suiteModalData, setSuiteModalData } =
     useSuites(setSelectedSuite);
   const {
@@ -142,20 +150,8 @@ const Dashboard = (props: DashboardProps) => {
     useState<boolean>(false);
 
   const handleDiscard = () => {
-    setIsBotsModalOpen(false);
     setIsSuiteModalOpen(false);
     setIsEnvironmentModalOpen(false);
-  };
-
-  const addBlankBot = () => {
-    const newBot = {
-      id: uuidv4(),
-      name: "",
-      info: "",
-      description: "",
-      isNew: true,
-    };
-    setBotModalData([...botModalData, newBot]);
   };
 
   const addBlankSuite = () => {
@@ -439,11 +435,7 @@ const Dashboard = (props: DashboardProps) => {
       <ModifyBot
         isBotsModalOpen={isBotsModalOpen}
         setIsBotsModalOpen={setIsBotsModalOpen}
-        handleAdd={addBlankBot}
         title="Add / Modify Bots"
-        handleDiscard={handleDiscard}
-        // botModalData={botModalData}
-        // setBotModalData={setBotModalData}
       />
 
       <ModifySuite

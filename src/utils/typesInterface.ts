@@ -95,14 +95,15 @@ export interface TestRunType {
 }
 
 export interface GlobalStateType {
+  addBotRow: any;
   botLists: BotType[];
   setBotLists: React.Dispatch<React.SetStateAction<BotType[]>>;
-  botModalData: BotAndSuiteModalType[];
   suiteModalData: BotAndSuiteModalType[];
+  updateBotRow: any;
+  deleteBotRow: any;
   setSuiteModalData: React.Dispatch<
     React.SetStateAction<BotAndSuiteModalType[]>
   >;
-  setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
   suiteLists: SuiteType[];
   setSuiteLists: React.Dispatch<React.SetStateAction<SuiteType[]>>;
   environmentModalData?: EnvironmentModalType[];

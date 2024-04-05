@@ -1,16 +1,19 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useApi } from "./useApi";
 import { useOrganization, useUser } from "@clerk/nextjs";
+import { BotType, GlobalStateType } from "../utils/typesInterface";
+import { GlobalStateContext } from "../globalState";
 
 const useAddBot = () => {
   const { organization } = useOrganization();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { addBotRow } = useContext(GlobalStateContext) as GlobalStateType;
 
   const { request } = useApi();
 
   const addBot = useCallback(
-    async (name: string) => {
+    async (name: string, botLists: BotType[]) => {
       try {
         let organizationPayload = {
           name,
@@ -26,14 +29,13 @@ const useAddBot = () => {
           method: "POST",
           data: organization?.id ? organizationPayload : userPayload,
         });
-
-        console.log(data?.data);
+        addBotRow(data, botLists);
       } catch (error: any) {
         console.error({ error });
       } finally {
       }
     },
-    [user, organization]
+    [user?.id, organization?.id]
   );
 
   return { addBot, isLoading };

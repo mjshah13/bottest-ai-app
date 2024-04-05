@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Theme } from "@radix-ui/themes";
 import { Poppins } from "next/font/google";
-import { BotsProvider } from "../globalStateProvider";
+import { GlobalStateProvider } from "../globalStateProvider";
 
 const poppins = Poppins({
   weight: "400",
@@ -30,9 +30,9 @@ export default function RootLayout({
           />
 
           <div>
-            <BotsProvider>
+            <GlobalStateProvider>
               <Theme className={poppins.variable}>{children}</Theme>
-            </BotsProvider>
+            </GlobalStateProvider>
 
             <ToastContainer
               position="top-right"
