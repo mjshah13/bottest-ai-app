@@ -1,11 +1,23 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useApi } from "./useApi";
 import { useUser } from "@clerk/nextjs";
+import { GlobalStateContext } from "../globalState";
+import { BotAndSuiteModalType, BotType } from "../utils/typesInterface";
+
+interface GlobalStateType {
+  botLists: BotType[];
+  setBotLists: React.Dispatch<React.SetStateAction<BotType[]>>;
+  botModalData: BotAndSuiteModalType[];
+  setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
+}
 
 const useUpdateBot = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { request } = useApi();
   const { user } = useUser();
+  const { botModalData, setBotModalData } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
 
   const updateBot = useCallback(
     async (botID: string, name: string) => {
@@ -17,7 +29,6 @@ const useUpdateBot = () => {
             name,
           },
         });
-        console.log(data?.data, "hhhh");
       } catch (error: any) {
         console.error({ error });
       }

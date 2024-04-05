@@ -1,20 +1,34 @@
-import { useState, useCallback } from "react";
-import { EnvironmentModalType, EnvironmentType } from "../utils/typesInterface";
+import { useState, useCallback, useContext } from "react";
+import {
+  EnvironmentModalType,
+  EnvironmentType,
+  GlobalStateType,
+} from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
+import { GlobalStateContext } from "../globalState";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useEnvironment = (setSelectedEnvironment: any) => {
   const { organization } = useOrganization();
-  const [environmentModalData, setEnvironmentModalData] = useState<
-    EnvironmentModalType[]
-  >([]);
-  const [environmentLists, setEnvironmentLists] = useState<
-    EnvironmentType[] | null
-  >(null);
+
+  const {
+    environmentLists,
+    setEnvironmentLists,
+    environmentModalData,
+    setEnvironmentModalData,
+  } = useContext(GlobalStateContext) as GlobalStateType;
+
+  // const [environmentModalData, setEnvironmentModalData] = useState<
+  //   EnvironmentModalType[]
+  // >([]);
+  // const [environmentLists, setEnvironmentLists] = useState<
+  //   EnvironmentType[] | null
+  // >(null);
+
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
   const { request } = useApi();

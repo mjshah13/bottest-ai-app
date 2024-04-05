@@ -1,12 +1,18 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
-import { BotAndSuiteModalType, Option } from "../../../utils/typesInterface";
+import {
+  BotAndSuiteModalType,
+  GlobalStateType,
+  Option,
+} from "../../../utils/typesInterface";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
 import useAddSuite from "../../../hooks/useAddSuite";
+import { useApi } from "../../../hooks/useApi";
+import { GlobalStateContext } from "../../../globalState";
 
 interface ModalProps {
   title?: string;
@@ -15,11 +21,11 @@ interface ModalProps {
   setIsSuiteModalOpen?: (isSuiteModalopen: boolean) => void;
   selectedBot?: Option | null;
   // handleSave?: () => void;
-  suiteModalData?: BotAndSuiteModalType[];
+  // suiteModalData?: BotAndSuiteModalType[];
   handleAdd?: () => void;
-  setSuiteModalData: React.Dispatch<
-    React.SetStateAction<BotAndSuiteModalType[]>
-  >;
+  // setSuiteModalData: React.Dispatch<
+  //   React.SetStateAction<BotAndSuiteModalType[]>
+  // >;
 }
 
 const ModifySuite: React.FC<ModalProps> = ({
@@ -27,19 +33,23 @@ const ModifySuite: React.FC<ModalProps> = ({
   handleDiscard,
   selectedBot,
   // handleSave,
-  suiteModalData,
+  // suiteModalData,
   handleAdd,
-  setSuiteModalData,
+  // setSuiteModalData,
   isSuiteModalOpen,
   setIsSuiteModalOpen,
 }: ModalProps) => {
+  const { suiteModalData, setSuiteModalData } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
+
   const suiteColumns: TableColumnsType<BotAndSuiteModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Default Success Criteria", dataIndex: "info", key: "info" },
     {
       dataIndex: "",
       key: "x",
-      render: () => (
+      render: (record) => (
         <div className="flex justify-center items-center gap-3">
           <Tooltip.Provider>
             <Tooltip.Root>
@@ -57,13 +67,15 @@ const ModifySuite: React.FC<ModalProps> = ({
             </Tooltip.Root>
           </Tooltip.Provider>
 
-          <button>
+          <button onClick={() => deleteSuite(record?.id)}>
             <Trash color="#E1654A" size={18} />
           </button>
         </div>
       ),
     },
   ];
+
+  const { request } = useApi();
 
   const { updateSuite } = useUpdateSuite();
   const { addSuite } = useAddSuite();
@@ -80,6 +92,19 @@ const ModifySuite: React.FC<ModalProps> = ({
           : suite
       )
     );
+  };
+
+  const deleteSuite = async (suiteId: string) => {
+    try {
+      const data = await request({
+        url: `/v1/suites/${suiteId}`,
+        method: "DELETE",
+      });
+
+      console.log(data?.data);
+    } catch (error: any) {
+      console.error({ error });
+    }
   };
 
   const handleSave = () => {

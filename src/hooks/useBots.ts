@@ -1,18 +1,27 @@
-import { useState, useEffect, useCallback } from "react";
-import { BotAndSuiteModalType, BotType } from "../utils/typesInterface";
+import { useState, useEffect, useCallback, useContext } from "react";
+import {
+  BotAndSuiteModalType,
+  BotType,
+  GlobalStateType,
+} from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
+import { GlobalStateContext } from "../globalState";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useBots = (setSelectedBot: any) => {
+  const { botLists, setBotLists, botModalData, setBotModalData } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
+
   const { user } = useUser();
   const { request } = useApi();
   const { organization } = useOrganization();
-  const [botLists, setBotLists] = useState<BotType[]>([]);
-  const [botModalData, setBotModalData] = useState<BotAndSuiteModalType[]>([]);
+  // const [botLists, setBotLists] = useState<BotType[]>([]);
+  // const [botModalData, setBotModalData] = useState<BotAndSuiteModalType[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchBots = useCallback(async () => {

@@ -93,3 +93,24 @@ export interface EnvironmentModalType {
 export interface TestRunType {
   status?: string;
 }
+
+export interface GlobalStateType {
+  botLists: BotType[];
+  setBotLists: React.Dispatch<React.SetStateAction<BotType[]>>;
+  botModalData: BotAndSuiteModalType[];
+  suiteModalData: BotAndSuiteModalType[];
+  setSuiteModalData: React.Dispatch<
+    React.SetStateAction<BotAndSuiteModalType[]>
+  >;
+  setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
+  suiteLists: SuiteType[];
+  setSuiteLists: React.Dispatch<React.SetStateAction<SuiteType[]>>;
+  environmentModalData?: EnvironmentModalType[];
+  setEnvironmentModalData: React.Dispatch<
+    React.SetStateAction<EnvironmentModalType[]>
+  >;
+  environmentLists: EnvironmentType[] | null; // Assuming environmentLists should hold EnvironmentType or null
+  setEnvironmentLists: React.Dispatch<
+    React.SetStateAction<EnvironmentType[] | null>
+  >;
+}

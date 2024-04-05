@@ -1,12 +1,17 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
-import { BotAndSuiteModalType } from "../../../utils/typesInterface";
+import {
+  BotAndSuiteModalType,
+  GlobalStateType,
+} from "../../../utils/typesInterface";
 import useAddBot from "../../../hooks/useAddBot";
 import useUpdateBot from "../../../hooks/useUpdateBot";
+import { useApi } from "../../../hooks/useApi";
+import { GlobalStateContext } from "../../../globalState";
 
 interface ModalProps {
   title?: string;
@@ -14,9 +19,9 @@ interface ModalProps {
   // handleSave?: () => void;
   isBotsModalOpen?: boolean;
   setIsBotsModalOpen?: (isBotsModalopen: boolean) => void | undefined;
-  botModalData?: BotAndSuiteModalType[];
+  // botModalData?: BotAndSuiteModalType[];
   handleAdd?: () => void;
-  setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
+  // setBotModalData: React.Dispatch<React.SetStateAction<BotAndSuiteModalType[]>>;
 }
 
 const ModifyBot: React.FC<ModalProps> = ({
@@ -25,41 +30,49 @@ const ModifyBot: React.FC<ModalProps> = ({
   // handleSave,
   isBotsModalOpen,
   setIsBotsModalOpen,
-  botModalData,
+  // botModalData,
   handleAdd,
-  setBotModalData,
-}: ModalProps) => {
+}: // setBotModalData,
+ModalProps) => {
+  const { request } = useApi();
   const botsColumns: TableColumnsType<BotAndSuiteModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Description", dataIndex: "info", key: "info" },
     {
       dataIndex: "",
       key: "x",
-      render: () => (
-        <div className="flex justify-center items-center gap-3">
-          <Tooltip.Provider>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-                  <CopyPlus size={18} />
-                </button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                  Create a copy of bots and existing tests.
-                  <Tooltip.Arrow className="TooltipArrow" />
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
+      render: (record) => {
+        // console.log("Record:", record); // Add this line to log the record object
+        return (
+          <div className="flex justify-center items-center gap-3">
+            <Tooltip.Provider>
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
+                    <CopyPlus size={18} />
+                  </button>
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                    Create a copy of bots and existing tests.
+                    <Tooltip.Arrow className="TooltipArrow" />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+            </Tooltip.Provider>
 
-          <button>
-            <Trash color="#E1654A" size={18} />
-          </button>
-        </div>
-      ),
+            <button onClick={() => deleteBot(record?.id)}>
+              <Trash color="#E1654A" size={18} />
+            </button>
+          </div>
+        );
+      },
     },
   ];
+
+  const { botModalData, setBotModalData } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
 
   const { addBot } = useAddBot();
   const { updateBot } = useUpdateBot();
@@ -76,6 +89,19 @@ const ModifyBot: React.FC<ModalProps> = ({
           : bot
       )
     );
+  };
+
+  const deleteBot = async (botId: string) => {
+    try {
+      const data = await request({
+        url: `/v1/bots/${botId}`,
+        method: "DELETE",
+      });
+
+      console.log(data?.data);
+    } catch (error: any) {
+      console.error({ error });
+    }
   };
 
   const handleSave = () => {

@@ -1,8 +1,13 @@
-import { useState, useCallback } from "react";
-import { BotAndSuiteModalType, SuiteType } from "../utils/typesInterface";
+import { useState, useCallback, useContext } from "react";
+import {
+  BotAndSuiteModalType,
+  GlobalStateType,
+  SuiteType,
+} from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
+import { GlobalStateContext } from "../globalState";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
@@ -10,10 +15,13 @@ import { toast } from "react-toastify";
 const useSuites = (setSelectedSuite: any) => {
   const { organization } = useOrganization();
 
-  const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
-  const [suiteModalData, setSuiteModalData] = useState<BotAndSuiteModalType[]>(
-    []
-  );
+  const { suiteLists, setSuiteLists, suiteModalData, setSuiteModalData } =
+    useContext(GlobalStateContext) as GlobalStateType;
+
+  // const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
+  // const [suiteModalData, setSuiteModalData] = useState<BotAndSuiteModalType[]>(
+  //   []
+  // );
 
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();

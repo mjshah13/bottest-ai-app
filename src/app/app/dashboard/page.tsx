@@ -177,7 +177,7 @@ const Dashboard = (props: DashboardProps) => {
       description: "",
       isNew: true,
     };
-    setEnvironmentModalData([...environmentModalData, newEnvironment]);
+    setEnvironmentModalData([...environmentModalData!, newEnvironment]);
   };
 
   const countStatus = (status: string) => {
@@ -442,8 +442,8 @@ const Dashboard = (props: DashboardProps) => {
         handleAdd={addBlankBot}
         title="Add / Modify Bots"
         handleDiscard={handleDiscard}
-        botModalData={botModalData}
-        setBotModalData={setBotModalData}
+        // botModalData={botModalData}
+        // setBotModalData={setBotModalData}
       />
 
       <ModifySuite
@@ -453,8 +453,8 @@ const Dashboard = (props: DashboardProps) => {
         handleAdd={addBlankSuite}
         title={`Add / Modify Suites for ${selectedBot?.name}`}
         handleDiscard={handleDiscard}
-        suiteModalData={suiteModalData}
-        setSuiteModalData={setSuiteModalData}
+        // suiteModalData={suiteModalData}
+        // setSuiteModalData={setSuiteModalData}
       />
 
       <ModifyEnvironment
@@ -462,10 +462,10 @@ const Dashboard = (props: DashboardProps) => {
         setIsEnvironmentModalOpen={setIsEnvironmentModalOpen}
         isEnvironmentModalOpen={isEnvironmentModalOpen}
         handleAdd={addBlankEnvironment}
-        environmentModalData={environmentModalData}
+        // environmentModalData={environmentModalData}
         title={`Add / Modify Environments for ${selectedSuite?.name}`}
         handleDiscard={handleDiscard}
-        setEnvironmentModalData={setEnvironmentModalData}
+        // setEnvironmentModalData={setEnvironmentModalData}
       />
     </div>
   );

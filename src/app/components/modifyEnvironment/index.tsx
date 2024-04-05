@@ -1,11 +1,17 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Table, TableColumnsType } from "antd";
 import CustomButton from "../../../elements/button";
-import { EnvironmentModalType, Option } from "../../../utils/typesInterface";
+import {
+  EnvironmentModalType,
+  GlobalStateType,
+  Option,
+} from "../../../utils/typesInterface";
 import { Trash, CircleAlert } from "lucide-react";
 import useAddEnvironment from "../../../hooks/useAddEnvironment";
 import useUpdateEnvironment from "../../../hooks/useUpdateEnvironment";
+import { useApi } from "../../../hooks/useApi";
+import { GlobalStateContext } from "../../../globalState";
 
 interface ModalProps {
   title?: string;
@@ -14,11 +20,11 @@ interface ModalProps {
   // handleSave?: () => void;
   isEnvironmentModalOpen?: boolean;
   setIsEnvironmentModalOpen?: (isEnvironmentModalopen: boolean) => void;
-  environmentModalData?: EnvironmentModalType[];
+  // environmentModalData?: EnvironmentModalType[];
   handleAdd?: () => void;
-  setEnvironmentModalData: React.Dispatch<
-    React.SetStateAction<EnvironmentModalType[]>
-  >;
+  // setEnvironmentModalData: React.Dispatch<
+  //   React.SetStateAction<EnvironmentModalType[]>
+  // >;
 }
 
 const ModifyEnvironment: React.FC<ModalProps> = ({
@@ -28,12 +34,17 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   // handleSave,
   isEnvironmentModalOpen,
   setIsEnvironmentModalOpen,
-  environmentModalData,
+  // environmentModalData,
   handleAdd,
-  setEnvironmentModalData,
-}: ModalProps) => {
+}: // setEnvironmentModalData,
+ModalProps) => {
+  const { environmentModalData, setEnvironmentModalData } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
+
   const { addEnvironment } = useAddEnvironment();
   const { updateEnvironment } = useUpdateEnvironment();
+  const { request } = useApi();
 
   const environmentColumns: TableColumnsType<EnvironmentModalType> = [
     { title: "Name", dataIndex: "name", key: "name" },
@@ -41,9 +52,9 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
     {
       dataIndex: "",
       key: "x",
-      render: () => (
+      render: (record) => (
         <div className="flex justify-center items-center gap-3">
-          <button>
+          <button onClick={() => deleteEnvironment(record?.id)}>
             <Trash color="#E1654A" size={18} />
           </button>
         </div>
@@ -67,6 +78,19 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
           : environment
       )
     );
+  };
+
+  const deleteEnvironment = async (environmentId: string) => {
+    try {
+      const data = await request({
+        url: `/v1/environments/${environmentId}`,
+        method: "DELETE",
+      });
+
+      console.log(data?.data);
+    } catch (error: any) {
+      console.error({ error });
+    }
   };
 
   const handleSave = () => {
