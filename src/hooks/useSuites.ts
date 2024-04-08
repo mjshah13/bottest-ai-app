@@ -15,13 +15,7 @@ import { GlobalStateContext } from "../globalState";
 const useSuites = (setSelectedSuite: any) => {
   const { organization } = useOrganization();
 
-  const { suiteLists, setSuiteLists, suiteModalData, setSuiteModalData } =
-    useContext(GlobalStateContext) as GlobalStateType;
-
-  // const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
-  // const [suiteModalData, setSuiteModalData] = useState<BotAndSuiteModalType[]>(
-  //   []
-  // );
+  const { setSuiteLists } = useContext(GlobalStateContext) as GlobalStateType;
 
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
@@ -36,14 +30,7 @@ const useSuites = (setSelectedSuite: any) => {
           url: `/v1/bots/${userBot}/suites`,
           method: "GET",
         });
-        setSuiteModalData(
-          data.data.map((bot: BotAndSuiteModalType) => ({
-            id: bot.id,
-            name: bot.name,
-            info: `this is ${bot.name}`,
-            description: "",
-          }))
-        );
+
         const selectDataItems: SuiteType[] =
           data?.data?.map(({ id, name }: SuiteType) => ({
             id,
@@ -63,7 +50,7 @@ const useSuites = (setSelectedSuite: any) => {
     [user, organization]
   );
 
-  return { suiteLists, suiteModalData, setSuiteModalData, fetchSuites, error };
+  return { fetchSuites, error };
 };
 
 export default useSuites;

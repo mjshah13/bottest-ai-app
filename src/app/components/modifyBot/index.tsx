@@ -1,6 +1,6 @@
-import { Dialog, Flex } from "@radix-ui/themes";
+import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
-import { Table, TableColumnsType } from "antd";
+
 import CustomButton from "../../../elements/button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
@@ -26,40 +26,40 @@ const ModifyBot: React.FC<ModalProps> = ({
   isBotsModalOpen,
   setIsBotsModalOpen,
 }: ModalProps) => {
-  const botsColumns: TableColumnsType<BotAndSuiteModalType> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Description", dataIndex: "info", key: "info" },
-    {
-      dataIndex: "",
-      key: "x",
-      render: (record) => {
-        // console.log("Record:", record); // Add this line to log the record object
-        return (
-          <div className="flex justify-center items-center gap-3">
-            <Tooltip.Provider>
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-                    <CopyPlus size={18} />
-                  </button>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                    Create a copy of bots and existing tests.
-                    <Tooltip.Arrow className="TooltipArrow" />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
-            </Tooltip.Provider>
+  // const botsColumns: TableColumnsType<BotAndSuiteModalType> = [
+  //   { title: "Name", dataIndex: "name", key: "name" },
+  //   { title: "Description", dataIndex: "info", key: "info" },
+  //   {
+  //     dataIndex: "",
+  //     key: "x",
+  //     render: (record) => {
+  //       // console.log("Record:", record); // Add this line to log the record object
+  //       return (
+  //         <div className="flex justify-center items-center gap-3">
+  //           <Tooltip.Provider>
+  //             <Tooltip.Root>
+  //               <Tooltip.Trigger asChild>
+  //                 <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
+  //                   <CopyPlus size={18} />
+  //                 </button>
+  //               </Tooltip.Trigger>
+  //               <Tooltip.Portal>
+  //                 <Tooltip.Content className="TooltipContent" sideOffset={5}>
+  //                   Create a copy of bots and existing tests.
+  //                   <Tooltip.Arrow className="TooltipArrow" />
+  //                 </Tooltip.Content>
+  //               </Tooltip.Portal>
+  //             </Tooltip.Root>
+  //           </Tooltip.Provider>
 
-            <button onClick={() => deleteBot(record?.id)}>
-              <Trash color="#E1654A" size={18} />
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
+  //           <button onClick={() => deleteBot(record?.id)}>
+  //             <Trash color="#E1654A" size={18} />
+  //           </button>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
 
   const { request } = useApi();
 
@@ -140,7 +140,7 @@ const ModifyBot: React.FC<ModalProps> = ({
 
   return (
     <Dialog.Root open={isBotsModalOpen} onOpenChange={setIsBotsModalOpen}>
-      <Dialog.Content maxWidth={"860px"}>
+      <Dialog.Content maxWidth={"870px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
             <p className="font-poppin text-black ">{title}</p>
@@ -148,7 +148,7 @@ const ModifyBot: React.FC<ModalProps> = ({
         </Dialog.Title>
         <div>
           <div className="px-5 pt-4 pb-7">
-            <Table
+            {/* <Table
               bordered
               pagination={false}
               columns={botsColumns}
@@ -178,7 +178,86 @@ const ModifyBot: React.FC<ModalProps> = ({
                   + Add new blank Bot
                 </button>
               )}
-            />
+            /> */}
+
+            <Table.Root variant="surface" size={"2"}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeaderCell
+                    style={{ width: "250px" }}
+                    className="border-r border-[#d2cdcd]"
+                  >
+                    Name
+                  </Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell
+                    style={{ width: "480px" }}
+                    className="border-r border-[#d2cdcd]"
+                  >
+                    Description
+                  </Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                {botData.map((bot) => (
+                  <Table.Row key={bot.id}>
+                    <Table.Cell className="border-r border-[#d2cdcd]">
+                      {" "}
+                      <input
+                        className=" py-2  w-[90%] outline-none  "
+                        type="text"
+                        value={`${bot.name}` || ""}
+                        onChange={(e) => handleChange(e, bot?.id)}
+                      />
+                    </Table.Cell>
+                    <Table.Cell className="border-r border-[#d2cdcd]">
+                      <div className="flex items-center h-full">{bot.info}</div>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-center gap-1.2 h-full">
+                        <Tooltip.Provider>
+                          <Tooltip.Root>
+                            <Tooltip.Trigger asChild>
+                              <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
+                                <CopyPlus size={18} />
+                              </button>
+                            </Tooltip.Trigger>
+                            <Tooltip.Portal>
+                              <Tooltip.Content
+                                className="TooltipContent"
+                                sideOffset={5}
+                              >
+                                Create a copy of bots and existing tests.
+                                <Tooltip.Arrow className="TooltipArrow" />
+                              </Tooltip.Content>
+                            </Tooltip.Portal>
+                          </Tooltip.Root>
+                        </Tooltip.Provider>
+                        <button
+                          className="ml-3"
+                          onClick={() => deleteBot(bot.id)}
+                        >
+                          <Trash color="#E1654A" size={18} />
+                        </button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+
+                <Table.Row>
+                  <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
+                    <button
+                      style={{ fontFamily: "poppins" }}
+                      className="w-full py-1.5 flex items-center justify-center text-[#388aeb] "
+                      onClick={addBlankBot}
+                    >
+                      + Add new blank Bot
+                    </button>
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table.Root>
           </div>
         </div>
 

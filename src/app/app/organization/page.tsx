@@ -1,16 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-// import CustomModal from "../../../elements/modal";
-// import { Table, TableColumnsType } from "antd";
-// import { CopyPlus, Trash } from "lucide-react";
-// import * as Tooltip from "@radix-ui/react-tooltip";
+import CustomizeTest from "../../components/customizeTest";
 
 const Organization = () => {
+  const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
   return (
     <>
-      <div className="h-[90vh] flex justify-center items-center">
+      <CustomizeTest
+        title="Customize test: My second test"
+        isCustomizeTestModal={isCustomizeTestModal}
+        setIsCustomizeTestModal={setIsCustomizeTestModal}
+      />
+
+      <div className="h-[90vh] flex justify-center flex-col items-center">
         Organization
+        <button onClick={() => setIsCustomizeTestModal(true)}>Open</button>
       </div>
     </>
   );

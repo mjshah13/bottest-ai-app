@@ -15,12 +15,9 @@ import { GlobalStateContext } from "../globalState";
 const useEnvironment = (setSelectedEnvironment: any) => {
   const { organization } = useOrganization();
 
-  const {
-    environmentLists,
-    setEnvironmentLists,
-    environmentModalData,
-    setEnvironmentModalData,
-  } = useContext(GlobalStateContext) as GlobalStateType;
+  const { setEnvironmentLists } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
 
   // const [environmentModalData, setEnvironmentModalData] = useState<
   //   EnvironmentModalType[]
@@ -43,16 +40,16 @@ const useEnvironment = (setSelectedEnvironment: any) => {
           method: "GET",
         });
 
-        const EnvironmentData: EnvironmentModalType[] = data.data.map(
-          (bot: EnvironmentModalType) => ({
-            id: bot.id,
-            name: bot.name,
-            url: bot.url,
-            // description: bot.description,
-          })
-        );
+        // const EnvironmentData: EnvironmentModalType[] = data.data.map(
+        //   (bot: EnvironmentModalType) => ({
+        //     id: bot.id,
+        //     name: bot.name,
+        //     url: bot.url,
+        //     // description: bot.description,
+        //   })
+        // );
 
-        setEnvironmentModalData(EnvironmentData);
+        // setEnvironmentModalData(EnvironmentData);
 
         const selectDataItems: EnvironmentType[] =
           data?.data?.map(({ id, name }: EnvironmentType) => ({
@@ -74,9 +71,6 @@ const useEnvironment = (setSelectedEnvironment: any) => {
   );
 
   return {
-    environmentLists,
-    environmentModalData,
-    setEnvironmentModalData,
     fetchEnvironment,
     error,
   };

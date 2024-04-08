@@ -6,9 +6,22 @@
   background-color: #fff !important;
 }
 
+.rt-BaseDialogContent {
+  padding: 0 !important;
+}
+.rt-TableColumnHeaderCell {
+  font-family: "Poppins";
+}
+.rt-TableRoot:where(.rt-variant-surface)
+  :where(.rt-TableRootTable)
+  :where(.rt-TableHeader) {
+  --table-row-background-color: #fdfcfa !important;
+}
+
 .TooltipArrow {
   fill: black;
 }
+
 .TooltipContent {
   border-radius: 6px;
   padding: 9px 12px;
@@ -42,6 +55,10 @@
 
 .rt-BaseDialogContent {
   padding: 0;
+}
+
+.rt-BaseButton {
+  font-family: "Poppins" !important;
 }
 
 .ant-table-wrapper .ant-table-thead > tr > th,

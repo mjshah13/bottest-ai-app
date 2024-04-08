@@ -25,9 +25,9 @@ export const GlobalStateProvider = ({
   const [environmentModalData, setEnvironmentModalData] = useState<
     EnvironmentModalType[]
   >([]);
-  const [environmentLists, setEnvironmentLists] = useState<
-    EnvironmentType[] | null
-  >(null);
+  const [environmentLists, setEnvironmentLists] = useState<EnvironmentType[]>(
+    []
+  );
 
   const updateBotRow = (updatedBot: BotType, botList: BotType[]) => {
     setBotLists(
@@ -40,6 +40,52 @@ export const GlobalStateProvider = ({
   const deleteBotRow = (deletedBot: string, botList: BotType[]) => {
     setBotLists(botList.filter((bot) => bot.id !== deletedBot));
   };
+
+  const updateSuiteRow = (updatedSuite: SuiteType, suiteLists: SuiteType[]) => {
+    setSuiteLists(
+      suiteLists.map((suite) =>
+        suite.id === updatedSuite.id ? updatedSuite : suite
+      )
+    );
+  };
+  const addSuiteRow = (addedSuite: SuiteType, suiteLists: SuiteType[]) => {
+    setSuiteLists([...suiteLists, addedSuite]);
+  };
+  const deleteSuiteRow = (deletedSuite: string, suiteLists: SuiteType[]) => {
+    setSuiteLists(suiteLists.filter((suite) => suite.id !== deletedSuite));
+  };
+
+  //////////////////////////////////////////////
+
+  const updateEnvironmentRow = (
+    updatedEnvironment: EnvironmentType,
+    environmentLists: EnvironmentType[]
+  ) => {
+    setEnvironmentLists(
+      environmentLists.map((environment) =>
+        environment.id === updatedEnvironment.id
+          ? updatedEnvironment
+          : environment
+      )
+    );
+  };
+  const addEnvironmentRow = (
+    addedEnvironment: EnvironmentType,
+    environmentLists: EnvironmentType[]
+  ) => {
+    setEnvironmentLists([...environmentLists, addedEnvironment]);
+  };
+  const deleteEnvironmentRow = (
+    deletedEnvironment: string,
+    environmentLists: EnvironmentType[]
+  ) => {
+    setEnvironmentLists(
+      environmentLists.filter(
+        (environment) => environment.id !== deletedEnvironment
+      )
+    );
+  };
+
   const contextValue: GlobalStateType = {
     botLists,
     setBotLists,
@@ -48,12 +94,18 @@ export const GlobalStateProvider = ({
     deleteBotRow,
     suiteLists,
     setSuiteLists,
+    updateSuiteRow,
+    deleteSuiteRow,
+    addSuiteRow,
     suiteModalData,
     setSuiteModalData,
     environmentModalData,
     setEnvironmentModalData,
     environmentLists,
     setEnvironmentLists,
+    updateEnvironmentRow,
+    addEnvironmentRow,
+    deleteEnvironmentRow,
   };
 
   return (

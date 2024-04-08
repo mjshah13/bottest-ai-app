@@ -1,14 +1,23 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useApi } from "./useApi";
 import { useUser } from "@clerk/nextjs";
+import { EnvironmentType, GlobalStateType } from "../utils/typesInterface";
+import { GlobalStateContext } from "../globalState";
 
 const useUpdateEnvironment = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { request } = useApi();
   const { user } = useUser();
+  const { updateEnvironmentRow } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
 
   const updateEnvironment = useCallback(
-    async (environmentID: string, name: string) => {
+    async (
+      environmentID: string,
+      name: string,
+      environmentLists: EnvironmentType[]
+    ) => {
       try {
         const data = await request({
           url: `/v1/environments/${environmentID}`,
@@ -18,7 +27,7 @@ const useUpdateEnvironment = () => {
           },
         });
 
-        console.log(data?.data);
+        updateEnvironmentRow(data, environmentLists);
       } catch (error: any) {
         console.error({ error });
       }

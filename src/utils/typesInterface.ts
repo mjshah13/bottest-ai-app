@@ -49,6 +49,7 @@ export interface SuiteType {
   name: string;
 }
 export interface EnvironmentType {
+  [x: string]: any;
   id: string;
   name: string;
 }
@@ -74,7 +75,7 @@ export interface PageConfig {
 }
 
 export interface BotAndSuiteModalType {
-  id: React.Key | string;
+  id: string;
   name?: string | JSX.Element;
   info: string;
   description: string;
@@ -83,7 +84,7 @@ export interface BotAndSuiteModalType {
 }
 
 export interface EnvironmentModalType {
-  id: React.Key | string;
+  id: string;
   name: string | JSX.Element;
   url?: string | JSX.Element;
   isNew?: boolean;
@@ -106,12 +107,16 @@ export interface GlobalStateType {
   >;
   suiteLists: SuiteType[];
   setSuiteLists: React.Dispatch<React.SetStateAction<SuiteType[]>>;
+  updateSuiteRow: any;
+  deleteSuiteRow: any;
+  addSuiteRow: any;
   environmentModalData?: EnvironmentModalType[];
   setEnvironmentModalData: React.Dispatch<
     React.SetStateAction<EnvironmentModalType[]>
   >;
-  environmentLists: EnvironmentType[] | null; // Assuming environmentLists should hold EnvironmentType or null
-  setEnvironmentLists: React.Dispatch<
-    React.SetStateAction<EnvironmentType[] | null>
-  >;
+  environmentLists: EnvironmentType[]; // Assuming environmentLists should hold EnvironmentType or null
+  setEnvironmentLists: React.Dispatch<React.SetStateAction<EnvironmentType[]>>;
+  updateEnvironmentRow: any;
+  addEnvironmentRow: any;
+  deleteEnvironmentRow: any;
 }

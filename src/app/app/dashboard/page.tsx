@@ -24,7 +24,6 @@ import { Box, Grid } from "@radix-ui/themes";
 import ModifyBot from "../../components/modifyBot";
 import ModifySuite from "../../components/modifySuite";
 import ModifyEnvironment from "../../components/modifyEnvironment";
-import { v4 as uuidv4 } from "uuid";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
@@ -48,17 +47,13 @@ const Dashboard = (props: DashboardProps) => {
   });
   const { organization } = useOrganization();
   const { user } = useUser();
-  const { botLists } = useContext(GlobalStateContext) as GlobalStateType;
+  const { botLists, suiteLists, environmentLists } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
 
   useBots(setSelectedBot);
-  const { suiteLists, fetchSuites, suiteModalData, setSuiteModalData } =
-    useSuites(setSelectedSuite);
-  const {
-    environmentLists,
-    fetchEnvironment,
-    environmentModalData,
-    setEnvironmentModalData,
-  } = useEnvironment(setSelectedEnvironment);
+  const { fetchSuites } = useSuites(setSelectedSuite);
+  const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
 
   const { testData, fetchTests, isLoading } = useTests();
   const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
@@ -148,33 +143,6 @@ const Dashboard = (props: DashboardProps) => {
   const [isSuiteModalOpen, setIsSuiteModalOpen] = useState<boolean>(false);
   const [isEnvironmentModalOpen, setIsEnvironmentModalOpen] =
     useState<boolean>(false);
-
-  const handleDiscard = () => {
-    setIsSuiteModalOpen(false);
-    setIsEnvironmentModalOpen(false);
-  };
-
-  const addBlankSuite = () => {
-    const newSuite = {
-      id: uuidv4(),
-      name: "",
-      info: "",
-      description: "",
-      isNew: true,
-    };
-    setSuiteModalData([...suiteModalData, newSuite]);
-  };
-
-  const addBlankEnvironment = () => {
-    const newEnvironment = {
-      id: uuidv4(),
-      name: "",
-      info: "",
-      description: "",
-      isNew: true,
-    };
-    setEnvironmentModalData([...environmentModalData!, newEnvironment]);
-  };
 
   const countStatus = (status: string) => {
     return suiteTestRuns?.filter((test) => test?.status === status).length;
@@ -432,33 +400,31 @@ const Dashboard = (props: DashboardProps) => {
         )}
       </div>
 
-      <ModifyBot
-        isBotsModalOpen={isBotsModalOpen}
-        setIsBotsModalOpen={setIsBotsModalOpen}
-        title="Add / Modify Bots"
-      />
+      {isBotsModalOpen && (
+        <ModifyBot
+          isBotsModalOpen={isBotsModalOpen}
+          setIsBotsModalOpen={setIsBotsModalOpen}
+          title="Add / Modify Bots"
+        />
+      )}
 
-      <ModifySuite
-        isSuiteModalOpen={isSuiteModalOpen}
-        setIsSuiteModalOpen={setIsSuiteModalOpen}
-        selectedBot={selectedBot}
-        handleAdd={addBlankSuite}
-        title={`Add / Modify Suites for ${selectedBot?.name}`}
-        handleDiscard={handleDiscard}
-        // suiteModalData={suiteModalData}
-        // setSuiteModalData={setSuiteModalData}
-      />
+      {isSuiteModalOpen && (
+        <ModifySuite
+          isSuiteModalOpen={isSuiteModalOpen}
+          setIsSuiteModalOpen={setIsSuiteModalOpen}
+          selectedBot={selectedBot}
+          title={`Add / Modify Suites for ${selectedBot?.name}`}
+        />
+      )}
 
-      <ModifyEnvironment
-        selectedBot={selectedBot}
-        setIsEnvironmentModalOpen={setIsEnvironmentModalOpen}
-        isEnvironmentModalOpen={isEnvironmentModalOpen}
-        handleAdd={addBlankEnvironment}
-        // environmentModalData={environmentModalData}
-        title={`Add / Modify Environments for ${selectedSuite?.name}`}
-        handleDiscard={handleDiscard}
-        // setEnvironmentModalData={setEnvironmentModalData}
-      />
+      {isEnvironmentModalOpen && (
+        <ModifyEnvironment
+          selectedBot={selectedBot}
+          setIsEnvironmentModalOpen={setIsEnvironmentModalOpen}
+          isEnvironmentModalOpen={isEnvironmentModalOpen}
+          title={`Add / Modify Environments for ${selectedSuite?.name}`}
+        />
+      )}
     </div>
   );
 };

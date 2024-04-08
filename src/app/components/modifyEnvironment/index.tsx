@@ -1,9 +1,9 @@
-import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useContext, useState } from "react";
-import { Table, TableColumnsType } from "antd";
+import { Dialog, Flex, Table } from "@radix-ui/themes";
+import React, { useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import {
   EnvironmentModalType,
+  EnvironmentType,
   GlobalStateType,
   Option,
 } from "../../../utils/typesInterface";
@@ -12,72 +12,94 @@ import useAddEnvironment from "../../../hooks/useAddEnvironment";
 import useUpdateEnvironment from "../../../hooks/useUpdateEnvironment";
 import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
+import { v4 as uuidv4 } from "uuid";
 
 interface ModalProps {
   title?: string;
-  handleDiscard?: () => void;
   selectedBot?: Option | null;
-  // handleSave?: () => void;
   isEnvironmentModalOpen?: boolean;
-  setIsEnvironmentModalOpen?: (isEnvironmentModalopen: boolean) => void;
-  // environmentModalData?: EnvironmentModalType[];
-  handleAdd?: () => void;
-  // setEnvironmentModalData: React.Dispatch<
-  //   React.SetStateAction<EnvironmentModalType[]>
-  // >;
+  setIsEnvironmentModalOpen: (isEnvironmentModalopen: boolean) => void;
 }
 
 const ModifyEnvironment: React.FC<ModalProps> = ({
   title,
-  handleDiscard,
   selectedBot,
-  // handleSave,
   isEnvironmentModalOpen,
   setIsEnvironmentModalOpen,
-  // environmentModalData,
-  handleAdd,
-}: // setEnvironmentModalData,
-ModalProps) => {
-  const { environmentModalData, setEnvironmentModalData } = useContext(
+}: ModalProps) => {
+  const { environmentLists, deleteEnvironmentRow } = useContext(
     GlobalStateContext
   ) as GlobalStateType;
 
   const { addEnvironment } = useAddEnvironment();
   const { updateEnvironment } = useUpdateEnvironment();
   const { request } = useApi();
+  const [environmentData, setEnvironmentData] = useState<
+    EnvironmentModalType[]
+  >([]);
 
-  const environmentColumns: TableColumnsType<EnvironmentModalType> = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "URL", dataIndex: "url", key: "url" },
-    {
-      dataIndex: "",
-      key: "x",
-      render: (record) => (
-        <div className="flex justify-center items-center gap-3">
-          <button onClick={() => deleteEnvironment(record?.id)}>
-            <Trash color="#E1654A" size={18} />
-          </button>
-        </div>
+  useEffect(
+    () =>
+      setEnvironmentData(
+        environmentLists?.map((bot: EnvironmentType) => ({
+          id: bot.id,
+          name: bot.name,
+          url: bot.url,
+        }))
       ),
-    },
-  ];
+    [environmentLists]
+  );
+
+  const handleDiscard = () => {
+    setEnvironmentData([]);
+    setIsEnvironmentModalOpen(false);
+  };
+
+  // const environmentColumns: TableColumnsType<EnvironmentModalType> = [
+  //   { title: "Name", dataIndex: "name", key: "name" },
+  //   { title: "URL", dataIndex: "url", key: "url" },
+  //   {
+  //     dataIndex: "",
+  //     key: "x",
+  //     render: (record) => (
+  //       <div className="flex justify-center items-center gap-3">
+  //         <button onClick={() => deleteEnvironment(record?.id)}>
+  //           <Trash color="#E1654A" size={18} />
+  //         </button>
+  //       </div>
+  //     ),
+  //   },
+  // ];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     id: React.Key
   ) => {
     const value = e.target.value;
-    setEnvironmentModalData((prevData) =>
-      prevData.map((environment) =>
-        environment.id === id
-          ? {
-              ...environment,
-              name: value,
-              isEdit: environment?.isNew ? false : true,
-            }
-          : environment
-      )
+    setEnvironmentData(
+      (prevData) =>
+        prevData &&
+        prevData.map((environment) =>
+          environment.id === id
+            ? {
+                ...environment,
+                name: value,
+                isEdit: environment?.isNew ? false : true,
+              }
+            : environment
+        )
     );
+  };
+
+  const addBlankEnvironment = () => {
+    const newEnvironment = {
+      id: uuidv4(),
+      name: "",
+      info: "",
+      description: "",
+      isNew: true,
+    };
+    setEnvironmentData([...environmentData, newEnvironment]);
   };
 
   const deleteEnvironment = async (environmentId: string) => {
@@ -87,32 +109,36 @@ ModalProps) => {
         method: "DELETE",
       });
 
-      console.log(data?.data);
+      deleteEnvironmentRow(environmentId, environmentLists);
     } catch (error: any) {
       console.error({ error });
     }
   };
 
   const handleSave = () => {
-    const filteredEnvironment = environmentModalData?.filter(
+    const filteredEnvironment = environmentData?.filter(
       (environment) => environment?.isEdit
     );
     if (filteredEnvironment) {
       filteredEnvironment?.map((item) => {
-        updateEnvironment(item?.id as string, item?.name as string);
+        updateEnvironment(
+          item?.id as string,
+          item?.name as string,
+          environmentLists
+        );
       });
-
-      // setIsEnvironmentModalOpen?.(false);
     }
-    const filteredNewEnvironment = environmentModalData?.filter(
+    const filteredNewEnvironment = environmentData?.filter(
       (environment) => environment?.isNew
     );
     if (filteredNewEnvironment) {
       filteredNewEnvironment?.map((item) => {
-        addEnvironment(item?.name as string, selectedBot?.id as string);
+        addEnvironment(
+          item?.name as string,
+          selectedBot?.id as string,
+          environmentLists
+        );
       });
-
-      // setIsEnvironmentModalOpen?.(false);
     }
   };
 
@@ -146,12 +172,75 @@ ModalProps) => {
                 </div>
               </div>
 
-              <Table
+              <Table.Root variant="surface" size={"2"}>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell
+                      style={{ width: "250px" }}
+                      className="border-r border-[#d2cdcd]"
+                    >
+                      Name
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell
+                      style={{ width: "500px" }}
+                      className="border-r border-[#d2cdcd]"
+                    >
+                      Url
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                  {environmentData.map((environment) => (
+                    <Table.Row key={environment.id}>
+                      <Table.Cell className="border-r border-[#d2cdcd]">
+                        {" "}
+                        <input
+                          className=" py-2  w-[90%] outline-none  "
+                          type="text"
+                          value={`${environment.name}` || ""}
+                          onChange={(e) => handleChange(e, environment?.id)}
+                        />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd]">
+                        <div className="flex items-center h-full">
+                          {environment.url}
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <div className="flex items-center justify-center gap-1.2 h-full">
+                          <button
+                            className=""
+                            onClick={() => deleteEnvironment(environment.id)}
+                          >
+                            <Trash color="#E1654A" size={18} />
+                          </button>
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+
+                  <Table.Row>
+                    <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
+                      <button
+                        style={{ fontFamily: "poppins" }}
+                        className="w-full py-1.5 flex items-center justify-center text-[#388aeb] "
+                        onClick={addBlankEnvironment}
+                      >
+                        + Add new blank Bot
+                      </button>
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              </Table.Root>
+
+              {/* <Table
                 bordered
                 pagination={false}
                 columns={environmentColumns}
                 dataSource={
-                  environmentModalData?.map((environment) => ({
+                  environmentData?.map((environment) => ({
                     ...environment,
                     url: (
                       <a href={`${environment?.url}`} target="_blank">
@@ -171,11 +260,14 @@ ModalProps) => {
                   })) || []
                 }
                 footer={() => (
-                  <button className="w-full text-[#388aeb]" onClick={handleAdd}>
+                  <button
+                    className="w-full text-[#388aeb]"
+                    onClick={addBlankEnvironment}
+                  >
                     + Add new environment
                   </button>
                 )}
-              />
+              /> */}
             </div>
           </>
         </div>
