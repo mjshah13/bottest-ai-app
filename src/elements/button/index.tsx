@@ -6,6 +6,7 @@ interface Props {
   onClick?: () => void;
   children?: React.ReactNode;
   svgIcon?: React.ReactNode;
+  isWidth?: boolean;
   color?:
     | "gray"
     | "gold"
@@ -42,11 +43,14 @@ const CustomButton: React.FC<Props> = ({
   svgIcon,
   color,
   onClick,
+  isWidth = false,
 }) => {
   return (
     <Button
       onClick={onClick}
-      className="flex items-center gap-2 min-w-[143px] py-3 font-poppin"
+      className={`flex items-center gap-2 min-w-[143px] ${
+        isWidth && "w-full"
+      }   py-3 font-poppin`}
       color={color}
       variant={variant}
     >

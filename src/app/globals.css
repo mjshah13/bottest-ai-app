@@ -8,10 +8,15 @@
 
 .rt-BaseDialogContent {
   padding: 0 !important;
-}
-.rt-TableColumnHeaderCell {
   font-family: "Poppins";
 }
+/* .rt-TableColumnHeaderCell {
+  font-family: "Poppins";
+} */
+/* .rt-TableBody {
+  font-family: "Poppins";
+} */
+
 .rt-TableRoot:where(.rt-variant-surface)
   :where(.rt-TableRootTable)
   :where(.rt-TableHeader) {
@@ -20,6 +25,10 @@
 
 .TooltipArrow {
   fill: black;
+}
+
+.rt-TableRootTable {
+  font-family: "Poppins";
 }
 
 .TooltipContent {
@@ -51,10 +60,6 @@
 }
 .cl-userPreviewMainIdentifier__userButton {
   font-family: "Poppins", sans-serif !important;
-}
-
-.rt-BaseDialogContent {
-  padding: 0;
 }
 
 .rt-BaseButton {

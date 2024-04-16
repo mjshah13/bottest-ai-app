@@ -189,7 +189,7 @@ const ModifySuite: React.FC<ModalProps> = ({
                     Name
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
-                    style={{ width: "270px" }}
+                    style={{ width: "285px" }}
                     className="border-r border-[#d2cdcd]"
                   >
                     Default Success Criteria
@@ -201,7 +201,7 @@ const ModifySuite: React.FC<ModalProps> = ({
                     Default Variants
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
-                    style={{ width: "160px" }}
+                    style={{ width: "155px" }}
                     className="border-r border-[#d2cdcd]"
                   >
                     Default Iterations
@@ -223,8 +223,8 @@ const ModifySuite: React.FC<ModalProps> = ({
                       />
                     </Table.Cell>
                     <Table.Cell className="border-r border-[#d2cdcd] ">
-                      <div className="flex items-center h-full    max-w-[240px]">
-                        <div className="whitespace-nowrap overflow-hidden overflow-ellipsis  ">
+                      <div className="flex items-center h-full max-w-[260px] ">
+                        <div className="overflow-hidden text-ellipsis whitespace-nowrap">
                           {suite?.info}
                         </div>
                       </div>
