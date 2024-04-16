@@ -42,16 +42,27 @@ export interface BottestReportProps {
 export interface BotType {
   id: string;
   name: string;
+  info?: string;
+  isEdit?: boolean;
+  isNew?: boolean;
 }
 
 export interface SuiteType {
   id: string;
   name: string;
+  isEdit?: boolean;
+  isNew?: boolean;
+  default_success_criteria?: string;
+  default_variant_count?: number;
+  default_iteration_count?: number;
 }
 export interface EnvironmentType {
   [x: string]: any;
   id: string;
   name: string;
+  info?: string;
+  isEdit?: boolean;
+  isNew?: boolean;
 }
 export interface TestType {
   [x: string]: any;
@@ -74,23 +85,6 @@ export interface PageConfig {
   matcher?: string[];
 }
 
-export interface BotAndSuiteModalType {
-  id: string;
-  name?: string | JSX.Element;
-  info: string;
-  description: string;
-  isNew?: boolean;
-  isEdit?: boolean;
-}
-
-export interface EnvironmentModalType {
-  id: string;
-  name: string | JSX.Element;
-  url?: string | JSX.Element;
-  isNew?: boolean;
-  isEdit?: boolean;
-  // description: string;
-}
 export interface TestRunType {
   status?: string;
 }
@@ -99,21 +93,13 @@ export interface GlobalStateType {
   addBotRow: any;
   botLists: BotType[];
   setBotLists: React.Dispatch<React.SetStateAction<BotType[]>>;
-  suiteModalData: BotAndSuiteModalType[];
   updateBotRow: any;
   deleteBotRow: any;
-  setSuiteModalData: React.Dispatch<
-    React.SetStateAction<BotAndSuiteModalType[]>
-  >;
   suiteLists: SuiteType[];
   setSuiteLists: React.Dispatch<React.SetStateAction<SuiteType[]>>;
   updateSuiteRow: any;
   deleteSuiteRow: any;
   addSuiteRow: any;
-  environmentModalData?: EnvironmentModalType[];
-  setEnvironmentModalData: React.Dispatch<
-    React.SetStateAction<EnvironmentModalType[]>
-  >;
   environmentLists: EnvironmentType[]; // Assuming environmentLists should hold EnvironmentType or null
   setEnvironmentLists: React.Dispatch<React.SetStateAction<EnvironmentType[]>>;
   updateEnvironmentRow: any;

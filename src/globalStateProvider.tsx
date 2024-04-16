@@ -3,9 +3,7 @@
 import React, { useState } from "react";
 
 import {
-  BotAndSuiteModalType,
   BotType,
-  EnvironmentModalType,
   EnvironmentType,
   GlobalStateType,
   SuiteType,
@@ -19,12 +17,7 @@ export const GlobalStateProvider = ({
 }) => {
   const [botLists, setBotLists] = useState<BotType[]>([]);
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
-  const [suiteModalData, setSuiteModalData] = useState<BotAndSuiteModalType[]>(
-    []
-  );
-  const [environmentModalData, setEnvironmentModalData] = useState<
-    EnvironmentModalType[]
-  >([]);
+
   const [environmentLists, setEnvironmentLists] = useState<EnvironmentType[]>(
     []
   );
@@ -87,21 +80,55 @@ export const GlobalStateProvider = ({
   };
 
   const contextValue: GlobalStateType = {
-    botLists,
+    botLists: botLists?.sort((a: BotType, b: BotType) => {
+      let nameA = a.name.toUpperCase(); // ignore upper and lowercase
+      let nameB = b.name.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    }),
     setBotLists,
     updateBotRow,
     addBotRow,
     deleteBotRow,
-    suiteLists,
+    suiteLists: suiteLists?.sort((a: SuiteType, b: SuiteType) => {
+      let nameA = a.name.toUpperCase(); // ignore upper and lowercase
+      let nameB = b.name.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    }),
     setSuiteLists,
     updateSuiteRow,
     deleteSuiteRow,
     addSuiteRow,
-    suiteModalData,
-    setSuiteModalData,
-    environmentModalData,
-    setEnvironmentModalData,
-    environmentLists,
+    environmentLists: environmentLists?.sort(
+      (a: EnvironmentType, b: EnvironmentType) => {
+        let nameA = a.name.toUpperCase(); // ignore upper and lowercase
+        let nameB = b.name.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      }
+    ),
     setEnvironmentLists,
     updateEnvironmentRow,
     addEnvironmentRow,

@@ -2,7 +2,6 @@ import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import {
-  BotAndSuiteModalType,
   GlobalStateType,
   Option,
   SuiteType,
@@ -68,17 +67,10 @@ const ModifySuite: React.FC<ModalProps> = ({
 
   const { updateSuite } = useUpdateSuite();
   const { addSuite } = useAddSuite();
-  const [suiteData, setSuiteData] = useState<BotAndSuiteModalType[]>([]);
+  const [suiteData, setSuiteData] = useState<SuiteType[]>([]);
 
   useEffect(() => {
-    setSuiteData(
-      suiteLists?.map((suite: SuiteType) => ({
-        id: suite.id,
-        name: suite.name,
-        info: `this is ${suite.name}`,
-        description: `this is ${suite.name}`,
-      }))
-    );
+    setSuiteData(suiteLists);
   }, [suiteLists]);
 
   const handleDiscard = () => {
@@ -90,13 +82,16 @@ const ModifySuite: React.FC<ModalProps> = ({
     e: React.ChangeEvent<HTMLInputElement>,
     id: React.Key
   ) => {
-    const value = e.target.value;
     setSuiteData(
       (prevData) =>
         prevData &&
         prevData.map((suite) =>
           suite.id === id
-            ? { ...suite, name: value, isEdit: suite?.isNew ? false : true }
+            ? {
+                ...suite,
+                [e.target.name]: e.target.value,
+                isEdit: suite?.isNew ? false : true,
+              }
             : suite
         )
     );
@@ -106,9 +101,10 @@ const ModifySuite: React.FC<ModalProps> = ({
     const newSuite = {
       id: uuidv4(),
       name: "",
-      info: "",
-      description: "",
       isNew: true,
+      default_success_criteria: "",
+      default_variant_count: 1,
+      default_iteration_count: 1,
     };
     setSuiteData([...suiteData, newSuite]);
   };
@@ -128,14 +124,15 @@ const ModifySuite: React.FC<ModalProps> = ({
   const handleSave = () => {
     const filteredSuite = suiteData?.filter((suite) => suite?.isEdit);
     if (filteredSuite) {
-      filteredSuite?.map((item) => {
-        updateSuite(item?.id as string, item?.name as string, suiteLists);
+      filteredSuite?.map(({ id, isEdit, isNew, ...rest }) => {
+        updateSuite(id as string, { ...rest }, suiteLists);
       });
     }
     const filteredNewSuite = suiteData?.filter((suite) => suite?.isNew);
     if (filteredNewSuite) {
-      filteredNewSuite?.map((item) => {
-        addSuite(item?.name as string, selectedBot?.id as string, suiteLists);
+      filteredNewSuite?.map(({ id, isEdit, isNew, ...rest }) => {
+        if (!rest?.name) return;
+        addSuite({ bot_id: selectedBot?.id, ...rest }, suiteLists);
       });
     }
   };
@@ -218,26 +215,37 @@ const ModifySuite: React.FC<ModalProps> = ({
                       <input
                         className=" py-2  w-[90%] outline-none  "
                         type="text"
+                        name="name"
                         value={`${suite.name}` || ""}
                         onChange={(e) => handleChange(e, suite?.id)}
                       />
                     </Table.Cell>
                     <Table.Cell className="border-r border-[#d2cdcd] ">
-                      <div className="flex items-center h-full max-w-[260px] ">
-                        <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-                          {suite?.info}
-                        </div>
-                      </div>
+                      <input
+                        className=" py-2  w-[90%] outline-none  "
+                        type="text"
+                        name="default_success_criteria"
+                        value={`${suite.default_success_criteria}` || ""}
+                        onChange={(e) => handleChange(e, suite?.id)}
+                      />
                     </Table.Cell>
                     <Table.Cell className="border-r border-[#d2cdcd]">
-                      <div className="flex items-center h-full">
-                        {suite.info}
-                      </div>
+                      <input
+                        className=" py-2  w-[90%] outline-none  "
+                        type="number"
+                        name="default_variant_count"
+                        value={`${suite.default_variant_count}` || ""}
+                        onChange={(e) => handleChange(e, suite?.id)}
+                      />
                     </Table.Cell>
                     <Table.Cell className="border-r border-[#d2cdcd]">
-                      <div className="flex items-center h-full">
-                        {suite.info}
-                      </div>
+                      <input
+                        className=" py-2  w-[90%] outline-none  "
+                        type="number"
+                        name="default_iteration_count"
+                        value={`${suite.default_iteration_count}` || ""}
+                        onChange={(e) => handleChange(e, suite?.id)}
+                      />
                     </Table.Cell>
                     <Table.Cell>
                       <div className="flex items-center justify-center gap-1.2 h-full">

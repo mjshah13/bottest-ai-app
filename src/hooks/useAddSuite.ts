@@ -13,17 +13,29 @@ const useAddSuite = () => {
   const { request } = useApi();
 
   const addSuite = useCallback(
-    async (name: string, botId: string, suiteLists: SuiteType[]) => {
+    async (data: any, suiteLists: SuiteType[]) => {
       try {
-        const data = await request({
+        const {
+          id,
+          name,
+          default_success_criteria,
+          default_variant_count,
+          default_iteration_count,
+        } = await request({
           url: `/v1/suites`,
           method: "POST",
-          data: {
-            name,
-            bot_id: botId,
-          },
+          data,
         });
-        addSuiteRow(data, suiteLists);
+        addSuiteRow(
+          {
+            id,
+            name,
+            default_success_criteria,
+            default_variant_count,
+            default_iteration_count,
+          },
+          suiteLists
+        );
       } catch (error: any) {
         console.error({ error });
       }

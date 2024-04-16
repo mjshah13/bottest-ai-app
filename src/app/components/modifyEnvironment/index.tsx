@@ -2,7 +2,6 @@ import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import {
-  EnvironmentModalType,
   EnvironmentType,
   GlobalStateType,
   Option,
@@ -34,9 +33,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   const { addEnvironment } = useAddEnvironment();
   const { updateEnvironment } = useUpdateEnvironment();
   const { request } = useApi();
-  const [environmentData, setEnvironmentData] = useState<
-    EnvironmentModalType[]
-  >([]);
+  const [environmentData, setEnvironmentData] = useState<EnvironmentType[]>([]);
 
   useEffect(
     () =>
@@ -228,7 +225,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                         className="w-full py-1.5 flex items-center justify-center text-[#388aeb] "
                         onClick={addBlankEnvironment}
                       >
-                        + Add new blank Bot
+                        + Add new blank Environment
                       </button>
                     </Table.Cell>
                   </Table.Row>

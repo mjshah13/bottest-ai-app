@@ -4,11 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
-import {
-  BotAndSuiteModalType,
-  BotType,
-  GlobalStateType,
-} from "../../../utils/typesInterface";
+import { BotType, GlobalStateType } from "../../../utils/typesInterface";
 import useAddBot from "../../../hooks/useAddBot";
 import useUpdateBot from "../../../hooks/useUpdateBot";
 import { useApi } from "../../../hooks/useApi";
@@ -26,41 +22,6 @@ const ModifyBot: React.FC<ModalProps> = ({
   isBotsModalOpen,
   setIsBotsModalOpen,
 }: ModalProps) => {
-  // const botsColumns: TableColumnsType<BotAndSuiteModalType> = [
-  //   { title: "Name", dataIndex: "name", key: "name" },
-  //   { title: "Description", dataIndex: "info", key: "info" },
-  //   {
-  //     dataIndex: "",
-  //     key: "x",
-  //     render: (record) => {
-  //       // console.log("Record:", record); // Add this line to log the record object
-  //       return (
-  //         <div className="flex justify-center items-center gap-3">
-  //           <Tooltip.Provider>
-  //             <Tooltip.Root>
-  //               <Tooltip.Trigger asChild>
-  //                 <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-  //                   <CopyPlus size={18} />
-  //                 </button>
-  //               </Tooltip.Trigger>
-  //               <Tooltip.Portal>
-  //                 <Tooltip.Content className="TooltipContent" sideOffset={5}>
-  //                   Create a copy of bots and existing tests.
-  //                   <Tooltip.Arrow className="TooltipArrow" />
-  //                 </Tooltip.Content>
-  //               </Tooltip.Portal>
-  //             </Tooltip.Root>
-  //           </Tooltip.Provider>
-
-  //           <button onClick={() => deleteBot(record?.id)}>
-  //             <Trash color="#E1654A" size={18} />
-  //           </button>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  // ];
-
   const { request } = useApi();
 
   const { botLists, deleteBotRow } = useContext(
@@ -68,7 +29,7 @@ const ModifyBot: React.FC<ModalProps> = ({
   ) as GlobalStateType;
   const { addBot } = useAddBot();
   const { updateBot } = useUpdateBot();
-  const [botData, setBotData] = useState<BotAndSuiteModalType[]>([]);
+  const [botData, setBotData] = useState<BotType[]>([]);
 
   useEffect(() => {
     setBotData(
@@ -133,6 +94,7 @@ const ModifyBot: React.FC<ModalProps> = ({
     const filteredNewBot = botData?.filter((bot) => bot?.isNew);
     if (filteredNewBot) {
       filteredNewBot?.map((item) => {
+        if (!item?.name) return;
         addBot(item?.name as string, botLists);
       });
     }

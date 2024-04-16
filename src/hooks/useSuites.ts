@@ -1,9 +1,5 @@
 import { useState, useCallback, useContext } from "react";
-import {
-  BotAndSuiteModalType,
-  GlobalStateType,
-  SuiteType,
-} from "../utils/typesInterface";
+import { GlobalStateType, SuiteType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -32,10 +28,21 @@ const useSuites = (setSelectedSuite: any) => {
         });
 
         const selectDataItems: SuiteType[] =
-          data?.data?.map(({ id, name }: SuiteType) => ({
-            id,
-            name,
-          })) || [];
+          data?.data?.map(
+            ({
+              id,
+              name,
+              default_success_criteria,
+              default_variant_count,
+              default_iteration_count,
+            }: SuiteType) => ({
+              id,
+              name,
+              default_success_criteria,
+              default_variant_count,
+              default_iteration_count,
+            })
+          ) || [];
         setSuiteLists(selectDataItems);
         if (selectDataItems.length === 1) {
           // Assuming handleSelect is a function that needs to be called when there is only one bot

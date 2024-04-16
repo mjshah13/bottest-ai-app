@@ -11,16 +11,29 @@ const useUpdateSuite = () => {
   const { updateSuiteRow } = useContext(GlobalStateContext) as GlobalStateType;
 
   const updateSuite = useCallback(
-    async (suiteID: string, name: string, suiteLists: SuiteType[]) => {
+    async (suiteID: string, data: any, suiteLists: SuiteType[]) => {
       try {
-        const data = await request({
+        const {
+          id,
+          name,
+          default_success_criteria,
+          default_variant_count,
+          default_iteration_count,
+        } = await request({
           url: `/v1/suites/${suiteID}`,
           method: "PATCH",
-          data: {
-            name: name,
-          },
+          data,
         });
-        updateSuiteRow(data, suiteLists);
+        updateSuiteRow(
+          {
+            id,
+            name,
+            default_success_criteria,
+            default_variant_count,
+            default_iteration_count,
+          },
+          suiteLists
+        );
       } catch (error: any) {
         console.error({ error });
       }

@@ -199,7 +199,9 @@ const Dashboard = (props: DashboardProps) => {
               Btntext="Add / Modify Bots"
               Label={"Select Bot"}
               options={botLists || []}
-              selectedValue={selectedBot}
+              selectedValue={botLists?.find(
+                (bot) => bot?.id === selectedBot?.id
+              )}
               placeholder="Select Bots"
               // onChange={(value) => handleChange("bots", value)}
               onSelectChange={(selectedOption) => {
@@ -213,7 +215,9 @@ const Dashboard = (props: DashboardProps) => {
               Label={"Select Suites"}
               // disabled={suiteLists?.length === 1 || !suiteLists}
               Btntext="Add / Modify Suites"
-              selectedValue={selectedSuite}
+              selectedValue={suiteLists?.find(
+                (suite) => suite?.id === selectedSuite?.id
+              )}
               placeholder="Select Suites"
               options={suiteLists || []}
               onSelectChange={(selectedOption) => {
@@ -228,7 +232,9 @@ const Dashboard = (props: DashboardProps) => {
               // disabled={environmentLists?.length === 1 || !environmentLists}
               placeholder="Select Environment"
               Btntext="Add / Modify Environments"
-              selectedValue={selectedEnvironment}
+              selectedValue={environmentLists?.find(
+                (env) => env?.id === selectedEnvironment?.id
+              )}
               options={environmentLists || []}
               onSelectChange={(selectedOption) => {
                 setSelectedEnvironment(selectedOption);
