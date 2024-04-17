@@ -12,6 +12,8 @@ import useUpdateEnvironment from "../../../hooks/useUpdateEnvironment";
 import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
+import useDeleteEnvironment from "../../../hooks/useDeleteEnvironment";
+import DeleteModal from "../deleteModal";
 
 interface ModalProps {
   title?: string;
@@ -26,22 +28,26 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   isEnvironmentModalOpen,
   setIsEnvironmentModalOpen,
 }: ModalProps) => {
-  const { environmentLists, deleteEnvironmentRow } = useContext(
+  const { environmentLists } = useContext(
     GlobalStateContext
   ) as GlobalStateType;
 
   const { addEnvironment } = useAddEnvironment();
   const { updateEnvironment } = useUpdateEnvironment();
-  const { request } = useApi();
+  const { deleteEnvironment } = useDeleteEnvironment();
+
   const [environmentData, setEnvironmentData] = useState<EnvironmentType[]>([]);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [selectedEnvironemnt, setSelectedEnvironemnt] =
+    useState<EnvironmentType | null>(null);
 
   useEffect(
     () =>
       setEnvironmentData(
-        environmentLists?.map((bot: EnvironmentType) => ({
-          id: bot.id,
-          name: bot.name,
-          url: bot.url,
+        environmentLists?.map((environment: EnvironmentType) => ({
+          id: environment.id,
+          name: environment.name,
+          url: environment.url,
         }))
       ),
     [environmentLists]
@@ -52,27 +58,11 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
     setIsEnvironmentModalOpen(false);
   };
 
-  // const environmentColumns: TableColumnsType<EnvironmentModalType> = [
-  //   { title: "Name", dataIndex: "name", key: "name" },
-  //   { title: "URL", dataIndex: "url", key: "url" },
-  //   {
-  //     dataIndex: "",
-  //     key: "x",
-  //     render: (record) => (
-  //       <div className="flex justify-center items-center gap-3">
-  //         <button onClick={() => deleteEnvironment(record?.id)}>
-  //           <Trash color="#E1654A" size={18} />
-  //         </button>
-  //       </div>
-  //     ),
-  //   },
-  // ];
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     id: React.Key
   ) => {
-    const value = e.target.value;
+    // const value = e.target.value;
     setEnvironmentData(
       (prevData) =>
         prevData &&
@@ -80,7 +70,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
           environment.id === id
             ? {
                 ...environment,
-                name: value,
+                [e.target.name]: e.target.value,
                 isEdit: environment?.isNew ? false : true,
               }
             : environment
@@ -93,24 +83,25 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
       id: uuidv4(),
       name: "",
       info: "",
+      url: "",
       description: "",
       isNew: true,
     };
     setEnvironmentData([...environmentData, newEnvironment]);
   };
 
-  const deleteEnvironment = async (environmentId: string) => {
-    try {
-      const data = await request({
-        url: `/v1/environments/${environmentId}`,
-        method: "DELETE",
-      });
+  // const deleteEnvironment = async (environmentId: string) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/environments/${environmentId}`,
+  //       method: "DELETE",
+  //     });
 
-      deleteEnvironmentRow(environmentId, environmentLists);
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
+  //     deleteEnvironmentRow(environmentId, environmentLists);
+  //   } catch (error: any) {
+  //     console.error({ error });
+  //   }
+  // };
 
   const handleSave = () => {
     const filteredEnvironment = environmentData?.filter(
@@ -129,13 +120,18 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
       (environment) => environment?.isNew
     );
     if (filteredNewEnvironment) {
-      filteredNewEnvironment?.map((item) => {
-        addEnvironment(
-          item?.name as string,
-          selectedBot?.id as string,
-          environmentLists
-        );
+      console.log(filteredNewEnvironment, "hhh");
+      filteredNewEnvironment?.map(({ id, isEdit, isNew, ...rest }) => {
+        if (!rest?.name) return;
+        addEnvironment({ bot_id: selectedBot?.id, ...rest }, environmentLists);
       });
+      // filteredNewEnvironment?.map((item) => {
+      //   addEnvironment(
+      //     item?.name as string,
+      //     selectedBot?.id as string,
+      //     environmentLists
+      //   );
+      // });
     }
   };
 
@@ -196,20 +192,31 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                         <input
                           className=" py-2  w-[90%] outline-none  "
                           type="text"
+                          name="name"
                           value={`${environment.name}` || ""}
                           onChange={(e) => handleChange(e, environment?.id)}
                         />
                       </Table.Cell>
                       <Table.Cell className="border-r border-[#d2cdcd]">
                         <div className="flex items-center h-full">
-                          {environment.url}
+                          {/* {environment.url} */}
+                          <input
+                            className=" py-2  w-[100%] outline-none  "
+                            type="text"
+                            name="url"
+                            value={`${environment.url}` || ""}
+                            onChange={(e) => handleChange(e, environment?.id)}
+                          />
                         </div>
                       </Table.Cell>
                       <Table.Cell>
                         <div className="flex items-center justify-center gap-1.2 h-full">
                           <button
                             className=""
-                            onClick={() => deleteEnvironment(environment.id)}
+                            onClick={() => {
+                              setIsDeleteModal(true);
+                              setSelectedEnvironemnt(environment);
+                            }}
                           >
                             <Trash color="#E1654A" size={18} />
                           </button>
@@ -288,6 +295,20 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
           </Flex>
         </div>
       </Dialog.Content>
+      {isDeleteModal && (
+        <DeleteModal
+          onClick={() => {
+            if (selectedEnvironemnt) {
+              deleteEnvironment(selectedEnvironemnt.id, environmentLists);
+              setIsDeleteModal(false);
+            }
+          }}
+          description={`Are you sure you want to delete the ${selectedEnvironemnt?.name} Environment?.This action can not be undone.`}
+          isDeleteModal={isDeleteModal}
+          setIsDeleteModal={setIsDeleteModal}
+          title={`Delete ${selectedEnvironemnt?.name} Environment`}
+        />
+      )}
     </Dialog.Root>
   );
 };

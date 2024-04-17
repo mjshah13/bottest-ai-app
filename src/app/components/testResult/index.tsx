@@ -3,12 +3,16 @@ import React, { useState } from "react";
 import CustomButton from "../../../elements/button";
 import {
   ChevronUp,
-  ChevronDown,
   CircleAlert,
   Download,
   User,
   Bot,
+  Shuffle,
+  Check,
+  UserCog,
 } from "lucide-react";
+import { Disclosure } from "@headlessui/react";
+import SaveBaselineModal from "../saveBaselineModal";
 
 interface ModalProps {
   title?: string;
@@ -21,11 +25,36 @@ const TestResult: React.FC<ModalProps> = ({
   isTestResultModal,
   setIsTestResultModal,
 }: ModalProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const data = [
+    { id: 1, title: "ha", name: "harim" },
+    { id: 2, title: "ma", name: "maaz" },
+    { id: 3, title: "az", name: "azeem" },
+  ];
 
-  const toggleCollapse = () => {
-    setIsOpen(!isOpen);
-  };
+  const [isOpenSaveBaselineModal, setisOpenSaveBaselineModal] = useState(false);
+
+  // const [activeDisclosurePanelIndex, setActiveDisclosurePanelIndex] =
+  //   useState(null);
+
+  // const togglePanels = (index: any) => {
+  //   console.log(index);
+  //   const disclosureButtons =
+  //     document.getElementsByClassName("disclosure-button");
+
+  //   for (let i = 0; i < disclosureButtons.length; i++) {
+  //     const disclosureButton: any = disclosureButtons.item(i);
+
+  //     disclosureButton.setAttribute("aria-expanded", "false"); // Assuming ARIA attribute is used
+  //     // Alternatively, modify CSS classes as needed for visual representation
+
+  //     // Set expanded state to true only for the clicked button
+  //     if (i === index) {
+  //       disclosureButton.setAttribute("aria-expanded", "true");
+  //       // Alternatively, modify CSS classes as needed
+  //     }
+  //   }
+
+  // };
 
   return (
     <Dialog.Root open={isTestResultModal} onOpenChange={setIsTestResultModal}>
@@ -44,28 +73,50 @@ const TestResult: React.FC<ModalProps> = ({
                   Currently viewing
                 </p>
               </div>
-              <div className="">
-                <div className="flex justify-between px-4">
-                  <h1 className="px-4  w-full bg-blue-500 text-black">
-                    Details
-                  </h1>
-                  <button onClick={toggleCollapse}>
-                    {isOpen ? <ChevronUp /> : <ChevronDown />}
-                  </button>
-                </div>
 
-                <div
-                  className={`mt-2 p-4 border rounded ${
-                    isOpen ? "" : "hidden"
-                  }`}
-                >
-                  <div>
-                    <p>Here is some collapsible content!</p>
-                    <p>Here is some collapsible content!</p>
-                    <p>Here is some collapsible content!</p>
-                    <p>Here is some collapsible content!</p>
-                  </div>
-                </div>
+              <div>
+                {/* {data.map((item, index) => ( */}
+                <Disclosure key={title}>
+                  {({ open, close }) => (
+                    <>
+                      <Disclosure.Button
+                        // onClick={() => togglePanels(index)}
+                        className={`disclosure-button flex items-center justify-between w-full  px-6 py-2  text-sm `}
+                      >
+                        <div className="gap-3 flex items-center">
+                          <Shuffle color="#E7C200" size={15} />
+                          <p
+                            className={`text-lg font-normal
+                             
+                             `}
+                          >
+                            Variant A
+                          </p>
+                        </div>
+
+                        <ChevronUp
+                          className={`${open ? "rotate-180 transform" : ""} 
+                            
+                              h-6 w-6 text-neutral`}
+                        />
+                      </Disclosure.Button>
+
+                      <Disclosure.Panel className="mt-0  text-sm">
+                        <div className="bg-[#F1f0ef] py-[1px]">
+                          {Array(4)
+                            ?.fill(4)
+                            ?.map((item) => (
+                              <div className="px-6 py-2.5 flex gap-3 mx-3 my-2   hover:bg-primary">
+                                <Check color="#54CA6E" size={19} />
+                                <h3>Iteration 1</h3>
+                              </div>
+                            ))}
+                        </div>
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
+                {/* ))} */}
               </div>
             </div>
           </Box>
@@ -86,6 +137,18 @@ const TestResult: React.FC<ModalProps> = ({
                     The replayed conversation matches the content of “First
                   </p>
                 </div>
+              </div>
+              <div className="w-full h-[7%]">
+                <CustomButton
+                  color="red"
+                  variant="outline"
+                  isWidth={true}
+                  svgIcon={<UserCog size={19} />}
+                  onClick={() => setisOpenSaveBaselineModal(true)}
+                >
+                  Override fail and set replayed conversation as an additional
+                  baseline.
+                </CustomButton>
               </div>
               <div className="flex justify-between items-center w-full h-[6%] ">
                 <div className="w-[45%]">
@@ -221,6 +284,11 @@ const TestResult: React.FC<ModalProps> = ({
           </Box>
         </Grid>
       </Dialog.Content>
+      <SaveBaselineModal
+        isOpenSaveBaselineModal={isOpenSaveBaselineModal}
+        setisOpenSaveBaselineModal={setisOpenSaveBaselineModal}
+        title="Test results: My third test"
+      />
     </Dialog.Root>
   );
 };

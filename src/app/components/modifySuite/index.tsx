@@ -13,6 +13,8 @@ import useAddSuite from "../../../hooks/useAddSuite";
 import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
+import useDeleteSuite from "../../../hooks/useDeleteSuite";
+import DeleteModal from "../deleteModal";
 
 interface ModalProps {
   title?: string;
@@ -27,38 +29,6 @@ const ModifySuite: React.FC<ModalProps> = ({
   isSuiteModalOpen,
   setIsSuiteModalOpen,
 }: ModalProps) => {
-  // const suiteColumns: TableColumnsType<BotAndSuiteModalType> = [
-  //   { title: "Name", dataIndex: "name", key: "name" },
-  //   { title: "Default Success Criteria", dataIndex: "info", key: "info" },
-  //   {
-  //     dataIndex: "",
-  //     key: "x",
-  //     render: (record) => (
-  //       <div className="flex justify-center items-center gap-3">
-  //         <Tooltip.Provider>
-  //           <Tooltip.Root>
-  //             <Tooltip.Trigger asChild>
-  //               <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-  //                 <CopyPlus size={18} />
-  //               </button>
-  //             </Tooltip.Trigger>
-  //             <Tooltip.Portal>
-  //               <Tooltip.Content className="TooltipContent" sideOffset={5}>
-  //                 Create a copy of Suite and existing tests.
-  //                 <Tooltip.Arrow className="TooltipArrow" />
-  //               </Tooltip.Content>
-  //             </Tooltip.Portal>
-  //           </Tooltip.Root>
-  //         </Tooltip.Provider>
-
-  //         <button onClick={() => deleteSuite(record?.id)}>
-  //           <Trash color="#E1654A" size={18} />
-  //         </button>
-  //       </div>
-  //     ),
-  //   },
-  // ];
-
   const { request } = useApi();
 
   const { suiteLists, deleteSuiteRow } = useContext(
@@ -66,7 +36,10 @@ const ModifySuite: React.FC<ModalProps> = ({
   ) as GlobalStateType;
 
   const { updateSuite } = useUpdateSuite();
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [selectedSuite, setSelectedSuite] = useState<SuiteType | null>(null);
   const { addSuite } = useAddSuite();
+  const { deleteSuite } = useDeleteSuite();
   const [suiteData, setSuiteData] = useState<SuiteType[]>([]);
 
   useEffect(() => {
@@ -109,17 +82,17 @@ const ModifySuite: React.FC<ModalProps> = ({
     setSuiteData([...suiteData, newSuite]);
   };
 
-  const deleteSuite = async (suiteId: string) => {
-    try {
-      const data = await request({
-        url: `/v1/suites/${suiteId}`,
-        method: "DELETE",
-      });
-      deleteSuiteRow(suiteId, suiteLists);
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
+  // const deleteSuite = async (suiteId: string) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/suites/${suiteId}`,
+  //       method: "DELETE",
+  //     });
+  //     deleteSuiteRow(suiteId, suiteLists);
+  //   } catch (error: any) {
+  //     console.error({ error });
+  //   }
+  // };
 
   const handleSave = () => {
     const filteredSuite = suiteData?.filter((suite) => suite?.isEdit);
@@ -137,6 +110,10 @@ const ModifySuite: React.FC<ModalProps> = ({
     }
   };
 
+  const handleModalData = (suite: SuiteType[]) => {
+    console.log(suite);
+  };
+
   return (
     <Dialog.Root open={isSuiteModalOpen} onOpenChange={setIsSuiteModalOpen}>
       <Dialog.Content maxWidth={"870px"}>
@@ -147,35 +124,6 @@ const ModifySuite: React.FC<ModalProps> = ({
         </Dialog.Title>
         <div>
           <div className="px-5 pt-4 pb-7">
-            {/* <Table
-              bordered
-              pagination={false}
-              columns={suiteColumns}
-              dataSource={suiteData?.map((suite) => {
-                return {
-                  ...suite,
-                  name: (
-                    <>
-                      <input
-                        className=" py-2 pl-2 w-full outline-none "
-                        type="text"
-                        value={`${suite.name}` || ""}
-                        onChange={(e) => handleChange(e, suite?.id)}
-                      />
-                    </>
-                  ),
-                };
-              })}
-              footer={() => (
-                <button
-                  className="w-full text-[#388aeb]"
-                  onClick={addBlankSuite}
-                >
-                  + Add new blank Suite
-                </button>
-              )}
-            /> */}
-
             <Table.Root variant="surface" size={"2"}>
               <Table.Header>
                 <Table.Row>
@@ -269,7 +217,10 @@ const ModifySuite: React.FC<ModalProps> = ({
                         </Tooltip.Provider>
                         <button
                           className="ml-3"
-                          onClick={() => deleteSuite(suite.id)}
+                          onClick={() => {
+                            setIsDeleteModal(true);
+                            setSelectedSuite(suite);
+                          }}
                         >
                           <Trash color="#E1654A" size={18} />
                         </button>
@@ -313,6 +264,20 @@ const ModifySuite: React.FC<ModalProps> = ({
           </Flex>
         </div>
       </Dialog.Content>
+      {isDeleteModal && (
+        <DeleteModal
+          onClick={() => {
+            if (selectedSuite) {
+              deleteSuite(selectedSuite?.id, suiteLists);
+              setIsDeleteModal(false);
+            }
+          }}
+          description={`Are you sure you want to delete the ${selectedSuite?.name} Suite?.This action can not be undone.`}
+          isDeleteModal={isDeleteModal}
+          setIsDeleteModal={setIsDeleteModal}
+          title={`Delete ${selectedSuite?.name} Suite`}
+        />
+      )}
     </Dialog.Root>
   );
 };

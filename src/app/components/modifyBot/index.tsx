@@ -4,30 +4,39 @@ import React, { useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
-import { BotType, GlobalStateType } from "../../../utils/typesInterface";
+import {
+  BotType,
+  GlobalStateType,
+  Option,
+} from "../../../utils/typesInterface";
 import useAddBot from "../../../hooks/useAddBot";
 import useUpdateBot from "../../../hooks/useUpdateBot";
 import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
+import useDeleteBot from "../../../hooks/useDeleteBot";
+import DeleteModal from "../deleteModal";
 
 interface ModalProps {
   title?: string;
+  // selectedBot?: Option | null;
   isBotsModalOpen?: boolean;
   setIsBotsModalOpen: (isBotsModalopen: boolean) => void;
 }
 
 const ModifyBot: React.FC<ModalProps> = ({
   title,
+  // selectedBot,
   isBotsModalOpen,
   setIsBotsModalOpen,
 }: ModalProps) => {
-  const { request } = useApi();
+  const { botLists } = useContext(GlobalStateContext) as GlobalStateType;
 
-  const { botLists, deleteBotRow } = useContext(
-    GlobalStateContext
-  ) as GlobalStateType;
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [selectedBot, setSelectedBot] = useState<BotType | null>(null);
+
   const { addBot } = useAddBot();
+  const { deleteBot } = useDeleteBot();
   const { updateBot } = useUpdateBot();
   const [botData, setBotData] = useState<BotType[]>([]);
 
@@ -72,17 +81,18 @@ const ModifyBot: React.FC<ModalProps> = ({
     };
     setBotData([...botData, newBot]);
   };
-  const deleteBot = async (botId: string) => {
-    try {
-      const data = await request({
-        url: `/v1/bots/${botId}`,
-        method: "DELETE",
-      });
-      deleteBotRow(botId, botLists);
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
+
+  // const deleteBot = async (botId: string) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/bots/${botId}`,
+  //       method: "DELETE",
+  //     });
+  //     deleteBotRow(botId, botLists);
+  //   } catch (error: any) {
+  //     console.error({ error });
+  //   }
+  // };
 
   const handleSave = () => {
     const filteredUpdateBot = botData?.filter((bot) => bot?.isEdit);
@@ -110,38 +120,6 @@ const ModifyBot: React.FC<ModalProps> = ({
         </Dialog.Title>
         <div>
           <div className="px-5 pt-4 pb-7">
-            {/* <Table
-              bordered
-              pagination={false}
-              columns={botsColumns}
-              expandable={{
-                expandedRowRender: (record) => {
-                  // console.log(record), "record"; // Record ko console me print karna
-                  return <p style={{ margin: 0 }}>{record.description}</p>;
-                },
-              }}
-              dataSource={botData?.map((bot) => {
-                return {
-                  ...bot,
-                  name: (
-                    <>
-                      <input
-                        className=" py-2 pl-2 w-full outline-none  "
-                        type="text"
-                        value={`${bot.name}` || ""}
-                        onChange={(e) => handleChange(e, bot?.id)}
-                      />
-                    </>
-                  ),
-                };
-              })}
-              footer={() => (
-                <button className="w-full text-[#388aeb]" onClick={addBlankBot}>
-                  + Add new blank Bot
-                </button>
-              )}
-            /> */}
-
             <Table.Root variant="surface" size={"2"}>
               <Table.Header>
                 <Table.Row>
@@ -198,7 +176,10 @@ const ModifyBot: React.FC<ModalProps> = ({
                         </Tooltip.Provider>
                         <button
                           className="ml-3"
-                          onClick={() => deleteBot(bot.id)}
+                          onClick={() => {
+                            setIsDeleteModal(true);
+                            setSelectedBot(bot);
+                          }}
                         >
                           <Trash color="#E1654A" size={18} />
                         </button>
@@ -242,6 +223,20 @@ const ModifyBot: React.FC<ModalProps> = ({
           </Flex>
         </div>
       </Dialog.Content>
+      {isDeleteModal && (
+        <DeleteModal
+          onClick={() => {
+            if (selectedBot) {
+              deleteBot(selectedBot.id, botLists);
+              setIsDeleteModal(false);
+            }
+          }}
+          description={`Are you sure you want to delete the ${selectedBot?.name} Bot? This will also delete all associated Suites, Environments, and Tests. This action can not be undone.`}
+          isDeleteModal={isDeleteModal}
+          setIsDeleteModal={setIsDeleteModal}
+          title={`Delete ${selectedBot?.name} Bot`}
+        />
+      )}
     </Dialog.Root>
   );
 };

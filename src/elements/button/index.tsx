@@ -50,7 +50,7 @@ const CustomButton: React.FC<Props> = ({
       onClick={onClick}
       className={`flex items-center gap-2 min-w-[143px] ${
         isWidth && "w-full"
-      }   py-3 font-poppin`}
+      }   py-3 font-poppin cursor-pointer`}
       color={color}
       variant={variant}
     >

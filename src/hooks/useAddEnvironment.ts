@@ -16,22 +16,19 @@ const useAddEnvironment = () => {
   const { request } = useApi();
 
   const addEnvironment = useCallback(
-    async (
-      name: string,
-      botId: string,
-      environmentLists: EnvironmentType[]
-    ) => {
+    async (data: any, environmentLists: EnvironmentType[]) => {
       try {
-        const data = await request({
+        const { id, name, url } = await request({
           url: `/v1/environments`,
           method: "POST",
-          data: {
-            name,
-            url: "http://www.dev.example.com/my/chatbot",
-            bot_id: botId,
-          },
+          data,
+          // data: {
+          //   name,
+          //   url: "http://www.dev.example.com/my/chatbot",
+          //   bot_id: botId,
+          // },
         });
-        addEnvironmentRow(data, environmentLists);
+        addEnvironmentRow({ id, name, url }, environmentLists);
       } catch (error: any) {
         console.error({ error });
       }

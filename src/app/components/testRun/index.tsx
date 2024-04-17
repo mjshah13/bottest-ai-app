@@ -1,5 +1,5 @@
 "use client";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import { BottestReportProps } from "../../../utils/typesInterface";
 import Skeleton from "react-loading-skeleton";
@@ -8,6 +8,8 @@ import { Box, Grid } from "@radix-ui/themes";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import LoadingSpin from "react-loading-spin";
 import { Ban, Check, ChevronsRight, Shuffle, X } from "lucide-react";
+import TestResult from "../testResult";
+import CustomizeTest from "../customizeTest";
 
 const TestRun = ({
   isDisabled = false,
@@ -21,6 +23,9 @@ const TestRun = ({
   function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
     return <span style={{ marginRight: "0.5rem" }}>{children}</span>;
   }
+
+  const [isTestResultModal, setIsTestResultModal] = useState(false);
+  const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
 
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] rounded-lg">
@@ -109,14 +114,20 @@ const TestRun = ({
                   <h1 className="text-black font-normal font-poppin text-sm">
                     {status}
                   </h1>
-                  <button
+                  <h1
                     className={`text-[#909193] ${
                       text === "View full result" &&
                       "font-semibold text-black hover:underline "
                     }  font-poppin text-sm`}
                   >
-                    {text}
-                  </button>
+                    {text === "View full result" ? (
+                      <button onClick={() => setIsTestResultModal(true)}>
+                        {text}
+                      </button>
+                    ) : (
+                      text
+                    )}
+                  </h1>
                 </div>
               </div>
             )}
@@ -125,13 +136,16 @@ const TestRun = ({
         <Box>
           <div className="h-full flex items-center justify-center   ">
             <div className=" w-full flex justify-center gap-7">
-              <Tooltip.Provider>
+              {/* <Tooltip.Provider>
                 <Tooltip.Root>
-                  <Tooltip.Trigger asChild>
-                    <button className="outline-none border-none bg-transparent">
-                      <Cog6ToothIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />
-                    </button>
-                  </Tooltip.Trigger>
+                  <Tooltip.Trigger asChild> */}
+              <button className="outline-none border-none bg-transparent">
+                <Cog6ToothIcon
+                  className="h-9 w-9 text-black hover:text-[#388aeb]"
+                  onClick={() => setIsCustomizeTestModal(true)}
+                />
+              </button>
+              {/* </Tooltip.Trigger>
                   <Tooltip.Portal>
                     <Tooltip.Content className="TooltipContent" sideOffset={5}>
                       Setting
@@ -139,7 +153,7 @@ const TestRun = ({
                     </Tooltip.Content>
                   </Tooltip.Portal>
                 </Tooltip.Root>
-              </Tooltip.Provider>
+              </Tooltip.Provider> */}
 
               <Tooltip.Provider>
                 <Tooltip.Root>
@@ -160,6 +174,20 @@ const TestRun = ({
           </div>
         </Box>
       </Grid>
+      {isTestResultModal && (
+        <TestResult
+          title="Test results: My second test"
+          isTestResultModal={isTestResultModal}
+          setIsTestResultModal={setIsTestResultModal}
+        />
+      )}
+      {isCustomizeTestModal && (
+        <CustomizeTest
+          title="Customize test: My second test"
+          isCustomizeTestModal={isCustomizeTestModal}
+          setIsCustomizeTestModal={setIsCustomizeTestModal}
+        />
+      )}
     </div>
   );
 };

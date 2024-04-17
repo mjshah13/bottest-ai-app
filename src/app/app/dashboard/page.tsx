@@ -27,10 +27,12 @@ import ModifyEnvironment from "../../components/modifyEnvironment";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
+import DeleteModal from "../../components/deleteModal";
 
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [containerHeight, setContainerHeight] = useState(0);
   const [selectedSuite, setSelectedSuite] = useState<Option | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<Option | null>(
@@ -293,7 +295,11 @@ const Dashboard = (props: DashboardProps) => {
                       <h1 className="font-normal font-poppin text-md ">
                         You have no tests, create one below!
                       </h1>
-                      <CustomButton color="blue" variant="solid">
+                      <CustomButton
+                        color="blue"
+                        variant="solid"
+                        // onClick={() => setIsDeleteModal(true)}
+                      >
                         Create new test
                       </CustomButton>
                     </div>
@@ -431,6 +437,13 @@ const Dashboard = (props: DashboardProps) => {
           title={`Add / Modify Environments for ${selectedSuite?.name}`}
         />
       )}
+
+      {/* <DeleteModal
+        description={`Are you sure you want to delete the entity.This action can not be undone `}
+        title="Delete Modal"
+        isDeleteModal={isDeleteModal}
+        setIsDeleteModal={setIsDeleteModal}
+      /> */}
     </div>
   );
 };

@@ -1,9 +1,5 @@
 import { useState, useCallback, useContext } from "react";
-import {
-  EnvironmentModalType,
-  EnvironmentType,
-  GlobalStateType,
-} from "../utils/typesInterface";
+import { EnvironmentType, GlobalStateType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -19,13 +15,6 @@ const useEnvironment = (setSelectedEnvironment: any) => {
     GlobalStateContext
   ) as GlobalStateType;
 
-  // const [environmentModalData, setEnvironmentModalData] = useState<
-  //   EnvironmentModalType[]
-  // >([]);
-  // const [environmentLists, setEnvironmentLists] = useState<
-  //   EnvironmentType[] | null
-  // >(null);
-
   const [error, setError] = useState<Error | null>(null);
   const { user } = useUser();
   const { request } = useApi();
@@ -40,21 +29,11 @@ const useEnvironment = (setSelectedEnvironment: any) => {
           method: "GET",
         });
 
-        // const EnvironmentData: EnvironmentModalType[] = data.data.map(
-        //   (bot: EnvironmentModalType) => ({
-        //     id: bot.id,
-        //     name: bot.name,
-        //     url: bot.url,
-        //     // description: bot.description,
-        //   })
-        // );
-
-        // setEnvironmentModalData(EnvironmentData);
-
         const selectDataItems: EnvironmentType[] =
-          data?.data?.map(({ id, name }: EnvironmentType) => ({
+          data?.data?.map(({ id, name, url }: EnvironmentType) => ({
             id,
             name,
+            url,
           })) || [];
         setEnvironmentLists(selectDataItems);
         if (selectDataItems.length === 1) {
