@@ -30,6 +30,11 @@ export const GlobalStateProvider = ({
   const addBotRow = (addedBot: BotType, botList: BotType[]) => {
     setBotLists([...botList, addedBot]);
   };
+
+  const copyBot = (addedBot: BotType, botList: BotType[]) => {
+    setBotLists([...botList, addedBot]);
+  };
+
   const deleteBotRow = (deletedBot: string, botList: BotType[]) => {
     setBotLists(botList.filter((bot) => bot.id !== deletedBot));
   };
@@ -47,8 +52,6 @@ export const GlobalStateProvider = ({
   const deleteSuiteRow = (deletedSuite: string, suiteLists: SuiteType[]) => {
     setSuiteLists(suiteLists.filter((suite) => suite.id !== deletedSuite));
   };
-
-  //////////////////////////////////////////////
 
   const updateEnvironmentRow = (
     updatedEnvironment: EnvironmentType,
@@ -133,6 +136,7 @@ export const GlobalStateProvider = ({
     updateEnvironmentRow,
     addEnvironmentRow,
     deleteEnvironmentRow,
+    copyBot,
   };
 
   return (

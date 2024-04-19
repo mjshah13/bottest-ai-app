@@ -4,6 +4,7 @@ import { Button, Select } from "@radix-ui/themes";
 import * as React from "react";
 import { Option } from "../../utils/typesInterface";
 import { Settings } from "lucide-react";
+import CustomButton from "../button";
 
 interface CustomSelectProps {
   onSelectChange?: (selectedOption: Option) => void;
@@ -28,9 +29,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 }) => {
   return (
     <div className="flex flex-col justify-start gap-1">
-      <label className="font-poppin text-sm text-black">
-        {Label}
-      </label>
+      <label className="font-poppin text-sm text-black">{Label}</label>
       <Select.Root
         key={selectedValue?.id}
         disabled={disabled}
@@ -52,9 +51,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
             <Select.Item
               className={`
               font-poppin
-                ${option.id === selectedValue?.id
-                  ? "bg-primary text-black font-semibold"
-                  : "bg-white text-black px-1.5 "
+                ${
+                  option.id === selectedValue?.id
+                    ? "bg-primary text-black font-semibold"
+                    : "bg-white text-black px-1.5 "
                 } mb-1.5 hover:bg-primary hover:text-black`}
               key={option.id}
               value={option.id || ""}
@@ -62,15 +62,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
               {option.name}
             </Select.Item>
           ))}
-          <Button
+          <CustomButton
+            isWidth={true}
             color="gray"
             variant="surface"
-            className="w-full font-poppin"
+            // className="w-full text-black font-poppin"
             onClick={onClick}
           >
             <Settings size={17} />
             {Btntext}
-          </Button>
+          </CustomButton>
         </Select.Content>
       </Select.Root>
     </div>

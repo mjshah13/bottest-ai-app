@@ -10,6 +10,7 @@ import LoadingSpin from "react-loading-spin";
 import { Ban, Check, ChevronsRight, Shuffle, X } from "lucide-react";
 import TestResult from "../testResult";
 import CustomizeTest from "../customizeTest";
+import useTests from "../../../hooks/useTests";
 
 const TestRun = ({
   isDisabled = false,
@@ -17,12 +18,16 @@ const TestRun = ({
   lastTestRuns,
   status,
   loading,
+  specificTest,
 }: BottestReportProps) => {
   const { backgroundColor, text, icon } = getBackgroundColorClass(status);
 
   function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
     return <span style={{ marginRight: "0.5rem" }}>{children}</span>;
   }
+
+  // console.log(lastTestRuns, "hhh");
+  // console.log(specificTest, "hhhh");
 
   const [isTestResultModal, setIsTestResultModal] = useState(false);
   const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
@@ -143,6 +148,7 @@ const TestRun = ({
                 <Cog6ToothIcon
                   className="h-9 w-9 text-black hover:text-[#388aeb]"
                   onClick={() => setIsCustomizeTestModal(true)}
+                  // onClick={onClick}
                 />
               </button>
               {/* </Tooltip.Trigger>
@@ -176,6 +182,7 @@ const TestRun = ({
       </Grid>
       {isTestResultModal && (
         <TestResult
+          specificTestId={specificTest?.id}
           title="Test results: My second test"
           isTestResultModal={isTestResultModal}
           setIsTestResultModal={setIsTestResultModal}
@@ -186,6 +193,7 @@ const TestRun = ({
           title="Customize test: My second test"
           isCustomizeTestModal={isCustomizeTestModal}
           setIsCustomizeTestModal={setIsCustomizeTestModal}
+          specificTest={specificTest}
         />
       )}
     </div>

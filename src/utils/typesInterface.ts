@@ -37,6 +37,7 @@ export interface BottestReportProps {
   lastTestRuns?: TestType[];
   status: string;
   loading?: boolean;
+  specificTest: TestType;
 }
 
 export interface BotType {
@@ -64,6 +65,7 @@ export interface EnvironmentType {
   isEdit?: boolean;
   isNew?: boolean;
 }
+
 export interface TestType {
   [x: string]: any;
   created_at: string;
@@ -105,4 +107,5 @@ export interface GlobalStateType {
   updateEnvironmentRow: any;
   addEnvironmentRow: any;
   deleteEnvironmentRow: any;
+  copyBot: any;
 }

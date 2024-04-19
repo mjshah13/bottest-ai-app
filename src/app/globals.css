@@ -17,6 +17,13 @@
   font-family: "Poppins";
 } */
 
+/* .AccordionChevron {
+  transition: transform 300ms;
+}
+.AccordionTrigger[data-state="open"] > .AccordionChevron {
+  transform: rotate(180deg);
+} */
+
 .rt-TableRoot:where(.rt-variant-surface)
   :where(.rt-TableRootTable)
   :where(.rt-TableHeader) {

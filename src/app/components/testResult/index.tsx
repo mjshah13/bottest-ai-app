@@ -1,5 +1,5 @@
 import { Box, Dialog, Flex, Grid } from "@radix-ui/themes";
-import React, { useState } from "react";
+import { Ban, ChevronsRight, X } from "lucide-react";
 import CustomButton from "../../../elements/button";
 import {
   ChevronUp,
@@ -10,51 +10,87 @@ import {
   Shuffle,
   Check,
   UserCog,
+  ChevronDown,
 } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 import SaveBaselineModal from "../saveBaselineModal";
+import * as Accordion from "@radix-ui/react-accordion";
+import classNames from "classnames";
+import React, { useEffect, useState } from "react";
+import { useApi } from "../../../hooks/useApi";
 
 interface ModalProps {
   title?: string;
   isTestResultModal?: boolean;
   setIsTestResultModal: (isTestResultModal: boolean) => void;
+  specificTestId?: string;
 }
+
+interface AccordionTriggerProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const AccordionTrigger = React.forwardRef<
+  HTMLButtonElement,
+  AccordionTriggerProps
+>(({ children, className, ...props }, forwardedRef) => (
+  <Accordion.Header className="flex">
+    <Accordion.Trigger
+      className={classNames(
+        " group flex h-[45px] flex-1 cursor-default items-center justify-between  px-5 text-[15px] leading-none  outline-none",
+        className
+      )}
+      {...props}
+      ref={forwardedRef}
+    >
+      {children}
+      <ChevronDown
+        size={17}
+        className="text-black  ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
+        aria-hidden
+      />
+    </Accordion.Trigger>
+  </Accordion.Header>
+));
 
 const TestResult: React.FC<ModalProps> = ({
   title,
   isTestResultModal,
   setIsTestResultModal,
+  specificTestId,
 }: ModalProps) => {
+  // console.log(specificTestId, "hhh");
+
+  const { request } = useApi();
+
+  const fetchTestRuns = async (test_Id: string) => {
+    try {
+      const data = await request({
+        url: `/v1/test_runs/${test_Id}`,
+        method: "GET",
+      });
+
+      console.log(data?.data);
+    } catch (error: any) {
+      console.error({ error });
+    }
+  };
+
+  useEffect(() => {
+    if (!specificTestId) return;
+    fetchTestRuns("trn_zbqJjMfE7sBIxBOKvuydKeY9L32rU" as string);
+  }, [specificTestId]);
+
   const data = [
-    { id: 1, title: "ha", name: "harim" },
-    { id: 2, title: "ma", name: "maaz" },
-    { id: 3, title: "az", name: "azeem" },
+    { id: 1, title: " Variant A", name: "Iteration 1", status: "Running" },
+    { id: 2, title: " Variant B", name: "Iteration 2", status: "Pass" },
+    { id: 3, title: " Variant C", name: "Iteration 3", status: "Fail" },
+    { id: 4, title: " Variant D", name: "Iteration 4", status: "Mixed" },
+    { id: 5, title: " Variant E", name: "Iteration 5", status: "Stopped" },
   ];
 
   const [isOpenSaveBaselineModal, setisOpenSaveBaselineModal] = useState(false);
-
-  // const [activeDisclosurePanelIndex, setActiveDisclosurePanelIndex] =
-  //   useState(null);
-
-  // const togglePanels = (index: any) => {
-  //   console.log(index);
-  //   const disclosureButtons =
-  //     document.getElementsByClassName("disclosure-button");
-
-  //   for (let i = 0; i < disclosureButtons.length; i++) {
-  //     const disclosureButton: any = disclosureButtons.item(i);
-
-  //     disclosureButton.setAttribute("aria-expanded", "false"); // Assuming ARIA attribute is used
-  //     // Alternatively, modify CSS classes as needed for visual representation
-
-  //     // Set expanded state to true only for the clicked button
-  //     if (i === index) {
-  //       disclosureButton.setAttribute("aria-expanded", "true");
-  //       // Alternatively, modify CSS classes as needed
-  //     }
-  //   }
-
-  // };
 
   return (
     <Dialog.Root open={isTestResultModal} onOpenChange={setIsTestResultModal}>
@@ -74,49 +110,37 @@ const TestResult: React.FC<ModalProps> = ({
                 </p>
               </div>
 
-              <div>
-                {/* {data.map((item, index) => ( */}
-                <Disclosure key={title}>
-                  {({ open, close }) => (
-                    <>
-                      <Disclosure.Button
-                        // onClick={() => togglePanels(index)}
-                        className={`disclosure-button flex items-center justify-between w-full  px-6 py-2  text-sm `}
-                      >
-                        <div className="gap-3 flex items-center">
-                          <Shuffle color="#E7C200" size={15} />
-                          <p
-                            className={`text-lg font-normal
-                             
-                             `}
-                          >
-                            Variant A
-                          </p>
-                        </div>
+              <div className="mt-2">
+                <Accordion.Root
+                  className="w-full rounded-md "
+                  type="single"
+                  collapsible
+                >
+                  {data?.map((item, index) => {
+                    const { icon } = statusHandleClass(item.status);
 
-                        <ChevronUp
-                          className={`${open ? "rotate-180 transform" : ""} 
-                            
-                              h-6 w-6 text-neutral`}
-                        />
-                      </Disclosure.Button>
-
-                      <Disclosure.Panel className="mt-0  text-sm">
-                        <div className="bg-[#F1f0ef] py-[1px]">
-                          {Array(4)
-                            ?.fill(4)
-                            ?.map((item) => (
-                              <div className="px-6 py-2.5 flex gap-3 mx-3 my-2   hover:bg-primary">
-                                <Check color="#54CA6E" size={19} />
-                                <h3>Iteration 1</h3>
-                              </div>
-                            ))}
-                        </div>
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
-                {/* ))} */}
+                    return (
+                      <Accordion.AccordionItem value={`${item.id}`}>
+                        <AccordionTrigger className="w-full px-4">
+                          <div className="flex justify-between">
+                            <div className="gap-3 flex items-center">
+                              {icon}
+                              <p className={`text-md font-normal`}>
+                                {item.title}
+                              </p>
+                            </div>
+                          </div>
+                        </AccordionTrigger>
+                        <Accordion.AccordionContent className="px-4 bg-[#f4f4f2] py-[0.2px]">
+                          <div className="px-2 py-2.5 flex items-center gap-3 rounded-lg  my-2 hover:bg-primary">
+                            <Check color="#54CA6E" size={19} />
+                            <h3>{item.name}</h3>
+                          </div>
+                        </Accordion.AccordionContent>
+                      </Accordion.AccordionItem>
+                    );
+                  })}
+                </Accordion.Root>
               </div>
             </div>
           </Box>
@@ -294,3 +318,66 @@ const TestResult: React.FC<ModalProps> = ({
 };
 
 export default TestResult;
+
+const statusHandleClass = (status: string) => {
+  switch (status) {
+    case "Running":
+      return {
+        backgroundColor: "bg-primary",
+        text: "Test in progress",
+        icon: <Shuffle color="#388aeb" size={15} />,
+      };
+    case "Pass":
+      return {
+        backgroundColor: "bg-successLight",
+        text: "View full result",
+        icon: <Check color="#54CA6E" size={15} />,
+      };
+    case "Fail":
+      return {
+        backgroundColor: "bg-dangerLight",
+        text: "View full result",
+        icon: <X color="#E1654A" size={15} />,
+      };
+    case "Error":
+      return {
+        backgroundColor: "bg-dangerLight",
+        text: "View error",
+        icon: (
+          <svg
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="24" height="24" rx="12" fill="#E1654A" />
+            <path
+              d="M12.975 6.185L12.754 14.43H11.139L10.918 6.185H12.975ZM12.006 18.119C11.6547 18.119 11.36 18 11.122 17.762C10.884 17.524 10.765 17.2293 10.765 16.878C10.765 16.5267 10.884 16.232 11.122 15.994C11.36 15.756 11.6547 15.637 12.006 15.637C12.346 15.637 12.635 15.756 12.873 15.994C13.111 16.232 13.23 16.5267 13.23 16.878C13.23 17.2293 13.111 17.524 12.873 17.762C12.635 18 12.346 18.119 12.006 18.119Z"
+              fill="white"
+            />
+          </svg>
+        ),
+      };
+    case "Mixed":
+      return {
+        backgroundColor: "bg-warningLight",
+        text: "View full result",
+        icon: <Shuffle color="#E7C200" size={15} />,
+      };
+    case "Skipped":
+      return {
+        backgroundColor: "bg-[#f2f2f2]",
+        text: "No result",
+        icon: <Ban color="#212427" size={15} />,
+      };
+    case "Stopped":
+      return {
+        backgroundColor: "bg-[#f2f2f2]",
+        text: "No result",
+        icon: <ChevronsRight color="#212427" size={15} />,
+      };
+    default:
+      return { backgroundColor: "", text: "" };
+  }
+};

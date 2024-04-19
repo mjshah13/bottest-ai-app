@@ -24,7 +24,7 @@ import { Box, Grid } from "@radix-ui/themes";
 import ModifyBot from "../../components/modifyBot";
 import ModifySuite from "../../components/modifySuite";
 import ModifyEnvironment from "../../components/modifyEnvironment";
-import { useOrganization, useUser } from "@clerk/nextjs";
+import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
 import DeleteModal from "../../components/deleteModal";
@@ -33,6 +33,7 @@ interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
+  // const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
   const [containerHeight, setContainerHeight] = useState(0);
   const [selectedSuite, setSelectedSuite] = useState<Option | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<Option | null>(
@@ -47,6 +48,8 @@ const Dashboard = (props: DashboardProps) => {
   const [filters, setFilters] = useState({
     tab: "View all",
   });
+
+  const { orgRole } = useAuth();
   const { organization } = useOrganization();
   const { user } = useUser();
   const { botLists, suiteLists, environmentLists } = useContext(
@@ -298,6 +301,9 @@ const Dashboard = (props: DashboardProps) => {
                       <CustomButton
                         color="blue"
                         variant="solid"
+                        disabled={
+                          organization !== null && orgRole === "org:viewer"
+                        }
                         // onClick={() => setIsDeleteModal(true)}
                       >
                         Create new test
@@ -316,13 +322,21 @@ const Dashboard = (props: DashboardProps) => {
                               </h1>
                             </div>
                             <div className="gap-4 flex ">
-                              <CustomButton variant="outline" color="gray">
+                              <CustomButton
+                                variant="outline"
+                                color="gray"
+                                disabled={
+                                  organization !== null &&
+                                  orgRole === "org:viewer"
+                                }
+                              >
                                 Create new test
                               </CustomButton>
                               <CustomButton
                                 color="blue"
                                 variant="solid"
                                 svgIcon={<RefreshCw size={17} />}
+                                isPrimary
                               >
                                 Run all tests
                               </CustomButton>
@@ -390,17 +404,20 @@ const Dashboard = (props: DashboardProps) => {
                           }}
                         >
                           {filteredData &&
-                            filteredData?.map((item: TestType) => (
-                              <div className="mb-5" key={item?.title}>
-                                <TestRun
-                                  isDisabled={!item?.full_run_enabled}
-                                  title={item?.name}
-                                  lastTestRuns={item?.recent_test_runs}
-                                  status={item?.status}
-                                  loading={isLoading}
-                                />
-                              </div>
-                            ))}
+                            filteredData?.map(
+                              ({ recent_test_runs, ...item }: TestType) => (
+                                <div className="mb-5" key={item?.title}>
+                                  <TestRun
+                                    specificTest={item}
+                                    isDisabled={!item?.full_run_enabled}
+                                    title={item?.name}
+                                    lastTestRuns={recent_test_runs}
+                                    status={item?.status}
+                                    loading={isLoading}
+                                  />
+                                </div>
+                              )
+                            )}
                         </div>
                       </>
                     )}
@@ -437,6 +454,14 @@ const Dashboard = (props: DashboardProps) => {
           title={`Add / Modify Environments for ${selectedSuite?.name}`}
         />
       )}
+
+      {/* {isCustomizeTestModal && (
+        <CustomizeTest
+          title="Customize test: My second test"
+          isCustomizeTestModal={isCustomizeTestModal}
+          setIsCustomizeTestModal={setIsCustomizeTestModal}
+        />
+      )} */}
 
       {/* <DeleteModal
         description={`Are you sure you want to delete the entity.This action can not be undone `}

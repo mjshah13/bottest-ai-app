@@ -14,6 +14,7 @@ import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
 import useDeleteEnvironment from "../../../hooks/useDeleteEnvironment";
 import DeleteModal from "../deleteModal";
+import { useAuth, useOrganization } from "@clerk/nextjs";
 
 interface ModalProps {
   title?: string;
@@ -35,6 +36,8 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   const { addEnvironment } = useAddEnvironment();
   const { updateEnvironment } = useUpdateEnvironment();
   const { deleteEnvironment } = useDeleteEnvironment();
+  const { orgRole } = useAuth();
+  const { organization } = useOrganization();
 
   const [environmentData, setEnvironmentData] = useState<EnvironmentType[]>([]);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -195,6 +198,9 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                           name="name"
                           value={`${environment.name}` || ""}
                           onChange={(e) => handleChange(e, environment?.id)}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
                         />
                       </Table.Cell>
                       <Table.Cell className="border-r border-[#d2cdcd]">
@@ -206,17 +212,23 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                             name="url"
                             value={`${environment.url}` || ""}
                             onChange={(e) => handleChange(e, environment?.id)}
+                            disabled={
+                              organization !== null && orgRole === "org:viewer"
+                            }
                           />
                         </div>
                       </Table.Cell>
                       <Table.Cell>
                         <div className="flex items-center justify-center gap-1.2 h-full">
                           <button
-                            className=""
+                            className="outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
                             onClick={() => {
                               setIsDeleteModal(true);
                               setSelectedEnvironemnt(environment);
                             }}
+                            disabled={
+                              organization !== null && orgRole === "org:viewer"
+                            }
                           >
                             <Trash color="#E1654A" size={18} />
                           </button>
@@ -228,8 +240,10 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                   <Table.Row>
                     <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
                       <button
-                        style={{ fontFamily: "poppins" }}
-                        className="w-full py-1.5 flex items-center justify-center text-[#388aeb] "
+                        className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
+                        disabled={
+                          organization !== null && orgRole === "org:viewer"
+                        }
                         onClick={addBlankEnvironment}
                       >
                         + Add new blank Environment
@@ -288,7 +302,13 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
               </CustomButton>
             </Dialog.Close>
             <Dialog.Close>
-              <CustomButton onClick={handleSave} color="blue" variant="solid">
+              <CustomButton
+                onClick={handleSave}
+                color="blue"
+                variant="solid"
+                disabled={organization !== null && orgRole === "org:viewer"}
+                isPrimary
+              >
                 Save changes
               </CustomButton>
             </Dialog.Close>

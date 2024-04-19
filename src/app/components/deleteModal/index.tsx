@@ -38,7 +38,12 @@ const DeleteModal: React.FC<ModalProps> = ({
               </CustomButton>
             </Dialog.Close>
             <Dialog.Close>
-              <CustomButton onClick={onClick} color="red" variant="outline">
+              <CustomButton
+                onClick={onClick}
+                variant="outline"
+                color="red"
+                isDanger
+              >
                 Yes,delete
               </CustomButton>
             </Dialog.Close>

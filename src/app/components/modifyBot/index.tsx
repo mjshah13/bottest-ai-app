@@ -16,6 +16,8 @@ import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
 import useDeleteBot from "../../../hooks/useDeleteBot";
 import DeleteModal from "../deleteModal";
+import { useAuth, useOrganization } from "@clerk/nextjs";
+import useDuplicateBot from "../../../hooks/useDuplicateBot";
 
 interface ModalProps {
   title?: string;
@@ -31,13 +33,14 @@ const ModifyBot: React.FC<ModalProps> = ({
   setIsBotsModalOpen,
 }: ModalProps) => {
   const { botLists } = useContext(GlobalStateContext) as GlobalStateType;
-
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [selectedBot, setSelectedBot] = useState<BotType | null>(null);
-
+  const { orgRole } = useAuth();
+  const { organization } = useOrganization();
   const { addBot } = useAddBot();
   const { deleteBot } = useDeleteBot();
   const { updateBot } = useUpdateBot();
+  const { duplicateBot } = useDuplicateBot();
   const [botData, setBotData] = useState<BotType[]>([]);
 
   useEffect(() => {
@@ -81,18 +84,6 @@ const ModifyBot: React.FC<ModalProps> = ({
     };
     setBotData([...botData, newBot]);
   };
-
-  // const deleteBot = async (botId: string) => {
-  //   try {
-  //     const data = await request({
-  //       url: `/v1/bots/${botId}`,
-  //       method: "DELETE",
-  //     });
-  //     deleteBotRow(botId, botLists);
-  //   } catch (error: any) {
-  //     console.error({ error });
-  //   }
-  // };
 
   const handleSave = () => {
     const filteredUpdateBot = botData?.filter((bot) => bot?.isEdit);
@@ -149,6 +140,9 @@ const ModifyBot: React.FC<ModalProps> = ({
                         type="text"
                         value={`${bot.name}` || ""}
                         onChange={(e) => handleChange(e, bot?.id)}
+                        disabled={
+                          organization !== null && orgRole === "org:viewer"
+                        }
                       />
                     </Table.Cell>
                     <Table.Cell className="border-r border-[#d2cdcd]">
@@ -156,13 +150,19 @@ const ModifyBot: React.FC<ModalProps> = ({
                     </Table.Cell>
                     <Table.Cell>
                       <div className="flex items-center justify-center gap-1.2 h-full">
-                        <Tooltip.Provider>
+                        {/* <Tooltip.Provider>
                           <Tooltip.Root>
-                            <Tooltip.Trigger asChild>
-                              <button className="outline-none border-none bg-transparent hover:text-[#388aeb]">
-                                <CopyPlus size={18} />
-                              </button>
-                            </Tooltip.Trigger>
+                            <Tooltip.Trigger asChild> */}
+                        <button
+                          onClick={() => duplicateBot(bot?.id, botLists)}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
+                          className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd]"
+                        >
+                          <CopyPlus size={18} />
+                        </button>
+                        {/* </Tooltip.Trigger>
                             <Tooltip.Portal>
                               <Tooltip.Content
                                 className="TooltipContent"
@@ -173,13 +173,16 @@ const ModifyBot: React.FC<ModalProps> = ({
                               </Tooltip.Content>
                             </Tooltip.Portal>
                           </Tooltip.Root>
-                        </Tooltip.Provider>
+                        </Tooltip.Provider> */}
                         <button
-                          className="ml-3"
+                          className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
                           onClick={() => {
                             setIsDeleteModal(true);
                             setSelectedBot(bot);
                           }}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
                         >
                           <Trash color="#E1654A" size={18} />
                         </button>
@@ -191,9 +194,11 @@ const ModifyBot: React.FC<ModalProps> = ({
                 <Table.Row>
                   <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
                     <button
-                      style={{ fontFamily: "poppins" }}
-                      className="w-full py-1.5 flex items-center justify-center text-[#388aeb] "
+                      className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
                       onClick={addBlankBot}
+                      disabled={
+                        organization !== null && orgRole === "org:viewer"
+                      }
                     >
                       + Add new blank Bot
                     </button>
@@ -216,7 +221,13 @@ const ModifyBot: React.FC<ModalProps> = ({
               </CustomButton>
             </Dialog.Close>
             <Dialog.Close>
-              <CustomButton onClick={handleSave} color="blue" variant="solid">
+              <CustomButton
+                onClick={handleSave}
+                color="blue"
+                variant="solid"
+                disabled={organization !== null && orgRole === "org:viewer"}
+                isPrimary
+              >
                 Save changes
               </CustomButton>
             </Dialog.Close>
@@ -231,7 +242,7 @@ const ModifyBot: React.FC<ModalProps> = ({
               setIsDeleteModal(false);
             }
           }}
-          description={`Are you sure you want to delete the ${selectedBot?.name} Bot? This will also delete all associated Suites, Environments, and Tests. This action can not be undone.`}
+          description={`Are you sure you want to delete the ${selectedBot?.name} Bot? This will also delete all associated Suites, Environments, and Tests.This action can not be undone.`}
           isDeleteModal={isDeleteModal}
           setIsDeleteModal={setIsDeleteModal}
           title={`Delete ${selectedBot?.name} Bot`}

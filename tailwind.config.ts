@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const { mauve, violet } = require("@radix-ui/colors");
 
 const config: Config = {
   important: true,
@@ -34,6 +35,24 @@ const config: Config = {
     extend: {
       minHeight: {
         "80": "80%", // Adds a `min-h-80` class with a min-height of 60%
+      },
+      colors: {
+        ...mauve,
+        ...violet,
+      },
+      keyframes: {
+        slideDown: {
+          from: { height: "0px" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        slideUp: {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0px" },
+        },
+      },
+      animation: {
+        slideDown: "slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)",
+        slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
       },
     },
   },

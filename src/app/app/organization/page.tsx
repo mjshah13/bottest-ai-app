@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomizeTest from "../../components/customizeTest";
 import TestResult from "../../components/testResult";
+import { useAuth, useOrganization, useSession } from "@clerk/nextjs";
 
 const Organization = () => {
+  const { orgRole } = useAuth();
+
+  console.log(orgRole);
   // const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
   // const [isTestResultModal, setIsTestResultModal] = useState(false);
 

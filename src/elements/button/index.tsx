@@ -7,6 +7,9 @@ interface Props {
   children?: React.ReactNode;
   svgIcon?: React.ReactNode;
   isWidth?: boolean;
+  disabled?: boolean | undefined;
+  isPrimary?: boolean;
+  isDanger?: boolean;
   color?:
     | "gray"
     | "gold"
@@ -44,15 +47,20 @@ const CustomButton: React.FC<Props> = ({
   color,
   onClick,
   isWidth = false,
+  disabled = false,
+  isPrimary,
+  isDanger,
 }) => {
   return (
     <Button
       onClick={onClick}
-      className={`flex items-center gap-2 min-w-[143px] ${
-        isWidth && "w-full"
-      }   py-3 font-poppin cursor-pointer`}
+      className={` ${isWidth && "w-full"} ${isPrimary && "text-white"} ${
+        isDanger && "text-danger"
+      } 
+      text-black py-4 font-poppin cursor-pointer flex items-center gap-2 min-w-[143px] rounded-md`}
       color={color}
       variant={variant}
+      disabled={disabled}
     >
       {svgIcon && <>{svgIcon}</>}
       {children}
