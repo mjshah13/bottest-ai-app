@@ -18,6 +18,7 @@ import useDeleteBot from "../../../hooks/useDeleteBot";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import useDuplicateBot from "../../../hooks/useDuplicateBot";
+import NoData from "../noData";
 
 interface ModalProps {
   title?: string;
@@ -40,7 +41,7 @@ const ModifyBot: React.FC<ModalProps> = ({
   const { addBot } = useAddBot();
   const { deleteBot } = useDeleteBot();
   const { updateBot } = useUpdateBot();
-  const { duplicateBot } = useDuplicateBot();
+  const { duplicateBot, isLoading: loading } = useDuplicateBot();
   const [botData, setBotData] = useState<BotType[]>([]);
 
   useEffect(() => {
@@ -151,29 +152,31 @@ const ModifyBot: React.FC<ModalProps> = ({
                     <Table.Cell>
                       <div className="flex items-center justify-center gap-1.2 h-full">
                         {/* <Tooltip.Provider>
-                          <Tooltip.Root>
-                            <Tooltip.Trigger asChild> */}
+                         <Tooltip.Root>
+                           <Tooltip.Trigger asChild> */}
                         <button
                           onClick={() => duplicateBot(bot?.id, botLists)}
                           disabled={
-                            organization !== null && orgRole === "org:viewer"
+                            (organization !== null &&
+                              orgRole === "org:viewer") ||
+                            loading
                           }
                           className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd]"
                         >
                           <CopyPlus size={18} />
                         </button>
                         {/* </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                              <Tooltip.Content
-                                className="TooltipContent"
-                                sideOffset={5}
-                              >
-                                Create a copy of bots and existing tests.
-                                <Tooltip.Arrow className="TooltipArrow" />
-                              </Tooltip.Content>
-                            </Tooltip.Portal>
-                          </Tooltip.Root>
-                        </Tooltip.Provider> */}
+                           <Tooltip.Portal>
+                             <Tooltip.Content
+                               className="TooltipContent"
+                               sideOffset={5}
+                             >
+                               Create a copy of bots and existing tests.
+                               <Tooltip.Arrow className="TooltipArrow" />
+                             </Tooltip.Content>
+                           </Tooltip.Portal>
+                         </Tooltip.Root>
+                       </Tooltip.Provider> */}
                         <button
                           className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
                           onClick={() => {

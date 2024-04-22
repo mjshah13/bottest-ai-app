@@ -53,6 +53,10 @@ export const GlobalStateProvider = ({
     setSuiteLists(suiteLists.filter((suite) => suite.id !== deletedSuite));
   };
 
+  const copySuite = (addedSuite: SuiteType, suiteLists: SuiteType[]) => {
+    setSuiteLists([...suiteLists, addedSuite]);
+  };
+
   const updateEnvironmentRow = (
     updatedEnvironment: EnvironmentType,
     environmentLists: EnvironmentType[]
@@ -137,6 +141,7 @@ export const GlobalStateProvider = ({
     addEnvironmentRow,
     deleteEnvironmentRow,
     copyBot,
+    copySuite,
   };
 
   return (

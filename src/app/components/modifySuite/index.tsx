@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 import useDeleteSuite from "../../../hooks/useDeleteSuite";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import useDuplicateSuite from "../../../hooks/useDuplicateSuite";
 
 interface ModalProps {
   title?: string;
@@ -37,6 +38,7 @@ const ModifySuite: React.FC<ModalProps> = ({
   const [selectedSuite, setSelectedSuite] = useState<SuiteType | null>(null);
   const { addSuite } = useAddSuite();
   const { deleteSuite } = useDeleteSuite();
+  const { duplicateSuite, isLoading: loading } = useDuplicateSuite();
   const [suiteData, setSuiteData] = useState<SuiteType[]>([]);
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
@@ -204,12 +206,11 @@ const ModifySuite: React.FC<ModalProps> = ({
                     </Table.Cell>
                     <Table.Cell>
                       <div className="flex items-center justify-center gap-1.2 h-full">
-                        {/* <Tooltip.Provider>
-                          <Tooltip.Root>
-                            <Tooltip.Trigger asChild> */}
                         <button
+                          // onClick={() => duplicateSuite(suite?.id, suiteLists)}
                           disabled={
                             organization !== null && orgRole === "org:viewer"
+                            // loading
                           }
                           className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd]"
                         >

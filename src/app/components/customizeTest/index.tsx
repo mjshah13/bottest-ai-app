@@ -1,11 +1,12 @@
 import { Checkbox, Dialog, Flex } from "@radix-ui/themes";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
-
 import Chip from "../../../elements/chip";
 import { Trash } from "lucide-react";
 import { TestType } from "../../../utils/typesInterface";
-import { useApi } from "../../../hooks/useApi";
+import useBaseline from "../../../hooks/useBaseline";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 interface ModalProps {
   title?: string;
@@ -34,6 +35,12 @@ const CustomizeTest: React.FC<ModalProps> = ({
     isNumberOfIterationInputDisabled,
     setIsNumberOfIterationInputDisabled,
   ] = useState(true);
+
+  // const [isLoading, setIsLoading] = useState(false);
+
+  // console.log(isLoading);
+
+  const { fetchBaseline, baselines, isLoading } = useBaseline();
 
   const TabBtn = ["Suite’s default", "Custom"]; // Array for button labels
 
@@ -85,57 +92,23 @@ const CustomizeTest: React.FC<ModalProps> = ({
     }));
   };
 
-  const { request } = useApi();
-
-  interface Conversation {
-    id?: string;
-    created_at?: string;
-    created_by?: string;
-    html_blob?: string;
-    last_updated_at?: string;
-    last_updated_by?: string;
-  }
-
-  interface BaselineState {
-    conversation_json?: Conversation[];
-    name?: string;
-  }
-
   const downloadJson = (jsonData: any, fileName: string) => {
-    // Convert JSON data to string
     const jsonString = JSON.stringify(jsonData);
 
-    // Create a blob with the JSON string
     const blob = new Blob([jsonString], { type: "application/json" });
 
-    // Create an anchor element and dispatch a download event
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `${fileName}.json`;
 
-    // Append anchor to body, trigger click, and then remove from the body
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   };
 
-  const [baselines, setBaselines] = useState<BaselineState[]>([]);
-
-  const fetchBaseline = async (test_Id: string) => {
-    try {
-      const data = await request({
-        url: `/v1/tests/${test_Id}/baselines`,
-        method: "GET",
-      });
-
-      setBaselines(data?.data);
-    } catch (error: any) {
-      console.error({ error });
-    }
-  };
-
   useEffect(() => {
     fetchBaseline(specificTest?.id as string);
+    // setIsLoading(true);
   }, [specificTest]);
 
   useEffect(() => {
@@ -184,23 +157,29 @@ const CustomizeTest: React.FC<ModalProps> = ({
               ))}
             </div>
             <div>
-              <textarea
-                onChange={(e) => handleChange(e)}
-                name="success_criteria"
-                value={customizeTestData?.success_criteria}
-                disabled={isSuccessCriteriaTextDisabled} // Directly control textarea disability with state
-                className={`${
-                  isSuccessCriteriaTextDisabled && "text-[#909193]"
-                } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
-                placeholder="Enter your custom success criteria here..."
-              />
+              {isLoading ? (
+                <div className="mt-1">
+                  <Skeleton count={1} width={"100%"} height={80} />
+                </div>
+              ) : (
+                <textarea
+                  onChange={(e) => handleChange(e)}
+                  name="success_criteria"
+                  value={customizeTestData?.success_criteria}
+                  disabled={isSuccessCriteriaTextDisabled} // Directly control textarea disability with state
+                  className={`${
+                    isSuccessCriteriaTextDisabled && "text-[#909193]"
+                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
+                  placeholder="Enter your custom success criteria here..."
+                />
+              )}
+
               <p className="text-[#909193] font-medium ">
                 The default success criteria can be changed on a test suite
                 level in the test suite settings.
               </p>
             </div>
 
-            {/*  */}
             <div className="flex mt-6 gap-7 ">
               <div className=" w-full ">
                 <h1 className="mb-2">Number of variants</h1>
@@ -209,32 +188,39 @@ const CustomizeTest: React.FC<ModalProps> = ({
                     <button
                       key={index}
                       className={`
-            ${
-              numberOfVariantsTab === index
-                ? "bg-[#388aeb] text-white"
-                : "bg-gray-300 text-gray-800"
-            }
-            w-full flex items-center justify-center rounded ${
-              index === 0 ? "rounded-l" : ""
-            } ${index === title.length - 1 ? "rounded-r" : ""}
-          `}
+                ${
+                  numberOfVariantsTab === index
+                    ? "bg-[#388aeb] text-white"
+                    : "bg-gray-300 text-gray-800"
+                }
+             w-full flex items-center justify-center rounded ${
+               index === 0 ? "rounded-l" : ""
+             } ${index === title.length - 1 ? "rounded-r" : ""}
+           `}
                       onClick={() => handleNumberOfVariantsClick(index)}
                     >
                       {title}
                     </button>
                   ))}
                 </div>
+
                 <div>
-                  <input
-                    onChange={(e) => handleChange(e)}
-                    name="variant_count"
-                    value={customizeTestData?.variant_count}
-                    disabled={isNumberOfVariantsInputDisabled} // Directly control textarea disability with state
-                    className={`${
-                      isNumberOfVariantsInputDisabled && "text-[#909193]"
-                    } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
-                    placeholder="Enter your custom success criteria here..."
-                  />
+                  {isLoading ? (
+                    <div className="mt-1">
+                      <Skeleton count={1} width={"100%"} height={40} />
+                    </div>
+                  ) : (
+                    <input
+                      onChange={(e) => handleChange(e)}
+                      name="variant_count"
+                      value={customizeTestData?.variant_count}
+                      disabled={isNumberOfVariantsInputDisabled} // Directly control textarea disability with state
+                      className={`${
+                        isNumberOfVariantsInputDisabled && "text-[#909193]"
+                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
+                      placeholder="Enter your custom success criteria here..."
+                    />
+                  )}
                 </div>
               </div>
               <div className="w-full ">
@@ -260,35 +246,49 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   ))}
                 </div>
                 <div>
-                  <input
-                    onChange={(e) => handleChange(e)}
-                    name="iteration_count"
-                    value={customizeTestData?.iteration_count}
-                    disabled={isNumberOfIterationInputDisabled} // Directly control textarea disability with state
-                    className={`${
-                      isNumberOfIterationInputDisabled && "text-[#909193]"
-                    } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
-                    placeholder="Enter your custom success criteria here..."
-                  />
+                  {isLoading ? (
+                    <div className="mt-1">
+                      <Skeleton count={1} width={"100%"} height={40} />
+                    </div>
+                  ) : (
+                    <input
+                      onChange={(e) => handleChange(e)}
+                      name="iteration_count"
+                      value={customizeTestData?.iteration_count}
+                      disabled={isNumberOfIterationInputDisabled} // Directly control textarea disability with state
+                      className={`${
+                        isNumberOfIterationInputDisabled && "text-[#909193]"
+                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
+                      placeholder="Enter your custom success criteria here..."
+                    />
+                  )}
                 </div>
               </div>
             </div>
             <div className="mt-6">
               <h1>Baseline conversations:</h1>
               <div className="mt-2">
-                {baselines?.map((item) => (
-                  <Chip
-                    onClick={() =>
-                      downloadJson(
-                        item?.conversation_json,
-                        item?.name || "Baseline"
-                      )
-                    }
-                    isCancel={baselines?.length > 1}
-                  >
-                    {item?.name}
-                  </Chip>
-                ))}
+                {isLoading ? (
+                  <div className="mt-1">
+                    <Skeleton count={1} width={120} height={35} />
+                  </div>
+                ) : (
+                  <>
+                    {baselines?.map((item) => (
+                      <Chip
+                        onClick={() =>
+                          downloadJson(
+                            item?.conversation_json,
+                            item?.name || "Baseline"
+                          )
+                        }
+                        isCancel={baselines?.length > 1}
+                      >
+                        {item?.name}
+                      </Chip>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
             <div className="mt-6">

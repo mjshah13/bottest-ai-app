@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import useDeleteEnvironment from "../../../hooks/useDeleteEnvironment";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import NoData from "../noData";
 
 interface ModalProps {
   title?: string;
@@ -139,121 +140,124 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
   };
 
   return (
-    <Dialog.Root
-      open={isEnvironmentModalOpen}
-      onOpenChange={setIsEnvironmentModalOpen}
-    >
-      <Dialog.Content maxWidth={"860px"}>
-        <Dialog.Title>
-          <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className="font-poppin text-black ">{title}</p>
-          </div>
-        </Dialog.Title>
-        <div>
-          <>
-            <div className="px-5 pt-4 pb-7">
-              <div className="border border-warning bg-warningLight px-4 py-3 rounded-lg mb-5 flex gap-2">
-                <div>
-                  <CircleAlert fill="#E7C200" color="white" />
+    <>
+      <Dialog.Root
+        open={isEnvironmentModalOpen}
+        onOpenChange={setIsEnvironmentModalOpen}
+      >
+        <Dialog.Content maxWidth={"860px"}>
+          <Dialog.Title>
+            <div className="border-b border-[#f5f5f5] py-5 px-6 ">
+              <p className="font-poppin text-black ">{title}</p>
+            </div>
+          </Dialog.Title>
+          <div>
+            <>
+              <div className="px-5 pt-4 pb-7">
+                <div className="border border-warning bg-warningLight px-4 py-3 rounded-lg mb-5 flex gap-2">
+                  <div>
+                    <CircleAlert fill="#E7C200" color="white" />
+                  </div>
+                  <div className="flex flex-col ">
+                    <h1 className="text-black text-normal font-poppin">Note</h1>
+                    <p className="text-black text-sm font-poppin w-[80%]">
+                      The UI of a different environment should match the UI of
+                      original recorded tests. Attempting to run tests on
+                      environments where the UI does not match may result in
+                      tests failing due to inability to replay or capture data
+                      correctly!
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col ">
-                  <h1 className="text-black text-normal font-poppin">Note</h1>
-                  <p className="text-black text-sm font-poppin w-[80%]">
-                    The UI of a different environment should match the UI of
-                    original recorded tests. Attempting to run tests on
-                    environments where the UI does not match may result in tests
-                    failing due to inability to replay or capture data
-                    correctly!
-                  </p>
-                </div>
-              </div>
 
-              <Table.Root variant="surface" size={"2"}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "250px" }}
-                      className="border-r border-[#d2cdcd]"
-                    >
-                      Name
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "500px" }}
-                      className="border-r border-[#d2cdcd]"
-                    >
-                      Url
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-                  </Table.Row>
-                </Table.Header>
+                <Table.Root variant="surface" size={"2"}>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "250px" }}
+                        className="border-r border-[#d2cdcd]"
+                      >
+                        Name
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "500px" }}
+                        className="border-r border-[#d2cdcd]"
+                      >
+                        Url
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+                    </Table.Row>
+                  </Table.Header>
 
-                <Table.Body>
-                  {environmentData.map((environment) => (
-                    <Table.Row key={environment.id}>
-                      <Table.Cell className="border-r border-[#d2cdcd]">
-                        {" "}
-                        <input
-                          className=" py-2  w-[90%] outline-none  "
-                          type="text"
-                          name="name"
-                          value={`${environment.name}` || ""}
-                          onChange={(e) => handleChange(e, environment?.id)}
-                          disabled={
-                            organization !== null && orgRole === "org:viewer"
-                          }
-                        />
-                      </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd]">
-                        <div className="flex items-center h-full">
-                          {/* {environment.url} */}
+                  <Table.Body>
+                    {environmentData.map((environment) => (
+                      <Table.Row key={environment.id}>
+                        <Table.Cell className="border-r border-[#d2cdcd]">
+                          {" "}
                           <input
-                            className=" py-2  w-[100%] outline-none  "
+                            className=" py-2  w-[90%] outline-none  "
                             type="text"
-                            name="url"
-                            value={`${environment.url}` || ""}
+                            name="name"
+                            value={`${environment.name}` || ""}
                             onChange={(e) => handleChange(e, environment?.id)}
                             disabled={
                               organization !== null && orgRole === "org:viewer"
                             }
                           />
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <div className="flex items-center justify-center gap-1.2 h-full">
-                          <button
-                            className="outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
-                            onClick={() => {
-                              setIsDeleteModal(true);
-                              setSelectedEnvironemnt(environment);
-                            }}
-                            disabled={
-                              organization !== null && orgRole === "org:viewer"
-                            }
-                          >
-                            <Trash color="#E1654A" size={18} />
-                          </button>
-                        </div>
+                        </Table.Cell>
+                        <Table.Cell className="border-r border-[#d2cdcd]">
+                          <div className="flex items-center h-full">
+                            {/* {environment.url} */}
+                            <input
+                              className=" py-2  w-[100%] outline-none  "
+                              type="text"
+                              name="url"
+                              value={`${environment.url}` || ""}
+                              onChange={(e) => handleChange(e, environment?.id)}
+                              disabled={
+                                organization !== null &&
+                                orgRole === "org:viewer"
+                              }
+                            />
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <div className="flex items-center justify-center gap-1.2 h-full">
+                            <button
+                              className="outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
+                              onClick={() => {
+                                setIsDeleteModal(true);
+                                setSelectedEnvironemnt(environment);
+                              }}
+                              disabled={
+                                organization !== null &&
+                                orgRole === "org:viewer"
+                              }
+                            >
+                              <Trash color="#E1654A" size={18} />
+                            </button>
+                          </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+
+                    <Table.Row>
+                      <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
+                        <button
+                          className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
+                          onClick={addBlankEnvironment}
+                        >
+                          + Add new blank Environment
+                        </button>
                       </Table.Cell>
                     </Table.Row>
-                  ))}
+                  </Table.Body>
+                </Table.Root>
 
-                  <Table.Row>
-                    <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
-                      <button
-                        className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
-                        disabled={
-                          organization !== null && orgRole === "org:viewer"
-                        }
-                        onClick={addBlankEnvironment}
-                      >
-                        + Add new blank Environment
-                      </button>
-                    </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table.Root>
-
-              {/* <Table
+                {/* <Table
                 bordered
                 pagination={false}
                 columns={environmentColumns}
@@ -286,50 +290,52 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                   </button>
                 )}
               /> */}
-            </div>
-          </>
-        </div>
+              </div>
+            </>
+          </div>
 
-        <div className="border-t border-[#f5f5f5]">
-          <Flex gap="3" py={"3"} px={"3"} justify="end">
-            <Dialog.Close>
-              <CustomButton
-                onClick={handleDiscard}
-                variant="outline"
-                color="gray"
-              >
-                Discard
-              </CustomButton>
-            </Dialog.Close>
-            <Dialog.Close>
-              <CustomButton
-                onClick={handleSave}
-                color="blue"
-                variant="solid"
-                disabled={organization !== null && orgRole === "org:viewer"}
-                isPrimary
-              >
-                Save changes
-              </CustomButton>
-            </Dialog.Close>
-          </Flex>
-        </div>
-      </Dialog.Content>
-      {isDeleteModal && (
-        <DeleteModal
-          onClick={() => {
-            if (selectedEnvironemnt) {
-              deleteEnvironment(selectedEnvironemnt.id, environmentLists);
-              setIsDeleteModal(false);
-            }
-          }}
-          description={`Are you sure you want to delete the ${selectedEnvironemnt?.name} Environment?.This action can not be undone.`}
-          isDeleteModal={isDeleteModal}
-          setIsDeleteModal={setIsDeleteModal}
-          title={`Delete ${selectedEnvironemnt?.name} Environment`}
-        />
-      )}
-    </Dialog.Root>
+          <div className="border-t border-[#f5f5f5]">
+            <Flex gap="3" py={"3"} px={"3"} justify="end">
+              <Dialog.Close>
+                <CustomButton
+                  onClick={handleDiscard}
+                  variant="outline"
+                  color="gray"
+                >
+                  Discard
+                </CustomButton>
+              </Dialog.Close>
+              <Dialog.Close>
+                <CustomButton
+                  onClick={handleSave}
+                  color="blue"
+                  variant="solid"
+                  disabled={organization !== null && orgRole === "org:viewer"}
+                  isPrimary
+                >
+                  Save changes
+                </CustomButton>
+              </Dialog.Close>
+            </Flex>
+          </div>
+        </Dialog.Content>
+
+        {isDeleteModal && (
+          <DeleteModal
+            onClick={() => {
+              if (selectedEnvironemnt) {
+                deleteEnvironment(selectedEnvironemnt.id, environmentLists);
+                setIsDeleteModal(false);
+              }
+            }}
+            description={`Are you sure you want to delete the ${selectedEnvironemnt?.name} Environment?.This action can not be undone.`}
+            isDeleteModal={isDeleteModal}
+            setIsDeleteModal={setIsDeleteModal}
+            title={`Delete ${selectedEnvironemnt?.name} Environment`}
+          />
+        )}
+      </Dialog.Root>
+    </>
   );
 };
 

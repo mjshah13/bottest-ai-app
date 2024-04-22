@@ -1,28 +1,27 @@
 import { useState, useCallback, useContext } from "react";
 import { useApi } from "./useApi";
 import { useOrganization, useUser } from "@clerk/nextjs";
-import { BotType, GlobalStateType } from "../utils/typesInterface";
+import { GlobalStateType, SuiteType } from "../utils/typesInterface";
 import { GlobalStateContext } from "../globalState";
 
-const useDuplicateBot = () => {
+const useDuplicateSuite = () => {
   const { organization } = useOrganization();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { copyBot } = useContext(GlobalStateContext) as GlobalStateType;
+  const { copySuite } = useContext(GlobalStateContext) as GlobalStateType;
 
   const { request } = useApi();
 
-  const duplicateBot = useCallback(
-    async (botId: string, botLists: BotType[]) => {
+  const duplicateSuite = useCallback(
+    async (suiteId: string, suiteLists: SuiteType[]) => {
       setIsLoading(true);
       try {
         const data = await request({
-          url: `/v1/bots/${botId}/copy`,
+          url: `/v1/suites/${suiteId}/copy`,
           method: "POST",
         });
-        copyBot(data, botLists);
-        // addEnvironmentRow({ id, name, url }, environmentLists);
+        copySuite(data, suiteLists);
       } catch (error: any) {
         console.error({ error });
         setIsLoading(false);
@@ -33,7 +32,7 @@ const useDuplicateBot = () => {
     [user, organization]
   );
 
-  return { duplicateBot, isLoading };
+  return { duplicateSuite, isLoading };
 };
 
-export default useDuplicateBot;
+export default useDuplicateSuite;

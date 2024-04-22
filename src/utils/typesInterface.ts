@@ -91,6 +91,20 @@ export interface TestRunType {
   status?: string;
 }
 
+export interface Conversation {
+  id?: string;
+  created_at?: string;
+  created_by?: string;
+  html_blob?: string;
+  last_updated_at?: string;
+  last_updated_by?: string;
+}
+
+export interface Baseline {
+  conversation_json?: Conversation[];
+  name?: string;
+}
+
 export interface GlobalStateType {
   addBotRow: any;
   botLists: BotType[];
@@ -108,4 +122,5 @@ export interface GlobalStateType {
   addEnvironmentRow: any;
   deleteEnvironmentRow: any;
   copyBot: any;
+  copySuite: any;
 }

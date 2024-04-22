@@ -169,6 +169,7 @@ const TestResult: React.FC<ModalProps> = ({
                   isWidth={true}
                   svgIcon={<UserCog size={19} />}
                   onClick={() => setisOpenSaveBaselineModal(true)}
+                  isDanger
                 >
                   Override fail and set replayed conversation as an additional
                   baseline.
