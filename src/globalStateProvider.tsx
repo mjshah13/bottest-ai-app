@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 import {
+  Baseline,
   BotType,
   EnvironmentType,
   GlobalStateType,
@@ -17,6 +18,7 @@ export const GlobalStateProvider = ({
 }) => {
   const [botLists, setBotLists] = useState<BotType[]>([]);
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
+  // const [baselines, setBaselines] = useState<Baseline[]>([]);
 
   const [environmentLists, setEnvironmentLists] = useState<EnvironmentType[]>(
     []
@@ -142,6 +144,8 @@ export const GlobalStateProvider = ({
     deleteEnvironmentRow,
     copyBot,
     copySuite,
+    // baselines,
+    // setBaselines,
   };
 
   return (

@@ -57,3 +57,5 @@ export const filterOptions = [
 export const getStatuses = filterOptions
   ?.filter((status) => status?.include)
   ?.map((status) => status?.status);
+
+export const TabBtn = ["Suite’s default", "Custom"];

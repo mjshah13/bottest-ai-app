@@ -100,9 +100,10 @@ export interface Conversation {
   last_updated_by?: string;
 }
 
-export interface Baseline {
+export interface BaselineType {
+  id: string;
+  name: string;
   conversation_json?: Conversation[];
-  name?: string;
 }
 
 export interface GlobalStateType {
@@ -116,11 +117,31 @@ export interface GlobalStateType {
   updateSuiteRow: any;
   deleteSuiteRow: any;
   addSuiteRow: any;
-  environmentLists: EnvironmentType[]; // Assuming environmentLists should hold EnvironmentType or null
+  environmentLists: EnvironmentType[];
   setEnvironmentLists: React.Dispatch<React.SetStateAction<EnvironmentType[]>>;
   updateEnvironmentRow: any;
   addEnvironmentRow: any;
   deleteEnvironmentRow: any;
   copyBot: any;
   copySuite: any;
+  // baselines: Baseline[];
+  // setBaselines: React.Dispatch<React.SetStateAction<Baseline[]>>;
+}
+
+export interface TestRuns {
+  status: string;
+  id: string;
+  evaluations: any[];
+}
+
+export interface CustomizeTestData {
+  success_criteria: string;
+  variant_count: number;
+  iteration_count: number;
+  full_run_enabled: boolean;
+}
+
+export interface AccordionTriggerProps {
+  children: React.ReactNode;
+  className?: string;
 }

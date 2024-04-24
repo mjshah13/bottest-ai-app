@@ -23,12 +23,12 @@ const useAddBot = () => {
           name,
           user_id: user?.id,
         };
-
         const data = await request({
           url: `/v1/bots`,
           method: "POST",
           data: organization?.id ? organizationPayload : userPayload,
         });
+
         addBotRow(data, botLists);
       } catch (error: any) {
         console.error({ error });

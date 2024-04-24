@@ -6,11 +6,9 @@ import {
   Option,
   SuiteType,
 } from "../../../utils/typesInterface";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
 import useAddSuite from "../../../hooks/useAddSuite";
-import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
 import useDeleteSuite from "../../../hooks/useDeleteSuite";
@@ -38,7 +36,7 @@ const ModifySuite: React.FC<ModalProps> = ({
   const [selectedSuite, setSelectedSuite] = useState<SuiteType | null>(null);
   const { addSuite } = useAddSuite();
   const { deleteSuite } = useDeleteSuite();
-  const { duplicateSuite, isLoading: loading } = useDuplicateSuite();
+  // const { duplicateSuite, isLoading: loading } = useDuplicateSuite();
   const [suiteData, setSuiteData] = useState<SuiteType[]>([]);
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
@@ -82,18 +80,6 @@ const ModifySuite: React.FC<ModalProps> = ({
     };
     setSuiteData([...suiteData, newSuite]);
   };
-
-  // const deleteSuite = async (suiteId: string) => {
-  //   try {
-  //     const data = await request({
-  //       url: `/v1/suites/${suiteId}`,
-  //       method: "DELETE",
-  //     });
-  //     deleteSuiteRow(suiteId, suiteLists);
-  //   } catch (error: any) {
-  //     console.error({ error });
-  //   }
-  // };
 
   const handleSave = () => {
     const filteredSuite = suiteData?.filter((suite) => suite?.isEdit);

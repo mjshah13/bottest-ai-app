@@ -15,6 +15,7 @@ interface CustomSelectProps {
   selectedValue?: Option | null;
   Label?: string;
   placeholder?: string;
+  isAddedBtn?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -26,6 +27,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   selectedValue,
   Label,
   placeholder,
+  isAddedBtn = true,
 }) => {
   return (
     <div className="flex flex-col justify-start gap-1">
@@ -62,16 +64,18 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
               {option.name}
             </Select.Item>
           ))}
-          <CustomButton
-            isWidth={true}
-            color="gray"
-            variant="surface"
-            // className="w-full text-black font-poppin"
-            onClick={onClick}
-          >
-            <Settings size={17} />
-            {Btntext}
-          </CustomButton>
+          {isAddedBtn && (
+            <CustomButton
+              isWidth={true}
+              color="gray"
+              variant="surface"
+              // className="w-full text-black font-poppin"
+              onClick={onClick}
+            >
+              <Settings size={17} />
+              {Btntext}
+            </CustomButton>
+          )}
         </Select.Content>
       </Select.Root>
     </div>

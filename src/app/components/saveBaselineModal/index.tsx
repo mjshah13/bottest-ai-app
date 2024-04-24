@@ -1,18 +1,31 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "../../../elements/button";
+import CustomInput from "../../../elements/input";
+import useAddBaseline from "../../../hooks/useAddBaseline";
 
 interface ModalProps {
   title?: string;
   isOpenSaveBaselineModal?: boolean;
   setisOpenSaveBaselineModal: (isOpenSaveBaselineModal: boolean) => void;
+  baselineData: any;
+  testId?: string;
 }
 
 const SaveBaselineModal: React.FC<ModalProps> = ({
   title,
   isOpenSaveBaselineModal,
   setisOpenSaveBaselineModal,
+  baselineData,
+  testId,
 }: ModalProps) => {
+  const [name, setName] = useState<string>("");
+  const { addBaseline } = useAddBaseline();
+
+  const handleChange = (value: string) => {
+    setName(value);
+  };
+
   return (
     <Dialog.Root
       open={isOpenSaveBaselineModal}
@@ -42,17 +55,13 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
             </p>
           </div>
           <div className="mt-4">
-            <label
-              htmlFor="
-            "
-              className="text-md"
-            >
-              Name:
-            </label>
-            <input
-              className="w-full border border-[#d9d9d9] py-1.5 rounded-lg mt-2 px-3"
-              type="text
-            "
+            <CustomInput
+              type="text"
+              label="Name:"
+              placeholder="Enter new Baseline"
+              onChange={(value) => {
+                handleChange(value);
+              }}
             />
           </div>
         </div>
@@ -65,7 +74,14 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
               </CustomButton>
             </Dialog.Close>
             <Dialog.Close>
-              <CustomButton onClick={() => {}} color="blue" variant="solid">
+              <CustomButton
+                onClick={() =>
+                  addBaseline(name, baselineData?.html_blob, testId as string)
+                }
+                color="blue"
+                variant="solid"
+                isPrimary
+              >
                 Save Baseline
               </CustomButton>
             </Dialog.Close>

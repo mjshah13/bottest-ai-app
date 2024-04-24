@@ -10,7 +10,6 @@ import LoadingSpin from "react-loading-spin";
 import { Ban, Check, ChevronsRight, Shuffle, X } from "lucide-react";
 import TestResult from "../testResult";
 import CustomizeTest from "../customizeTest";
-import useTests from "../../../hooks/useTests";
 
 const TestRun = ({
   isDisabled = false,
@@ -25,10 +24,7 @@ const TestRun = ({
   function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
     return <span style={{ marginRight: "0.5rem" }}>{children}</span>;
   }
-
-  // console.log(lastTestRuns, "hhh");
-  // console.log(specificTest, "hhhh");
-
+  const [id, setId] = useState<string | undefined>(undefined);
   const [isTestResultModal, setIsTestResultModal] = useState(false);
   const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
 
@@ -60,6 +56,9 @@ const TestRun = ({
                 <>
                   {lastTestRuns?.map((item, index) => (
                     <div
+                      onClick={() => {
+                        setId(item?.id), setIsTestResultModal(true);
+                      }}
                       key={index}
                       className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full font-poppin
                       ${
@@ -141,25 +140,12 @@ const TestRun = ({
         <Box>
           <div className="h-full flex items-center justify-center   ">
             <div className=" w-full flex justify-center gap-7">
-              {/* <Tooltip.Provider>
-                <Tooltip.Root>
-                  <Tooltip.Trigger asChild> */}
               <button className="outline-none border-none bg-transparent">
                 <Cog6ToothIcon
                   className="h-9 w-9 text-black hover:text-[#388aeb]"
                   onClick={() => setIsCustomizeTestModal(true)}
-                  // onClick={onClick}
                 />
               </button>
-              {/* </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                      Setting
-                      <Tooltip.Arrow className="TooltipArrow" />
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider> */}
 
               <Tooltip.Provider>
                 <Tooltip.Root>
@@ -182,7 +168,8 @@ const TestRun = ({
       </Grid>
       {isTestResultModal && (
         <TestResult
-          specificTestId={specificTest?.id}
+          testId={specificTest?.id}
+          specificTestRunId={id}
           title="Test results: My second test"
           isTestResultModal={isTestResultModal}
           setIsTestResultModal={setIsTestResultModal}

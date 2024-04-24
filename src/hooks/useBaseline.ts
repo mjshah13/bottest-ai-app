@@ -1,15 +1,15 @@
 import { useState, useCallback, useContext } from "react";
-import { Baseline, GlobalStateType, SuiteType } from "../utils/typesInterface";
+import {
+  BaselineType,
+  GlobalStateType,
+  SuiteType,
+} from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { GlobalStateContext } from "../globalState";
-import { tree } from "next/dist/build/templates/app-page";
-
-// Assuming request is a utility function you've created to make HTTP requests
-// Make sure to type it accordingly
 
 const useBaseline = () => {
-  const [baselines, setBaselines] = useState<Baseline[]>([]);
+  const [baselines, setBaselines] = useState<BaselineType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { organization } = useOrganization();
   const { user } = useUser();
@@ -18,7 +18,7 @@ const useBaseline = () => {
   const { request } = useApi();
 
   const fetchBaseline = useCallback(
-    async (test_Id: string) => {
+    async (test_Id: string, setSelectedBaseline?: any) => {
       setIsLoading(true);
       try {
         const data = await request({
@@ -27,6 +27,12 @@ const useBaseline = () => {
         });
 
         setBaselines(data?.data);
+        if (data?.data?.length === 1) {
+          setSelectedBaseline({
+            name: data?.data[0]?.name,
+            id: data?.data[0]?.id,
+          });
+        }
       } catch (error: any) {
         console.error({ error });
         setIsLoading(false);

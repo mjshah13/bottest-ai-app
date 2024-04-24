@@ -1,12 +1,13 @@
 import { Checkbox, Dialog, Flex } from "@radix-ui/themes";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import Chip from "../../../elements/chip";
 import { Trash } from "lucide-react";
-import { TestType } from "../../../utils/typesInterface";
+import { CustomizeTestData, TestType } from "../../../utils/typesInterface";
 import useBaseline from "../../../hooks/useBaseline";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { TabBtn } from "../../../utils/common";
 
 interface ModalProps {
   title?: string;
@@ -21,8 +22,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
   setIsCustomizeTestModal,
   specificTest,
 }: ModalProps) => {
-  // console.log(specificTest, "hhhh");
-
+  const { fetchBaseline, baselines, isLoading } = useBaseline();
   const [successCriteriaTab, setSuccessCriteriaTab] = useState(0);
   const [numberOfVariantsTab, setNumberOfVariantsTab] = useState(0);
   const [numberOfIterationTab, setNumberOfIterationTab] = useState(0);
@@ -35,14 +35,6 @@ const CustomizeTest: React.FC<ModalProps> = ({
     isNumberOfIterationInputDisabled,
     setIsNumberOfIterationInputDisabled,
   ] = useState(true);
-
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // console.log(isLoading);
-
-  const { fetchBaseline, baselines, isLoading } = useBaseline();
-
-  const TabBtn = ["Suite’s default", "Custom"]; // Array for button labels
 
   const handleSuccessCriteriaClick = (index: number) => {
     setSuccessCriteriaTab(index);
@@ -58,13 +50,6 @@ const CustomizeTest: React.FC<ModalProps> = ({
     setNumberOfIterationTab(index);
     setIsNumberOfIterationInputDisabled(index === 0);
   };
-
-  interface CustomizeTestData {
-    success_criteria: string;
-    variant_count: number;
-    iteration_count: number;
-    full_run_enabled: boolean;
-  }
 
   const [customizeTestData, setCustomizeTestData] = useState<CustomizeTestData>(
     {
@@ -94,9 +79,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
 
   const downloadJson = (jsonData: any, fileName: string) => {
     const jsonString = JSON.stringify(jsonData);
-
     const blob = new Blob([jsonString], { type: "application/json" });
-
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `${fileName}.json`;
@@ -107,8 +90,8 @@ const CustomizeTest: React.FC<ModalProps> = ({
   };
 
   useEffect(() => {
+    if (!specificTest) return;
     fetchBaseline(specificTest?.id as string);
-    // setIsLoading(true);
   }, [specificTest]);
 
   useEffect(() => {
@@ -166,10 +149,10 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   onChange={(e) => handleChange(e)}
                   name="success_criteria"
                   value={customizeTestData?.success_criteria}
-                  disabled={isSuccessCriteriaTextDisabled} // Directly control textarea disability with state
+                  disabled={isSuccessCriteriaTextDisabled}
                   className={`${
                     isSuccessCriteriaTextDisabled && "text-[#909193]"
-                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
+                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`}
                   placeholder="Enter your custom success criteria here..."
                 />
               )}
@@ -214,10 +197,10 @@ const CustomizeTest: React.FC<ModalProps> = ({
                       onChange={(e) => handleChange(e)}
                       name="variant_count"
                       value={customizeTestData?.variant_count}
-                      disabled={isNumberOfVariantsInputDisabled} // Directly control textarea disability with state
+                      disabled={isNumberOfVariantsInputDisabled}
                       className={`${
                         isNumberOfVariantsInputDisabled && "text-[#909193]"
-                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
+                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`}
                       placeholder="Enter your custom success criteria here..."
                     />
                   )}
@@ -255,10 +238,10 @@ const CustomizeTest: React.FC<ModalProps> = ({
                       onChange={(e) => handleChange(e)}
                       name="iteration_count"
                       value={customizeTestData?.iteration_count}
-                      disabled={isNumberOfIterationInputDisabled} // Directly control textarea disability with state
+                      disabled={isNumberOfIterationInputDisabled}
                       className={`${
                         isNumberOfIterationInputDisabled && "text-[#909193]"
-                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`} // Add margin for better spacing
+                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`}
                       placeholder="Enter your custom success criteria here..."
                     />
                   )}
@@ -300,7 +283,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   checked={customizeTestData?.full_run_enabled}
                   onCheckedChange={(isChecked) =>
                     handleCheckboxChange(isChecked)
-                  } // Pass the checked state value to handleCheckboxChange
+                  }
                 />
                 Disable “My second test” from running in full test runs
               </div>
