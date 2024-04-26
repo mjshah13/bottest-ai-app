@@ -3,15 +3,25 @@ import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import Chip from "../../../elements/chip";
 import { Trash } from "lucide-react";
-import { CustomizeTestData, TestType } from "../../../utils/typesInterface";
+import {
+  CustomizeTestData,
+  GlobalStateType,
+  TestType,
+} from "../../../utils/typesInterface";
 import useBaseline from "../../../hooks/useBaseline";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { TabBtn } from "../../../utils/common";
+import useDeleteBaseline from "../../../hooks/useDeleteBaseline";
+import useDeleteTest from "../../../hooks/useDeleteTest";
+import { GlobalStateContext } from "../../../globalState";
+import DeleteModal from "../deleteModal";
+import { useApi } from "../../../hooks/useApi";
+import useUpdateTest from "../../../hooks/useUpdateTest";
 
 interface ModalProps {
   title?: string;
-  specificTest?: TestType;
+  specificTest: TestType;
   isCustomizeTestModal?: boolean;
   setIsCustomizeTestModal: (isCustomizeTestModa: boolean) => void;
 }
@@ -22,10 +32,18 @@ const CustomizeTest: React.FC<ModalProps> = ({
   setIsCustomizeTestModal,
   specificTest,
 }: ModalProps) => {
-  const { fetchBaseline, baselines, isLoading } = useBaseline();
+  const { baselines, testData } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
+
+  const { fetchBaseline, isLoading } = useBaseline();
   const [successCriteriaTab, setSuccessCriteriaTab] = useState(0);
   const [numberOfVariantsTab, setNumberOfVariantsTab] = useState(0);
   const [numberOfIterationTab, setNumberOfIterationTab] = useState(0);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const { deleteBaseline } = useDeleteBaseline();
+  const { deleteTest } = useDeleteTest();
+  const { updateTest } = useUpdateTest();
 
   const [isSuccessCriteriaTextDisabled, setIsSuccessCriteriaTextDisabled] =
     useState(true);
@@ -92,14 +110,14 @@ const CustomizeTest: React.FC<ModalProps> = ({
   useEffect(() => {
     if (!specificTest) return;
     fetchBaseline(specificTest?.id as string);
-  }, [specificTest]);
+  }, []);
 
   useEffect(() => {
     if (specificTest) {
       setCustomizeTestData({
-        success_criteria: specificTest?.success_criteria, // Providing an empty string as a fallback
-        variant_count: specificTest?.variant_count, // Providing 0 as a fallback
-        iteration_count: specificTest?.iteration_count, // Providing 0 as a fallback
+        success_criteria: specificTest?.success_criteria,
+        variant_count: specificTest?.variant_count,
+        iteration_count: specificTest?.iteration_count,
         full_run_enabled: specificTest?.full_run_enabled,
       });
     }
@@ -250,7 +268,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
             </div>
             <div className="mt-6">
               <h1>Baseline conversations:</h1>
-              <div className="mt-2">
+              <div className="mt-2 flex gap-3">
                 {isLoading ? (
                   <div className="mt-1">
                     <Skeleton count={1} width={120} height={35} />
@@ -259,6 +277,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   <>
                     {baselines?.map((item) => (
                       <Chip
+                        handleDelete={() => deleteBaseline(item?.id, baselines)}
                         onClick={() =>
                           downloadJson(
                             item?.conversation_json,
@@ -294,8 +313,11 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 color="red"
                 svgIcon={<Trash size={17} />}
                 isDanger
+                onClick={() => {
+                  setIsDeleteModal(true);
+                }}
               >
-                Delete “My second test”
+                {` Delete ${specificTest?.name}`}
               </CustomButton>
             </div>
           </div>
@@ -310,7 +332,9 @@ const CustomizeTest: React.FC<ModalProps> = ({
             </Dialog.Close>
             <Dialog.Close>
               <CustomButton
-                onClick={() => {}}
+                onClick={() =>
+                  updateTest(specificTest?.id, customizeTestData, testData)
+                }
                 color="blue"
                 variant="solid"
                 isPrimary
@@ -321,6 +345,21 @@ const CustomizeTest: React.FC<ModalProps> = ({
           </Flex>
         </div>
       </Dialog.Content>
+
+      {isDeleteModal && (
+        <DeleteModal
+          onClick={() => {
+            if (specificTest?.id) {
+              deleteTest(specificTest?.id, testData);
+              setIsDeleteModal(false);
+            }
+          }}
+          description={`Are you sure you want to delete the ${specificTest?.name}?.This action can not be undone.`}
+          isDeleteModal={isDeleteModal}
+          setIsDeleteModal={setIsDeleteModal}
+          title={`Delete ${specificTest?.name}`}
+        />
+      )}
     </Dialog.Root>
   );
 };

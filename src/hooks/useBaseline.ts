@@ -9,11 +9,13 @@ import { useApi } from "./useApi";
 import { GlobalStateContext } from "../globalState";
 
 const useBaseline = () => {
-  const [baselines, setBaselines] = useState<BaselineType[]>([]);
+  // const [baselines, setBaselines] = useState<BaselineType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { organization } = useOrganization();
   const { user } = useUser();
   const [error, setError] = useState<Error | null>(null);
+
+  const { setBaselines } = useContext(GlobalStateContext) as GlobalStateType;
 
   const { request } = useApi();
 
@@ -43,7 +45,7 @@ const useBaseline = () => {
     [user, organization]
   );
 
-  return { fetchBaseline, baselines, error, isLoading };
+  return { fetchBaseline, error, isLoading };
 };
 
 export default useBaseline;

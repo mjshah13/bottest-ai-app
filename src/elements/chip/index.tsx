@@ -5,9 +5,15 @@ interface Props {
   children?: React.ReactNode;
   isCancel?: boolean;
   onClick?: () => void;
+  handleDelete?: () => void;
 }
 
-const Chip: React.FC<Props> = ({ children, isCancel = false, onClick }) => {
+const Chip: React.FC<Props> = ({
+  children,
+  isCancel = false,
+  onClick,
+  handleDelete,
+}) => {
   return (
     <div className="flex gap-2 ">
       <div
@@ -18,7 +24,7 @@ const Chip: React.FC<Props> = ({ children, isCancel = false, onClick }) => {
         {children}
       </div>
       {isCancel && (
-        <button className="outline-none border-none">
+        <button className="outline-none border-none" onClick={handleDelete}>
           <X size={19} color="red" />
         </button>
       )}

@@ -1,14 +1,16 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CustomButton from "../../../elements/button";
 import CustomInput from "../../../elements/input";
 import useAddBaseline from "../../../hooks/useAddBaseline";
+import { GlobalStateContext } from "../../../globalState";
+import { GlobalStateType } from "../../../utils/typesInterface";
 
 interface ModalProps {
   title?: string;
   isOpenSaveBaselineModal?: boolean;
   setisOpenSaveBaselineModal: (isOpenSaveBaselineModal: boolean) => void;
-  baselineData: any;
+  htmlBlob: string;
   testId?: string;
 }
 
@@ -16,10 +18,12 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
   title,
   isOpenSaveBaselineModal,
   setisOpenSaveBaselineModal,
-  baselineData,
+  htmlBlob,
   testId,
 }: ModalProps) => {
+  const { baselines } = useContext(GlobalStateContext) as GlobalStateType;
   const [name, setName] = useState<string>("");
+
   const { addBaseline } = useAddBaseline();
 
   const handleChange = (value: string) => {
@@ -76,7 +80,12 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
             <Dialog.Close>
               <CustomButton
                 onClick={() =>
-                  addBaseline(name, baselineData?.html_blob, testId as string)
+                  addBaseline(
+                    name,
+                    htmlBlob as string,
+                    testId as string,
+                    baselines
+                  )
                 }
                 color="blue"
                 variant="solid"

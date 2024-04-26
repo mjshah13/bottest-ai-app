@@ -18,8 +18,8 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <OrganizationSwitcher
                   appearance={{
                     elements: {
-                      organizationSwitcherTrigger: "p-2"
-                    }
+                      organizationSwitcherTrigger: "p-2",
+                    },
                   }}
                 />
               </div>

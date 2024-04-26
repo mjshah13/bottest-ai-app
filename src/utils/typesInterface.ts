@@ -33,9 +33,7 @@ export interface ServiceItem {
 
 export interface BottestReportProps {
   isDisabled?: boolean;
-  title?: string;
   lastTestRuns?: TestType[];
-  status: string;
   loading?: boolean;
   specificTest: TestType;
 }
@@ -124,8 +122,14 @@ export interface GlobalStateType {
   deleteEnvironmentRow: any;
   copyBot: any;
   copySuite: any;
-  // baselines: Baseline[];
-  // setBaselines: React.Dispatch<React.SetStateAction<Baseline[]>>;
+  baselines: BaselineType[];
+  setBaselines: React.Dispatch<React.SetStateAction<BaselineType[]>>;
+  deleteBaselineData: any;
+  addNewBaseline: any;
+  testData: TestType[] | null;
+  setTestData: React.Dispatch<React.SetStateAction<TestType[] | null>>;
+  deleteTestRuns: any;
+  updateTestdata: any;
 }
 
 export interface TestRuns {

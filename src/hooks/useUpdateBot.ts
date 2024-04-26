@@ -20,7 +20,7 @@ const useUpdateBot = () => {
             name,
           },
         });
-        console.log({ botLists });
+
         updateBotRow(data, botLists);
       } catch (error: any) {
         console.error({ error });

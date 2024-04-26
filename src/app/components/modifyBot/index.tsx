@@ -1,35 +1,26 @@
 import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
-
 import CustomButton from "../../../elements/button";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { CopyPlus, Trash } from "lucide-react";
-import {
-  BotType,
-  GlobalStateType,
-  Option,
-} from "../../../utils/typesInterface";
+import { BotType, GlobalStateType } from "../../../utils/typesInterface";
 import useAddBot from "../../../hooks/useAddBot";
 import useUpdateBot from "../../../hooks/useUpdateBot";
-import { useApi } from "../../../hooks/useApi";
 import { GlobalStateContext } from "../../../globalState";
 import { v4 as uuidv4 } from "uuid";
 import useDeleteBot from "../../../hooks/useDeleteBot";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import useDuplicateBot from "../../../hooks/useDuplicateBot";
-import NoData from "../noData";
 
 interface ModalProps {
   title?: string;
-  // selectedBot?: Option | null;
   isBotsModalOpen?: boolean;
   setIsBotsModalOpen: (isBotsModalopen: boolean) => void;
 }
 
 const ModifyBot: React.FC<ModalProps> = ({
   title,
-  // selectedBot,
+
   isBotsModalOpen,
   setIsBotsModalOpen,
 }: ModalProps) => {
@@ -151,9 +142,6 @@ const ModifyBot: React.FC<ModalProps> = ({
                     </Table.Cell>
                     <Table.Cell>
                       <div className="flex items-center justify-center gap-1.2 h-full">
-                        {/* <Tooltip.Provider>
-                         <Tooltip.Root>
-                           <Tooltip.Trigger asChild> */}
                         <button
                           onClick={() => duplicateBot(bot?.id, botLists)}
                           disabled={
@@ -165,18 +153,7 @@ const ModifyBot: React.FC<ModalProps> = ({
                         >
                           <CopyPlus size={18} />
                         </button>
-                        {/* </Tooltip.Trigger>
-                           <Tooltip.Portal>
-                             <Tooltip.Content
-                               className="TooltipContent"
-                               sideOffset={5}
-                             >
-                               Create a copy of bots and existing tests.
-                               <Tooltip.Arrow className="TooltipArrow" />
-                             </Tooltip.Content>
-                           </Tooltip.Portal>
-                         </Tooltip.Root>
-                       </Tooltip.Provider> */}
+
                         <button
                           className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
                           onClick={() => {

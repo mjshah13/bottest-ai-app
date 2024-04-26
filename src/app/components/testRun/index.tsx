@@ -13,13 +13,13 @@ import CustomizeTest from "../customizeTest";
 
 const TestRun = ({
   isDisabled = false,
-  title,
   lastTestRuns,
-  status,
   loading,
   specificTest,
 }: BottestReportProps) => {
-  const { backgroundColor, text, icon } = getBackgroundColorClass(status);
+  const { backgroundColor, text, icon } = getBackgroundColorClass(
+    specificTest?.status
+  );
 
   function InlineWrapperWithMargin({ children }: PropsWithChildren<unknown>) {
     return <span style={{ marginRight: "0.5rem" }}>{children}</span>;
@@ -37,11 +37,11 @@ const TestRun = ({
               {loading ? (
                 <Skeleton count={1} inline width={200} height={40} />
               ) : (
-                title
+                specificTest?.name
               )}
             </h1>
             {isDisabled ? (
-              <div className=" bg-[#fafafa] flex font-poppin justify-center rounded-md border border-[#dcdcdc] max-w-[170px] w-full  py-0.5  ">
+              <div className=" bg-[#fafafa] flex font-poppin justify-center rounded-md border border-[#dcdcdc] max-w-[200px] w-full py-0.5  ">
                 Disabled in full test runs
               </div>
             ) : null}
@@ -116,7 +116,7 @@ const TestRun = ({
                 {icon}
                 <div className="flex flex-col justify-start">
                   <h1 className="text-black font-normal font-poppin text-sm">
-                    {status}
+                    {specificTest?.status}
                   </h1>
                   <h1
                     className={`text-[#909193] ${
@@ -124,13 +124,14 @@ const TestRun = ({
                       "font-semibold text-black hover:underline "
                     }  font-poppin text-sm`}
                   >
-                    {text === "View full result" ? (
-                      <button onClick={() => setIsTestResultModal(true)}>
-                        {text}
-                      </button>
-                    ) : (
-                      text
-                    )}
+                    <button
+                      onClick={() => {
+                        setId(specificTest?.testRunId),
+                          setIsTestResultModal(true);
+                      }}
+                    >
+                      {text}
+                    </button>
                   </h1>
                 </div>
               </div>
@@ -170,14 +171,14 @@ const TestRun = ({
         <TestResult
           testId={specificTest?.id}
           specificTestRunId={id}
-          title="Test results: My second test"
+          title={`Test results: ${specificTest?.name}`}
           isTestResultModal={isTestResultModal}
           setIsTestResultModal={setIsTestResultModal}
         />
       )}
       {isCustomizeTestModal && (
         <CustomizeTest
-          title="Customize test: My second test"
+          title={`Customize test: ${specificTest?.name}`}
           isCustomizeTestModal={isCustomizeTestModal}
           setIsCustomizeTestModal={setIsCustomizeTestModal}
           specificTest={specificTest}

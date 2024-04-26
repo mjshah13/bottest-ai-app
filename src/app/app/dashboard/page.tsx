@@ -27,13 +27,10 @@ import ModifyEnvironment from "../../components/modifyEnvironment";
 import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
-import DeleteModal from "../../components/deleteModal";
 
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
-  const [isDeleteModal, setIsDeleteModal] = useState(false);
-  // const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
   const [containerHeight, setContainerHeight] = useState(0);
   const [selectedSuite, setSelectedSuite] = useState<Option | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<Option | null>(
@@ -51,7 +48,6 @@ const Dashboard = (props: DashboardProps) => {
 
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
-  const { user } = useUser();
   const { botLists, suiteLists, environmentLists } = useContext(
     GlobalStateContext
   ) as GlobalStateType;
@@ -59,9 +55,10 @@ const Dashboard = (props: DashboardProps) => {
   useBots(setSelectedBot);
   const { fetchSuites } = useSuites(setSelectedSuite);
   const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
-
-  const { testData, fetchTests, isLoading } = useTests();
+  const { fetchTests, isLoading } = useTests();
   const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
+
+  const { testData } = useContext(GlobalStateContext) as GlobalStateType;
 
   const filterData = (status: string) => {
     if (status === "View all") {
@@ -410,9 +407,7 @@ const Dashboard = (props: DashboardProps) => {
                                   <TestRun
                                     specificTest={item}
                                     isDisabled={!item?.full_run_enabled}
-                                    title={item?.name}
                                     lastTestRuns={recent_test_runs}
-                                    status={item?.status}
                                     loading={isLoading}
                                   />
                                 </div>
@@ -454,21 +449,6 @@ const Dashboard = (props: DashboardProps) => {
           title={`Add / Modify Environments for ${selectedSuite?.name}`}
         />
       )}
-
-      {/* {isCustomizeTestModal && (
-        <CustomizeTest
-          title="Customize test: My second test"
-          isCustomizeTestModal={isCustomizeTestModal}
-          setIsCustomizeTestModal={setIsCustomizeTestModal}
-        />
-      )} */}
-
-      {/* <DeleteModal
-        description={`Are you sure you want to delete the entity.This action can not be undone `}
-        title="Delete Modal"
-        isDeleteModal={isDeleteModal}
-        setIsDeleteModal={setIsDeleteModal}
-      /> */}
     </div>
   );
 };

@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 
 import {
-  Baseline,
+  BaselineType,
   BotType,
   EnvironmentType,
   GlobalStateType,
   SuiteType,
+  TestType,
 } from "./utils/typesInterface";
 import { GlobalStateContext } from "./globalState";
 
@@ -18,7 +19,8 @@ export const GlobalStateProvider = ({
 }) => {
   const [botLists, setBotLists] = useState<BotType[]>([]);
   const [suiteLists, setSuiteLists] = useState<SuiteType[]>([]);
-  // const [baselines, setBaselines] = useState<Baseline[]>([]);
+  const [baselines, setBaselines] = useState<BaselineType[]>([]);
+  const [testData, setTestData] = useState<TestType[] | null>(null);
 
   const [environmentLists, setEnvironmentLists] = useState<EnvironmentType[]>(
     []
@@ -88,6 +90,42 @@ export const GlobalStateProvider = ({
     );
   };
 
+  const deleteBaselineData = (
+    deletebaseline: string,
+    baselines: BaselineType[]
+  ) => {
+    setBaselines(
+      baselines.filter((baseline) => baseline.id !== deletebaseline)
+    );
+  };
+
+  const addNewBaseline = (
+    addedBaseline: BaselineType,
+    baselines: BaselineType[]
+  ) => {
+    setBaselines([...baselines, addedBaseline]);
+  };
+
+  const deleteTestRuns = (deleteTest: string, testData: TestType[]) => {
+    setTestData(testData.filter((test) => test.id !== deleteTest));
+  };
+
+  const updateTestdata = (updateTest: TestType, testData: TestType[]) => {
+    // setTestData(
+    //   testData?.map((test) => (test?.id === updateTest?.id ? updateTest : test))
+    // );
+    setTestData(
+      testData?.map((test) =>
+        test.id === updateTest.id
+          ? {
+              ...test,
+              ...updateTest,
+            }
+          : test
+      )
+    );
+  };
+
   const contextValue: GlobalStateType = {
     botLists: botLists?.sort((a: BotType, b: BotType) => {
       let nameA = a.name.toUpperCase(); // ignore upper and lowercase
@@ -144,8 +182,14 @@ export const GlobalStateProvider = ({
     deleteEnvironmentRow,
     copyBot,
     copySuite,
-    // baselines,
-    // setBaselines,
+    baselines,
+    setBaselines,
+    deleteBaselineData,
+    addNewBaseline,
+    testData,
+    setTestData,
+    deleteTestRuns,
+    updateTestdata,
   };
 
   return (

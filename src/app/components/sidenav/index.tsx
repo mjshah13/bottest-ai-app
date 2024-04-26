@@ -14,6 +14,7 @@ import {
   X,
   Menu,
 } from "lucide-react";
+import Image from "next/image";
 
 const navigation: NavigationItem[] = [
   {
@@ -130,7 +131,9 @@ const Sidenav = () => {
                 like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                   <div className="flex h-16 shrink-0 items-center">
-                    <img
+                    <Image
+                      width={148}
+                      height={32}
                       className="h-8 w-auto"
                       src="/Assets/Logo.svg"
                       alt="Your Company"
@@ -209,7 +212,9 @@ const Sidenav = () => {
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
         >
           <div className="flex h-16 shrink-0 items-center">
-            <img
+            <Image
+              width={148}
+              height={32}
               className="h-8 w-auto"
               src="/Assets/Logo.svg"
               alt="Your Company"

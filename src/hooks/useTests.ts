@@ -1,16 +1,19 @@
-import { useState, useCallback } from "react";
-import { TestType } from "../utils/typesInterface";
+import { useState, useCallback, useContext } from "react";
+import { GlobalStateType, TestType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
+import { GlobalStateContext } from "../globalState";
 
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
 const useTests = () => {
-  const [testData, setTestData] = useState<TestType[] | null>(null);
+  // const [testData, setTestData] = useState<TestType[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { setTestData } = useContext(GlobalStateContext) as GlobalStateType;
 
   const { user } = useUser();
   const { organization } = useOrganization();
@@ -45,7 +48,12 @@ const useTests = () => {
             }
           );
           const status = lastTests[lastTests.length - 1]?.status;
-          return { ...test, status, recent_test_runs: lastTests };
+          return {
+            ...test,
+            status: lastTests[lastTests.length - 1]?.status,
+            testRunId: lastTests[lastTests.length - 1]?.id,
+            recent_test_runs: lastTests,
+          };
         });
         setTestData(treatedData);
       } catch (error: any) {
@@ -60,7 +68,7 @@ const useTests = () => {
     [user, organization]
   );
 
-  return { testData, fetchTests, error, isLoading };
+  return { fetchTests, error, isLoading };
 };
 
 export default useTests;
