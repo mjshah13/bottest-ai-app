@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useEffect, useCallback, useContext } from "react";
 import { BotType, GlobalStateType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";

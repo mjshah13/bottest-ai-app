@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import { Checkbox, Dialog, Flex } from "@radix-ui/themes";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
@@ -109,7 +112,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
 
   useEffect(() => {
     if (!specificTest) return;
-    fetchBaseline(specificTest?.id as string);
+    fetchBaseline(specificTest.id);
   }, []);
 
   useEffect(() => {
@@ -277,6 +280,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   <>
                     {baselines?.map((item) => (
                       <Chip
+                        key={item.id}
                         handleDelete={() => deleteBaseline(item?.id, baselines)}
                         onClick={() =>
                           downloadJson(

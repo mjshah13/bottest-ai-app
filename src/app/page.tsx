@@ -1,5 +1,6 @@
 "use client";
 import { UserButton, useAuth, useSession } from "@clerk/nextjs";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -11,7 +12,13 @@ export default function Home() {
   return (
     <div className="h-screen bg-[#fdfcfa] flex items-center justify-center">
       <div className="flex flex-col gap-y-8">
-        <img className="h-11" src="/Assets/Logo.svg" alt="Your Company" />
+        <Image
+          className="h-11"
+          src="/Assets/Logo.svg"
+          alt="Your Company"
+          width={148}
+          height={32}
+        />
         <div className="w-[434px] h-[400px] bg-white rounded-lg border border-lightgray">
           <div className="border-b border-lightgray h-[98px] flex flex-col justify-center items-center">
             <h1 className="text-2xl text-black font-semibold font-poppin">

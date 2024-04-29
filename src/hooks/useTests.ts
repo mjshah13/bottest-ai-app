@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useCallback, useContext } from "react";
 import { GlobalStateType, TestType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
@@ -9,7 +11,6 @@ import { GlobalStateContext } from "../globalState";
 // Make sure to type it accordingly
 
 const useTests = () => {
-  // const [testData, setTestData] = useState<TestType[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

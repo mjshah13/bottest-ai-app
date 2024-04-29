@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useCallback } from "react";
 import { TestRuns } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";

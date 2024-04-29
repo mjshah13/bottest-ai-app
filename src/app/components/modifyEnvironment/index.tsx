@@ -15,7 +15,6 @@ import { v4 as uuidv4 } from "uuid";
 import useDeleteEnvironment from "../../../hooks/useDeleteEnvironment";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
-import NoData from "../noData";
 
 interface ModalProps {
   title?: string;

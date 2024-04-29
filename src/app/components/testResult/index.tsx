@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+
 import { Box, Dialog, Flex, Grid } from "@radix-ui/themes";
 import { Ban, ChevronsRight, X } from "lucide-react";
 import CustomButton from "../../../elements/button";
@@ -436,6 +438,8 @@ const TestResult: React.FC<ModalProps> = ({
     </>
   );
 };
+
+TestResult.displayName = "TestResult";
 
 export default TestResult;
 

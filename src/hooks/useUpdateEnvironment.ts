@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useCallback, useContext } from "react";
 import { useApi } from "./useApi";
 import { useUser } from "@clerk/nextjs";

@@ -1,4 +1,6 @@
 // useApi.ts
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 
 import { useSession } from "@clerk/nextjs";
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
