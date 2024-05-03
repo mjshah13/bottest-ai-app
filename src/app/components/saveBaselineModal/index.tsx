@@ -12,6 +12,9 @@ interface ModalProps {
   setisOpenSaveBaselineModal: (isOpenSaveBaselineModal: boolean) => void;
   htmlBlob: string;
   testId?: string;
+  isOverideDisable: boolean;
+  setisOverideDisable: (isOverideDisable: boolean) => void;
+  testName: string;
 }
 
 const SaveBaselineModal: React.FC<ModalProps> = ({
@@ -20,6 +23,9 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
   setisOpenSaveBaselineModal,
   htmlBlob,
   testId,
+  isOverideDisable,
+  setisOverideDisable,
+  testName,
 }: ModalProps) => {
   const { baselines } = useContext(GlobalStateContext) as GlobalStateType;
   const [name, setName] = useState<string>("");
@@ -38,28 +44,29 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
       <Dialog.Content maxWidth={"480px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className=" text-black ">{title}</p>
+            <p className=" text-black text-base font-semibold">{title}</p>
           </div>
         </Dialog.Title>
 
         <div className="px-6 pt-2 pb-7">
           <div className=" border border-warning bg-warningLight px-4 rounded-lg mb-5 flex items-center py-3.5 gap-3  ">
             <div className="flex flex-col ">
-              <p className="text-black text-sm text-balance ">
+              <p className="text-black text-sm text-balance font-normal">
                 Note that adding large amounts of additional baselines may
                 increase billing costs slightly.
               </p>
             </div>
           </div>
           <div>
-            <p className="text-sm text-black ">
-              Saving this conversation as an additional baseline for “My third
-              test” will cause all future runs of “My third test” to compare
-              against this as a reference.
+            <p className="text-sm text-black font-normal ">
+              {`Saving this conversation as an additional baseline for “${testName}”
+               will cause all future runs of “${testName}” to compare
+              against this as a reference.`}
             </p>
           </div>
           <div className="mt-4">
             <CustomInput
+              className={"text-sm font-normal font-poppin"}
               type="text"
               label="Name:"
               placeholder="Enter new Baseline"
@@ -79,14 +86,15 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
             </Dialog.Close>
             <Dialog.Close>
               <CustomButton
-                onClick={() =>
+                onClick={() => {
                   addBaseline(
                     name,
                     htmlBlob as string,
                     testId as string,
                     baselines
-                  )
-                }
+                  );
+                  setisOverideDisable(true);
+                }}
                 color="blue"
                 variant="solid"
                 isPrimary

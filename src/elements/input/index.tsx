@@ -11,6 +11,7 @@ interface InputProps {
   placeholder?: string;
   onChange?: (value: string) => void;
   size?: ResponsiveSize;
+  className?: any;
 }
 
 const CustomInput: React.FC<InputProps> = ({
@@ -19,17 +20,19 @@ const CustomInput: React.FC<InputProps> = ({
   placeholder,
   onChange,
   size = "2",
+  className,
 }) => {
   const [inputType, setInputType] = useState<InputType>(type);
 
   return (
     <div>
       {label && (
-        <label className="block font-poppins font-[300] mb-2 text-base">
+        <label className="block font-poppins text-sm font-normal mb-2 ">
           {label}
         </label>
       )}
       <TextField.Root
+        className={className}
         size={size}
         type={type === "password" ? inputType : type}
         onChange={(e) => onChange && onChange(e.target.value)}

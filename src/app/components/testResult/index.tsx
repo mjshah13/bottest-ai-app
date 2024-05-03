@@ -27,6 +27,7 @@ import useTestRun from "../../../hooks/useTestRuns";
 import Loader from "../loader";
 import Image from "next/image";
 import { GlobalStateContext } from "../../../globalState";
+import { useAuth, useOrganization } from "@clerk/nextjs";
 
 interface ModalProps {
   title?: string;
@@ -34,6 +35,7 @@ interface ModalProps {
   setIsTestResultModal: (isTestResultModal: boolean) => void;
   specificTestRunId?: string;
   testId?: string;
+  testName: string;
 }
 
 interface ConversationItem {
@@ -48,7 +50,7 @@ const AccordionTrigger = React.forwardRef<
   <Accordion.Header className="flex">
     <Accordion.Trigger
       className={classNames(
-        " group flex h-[45px] flex-1 cursor-default items-center justify-between  px-5 text-[15px] leading-none  outline-none",
+        " group flex h-[45px] flex-1  items-center justify-between   px-6 text-[15px] leading-none  cursor-pointer  outline-none",
         className
       )}
       {...props}
@@ -70,7 +72,10 @@ const TestResult: React.FC<ModalProps> = ({
   setIsTestResultModal,
   specificTestRunId,
   testId,
+  testName,
 }: ModalProps) => {
+  const { orgRole } = useAuth();
+  const { organization } = useOrganization();
   const [isOpenSaveBaselineModal, setisOpenSaveBaselineModal] = useState(false);
   const [selectedEvaluation, setSelectedEvaluation] = useState<any>(null);
   const [selectedBaseline, setSelectedBaseline] = useState<Option | null>(null);
@@ -80,6 +85,7 @@ const TestResult: React.FC<ModalProps> = ({
   const [selectedVariantLetter, setSelectedVariantLetter] = useState("");
   const [selectedIteration, setSelectedIteration] = useState(0);
   const [variantLetters, setVariantLetters] = useState<string[]>([]);
+  const [isOverideDisable, setisOverideDisable] = useState<boolean>(false);
 
   useEffect(() => {
     if (!specificTestRunId) return;
@@ -133,24 +139,26 @@ const TestResult: React.FC<ModalProps> = ({
     document.body.removeChild(a);
   };
 
+  console.log({ selectedEvaluation });
+
   return (
     <>
       <Dialog.Root open={isTestResultModal} onOpenChange={setIsTestResultModal}>
         <Dialog.Content
           minWidth={"1088px"}
-          style={{ minHeight: "890px", height: "100%" }}
+          // style={{ minHeight: "890px", height: "100%" }}
         >
-          <Grid columns="260px 1fr" className="min-h-[880px] h-full">
+          <Grid columns="240px 1fr" className="min-h-[880px] h-full">
             <Box>
               <div
                 className="bg-[#fdfcfa] h-full "
                 style={{
                   boxShadow:
-                    "rgba(17, 17, 26, 0.1) 0px 4px 16px 0px inset, rgba(17, 17, 26, 0.05) 0px 8px 32px 0px ",
+                    "0px 9px 28px 8px rgba(0, 0, 0, 0.05) inset,  0px 3px 6px -4px rgba(0, 0, 0, 0.12) ",
                 }}
               >
                 <div className=" py-3 px-4 ">
-                  <p className=" font-semibold text-xl text-black ">
+                  <p className=" font-semibold text-lg text-black ">
                     Currently viewing
                   </p>
                 </div>
@@ -167,42 +175,51 @@ const TestResult: React.FC<ModalProps> = ({
                       return (
                         <>
                           <Accordion.AccordionItem value={`${item.id}`}>
-                            <AccordionTrigger className="w-full px-4">
-                              <div className="flex justify-between">
+                            <AccordionTrigger className="w-full ">
+                              <div className="flex justify-between ">
                                 <div className="gap-3 flex items-center">
                                   {icon}
-                                  <p className={`text-md font-normal`}>
+                                  <p
+                                    className={`text-base font-normal text-black`}
+                                  >
                                     {`Variant ${variantLetter}`}
                                   </p>
                                 </div>
                               </div>
                             </AccordionTrigger>
 
-                            {item.evaluations?.map((evaluation, evalIndex) => (
-                              <Accordion.AccordionContent
-                                key={evalIndex}
-                                className="px-4 bg-[#f4f4f2] py-[0.2px]"
-                              >
-                                <div
-                                  className="px-2 py-2.5 flex items-center gap-3 rounded-lg  my-2 hover:bg-primary"
-                                  onClick={() =>
-                                    handleEvaluation(
-                                      evaluation,
-                                      variantLetter,
-                                      evalIndex
-                                    )
-                                  }
-                                >
-                                  {evaluation?.status === "Fail" ? (
-                                    <X color="#E1654A" size={19} />
-                                  ) : (
-                                    <Check color="#54CA6E" size={19} />
-                                  )}
+                            <Accordion.AccordionContent className="px-3 bg-[#f4f3f2] py-[5px] ">
+                              {item.evaluations?.map(
+                                (evaluation, evalIndex) => (
+                                  <div
+                                    key={evalIndex}
+                                    className={`px-3 h-[40px] mb-[4px] flex  items-center gap-2.5 rounded-lg  hover:bg-primary hover:text-secondary cursor-pointer 
+                                     ${
+                                       selectedEvaluation?.id ===
+                                         evaluation?.id && "bg-primary "
+                                     }
+                                    `}
+                                    onClick={() =>
+                                      handleEvaluation(
+                                        evaluation,
+                                        variantLetter,
+                                        evalIndex
+                                      )
+                                    }
+                                  >
+                                    {evaluation?.status === "Fail" ? (
+                                      <X color="#E1654A" size={19} />
+                                    ) : (
+                                      <Check color="#54CA6E" size={19} />
+                                    )}
 
-                                  <h3>Iteration {`${evalIndex + 1}`}</h3>
-                                </div>
-                              </Accordion.AccordionContent>
-                            ))}
+                                    <h3 className="text-sm text-black font-normal">
+                                      Iteration {`${evalIndex + 1}`}
+                                    </h3>
+                                  </div>
+                                )
+                              )}
+                            </Accordion.AccordionContent>
                           </Accordion.AccordionItem>
                         </>
                       );
@@ -211,25 +228,29 @@ const TestResult: React.FC<ModalProps> = ({
                 </div>
               </div>
             </Box>
-            <Box className="relative h-full ">
+            <Box className="relative h-full right-box">
               <Dialog.Title className="h-[6%]">
                 <div className="border-b border-[#e9e5e5] py-4 px-4 ">
-                  <p className=" text-black m-0">{title}</p>
+                  <p className=" text-black font-semibold text-lg m-0">
+                    {title}
+                  </p>
                 </div>
               </Dialog.Title>
 
               {selectedEvaluation ? (
                 <div className="px-5 py-3 h-[85%] flex flex-col">
                   {selectedEvaluation?.status === "Fail" ? (
-                    <div className=" bg-dangerLight px-6 py-3.5  rounded-lg mb-5 flex items-start   gap-3">
-                      <div className="">
+                    <div className=" bg-dangerLight px-6 py-7  rounded-lg mb-5 flex items-start   gap-4">
+                      <div className="mt-0.5">
                         <div className="bg-[#E1654A] p-1 rounded-2xl flex items-center justify-center ">
                           <X color="#ffffff" size={14} />
                         </div>
                       </div>
                       <div className="flex flex-col ">
-                        <h1 className="text-black text-normal">Test Failed</h1>
-                        <p className="text-black text-sm ">
+                        <h1 className="text-black text-base font-normal">
+                          {selectedEvaluation?.status}
+                        </h1>
+                        <p className="text-black text-sm font-normal  ">
                           The replayed conversation does not match the tone of
                           any of the baselines. While the tone of all of the
                           baselines is polite and friendly, the tone in the
@@ -245,10 +266,13 @@ const TestResult: React.FC<ModalProps> = ({
                         </div>
                       </div>
                       <div className="flex flex-col ">
-                        <h1 className="text-black text-normal">Test Passed</h1>
+                        <h1 className="text-black text-normal">
+                          {selectedEvaluation?.status}
+                        </h1>
                         <p className="text-black text-sm ">
-                          The replayed conversation matches the content of
-                          “First
+                          {selectedEvaluation?.status?.status_info
+                            ? selectedEvaluation?.status?.status_info
+                            : "  The replayed conversation matches the content of  “First Baseline”!"}
                         </p>
                       </div>
                     </div>
@@ -259,11 +283,15 @@ const TestResult: React.FC<ModalProps> = ({
                         color="red"
                         variant="outline"
                         isWidth={true}
-                        svgIcon={<UserCog size={19} />}
+                        svgIcon={<UserCog size={16} />}
+                        isDanger
                         onClick={() => {
                           setisOpenSaveBaselineModal(true);
                         }}
-                        isDanger
+                        disabled={
+                          (organization !== null && orgRole === "org:viewer") ||
+                          isOverideDisable
+                        }
                       >
                         Override fail and set replayed conversation as an
                         additional baseline.
@@ -276,7 +304,7 @@ const TestResult: React.FC<ModalProps> = ({
                         color="gray"
                         variant="surface"
                         isWidth={true}
-                        svgIcon={<Download size={19} />}
+                        svgIcon={<Download size={16} />}
                         onClick={() =>
                           downloadJson(
                             selectedEvaluation?.conversation_json,
@@ -289,9 +317,9 @@ const TestResult: React.FC<ModalProps> = ({
                         {`Variant ${selectedVariantLetter} - Iteration ${selectedIteration}`}
                       </CustomButton>
                     </div>
-                    <hr className="h-[32px] w-[2px] border-none outline-none bg-[#d9d9d9] text-[#d9d9d9" />
+                    <hr className="h-[32px] w-[1px] border-none outline-none bg-[#d9d9d9] text-[#d9d9d9" />
 
-                    <div className="w-[45%]">
+                    <div className="w-[45%] pb-1">
                       <CustomSelect
                         placeholder="Select Baseline"
                         Btntext="Deleted Soon"
@@ -310,8 +338,7 @@ const TestResult: React.FC<ModalProps> = ({
                     </div>
 
                     <button
-                      className="border border-[#d8d8d8] px-2 py-1.5
-  rounded-lg"
+                      className="border border-[#d8d8d8] px-2 py-1.5 rounded-lg hover:bg-[#FFFDFD] hover:border hover:border-[#d8d8d8]"
                       onClick={() =>
                         downloadJson(
                           baselines?.find(
@@ -344,48 +371,38 @@ const TestResult: React.FC<ModalProps> = ({
                                 className="flex gap-4 items-end"
                                 key={item.id}
                               >
-                                <div className="p-2 mb-2 bg-[#f6f5f3] rounded-full">
-                                  <User size={19} color="gray" />
+                                <div className="w-[40px] h-[38px] mb-1 bg-[#f6f5f3] flex items-center justify-center  rounded-full">
+                                  <User size={23} color="gray" />
                                 </div>
                                 <div className="w-full">
                                   <textarea
                                     value={item.message}
                                     disabled={true}
-                                    className={`${
-                                      "" && "text-[#909193]"
-                                    } mt-2.5 w-full px-2 py-2  border border-[#d0d0d0] rounded resize-none disabled:bg-[#fefefd] disabled:text-[#8e8e8d]  `}
-                                    placeholder="Enter your custom success criteria here..."
+                                    className={`
+                                     mt-2.5 w-full px-2 py-2 text-sm font-normal border border-[#d0d0d0] rounded resize-none disabled:bg-[#fefefd] disabled:text-[#8e8e8d]  `}
                                   />
                                 </div>
                               </div>
                             )}
                             {item?.author === "bot" && (
-                              <div className="flex gap-4 items-end">
-                                <div className="p-2 mb-2 bg-[#388aeb] rounded-full">
-                                  <Bot size={19} color="#ffff" />
+                              <div className="flex gap-4 items-end ">
+                                <div className="w-[40px] h-[38px] bg-[#388aeb] rounded-full  flex items-center justify-center">
+                                  <Bot size={23} color="#ffff" />
                                 </div>
                                 <div className="w-full flex items-center gap-3">
                                   <textarea
-                                    style={{
-                                      height: "180px",
-                                      resize: "none",
-                                    }}
                                     value={item?.message}
-                                    className={`mt-2.5 w-full px-2 py-2 border border-[#d0d0d0] rounded`}
-                                    placeholder="Enter your custom success criteria here..."
+                                    className={`mt-2.5 w-full px-2 py-2 border border-[#d0d0d0] rounded text-sm font-normal resize-none h-[180px] overflow-y-scroll bot_textarea`}
+                                    placeholder=""
                                   />
-                                  <hr className="h-[180px] mt-2.5 w-[3px] border-none outline-none bg-[#d9d9d9] text-[#d9d9d9]" />
+                                  <hr className="h-[180px] mt-2.5 w-[3px] border-none outline-none bg-[#d9d9d9] text-[#d9d9d9] " />
 
                                   <textarea
-                                    style={{
-                                      height: "180px",
-                                      resize: "none",
-                                    }}
                                     value={
                                       baselineConversationJson[index]
                                         ?.message || ""
                                     }
-                                    className={`mt-2.5 w-full px-2 py-2 border border-[#d0d0d0] rounded`}
+                                    className={`mt-2.5 w-full px-2 py-2 border border-[#d0d0d0] rounded text-sm font-normal resize-none h-[180px] overflow-y-scroll bot_textarea`}
                                     placeholder="Baseline message will appear here..."
                                   />
                                 </div>
@@ -406,7 +423,7 @@ const TestResult: React.FC<ModalProps> = ({
                     alt=""
                   />
                   <h1 className="text-black font-semibold text-lg mt-2 ">
-                    Please Select the iteration from the dropdown
+                    Please select the iteration from the dropdown.
                   </h1>
                 </div>
               )}
@@ -428,6 +445,9 @@ const TestResult: React.FC<ModalProps> = ({
         {isLoading && <Loader />}
 
         <SaveBaselineModal
+          testName={testName}
+          isOverideDisable={isOverideDisable}
+          setisOverideDisable={setisOverideDisable}
           testId={testId}
           htmlBlob={selectedEvaluation?.html_blob}
           isOpenSaveBaselineModal={isOpenSaveBaselineModal}
@@ -449,19 +469,19 @@ const statusHandleClass = (status: string) => {
       return {
         backgroundColor: "bg-primary",
         text: "Test in progress",
-        icon: <Shuffle color="#388aeb" size={15} />,
+        icon: <Shuffle color="#388aeb" size={16} />,
       };
     case "Pass":
       return {
         backgroundColor: "bg-successLight",
         text: "View full result",
-        icon: <Check color="#54CA6E" size={15} />,
+        icon: <Check color="#54CA6E" size={16} />,
       };
     case "Fail":
       return {
         backgroundColor: "bg-dangerLight",
         text: "View full result",
-        icon: <X color="#E1654A" size={15} />,
+        icon: <X color="#E1654A" size={16} />,
       };
     case "Error":
       return {
@@ -469,8 +489,8 @@ const statusHandleClass = (status: string) => {
         text: "View error",
         icon: (
           <svg
-            width="26"
-            height="26"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -487,19 +507,19 @@ const statusHandleClass = (status: string) => {
       return {
         backgroundColor: "bg-warningLight",
         text: "View full result",
-        icon: <Shuffle color="#E7C200" size={15} />,
+        icon: <Shuffle color="#E7C200" size={16} />,
       };
     case "Skipped":
       return {
         backgroundColor: "bg-[#f2f2f2]",
         text: "No result",
-        icon: <Ban color="#212427" size={15} />,
+        icon: <Ban color="#212427" size={16} />,
       };
     case "Stopped":
       return {
         backgroundColor: "bg-[#f2f2f2]",
         text: "No result",
-        icon: <ChevronsRight color="#212427" size={15} />,
+        icon: <ChevronsRight color="#212427" size={16} />,
       };
     default:
       return { backgroundColor: "", text: "" };

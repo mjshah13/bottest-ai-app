@@ -38,10 +38,7 @@ const useEnvironment = (setSelectedEnvironment: any) => {
             url,
           })) || [];
         setEnvironmentLists(selectDataItems);
-        if (selectDataItems.length === 1) {
-          // Assuming handleSelect is a function that needs to be called when there is only one bot
-          setSelectedEnvironment(selectDataItems[0]);
-        }
+        setSelectedEnvironment(selectDataItems[0]);
       } catch (error: any) {
         console.error({ error });
         setError(error);

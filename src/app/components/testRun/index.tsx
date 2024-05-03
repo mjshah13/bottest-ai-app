@@ -55,12 +55,16 @@ const TestRun = ({
               ) : (
                 <>
                   {lastTestRuns?.map((item, index) => (
-                    <div
-                      onClick={() => {
-                        setId(item?.id), setIsTestResultModal(true);
-                      }}
-                      key={index}
-                      className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full font-poppin
+                    <>
+                      <Tooltip.Provider>
+                        <Tooltip.Root>
+                          <Tooltip.Trigger asChild>
+                            <div
+                              onClick={() => {
+                                setId(item?.id), setIsTestResultModal(true);
+                              }}
+                              key={index}
+                              className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full font-poppin cursor-pointer hover:border hover:border-[#388aeb]
                       ${
                         item?.status === "Pass"
                           ? "bg-success"
@@ -76,7 +80,20 @@ const TestRun = ({
                           ? "bg-[#212427]"
                           : ""
                       }`}
-                    />
+                            />
+                          </Tooltip.Trigger>
+                          <Tooltip.Portal>
+                            <Tooltip.Content
+                              className="TooltipContent"
+                              sideOffset={5}
+                            >
+                              {item?.status}
+                              <Tooltip.Arrow className="TooltipArrow" />
+                            </Tooltip.Content>
+                          </Tooltip.Portal>
+                        </Tooltip.Root>
+                      </Tooltip.Provider>
+                    </>
                   ))}
                 </>
               )}
@@ -141,12 +158,24 @@ const TestRun = ({
         <Box>
           <div className="h-full flex items-center justify-center   ">
             <div className=" w-full flex justify-center gap-7">
-              <button className="outline-none border-none bg-transparent">
-                <Cog6ToothIcon
-                  className="h-9 w-9 text-black hover:text-[#388aeb]"
-                  onClick={() => setIsCustomizeTestModal(true)}
-                />
-              </button>
+              <Tooltip.Provider>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button className="outline-none border-none bg-transparent">
+                      <Cog6ToothIcon
+                        className="h-9 w-9 text-black hover:text-[#388aeb]"
+                        onClick={() => setIsCustomizeTestModal(true)}
+                      />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                      Modify Test
+                      <Tooltip.Arrow className="TooltipArrow" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
 
               <Tooltip.Provider>
                 <Tooltip.Root>
@@ -157,7 +186,7 @@ const TestRun = ({
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
                     <Tooltip.Content className="TooltipContent" sideOffset={5}>
-                      Run test
+                      Run Test
                       <Tooltip.Arrow className="TooltipArrow" />
                     </Tooltip.Content>
                   </Tooltip.Portal>
@@ -170,6 +199,7 @@ const TestRun = ({
       {isTestResultModal && (
         <TestResult
           testId={specificTest?.id}
+          testName={specificTest?.name}
           specificTestRunId={id}
           title={`Test results: ${specificTest?.name}`}
           isTestResultModal={isTestResultModal}

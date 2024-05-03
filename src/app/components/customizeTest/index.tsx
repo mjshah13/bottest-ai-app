@@ -21,6 +21,7 @@ import { GlobalStateContext } from "../../../globalState";
 import DeleteModal from "../deleteModal";
 import { useApi } from "../../../hooks/useApi";
 import useUpdateTest from "../../../hooks/useUpdateTest";
+import { useAuth, useOrganization } from "@clerk/nextjs";
 
 interface ModalProps {
   title?: string;
@@ -47,6 +48,8 @@ const CustomizeTest: React.FC<ModalProps> = ({
   const { deleteBaseline } = useDeleteBaseline();
   const { deleteTest } = useDeleteTest();
   const { updateTest } = useUpdateTest();
+  const { orgRole } = useAuth();
+  const { organization } = useOrganization();
 
   const [isSuccessCriteriaTextDisabled, setIsSuccessCriteriaTextDisabled] =
     useState(true);
@@ -134,12 +137,12 @@ const CustomizeTest: React.FC<ModalProps> = ({
       <Dialog.Content maxWidth={"860px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className=" text-black ">{title}</p>
+            <p className=" text-black font-semibold text-base">{title}</p>
           </div>
         </Dialog.Title>
         <div>
           <div className="px-5 pt-2 pb-7">
-            <h1 className="mb-2">Success criteria:</h1>
+            <h1 className="mb-2 text-sm ">Success criteria:</h1>
             <div className="flex border border-[#d9d9d9] rounded w-full h-[34px]  ">
               {TabBtn.map((title, index) => (
                 <button
@@ -150,7 +153,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 ? "bg-[#388aeb] text-white"
                 : "bg-gray-300 text-gray-800"
             }
-            w-full flex items-center justify-center rounded ${
+            w-full flex items-center justify-center rounded text-sm ${
               index === 0 ? "rounded-l" : ""
             } ${index === title.length - 1 ? "rounded-r" : ""}
           `}
@@ -172,13 +175,14 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   value={customizeTestData?.success_criteria}
                   disabled={isSuccessCriteriaTextDisabled}
                   className={`${
-                    isSuccessCriteriaTextDisabled && "text-[#909193]"
-                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`}
+                    isSuccessCriteriaTextDisabled &&
+                    "text-[#b8b8b8] bg-[#f5f5f5]"
+                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded-md font-normal text-sm h-[70px]`}
                   placeholder="Enter your custom success criteria here..."
                 />
               )}
 
-              <p className="text-[#909193] font-medium ">
+              <p className="text-[#909193] text-xs font-normal ">
                 The default success criteria can be changed on a test suite
                 level in the test suite settings.
               </p>
@@ -186,7 +190,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
 
             <div className="flex mt-6 gap-7 ">
               <div className=" w-full ">
-                <h1 className="mb-2">Number of variants</h1>
+                <h1 className="mb-2 text-sm ">Number of variants</h1>
                 <div className="flex border border-[#d9d9d9] rounded w-full h-[34px]  ">
                   {TabBtn.map((title, index) => (
                     <button
@@ -197,7 +201,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                     ? "bg-[#388aeb] text-white"
                     : "bg-gray-300 text-gray-800"
                 }
-             w-full flex items-center justify-center rounded ${
+             w-full flex items-center justify-center rounded text-sm ${
                index === 0 ? "rounded-l" : ""
              } ${index === title.length - 1 ? "rounded-r" : ""}
            `}
@@ -220,15 +224,16 @@ const CustomizeTest: React.FC<ModalProps> = ({
                       value={customizeTestData?.variant_count}
                       disabled={isNumberOfVariantsInputDisabled}
                       className={`${
-                        isNumberOfVariantsInputDisabled && "text-[#909193]"
-                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`}
-                      placeholder="Enter your custom success criteria here..."
+                        isNumberOfVariantsInputDisabled &&
+                        "text-[#b8b8b8] bg-[#f5f5f5]"
+                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded font-normal text-sm`}
+                      placeholder="Enter your custom variant count here..."
                     />
                   )}
                 </div>
               </div>
               <div className="w-full ">
-                <h1 className="mb-2">Number of iterations</h1>
+                <h1 className="mb-2 text-sm ">Number of iterations</h1>
                 <div className="flex border border-[#d9d9d9] rounded w-full h-[34px]  ">
                   {TabBtn.map((title, index) => (
                     <button
@@ -239,7 +244,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 ? "bg-[#388aeb] text-white"
                 : "bg-gray-300 text-gray-800"
             }
-            w-full flex items-center justify-center rounded ${
+            w-full flex items-center justify-center rounded text-sm ${
               index === 0 ? "rounded-l" : ""
             } ${index === title.length - 1 ? "rounded-r" : ""}
           `}
@@ -261,16 +266,17 @@ const CustomizeTest: React.FC<ModalProps> = ({
                       value={customizeTestData?.iteration_count}
                       disabled={isNumberOfIterationInputDisabled}
                       className={`${
-                        isNumberOfIterationInputDisabled && "text-[#909193]"
-                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded`}
-                      placeholder="Enter your custom success criteria here..."
+                        isNumberOfIterationInputDisabled &&
+                        "text-[#b8b8b8] bg-[#f5f5f5]"
+                      } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded font-normal text-sm`}
+                      placeholder="Enter your custom iteration count here..."
                     />
                   )}
                 </div>
               </div>
             </div>
             <div className="mt-6">
-              <h1>Baseline conversations:</h1>
+              <h1 className="text-sm ">Baseline conversations:</h1>
               <div className="mt-2 flex gap-3">
                 {isLoading ? (
                   <div className="mt-1">
@@ -279,26 +285,30 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 ) : (
                   <>
                     {baselines?.map((item) => (
-                      <Chip
-                        key={item.id}
-                        handleDelete={() => deleteBaseline(item?.id, baselines)}
-                        onClick={() =>
-                          downloadJson(
-                            item?.conversation_json,
-                            item?.name || "Baseline"
-                          )
-                        }
-                        isCancel={baselines?.length > 1}
-                      >
-                        {item?.name}
-                      </Chip>
+                      <div className="mr-1.5">
+                        <Chip
+                          key={item.id}
+                          handleDelete={() =>
+                            deleteBaseline(item?.id, baselines)
+                          }
+                          onClick={() =>
+                            downloadJson(
+                              item?.conversation_json,
+                              item?.name || "Baseline"
+                            )
+                          }
+                          isCancel={baselines?.length > 1}
+                        >
+                          {item?.name}
+                        </Chip>
+                      </div>
                     ))}
                   </>
                 )}
               </div>
             </div>
             <div className="mt-6">
-              <h1>Full test runs:</h1>
+              <h1 className="text-sm mb-2">Full test runs:</h1>
               <div className="flex items-center gap-2">
                 <Checkbox
                   variant="classic"
@@ -307,8 +317,11 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   onCheckedChange={(isChecked) =>
                     handleCheckboxChange(isChecked)
                   }
+                  disabled={organization !== null && orgRole === "org:viewer"}
                 />
-                Disable “My second test” from running in full test runs
+                <h1 className="text-sm">
+                  {`Disable "${specificTest?.name}" from running in full test runs`}
+                </h1>
               </div>
             </div>
             <div className="mt-6">
@@ -320,6 +333,8 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 onClick={() => {
                   setIsDeleteModal(true);
                 }}
+                disabled={organization !== null && orgRole === "org:viewer"}
+                // disabled={true}
               >
                 {` Delete ${specificTest?.name}`}
               </CustomButton>
@@ -342,6 +357,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 color="blue"
                 variant="solid"
                 isPrimary
+                disabled={organization !== null && orgRole === "org:viewer"}
               >
                 Save changes
               </CustomButton>
@@ -358,10 +374,10 @@ const CustomizeTest: React.FC<ModalProps> = ({
               setIsDeleteModal(false);
             }
           }}
-          description={`Are you sure you want to delete the ${specificTest?.name}?.This action can not be undone.`}
+          description={`Are you sure you want to delete the ${specificTest?.name} Test? This action can not be undone.`}
           isDeleteModal={isDeleteModal}
           setIsDeleteModal={setIsDeleteModal}
-          title={`Delete ${specificTest?.name}`}
+          title={`Delete "${specificTest?.name}" Test`}
         />
       )}
     </Dialog.Root>

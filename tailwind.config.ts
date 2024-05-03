@@ -14,6 +14,7 @@ const config: Config = {
       poppin: ["var(--font-poppins)"],
     },
     colors: {
+      disabledGray: "#adb1bd",
       transparent: "transparent",
       white: "#FFFFFF",
       lightgray: "#F0EFED",
@@ -57,5 +58,6 @@ const config: Config = {
     },
   },
   plugins: [],
+  darkMode: "class",
 };
 export default config;

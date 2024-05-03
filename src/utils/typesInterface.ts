@@ -41,9 +41,10 @@ export interface BottestReportProps {
 export interface BotType {
   id: string;
   name: string;
-  info?: string;
   isEdit?: boolean;
   isNew?: boolean;
+  isDelete?: boolean;
+  isDuplicate?: boolean;
 }
 
 export interface SuiteType {
@@ -51,6 +52,8 @@ export interface SuiteType {
   name: string;
   isEdit?: boolean;
   isNew?: boolean;
+  isDuplicate?: boolean;
+  isDelete?: boolean;
   default_success_criteria?: string;
   default_variant_count?: number;
   default_iteration_count?: number;
@@ -62,6 +65,7 @@ export interface EnvironmentType {
   info?: string;
   isEdit?: boolean;
   isNew?: boolean;
+  isDelete?: boolean;
 }
 
 export interface TestType {

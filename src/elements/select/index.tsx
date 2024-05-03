@@ -45,14 +45,17 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           }
         }}
       >
-        <Select.Trigger placeholder={placeholder} className="font-poppin">
+        <Select.Trigger
+          placeholder={placeholder}
+          className="font-poppin cursor-pointer"
+        >
           {selectedValue?.name}
         </Select.Trigger>
         <Select.Content position="popper" className="font-poppin">
           {options?.map((option) => (
             <Select.Item
               className={`
-              font-poppin
+              font-poppin cursor-pointer
                 ${
                   option.id === selectedValue?.id
                     ? "bg-primary text-black font-semibold"

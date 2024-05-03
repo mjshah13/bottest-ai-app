@@ -1,4 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
+
+"use client";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import "react-toastify/dist/ReactToastify.css";

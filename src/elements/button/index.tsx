@@ -47,17 +47,22 @@ const CustomButton: React.FC<Props> = ({
   color,
   onClick,
   isWidth = false,
-  disabled = false,
+  disabled,
   isPrimary,
   isDanger,
 }) => {
   return (
     <Button
       onClick={onClick}
-      className={` ${isWidth && "w-full"} ${isPrimary && "text-white"} ${
-        isDanger && "text-danger"
-      } 
-      text-black py-4 font-poppin cursor-pointer flex items-center gap-2 min-w-[143px] rounded-md`}
+      className={` ${isWidth && "w-full"} ${
+        isPrimary ? "text-white" : "text-black"
+      } ${isDanger ? "text-danger" : "text-black"}
+      ${
+        disabled
+          ? "text-disabledGray cursor-not-allowed"
+          : "text-black cursor-pointer"
+      }
+      text-black py-4 font-poppin  font-normal flex items-center gap-2 min-w-[143px] rounded-md`}
       color={color}
       variant={variant}
       disabled={disabled}

@@ -27,64 +27,85 @@ export const GlobalStateProvider = ({
   );
 
   const updateBotRow = (updatedBot: BotType, botList: BotType[]) => {
-    setBotLists(
-      botList.map((bot) => (bot.id === updatedBot.id ? updatedBot : bot))
-    );
+    setBotLists((prevbotlist) => {
+      return prevbotlist?.map((bot) =>
+        bot?.id === updatedBot?.id ? updatedBot : bot
+      );
+    });
+    // setBotLists(
+    //   botList.map((bot) => (bot.id === updatedBot.id ? updatedBot : bot))
+    // );
   };
   const addBotRow = (addedBot: BotType, botList: BotType[]) => {
-    setBotLists([...botList, addedBot]);
+    setBotLists((prevBot) => [...prevBot, addedBot]);
   };
 
   const copyBot = (addedBot: BotType, botList: BotType[]) => {
-    setBotLists([...botList, addedBot]);
+    setBotLists((prevBot) => [...prevBot, addedBot]);
   };
 
   const deleteBotRow = (deletedBot: string, botList: BotType[]) => {
-    setBotLists(botList.filter((bot) => bot.id !== deletedBot));
+    // setBotLists(botList.filter((bot) => bot.id !== deletedBot));
+    setBotLists((prevBot) => prevBot?.filter((bot) => bot.id !== deletedBot));
   };
 
   const updateSuiteRow = (updatedSuite: SuiteType, suiteLists: SuiteType[]) => {
-    setSuiteLists(
-      suiteLists.map((suite) =>
+    setSuiteLists((prevSuiteLists) => {
+      // Map over the previous suiteLists array and update the relevant suite
+      return prevSuiteLists.map((suite) =>
         suite.id === updatedSuite.id ? updatedSuite : suite
-      )
-    );
+      );
+    });
   };
+
   const addSuiteRow = (addedSuite: SuiteType, suiteLists: SuiteType[]) => {
-    setSuiteLists([...suiteLists, addedSuite]);
+    setSuiteLists((prevSuite) => [...prevSuite, addedSuite]);
   };
   const deleteSuiteRow = (deletedSuite: string, suiteLists: SuiteType[]) => {
-    setSuiteLists(suiteLists.filter((suite) => suite.id !== deletedSuite));
+    setSuiteLists((prevSuite) =>
+      prevSuite.filter((suite) => suite.id !== deletedSuite)
+    );
   };
 
   const copySuite = (addedSuite: SuiteType, suiteLists: SuiteType[]) => {
-    setSuiteLists([...suiteLists, addedSuite]);
+    setSuiteLists((prevSuite) => [...prevSuite, addedSuite]);
   };
 
   const updateEnvironmentRow = (
     updatedEnvironment: EnvironmentType,
     environmentLists: EnvironmentType[]
   ) => {
-    setEnvironmentLists(
-      environmentLists.map((environment) =>
-        environment.id === updatedEnvironment.id
+    setEnvironmentLists((prevEnvironment) => {
+      return prevEnvironment?.map((environment) =>
+        environment?.id === updatedEnvironment?.id
           ? updatedEnvironment
           : environment
-      )
-    );
+      );
+    });
+
+    // setEnvironmentLists(
+    //   environmentLists.map((environment) =>
+    //     environment.id === updatedEnvironment.id
+    //       ? updatedEnvironment
+    //       : environment
+    //   )
+    // );
   };
   const addEnvironmentRow = (
     addedEnvironment: EnvironmentType,
     environmentLists: EnvironmentType[]
   ) => {
-    setEnvironmentLists([...environmentLists, addedEnvironment]);
+    setEnvironmentLists((prevEnvironment) => [
+      ...prevEnvironment,
+      addedEnvironment,
+    ]);
   };
   const deleteEnvironmentRow = (
     deletedEnvironment: string,
     environmentLists: EnvironmentType[]
   ) => {
-    setEnvironmentLists(
-      environmentLists.filter(
+    setEnvironmentLists((prevEnvironment) =>
+      prevEnvironment.filter(
         (environment) => environment.id !== deletedEnvironment
       )
     );
@@ -94,8 +115,8 @@ export const GlobalStateProvider = ({
     deletebaseline: string,
     baselines: BaselineType[]
   ) => {
-    setBaselines(
-      baselines.filter((baseline) => baseline.id !== deletebaseline)
+    setBaselines((prevBaseline) =>
+      prevBaseline.filter((baseline) => baseline.id !== deletebaseline)
     );
   };
 

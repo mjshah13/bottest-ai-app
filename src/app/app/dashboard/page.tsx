@@ -57,7 +57,6 @@ const Dashboard = (props: DashboardProps) => {
   const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
   const { fetchTests, isLoading } = useTests();
   const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
-
   const { testData } = useContext(GlobalStateContext) as GlobalStateType;
 
   const filterData = (status: string) => {
@@ -298,6 +297,7 @@ const Dashboard = (props: DashboardProps) => {
                       <CustomButton
                         color="blue"
                         variant="solid"
+                        isPrimary
                         disabled={
                           organization !== null && orgRole === "org:viewer"
                         }
@@ -334,6 +334,10 @@ const Dashboard = (props: DashboardProps) => {
                                 variant="solid"
                                 svgIcon={<RefreshCw size={17} />}
                                 isPrimary
+                                disabled={
+                                  organization !== null &&
+                                  orgRole === "org:viewer"
+                                }
                               >
                                 Run all tests
                               </CustomButton>
@@ -380,12 +384,11 @@ const Dashboard = (props: DashboardProps) => {
                                   ))}
                               </div>
                             </Box>
-                            <Box className="mt-1">
+                            <Box>
                               <CustomInput
                                 onChange={(value) => {
                                   handleFilteredData(value);
                                 }}
-                                size="2"
                                 type="text"
                                 placeholder="Search for a test"
                               />

@@ -85,26 +85,11 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
     const newEnvironment = {
       id: uuidv4(),
       name: "",
-      info: "",
       url: "",
-      description: "",
       isNew: true,
     };
     setEnvironmentData([...environmentData, newEnvironment]);
   };
-
-  // const deleteEnvironment = async (environmentId: string) => {
-  //   try {
-  //     const data = await request({
-  //       url: `/v1/environments/${environmentId}`,
-  //       method: "DELETE",
-  //     });
-
-  //     deleteEnvironmentRow(environmentId, environmentLists);
-  //   } catch (error: any) {
-  //     console.error({ error });
-  //   }
-  // };
 
   const handleSave = () => {
     const filteredEnvironment = environmentData?.filter(
@@ -123,19 +108,29 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
       (environment) => environment?.isNew
     );
     if (filteredNewEnvironment) {
-      console.log(filteredNewEnvironment, "hhh");
       filteredNewEnvironment?.map(({ id, isEdit, isNew, ...rest }) => {
         if (!rest?.name) return;
         addEnvironment({ bot_id: selectedBot?.id, ...rest }, environmentLists);
       });
-      // filteredNewEnvironment?.map((item) => {
-      //   addEnvironment(
-      //     item?.name as string,
-      //     selectedBot?.id as string,
-      //     environmentLists
-      //   );
-      // });
     }
+    const filteredDeleteEnvironment = environmentData?.filter(
+      (environment) => environment?.isDelete
+    );
+    if (filteredDeleteEnvironment) {
+      filteredDeleteEnvironment?.map((environment) => {
+        deleteEnvironment(environment.id, environmentLists);
+      });
+    }
+  };
+
+  const handleDeleteEnvironment = (selectedSuiteId: string) => {
+    setEnvironmentData(
+      environmentData.map((environment) =>
+        environment.id === selectedSuiteId
+          ? { ...environment, isDelete: true }
+          : environment
+      )
+    );
   };
 
   return (
@@ -147,7 +142,9 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
         <Dialog.Content maxWidth={"860px"}>
           <Dialog.Title>
             <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-              <p className="font-poppin text-black ">{title}</p>
+              <p className="font-poppin text-black text-base font-semibold ">
+                {title}
+              </p>
             </div>
           </Dialog.Title>
           <div>
@@ -174,13 +171,13 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                     <Table.Row>
                       <Table.ColumnHeaderCell
                         style={{ width: "250px" }}
-                        className="border-r border-[#d2cdcd]"
+                        className="border-r border-[#d2cdcd] text-sm font-semibold"
                       >
                         Name
                       </Table.ColumnHeaderCell>
                       <Table.ColumnHeaderCell
                         style={{ width: "500px" }}
-                        className="border-r border-[#d2cdcd]"
+                        className="border-r border-[#d2cdcd] text-sm font-semibold"
                       >
                         Url
                       </Table.ColumnHeaderCell>
@@ -189,61 +186,68 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                   </Table.Header>
 
                   <Table.Body>
-                    {environmentData.map((environment) => (
-                      <Table.Row key={environment.id}>
-                        <Table.Cell className="border-r border-[#d2cdcd]">
-                          {" "}
-                          <input
-                            className=" py-2  w-[90%] outline-none  "
-                            type="text"
-                            name="name"
-                            value={`${environment.name}` || ""}
-                            onChange={(e) => handleChange(e, environment?.id)}
-                            disabled={
-                              organization !== null && orgRole === "org:viewer"
-                            }
-                          />
-                        </Table.Cell>
-                        <Table.Cell className="border-r border-[#d2cdcd]">
-                          <div className="flex items-center h-full">
-                            {/* {environment.url} */}
+                    {environmentData
+                      ?.filter((environment) => !environment?.isDelete)
+                      .map((environment) => (
+                        <Table.Row key={environment.id}>
+                          <Table.Cell className="border-r border-[#d2cdcd]">
+                            {" "}
                             <input
-                              className=" py-2  w-[100%] outline-none  "
+                              className=" py-2  w-[90%] outline-none  "
                               type="text"
-                              name="url"
-                              value={`${environment.url}` || ""}
+                              name="name"
+                              value={`${environment.name}` || ""}
                               onChange={(e) => handleChange(e, environment?.id)}
                               disabled={
                                 organization !== null &&
                                 orgRole === "org:viewer"
                               }
                             />
-                          </div>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <div className="flex items-center justify-center gap-1.2 h-full">
-                            <button
-                              className="outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
-                              onClick={() => {
-                                setIsDeleteModal(true);
-                                setSelectedEnvironemnt(environment);
-                              }}
-                              disabled={
-                                organization !== null &&
-                                orgRole === "org:viewer"
-                              }
-                            >
-                              <Trash color="#E1654A" size={18} />
-                            </button>
-                          </div>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
+                          </Table.Cell>
+                          <Table.Cell className="border-r border-[#d2cdcd]">
+                            <div className="flex items-center h-full">
+                              {/* {environment.url} */}
+                              <input
+                                className=" py-2  w-[100%] outline-none  "
+                                type="text"
+                                name="url"
+                                value={`${environment.url}` || ""}
+                                onChange={(e) =>
+                                  handleChange(e, environment?.id)
+                                }
+                                disabled={
+                                  organization !== null &&
+                                  orgRole === "org:viewer"
+                                }
+                              />
+                            </div>
+                          </Table.Cell>
+                          <Table.Cell>
+                            {!environment?.isNew && (
+                              <div className="flex items-center justify-center gap-1.2 h-full">
+                                <button
+                                  className="outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
+                                  onClick={() => {
+                                    setIsDeleteModal(true);
+                                    setSelectedEnvironemnt(environment);
+                                  }}
+                                  disabled={
+                                    organization !== null &&
+                                    orgRole === "org:viewer"
+                                  }
+                                >
+                                  <Trash color="#E1654A" size={18} />
+                                </button>
+                              </div>
+                            )}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
 
                     <Table.Row>
                       <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
                         <button
-                          className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
+                          className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium disabled:cursor-not-allowed `}
                           disabled={
                             organization !== null && orgRole === "org:viewer"
                           }
@@ -255,40 +259,6 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                     </Table.Row>
                   </Table.Body>
                 </Table.Root>
-
-                {/* <Table
-                bordered
-                pagination={false}
-                columns={environmentColumns}
-                dataSource={
-                  environmentData?.map((environment) => ({
-                    ...environment,
-                    url: (
-                      <a href={`${environment?.url}`} target="_blank">
-                        {environment.url}
-                      </a>
-                    ),
-                    name: (
-                      <>
-                        <input
-                          className=" py-2 pl-2 w-full outline-none "
-                          type="text"
-                          value={`${environment.name}` || ""}
-                          onChange={(e) => handleChange(e, environment?.id)}
-                        />
-                      </>
-                    ),
-                  })) || []
-                }
-                footer={() => (
-                  <button
-                    className="w-full text-[#388aeb]"
-                    onClick={addBlankEnvironment}
-                  >
-                    + Add new environment
-                  </button>
-                )}
-              /> */}
               </div>
             </>
           </div>
@@ -323,7 +293,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
           <DeleteModal
             onClick={() => {
               if (selectedEnvironemnt) {
-                deleteEnvironment(selectedEnvironemnt.id, environmentLists);
+                handleDeleteEnvironment(selectedEnvironemnt?.id);
                 setIsDeleteModal(false);
               }
             }}

@@ -21,13 +21,13 @@ const DeleteModal: React.FC<ModalProps> = ({
     <Dialog.Root open={isDeleteModal} onOpenChange={setIsDeleteModal}>
       <Dialog.Content maxWidth={"480px"}>
         <Dialog.Title>
-          <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className=" text-black ">{title}</p>
+          <div className="border-b border-[#f5f5f5] h-[56px] flex items-center px-5 ">
+            <p className=" text-black text-base font-semibold">{title}</p>
           </div>
         </Dialog.Title>
 
-        <div className="px-6 pt-2 pb-7">
-          <p className="text-black text-sm text-wrap w-[80%] ">{description}</p>
+        <div className="px-5 pt-2 pb-7">
+          <p className="text-black font-normal text-sm ">{description}</p>
         </div>
 
         <div className="border-t border-[#f5f5f5]">
@@ -44,7 +44,7 @@ const DeleteModal: React.FC<ModalProps> = ({
                 color="red"
                 isDanger
               >
-                Yes,delete
+                Yes, delete
               </CustomButton>
             </Dialog.Close>
           </Flex>

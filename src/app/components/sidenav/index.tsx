@@ -1,11 +1,11 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { usePathname } from "next/navigation";
 import { UserButton, useSession } from "@clerk/nextjs";
 import { NavigationItem, ServiceItem } from "../../../utils/typesInterface";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import {
   Home,
   BarChartBig,
@@ -44,7 +44,7 @@ const services: ServiceItem[] = [
   {
     id: 1,
     name: "Help",
-    href: "https://www.google.com",
+    href: "https://bottest.ai/help",
     icon: <CircleHelp />,
     current: false,
     isDisabled: false,
@@ -52,7 +52,7 @@ const services: ServiceItem[] = [
   {
     id: 2,
     name: "Documentation",
-    href: "https://www.google.com",
+    href: "https://bottest.ai/docs",
     icon: <Building2 />,
     current: false,
     isDisabled: false,
@@ -64,14 +64,15 @@ function classNames(...classes: string[]) {
 }
 
 const Sidenav = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const [active, setActive] = useState(pathname);
 
   const handleNavigationClick = (item: NavigationItem) => {
     setActive(item.href);
-    router.push(item.href);
+    window.open(item.href, "_blank");
+    // router.push(item.href);
   };
 
   const { session } = useSession();
@@ -150,7 +151,7 @@ const Sidenav = () => {
                               onClick={() => handleNavigationClick(item)}
                               className={classNames(
                                 item?.href === active
-                                  ? "text-secondary bg-primary font-normal"
+                                  ? "text-secondary bg-primary font-normal "
                                   : item?.isDisabled
                                   ? "text-[#b6b8b7]  hover:bg-lightgray"
                                   : "text-black hover:text-black hover:bg-lightgray",
@@ -208,7 +209,7 @@ const Sidenav = () => {
 
       <div className="hidden h-full lg:z-50 lg:flex lg:w-64 lg:flex-col ">
         <div
-          className="flex grow flex-col gap-y-5  bg-white px-4"
+          className="flex grow flex-col gap-y-5  bg-white   px-4"
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
         >
           <div className="flex h-16 shrink-0 items-center">
@@ -231,11 +232,11 @@ const Sidenav = () => {
                       onClick={() => handleNavigationClick(item)}
                       className={classNames(
                         item?.href === active
-                          ? "text-secondary bg-primary font-normal"
+                          ? "text-secondary bg-primary font-normal "
                           : item?.isDisabled
                           ? "text-[#b6b8b7]  hover:bg-lightgray"
-                          : "text-black hover:text-black hover:bg-lightgray",
-                        "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full  font-poppin"
+                          : "text-black hover:text-black  hover:bg-lightgray ",
+                        "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full font-poppin"
                       )}
                       type="button"
                     >

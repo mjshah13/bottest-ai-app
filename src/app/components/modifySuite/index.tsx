@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import useDeleteSuite from "../../../hooks/useDeleteSuite";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import useDuplicateSuite from "../../../hooks/useDuplicateSuite";
 
 interface ModalProps {
@@ -36,7 +37,7 @@ const ModifySuite: React.FC<ModalProps> = ({
   const [selectedSuite, setSelectedSuite] = useState<SuiteType | null>(null);
   const { addSuite } = useAddSuite();
   const { deleteSuite } = useDeleteSuite();
-  // const { duplicateSuite, isLoading: loading } = useDuplicateSuite();
+  const { duplicateSuite, isLoading: loading } = useDuplicateSuite();
   const [suiteData, setSuiteData] = useState<SuiteType[]>([]);
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
@@ -51,7 +52,9 @@ const ModifySuite: React.FC<ModalProps> = ({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
     id: React.Key
   ) => {
     setSuiteData(
@@ -74,6 +77,7 @@ const ModifySuite: React.FC<ModalProps> = ({
       id: uuidv4(),
       name: "",
       isNew: true,
+      // isDelete: false,
       default_success_criteria: "",
       default_variant_count: 1,
       default_iteration_count: 1,
@@ -85,7 +89,7 @@ const ModifySuite: React.FC<ModalProps> = ({
     const filteredSuite = suiteData?.filter((suite) => suite?.isEdit);
     if (filteredSuite) {
       filteredSuite?.map(({ id, isEdit, isNew, ...rest }) => {
-        updateSuite(id as string, { ...rest }, suiteLists);
+        updateSuite(id, { ...rest }, suiteLists);
       });
     }
     const filteredNewSuite = suiteData?.filter((suite) => suite?.isNew);
@@ -95,6 +99,42 @@ const ModifySuite: React.FC<ModalProps> = ({
         addSuite({ bot_id: selectedBot?.id, ...rest }, suiteLists);
       });
     }
+
+    const filteredDeleteSuite = suiteData?.filter((suite) => suite?.isDelete);
+    if (filteredDeleteSuite) {
+      filteredDeleteSuite?.map((suite) => {
+        deleteSuite(suite?.id, suiteLists);
+      });
+    }
+    const filteredDuplicateSuite = suiteData?.filter(
+      (suite) => suite?.isDuplicate
+    );
+    if (filteredDuplicateSuite) {
+      filteredDuplicateSuite?.map((item) => {
+        duplicateSuite(item?.id, suiteLists);
+      });
+    }
+  };
+
+  const handleDeleteSuite = (selectedSuiteId: string) => {
+    setSuiteData(
+      suiteData.map((suite) =>
+        suite.id === selectedSuiteId ? { ...suite, isDelete: true } : suite
+      )
+    );
+  };
+
+  const handleCopySuite = (suite: SuiteType) => {
+    const newSuite = {
+      id: `${suite?.id}`,
+      name: `${suite?.name} Copy`,
+      isNew: true,
+      isDelete: false,
+      default_success_criteria: `${suite?.default_success_criteria} Copy`,
+      default_variant_count: 1,
+      default_iteration_count: 1,
+    };
+    setSuiteData([...suiteData, newSuite]);
   };
 
   return (
@@ -102,7 +142,9 @@ const ModifySuite: React.FC<ModalProps> = ({
       <Dialog.Content maxWidth={"870px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className="font-poppin text-black ">{title}</p>
+            <p className="font-poppin text-black text-base font-semibold ">
+              {title}
+            </p>
           </div>
         </Dialog.Title>
         <div>
@@ -112,25 +154,25 @@ const ModifySuite: React.FC<ModalProps> = ({
                 <Table.Row>
                   <Table.ColumnHeaderCell
                     style={{ width: "180px" }}
-                    className="border-r border-[#d2cdcd]"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold"
                   >
                     Name
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
                     style={{ width: "285px" }}
-                    className="border-r border-[#d2cdcd]"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold"
                   >
                     Default Success Criteria
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
                     style={{ width: "150px" }}
-                    className="border-r border-[#d2cdcd]"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold"
                   >
                     Default Variants
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
                     style={{ width: "155px" }}
-                    className="border-r border-[#d2cdcd]"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold"
                   >
                     Default Iterations
                   </Table.ColumnHeaderCell>
@@ -139,102 +181,132 @@ const ModifySuite: React.FC<ModalProps> = ({
               </Table.Header>
 
               <Table.Body>
-                {suiteData.map((suite) => (
-                  <Table.Row key={suite.id}>
-                    <Table.Cell className="border-r border-[#d2cdcd]">
-                      {" "}
-                      <input
-                        className=" py-2  w-[90%] outline-none  "
-                        type="text"
-                        name="name"
-                        value={`${suite.name}` || ""}
-                        onChange={(e) => handleChange(e, suite?.id)}
-                        disabled={
-                          organization !== null && orgRole === "org:viewer"
-                        }
-                      />
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd] ">
-                      <input
-                        className=" py-2  w-[90%] outline-none  "
-                        type="text"
-                        name="default_success_criteria"
-                        value={`${suite.default_success_criteria}` || ""}
-                        onChange={(e) => handleChange(e, suite?.id)}
-                        disabled={
-                          organization !== null && orgRole === "org:viewer"
-                        }
-                      />
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd]">
-                      <input
-                        className=" py-2  w-[90%] outline-none  "
-                        type="number"
-                        name="default_variant_count"
-                        value={`${suite.default_variant_count}` || ""}
-                        onChange={(e) => handleChange(e, suite?.id)}
-                        disabled={
-                          organization !== null && orgRole === "org:viewer"
-                        }
-                      />
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd]">
-                      <input
-                        className=" py-2  w-[90%] outline-none  "
-                        type="number"
-                        name="default_iteration_count"
-                        value={`${suite.default_iteration_count}` || ""}
-                        onChange={(e) => handleChange(e, suite?.id)}
-                        disabled={
-                          organization !== null && orgRole === "org:viewer"
-                        }
-                      />
-                    </Table.Cell>
-                    <Table.Cell>
-                      <div className="flex items-center justify-center gap-1.2 h-full">
-                        <button
-                          // onClick={() => duplicateSuite(suite?.id, suiteLists)}
-                          disabled={
-                            organization !== null && orgRole === "org:viewer"
-                            // loading
-                          }
-                          className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd]"
-                        >
-                          <CopyPlus size={18} />
-                        </button>
-                        {/* </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                              <Tooltip.Content
-                                className="TooltipContent"
-                                sideOffset={5}
-                              >
-                                Create a copy of bots and existing tests.
-                                <Tooltip.Arrow className="TooltipArrow" />
-                              </Tooltip.Content>
-                            </Tooltip.Portal>
-                          </Tooltip.Root>
-                        </Tooltip.Provider> */}
-                        <button
-                          className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
-                          onClick={() => {
-                            setIsDeleteModal(true);
-                            setSelectedSuite(suite);
-                          }}
+                {suiteData
+                  ?.filter((suite) => !suite?.isDelete)
+                  .map((suite) => (
+                    <Table.Row key={suite.id}>
+                      <Table.Cell className="border-r border-[#d2cdcd]">
+                        {" "}
+                        <input
+                          placeholder="Enter name"
+                          className=" py-2 w-[90%] outline-none "
+                          type="text"
+                          name="name"
+                          value={`${suite.name}` || ""}
+                          onChange={(e) => handleChange(e, suite?.id)}
                           disabled={
                             organization !== null && orgRole === "org:viewer"
                           }
-                        >
-                          <Trash color="#E1654A" size={18} />
-                        </button>
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
+                        />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd] ">
+                        <textarea
+                          placeholder="Enter success criteria"
+                          className=" w-[100%] h-full outline-none resize-none"
+                          // type="text"
+                          name="default_success_criteria"
+                          value={`${suite.default_success_criteria}` || ""}
+                          onChange={(e) => handleChange(e, suite?.id)}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
+                        />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd]">
+                        <input
+                          placeholder="Enter variant count"
+                          className=" py-2  w-[90%] outline-none  "
+                          type="number"
+                          name="default_variant_count"
+                          value={`${suite.default_variant_count}` || ""}
+                          onChange={(e) => handleChange(e, suite?.id)}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
+                        />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd]">
+                        <input
+                          className=" py-2  w-[90%] outline-none  "
+                          type="number"
+                          placeholder="Enter iteration count"
+                          name="default_iteration_count"
+                          value={`${suite.default_iteration_count}` || ""}
+                          onChange={(e) => handleChange(e, suite?.id)}
+                          disabled={
+                            organization !== null && orgRole === "org:viewer"
+                          }
+                        />
+                      </Table.Cell>
+                      <Table.Cell>
+                        {!suite.isNew && (
+                          <div className="flex items-center justify-center gap-1.2 h-full">
+                            <Tooltip.Provider>
+                              <Tooltip.Root>
+                                <Tooltip.Trigger asChild>
+                                  <button
+                                    onClick={() => handleCopySuite(suite)}
+                                    // onClick={() => duplicateSuite(suite?.id, suiteLists)}
+                                    disabled={
+                                      organization !== null &&
+                                      orgRole === "org:viewer"
+                                      // loading
+                                    }
+                                    className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
+                                  >
+                                    <CopyPlus size={18} />
+                                  </button>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                  <Tooltip.Content
+                                    className="TooltipContent"
+                                    sideOffset={5}
+                                  >
+                                    Create a copy of Suite
+                                    <Tooltip.Arrow className="TooltipArrow" />
+                                  </Tooltip.Content>
+                                </Tooltip.Portal>
+                              </Tooltip.Root>
+                            </Tooltip.Provider>
+
+                            <Tooltip.Provider>
+                              <Tooltip.Root>
+                                <Tooltip.Trigger asChild>
+                                  <button
+                                    className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed "
+                                    onClick={() => {
+                                      setIsDeleteModal(true);
+                                      setSelectedSuite(suite);
+                                    }}
+                                    disabled={
+                                      organization !== null &&
+                                      orgRole === "org:viewer"
+                                    }
+                                  >
+                                    <Trash color="#E1654A" size={18} />
+                                  </button>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                  <Tooltip.Content
+                                    className="TooltipContent"
+                                    sideOffset={5}
+                                  >
+                                    Delete Suite
+                                    <Tooltip.Arrow className="TooltipArrow" />
+                                  </Tooltip.Content>
+                                </Tooltip.Portal>
+                              </Tooltip.Root>
+                            </Tooltip.Provider>
+                          </div>
+                        )}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
 
                 <Table.Row>
                   <Table.Cell colSpan={5} className="bg-[#FDFCFA] ">
                     <button
-                      className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
+                      className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium disabled:cursor-not-allowed `}
                       disabled={
                         organization !== null && orgRole === "org:viewer"
                       }
@@ -278,7 +350,7 @@ const ModifySuite: React.FC<ModalProps> = ({
         <DeleteModal
           onClick={() => {
             if (selectedSuite) {
-              deleteSuite(selectedSuite?.id, suiteLists);
+              handleDeleteSuite(selectedSuite?.id);
               setIsDeleteModal(false);
             }
           }}

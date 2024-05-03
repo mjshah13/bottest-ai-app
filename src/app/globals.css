@@ -8,7 +8,10 @@
 
 .rt-BaseDialogContent {
   padding: 0 !important;
-  font-family: "Poppins";
+  font-family: "Poppins", sans-serif !important;
+}
+.rt-BaseDialogScrollPadding {
+  padding: 0 !important;
 }
 
 .rt-TableRoot:where(.rt-variant-surface)
@@ -25,6 +28,9 @@
   font-family: "Poppins";
 }
 
+.rt-Heading {
+  font-family: "Poppins", sans-serif !important;
+}
 .TooltipContent {
   border-radius: 6px;
   padding: 9px 12px;
@@ -57,23 +63,14 @@
 }
 
 .rt-BaseButton {
-  font-family: "Poppins" !important;
+  font-family: "Poppins", sans-serif !important;
 }
 
-.ant-table-wrapper .ant-table-thead > tr > th,
-:where(.css-dev-only-do-not-override-42nv3w).ant-table-wrapper
-  .ant-table-thead
-  > tr
-  > td {
-  background: #fdfcfa !important;
+.bot_textarea::-webkit-scrollbar {
+  width: 7px !important; /* adjust as needed */
 }
 
-.ant-table-wrapper .ant-table-footer {
-  background: #fdfcfa !important;
-}
-
-.ant-table-wrapper .ant-table-row-expand-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 2px !important;
+.bot_textarea::-webkit-scrollbar-thumb {
+  background-color: #8e8e8d !important; /* scrollbar thumb color */
+  border-radius: 4px !important; /* scrollbar thumb border radius */
 }

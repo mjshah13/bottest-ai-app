@@ -11,6 +11,7 @@ import useDeleteBot from "../../../hooks/useDeleteBot";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import useDuplicateBot from "../../../hooks/useDuplicateBot";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 interface ModalProps {
   title?: string;
@@ -40,8 +41,6 @@ const ModifyBot: React.FC<ModalProps> = ({
       botLists?.map((bot: BotType) => ({
         id: bot.id,
         name: bot.name,
-        info: `this is ${bot.name}`,
-        description: `this is ${bot.name}`,
       }))
     );
   }, [botLists]);
@@ -66,13 +65,13 @@ const ModifyBot: React.FC<ModalProps> = ({
         )
     );
   };
+
   const addBlankBot = () => {
     const newBot = {
       id: uuidv4(),
       name: "",
-      info: "",
-      description: "",
       isNew: true,
+      isDelete: false,
     };
     setBotData([...botData, newBot]);
   };
@@ -91,6 +90,38 @@ const ModifyBot: React.FC<ModalProps> = ({
         addBot(item?.name as string, botLists);
       });
     }
+    const filteredDeleteBot = botData?.filter((bot) => bot?.isDelete);
+    if (filteredDeleteBot) {
+      filteredDeleteBot?.map((item) => {
+        deleteBot(item.id, botLists);
+      });
+    }
+
+    const filteredDuplicateBot = botData?.filter((bot) => bot?.isDuplicate);
+    if (filteredDuplicateBot) {
+      filteredDuplicateBot?.map((item) => {
+        duplicateBot(item?.id, botLists);
+      });
+    }
+  };
+
+  const handleDeleteBot = (selectedBotId: string) => {
+    setBotData(
+      botData.map((bot) =>
+        bot.id === selectedBotId ? { ...bot, isDelete: true } : bot
+      )
+    );
+  };
+
+  const handleCopyBot = (bot: BotType) => {
+    const newBot = {
+      id: bot?.id,
+      name: `${bot?.name} Copy`,
+      isNew: false,
+      isDelete: false,
+      isDuplicate: true,
+    };
+    setBotData([...botData, newBot]);
   };
 
   return (
@@ -98,7 +129,9 @@ const ModifyBot: React.FC<ModalProps> = ({
       <Dialog.Content maxWidth={"870px"}>
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className="font-poppin text-black ">{title}</p>
+            <p className="font-poppin text-black text-base font-semibold ">
+              {title}
+            </p>
           </div>
         </Dialog.Title>
         <div>
@@ -107,74 +140,104 @@ const ModifyBot: React.FC<ModalProps> = ({
               <Table.Header>
                 <Table.Row>
                   <Table.ColumnHeaderCell
-                    style={{ width: "250px" }}
-                    className="border-r border-[#d2cdcd]"
+                    style={{ width: "720px" }}
+                    className="border-r border-[#d2cdcd] text-sm font-semibold"
                   >
                     Name
                   </Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell
-                    style={{ width: "480px" }}
-                    className="border-r border-[#d2cdcd]"
-                  >
-                    Description
-                  </Table.ColumnHeaderCell>
+
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
 
               <Table.Body>
-                {botData.map((bot) => (
-                  <Table.Row key={bot.id}>
-                    <Table.Cell className="border-r border-[#d2cdcd]">
-                      {" "}
-                      <input
-                        className=" py-2  w-[90%] outline-none  "
-                        type="text"
-                        value={`${bot.name}` || ""}
-                        onChange={(e) => handleChange(e, bot?.id)}
-                        disabled={
-                          organization !== null && orgRole === "org:viewer"
-                        }
-                      />
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd]">
-                      <div className="flex items-center h-full">{bot.info}</div>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <div className="flex items-center justify-center gap-1.2 h-full">
-                        <button
-                          onClick={() => duplicateBot(bot?.id, botLists)}
-                          disabled={
-                            (organization !== null &&
-                              orgRole === "org:viewer") ||
-                            loading
-                          }
-                          className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd]"
-                        >
-                          <CopyPlus size={18} />
-                        </button>
-
-                        <button
-                          className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd]"
-                          onClick={() => {
-                            setIsDeleteModal(true);
-                            setSelectedBot(bot);
-                          }}
+                {botData
+                  ?.filter((item) => !item?.isDelete)
+                  .map((bot) => (
+                    <Table.Row key={bot.id}>
+                      <Table.Cell className="border-r border-[#d2cdcd]">
+                        {" "}
+                        <input
+                          placeholder="Enter name"
+                          className=" py-2  w-full outline-none  "
+                          type="text"
+                          value={`${bot.name}` || ""}
+                          onChange={(e) => handleChange(e, bot?.id)}
                           disabled={
                             organization !== null && orgRole === "org:viewer"
                           }
-                        >
-                          <Trash color="#E1654A" size={18} />
-                        </button>
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
+                        />
+                      </Table.Cell>
+
+                      <Table.Cell>
+                        {bot?.isNew ||
+                          (!bot?.isDuplicate && (
+                            <div className="flex items-center justify-center gap-1.2 h-full">
+                              <Tooltip.Provider>
+                                <Tooltip.Root>
+                                  <Tooltip.Trigger asChild>
+                                    <button
+                                      onClick={() => handleCopyBot(bot)}
+                                      disabled={
+                                        (organization !== null &&
+                                          orgRole === "org:viewer") ||
+                                        loading
+                                      }
+                                      className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
+                                    >
+                                      <CopyPlus size={18} />
+                                    </button>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Portal>
+                                    <Tooltip.Content
+                                      className="TooltipContent"
+                                      sideOffset={5}
+                                    >
+                                      Create a copy of Bot
+                                      <Tooltip.Arrow className="TooltipArrow" />
+                                    </Tooltip.Content>
+                                  </Tooltip.Portal>
+                                </Tooltip.Root>
+                              </Tooltip.Provider>
+
+                              <Tooltip.Provider>
+                                <Tooltip.Root>
+                                  <Tooltip.Trigger asChild>
+                                    <button
+                                      className=" ml-3 outline-none border-none bg-transparent  disabled:cursor-not-allowed"
+                                      onClick={() => {
+                                        setIsDeleteModal(true);
+                                        setSelectedBot(bot);
+                                      }}
+                                      disabled={
+                                        organization !== null &&
+                                        orgRole === "org:viewer"
+                                      }
+                                    >
+                                      <Trash color="#E1654A" size={18} />
+                                    </button>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Portal>
+                                    <Tooltip.Content
+                                      className="TooltipContent"
+                                      sideOffset={5}
+                                    >
+                                      Delete Bot
+                                      <Tooltip.Arrow className="TooltipArrow" />
+                                    </Tooltip.Content>
+                                  </Tooltip.Portal>
+                                </Tooltip.Root>
+                              </Tooltip.Provider>
+                            </div>
+                          ))}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
 
                 <Table.Row>
                   <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
                     <button
-                      className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium   `}
+                      className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium disabled:cursor-not-allowed   `}
                       onClick={addBlankBot}
                       disabled={
                         organization !== null && orgRole === "org:viewer"
@@ -218,14 +281,14 @@ const ModifyBot: React.FC<ModalProps> = ({
         <DeleteModal
           onClick={() => {
             if (selectedBot) {
-              deleteBot(selectedBot.id, botLists);
+              handleDeleteBot(selectedBot?.id);
               setIsDeleteModal(false);
             }
           }}
-          description={`Are you sure you want to delete the ${selectedBot?.name} Bot? This will also delete all associated Suites, Environments, and Tests.This action can not be undone.`}
+          description={`Are you sure you want to delete the "${selectedBot?.name}" Bot? This will also delete all associated Suites, Environments, and Tests.This action can not be undone.`}
           isDeleteModal={isDeleteModal}
           setIsDeleteModal={setIsDeleteModal}
-          title={`Delete ${selectedBot?.name} Bot`}
+          title={`Delete "${selectedBot?.name}" Bot`}
         />
       )}
     </Dialog.Root>
