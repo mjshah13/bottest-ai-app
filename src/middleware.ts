@@ -1,11 +1,16 @@
-import { authMiddleware } from "@clerk/nextjs";
 import { PageConfig } from "./utils/typesInterface";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 // import { PageConfig } from "./utils/Interface";
-// Your middleware configuration remains the same
 
-export default authMiddleware({
-  publicRoutes: ["/"],
+const isProtectedRoute = createRouteMatcher([
+  "/app/dashboard",
+  "/app/organization",
+  "/app/analytics",
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) auth().protect();
 });
 
 export const config: PageConfig = {

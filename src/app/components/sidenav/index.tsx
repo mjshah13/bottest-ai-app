@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { usePathname } from "next/navigation";
 import { UserButton, useSession } from "@clerk/nextjs";
 import { NavigationItem, ServiceItem } from "../../../utils/typesInterface";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Home,
   BarChartBig,
@@ -64,15 +64,19 @@ function classNames(...classes: string[]) {
 }
 
 const Sidenav = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const [active, setActive] = useState(pathname);
 
   const handleNavigationClick = (item: NavigationItem) => {
     setActive(item.href);
+    router.push(item.href);
+  };
+
+  const handleServiceClick = (item: ServiceItem) => {
+    // setActive(item.href);
     window.open(item.href, "_blank");
-    // router.push(item.href);
   };
 
   const { session } = useSession();
@@ -181,11 +185,9 @@ const Sidenav = () => {
                             <button
                               key={i}
                               disabled={item?.isDisabled}
-                              onClick={() => handleNavigationClick(item)}
+                              onClick={() => handleServiceClick(item)}
                               className={classNames(
-                                item?.href === active
-                                  ? "text-secondary bg-primary font-normal "
-                                  : item?.isDisabled
+                                item?.isDisabled
                                   ? "text-[#b6b8b7]  hover:bg-lightgray"
                                   : "text-black hover:text-black hover:bg-lightgray",
                                 " flex items-center gap-x-3 rounded-md p-2 text-sm w-full  font-poppin "
@@ -261,11 +263,9 @@ const Sidenav = () => {
                     <button
                       disabled={item?.isDisabled}
                       key={i}
-                      onClick={() => handleNavigationClick(item)}
+                      onClick={() => handleServiceClick(item)}
                       className={classNames(
-                        item?.href === active
-                          ? "text-secondary bg-primary font-normal"
-                          : item?.isDisabled
+                        item?.isDisabled
                           ? "text-[#b6b8b7]  hover:bg-lightgray"
                           : "text-black hover:text-black hover:bg-lightgray",
                         "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full  font-poppin"
