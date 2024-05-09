@@ -1,8 +1,6 @@
 import { PageConfig } from "./utils/typesInterface";
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// import { PageConfig } from "./utils/Interface";
-
 const isProtectedRoute = createRouteMatcher([
   "/app/dashboard",
   "/app/organization",
