@@ -284,8 +284,8 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   </div>
                 ) : (
                   <>
-                    {baselines?.map((item) => (
-                      <div className="mr-1.5">
+                    {baselines?.map((item, i) => (
+                      <div className="mr-1.5" key={i}>
                         <Chip
                           key={item.id}
                           handleDelete={() =>
