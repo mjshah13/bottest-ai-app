@@ -10,9 +10,7 @@ const useDuplicateSuite = () => {
   const { organization } = useOrganization();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const { copySuite } = useContext(GlobalStateContext) as GlobalStateType;
-
   const { request } = useApi();
 
   const duplicateSuite = useCallback(

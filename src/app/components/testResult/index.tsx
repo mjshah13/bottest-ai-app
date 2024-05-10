@@ -139,8 +139,6 @@ const TestResult: React.FC<ModalProps> = ({
     document.body.removeChild(a);
   };
 
-  console.log({ selectedEvaluation });
-
   return (
     <>
       <Dialog.Root open={isTestResultModal} onOpenChange={setIsTestResultModal}>
@@ -445,6 +443,7 @@ const TestResult: React.FC<ModalProps> = ({
         {isLoading && <Loader />}
 
         <SaveBaselineModal
+          selectedEvaluation={selectedEvaluation}
           testName={testName}
           isOverideDisable={isOverideDisable}
           setisOverideDisable={setisOverideDisable}

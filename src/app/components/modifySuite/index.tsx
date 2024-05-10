@@ -94,7 +94,7 @@ const ModifySuite: React.FC<ModalProps> = ({
     }
     const filteredNewSuite = suiteData?.filter((suite) => suite?.isNew);
     if (filteredNewSuite) {
-      filteredNewSuite?.map(({ id, isEdit, isNew, ...rest }) => {
+      filteredNewSuite?.map(({ id, isEdit, isNew, isDuplicate, ...rest }) => {
         if (!rest?.name) return;
         addSuite({ bot_id: selectedBot?.id, ...rest }, suiteLists);
       });
@@ -128,8 +128,9 @@ const ModifySuite: React.FC<ModalProps> = ({
     const newSuite = {
       id: `${suite?.id}`,
       name: `${suite?.name} Copy`,
-      isNew: true,
+      isNew: false,
       isDelete: false,
+      isDuplicate: true,
       default_success_criteria: `${suite?.default_success_criteria} Copy`,
       default_variant_count: 1,
       default_iteration_count: 1,
@@ -239,66 +240,67 @@ const ModifySuite: React.FC<ModalProps> = ({
                         />
                       </Table.Cell>
                       <Table.Cell>
-                        {!suite.isNew && (
-                          <div className="flex items-center justify-center gap-1.2 h-full">
-                            <Tooltip.Provider>
-                              <Tooltip.Root>
-                                <Tooltip.Trigger asChild>
-                                  <button
-                                    onClick={() => handleCopySuite(suite)}
-                                    // onClick={() => duplicateSuite(suite?.id, suiteLists)}
-                                    disabled={
-                                      organization !== null &&
-                                      orgRole === "org:viewer"
-                                      // loading
-                                    }
-                                    className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
-                                  >
-                                    <CopyPlus size={18} />
-                                  </button>
-                                </Tooltip.Trigger>
-                                <Tooltip.Portal>
-                                  <Tooltip.Content
-                                    className="TooltipContent"
-                                    sideOffset={5}
-                                  >
-                                    Create a copy of Suite
-                                    <Tooltip.Arrow className="TooltipArrow" />
-                                  </Tooltip.Content>
-                                </Tooltip.Portal>
-                              </Tooltip.Root>
-                            </Tooltip.Provider>
+                        {suite.isNew ||
+                          (!suite?.isDuplicate && (
+                            <div className="flex items-center justify-center gap-1.2 h-full">
+                              <Tooltip.Provider>
+                                <Tooltip.Root>
+                                  <Tooltip.Trigger asChild>
+                                    <button
+                                      onClick={() => handleCopySuite(suite)}
+                                      // onClick={() => duplicateSuite(suite?.id, suiteLists)}
+                                      disabled={
+                                        organization !== null &&
+                                        orgRole === "org:viewer"
+                                        // loading
+                                      }
+                                      className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
+                                    >
+                                      <CopyPlus size={18} />
+                                    </button>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Portal>
+                                    <Tooltip.Content
+                                      className="TooltipContent"
+                                      sideOffset={5}
+                                    >
+                                      Create a copy of Suite
+                                      <Tooltip.Arrow className="TooltipArrow" />
+                                    </Tooltip.Content>
+                                  </Tooltip.Portal>
+                                </Tooltip.Root>
+                              </Tooltip.Provider>
 
-                            <Tooltip.Provider>
-                              <Tooltip.Root>
-                                <Tooltip.Trigger asChild>
-                                  <button
-                                    className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed "
-                                    onClick={() => {
-                                      setIsDeleteModal(true);
-                                      setSelectedSuite(suite);
-                                    }}
-                                    disabled={
-                                      organization !== null &&
-                                      orgRole === "org:viewer"
-                                    }
-                                  >
-                                    <Trash color="#E1654A" size={18} />
-                                  </button>
-                                </Tooltip.Trigger>
-                                <Tooltip.Portal>
-                                  <Tooltip.Content
-                                    className="TooltipContent"
-                                    sideOffset={5}
-                                  >
-                                    Delete Suite
-                                    <Tooltip.Arrow className="TooltipArrow" />
-                                  </Tooltip.Content>
-                                </Tooltip.Portal>
-                              </Tooltip.Root>
-                            </Tooltip.Provider>
-                          </div>
-                        )}
+                              <Tooltip.Provider>
+                                <Tooltip.Root>
+                                  <Tooltip.Trigger asChild>
+                                    <button
+                                      className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed "
+                                      onClick={() => {
+                                        setIsDeleteModal(true);
+                                        setSelectedSuite(suite);
+                                      }}
+                                      disabled={
+                                        organization !== null &&
+                                        orgRole === "org:viewer"
+                                      }
+                                    >
+                                      <Trash color="#E1654A" size={18} />
+                                    </button>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Portal>
+                                    <Tooltip.Content
+                                      className="TooltipContent"
+                                      sideOffset={5}
+                                    >
+                                      Delete Suite
+                                      <Tooltip.Arrow className="TooltipArrow" />
+                                    </Tooltip.Content>
+                                  </Tooltip.Portal>
+                                </Tooltip.Root>
+                              </Tooltip.Provider>
+                            </div>
+                          ))}
                       </Table.Cell>
                     </Table.Row>
                   ))}

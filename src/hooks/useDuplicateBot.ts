@@ -24,7 +24,6 @@ const useDuplicateBot = () => {
           method: "POST",
         });
         copyBot(data, botLists);
-        // addEnvironmentRow({ id, name, url }, environmentLists);
       } catch (error: any) {
         console.error({ error });
         setIsLoading(false);

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Download, X } from "lucide-react";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import CustomButton from "../button";
 
 interface Props {
   children?: React.ReactNode;
@@ -20,16 +21,19 @@ const Chip: React.FC<Props> = ({
 
   return (
     <div className="flex gap-1.5 ">
-      <div
+      <CustomButton
+        variant="outline"
+        color="gray"
         onClick={onClick}
-        className="py-1.5 border border-[#d9d9d9] flex items-center gap-2 px-3 justify-center rounded-md text-sm "
+        // className="py-1.5 cursor-pointer border border-[#d9d9d9] flex items-center gap-2 px-3 justify-center rounded-md text-sm "
       >
         <Download size={16} />
         {children}
-      </div>
+      </CustomButton>
+
       {isCancel && (
         <button
-          className="outline-none border-none  disabled:cursor-not-allowed"
+          className="outline-none border-none cursor-pointer disabled:cursor-not-allowed"
           onClick={handleDelete}
           disabled={organization !== null && orgRole === "org:viewer"}
         >

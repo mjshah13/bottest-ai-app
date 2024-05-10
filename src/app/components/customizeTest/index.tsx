@@ -129,6 +129,11 @@ const CustomizeTest: React.FC<ModalProps> = ({
     }
   }, [specificTest]);
 
+  console.log(specificTest);
+
+  const [isDeleteBaseline, setIsDeleteBaseline] = useState(false);
+  const [selectedBaseline, setIsSelectedBaseline] = useState<any>(null);
+
   return (
     <Dialog.Root
       open={isCustomizeTestModal}
@@ -277,7 +282,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
             </div>
             <div className="mt-6">
               <h1 className="text-sm ">Baseline conversations:</h1>
-              <div className="mt-2 flex gap-3">
+              <div className="mt-2 flex flex-wrap gap-3">
                 {isLoading ? (
                   <div className="mt-1">
                     <Skeleton count={1} width={120} height={35} />
@@ -285,12 +290,14 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 ) : (
                   <>
                     {baselines?.map((item, i) => (
-                      <div className="mr-1.5" key={i}>
+                      <div className="mr-2 " key={i}>
                         <Chip
                           key={item.id}
-                          handleDelete={() =>
-                            deleteBaseline(item?.id, baselines)
-                          }
+                          handleDelete={() => {
+                            setIsSelectedBaseline(item);
+                            // deleteBaseline(item?.id, baselines)
+                            setIsDeleteBaseline(true);
+                          }}
                           onClick={() =>
                             downloadJson(
                               item?.conversation_json,
@@ -311,6 +318,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
               <h1 className="text-sm mb-2">Full test runs:</h1>
               <div className="flex items-center gap-2">
                 <Checkbox
+                  className="cursor-pointer"
                   variant="classic"
                   color="blue"
                   checked={customizeTestData?.full_run_enabled}
@@ -319,7 +327,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   }
                   disabled={organization !== null && orgRole === "org:viewer"}
                 />
-                <h1 className="text-sm">
+                <h1 className="text-sm font-normal">
                   {`Disable "${specificTest?.name}" from running in full test runs`}
                 </h1>
               </div>
@@ -372,12 +380,31 @@ const CustomizeTest: React.FC<ModalProps> = ({
             if (specificTest?.id) {
               deleteTest(specificTest?.id, testData);
               setIsDeleteModal(false);
+              setIsCustomizeTestModal(false);
             }
           }}
           description={`Are you sure you want to delete the ${specificTest?.name} Test? This action can not be undone.`}
           isDeleteModal={isDeleteModal}
           setIsDeleteModal={setIsDeleteModal}
           title={`Delete "${specificTest?.name}" Test`}
+        />
+      )}
+
+      {isDeleteBaseline && (
+        <DeleteModal
+          onClick={() => {
+            if (selectedBaseline) {
+              deleteBaseline(selectedBaseline?.id, baselines);
+              setIsDeleteBaseline(false);
+            }
+            // deleteTest(specificTest?.id, testData);
+            // setIsDeleteModal(false);
+            // setIsCustomizeTestModal(false);
+          }}
+          description={`Are you sure you want to delete the "${selectedBaseline?.name}" Baseline? This action can not be undone.`}
+          isDeleteModal={isDeleteBaseline}
+          setIsDeleteModal={setIsDeleteBaseline}
+          title={`Delete "${selectedBaseline?.name}" Baseline`}
         />
       )}
     </Dialog.Root>

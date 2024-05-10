@@ -4,7 +4,7 @@ import CustomButton from "../../../elements/button";
 import CustomInput from "../../../elements/input";
 import useAddBaseline from "../../../hooks/useAddBaseline";
 import { GlobalStateContext } from "../../../globalState";
-import { GlobalStateType } from "../../../utils/typesInterface";
+import { GlobalStateType, TestRuns } from "../../../utils/typesInterface";
 
 interface ModalProps {
   title?: string;
@@ -15,6 +15,7 @@ interface ModalProps {
   isOverideDisable: boolean;
   setisOverideDisable: (isOverideDisable: boolean) => void;
   testName: string;
+  selectedEvaluation: any;
 }
 
 const SaveBaselineModal: React.FC<ModalProps> = ({
@@ -25,6 +26,7 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
   testId,
   isOverideDisable,
   setisOverideDisable,
+  selectedEvaluation,
   testName,
 }: ModalProps) => {
   const { baselines } = useContext(GlobalStateContext) as GlobalStateType;
@@ -93,7 +95,9 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
                     testId as string,
                     baselines
                   );
-                  setisOverideDisable(true);
+                  if (selectedEvaluation?.id) {
+                    setisOverideDisable(true);
+                  }
                 }}
                 color="blue"
                 variant="solid"
