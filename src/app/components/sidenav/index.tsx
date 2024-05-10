@@ -283,13 +283,13 @@ const Sidenav = () => {
                   ))}
                 </ul>
 
-                <div className="my-4 flex items-center gap-4">
-                  <UserButton afterSignOutUrl="/sign-in" />
-                  <h3 className="font-normal text-black font-poppin">
+                <div className="my-4 pl-1 flex items-center gap-4">
+                  <UserButton afterSignOutUrl="/sign-in" showName={true} />
+                  {/* <h3 className="font-normal text-black font-poppin">
                     {session?.user?.fullName
                       ? session?.user?.fullName
                       : session?.user?.username}
-                  </h3>
+                  </h3> */}
                 </div>
               </div>
             </div>
@@ -306,7 +306,7 @@ const Sidenav = () => {
           <span className="sr-only">Open sidebar</span>
           <Menu />
         </button>
-        <UserButton afterSignOutUrl="/sign-in" />
+        <UserButton afterSignOutUrl="/sign-in" showName={true} />
       </div>
     </div>
   );

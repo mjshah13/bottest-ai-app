@@ -124,6 +124,7 @@ const TestResult: React.FC<ModalProps> = ({
     });
     setSelectedVariantLetter(variantLetter);
     setSelectedIteration(evalIndex + 1);
+    setisOverideDisable(false);
   };
 
   const downloadJson = (jsonData: any, fileName: string) => {
@@ -138,6 +139,8 @@ const TestResult: React.FC<ModalProps> = ({
     a.click();
     document.body.removeChild(a);
   };
+
+  // console.log(selectedEvaluation, "hhhh");
 
   return (
     <>

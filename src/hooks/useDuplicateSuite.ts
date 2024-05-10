@@ -16,6 +16,7 @@ const useDuplicateSuite = () => {
   const duplicateSuite = useCallback(
     async (suiteId: string, suiteLists: SuiteType[]) => {
       setIsLoading(true);
+
       try {
         const data = await request({
           url: `/v1/suites/${suiteId}/copy`,

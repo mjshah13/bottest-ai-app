@@ -243,8 +243,8 @@ const ModifySuite: React.FC<ModalProps> = ({
                         {suite.isNew ||
                           (!suite?.isDuplicate && (
                             <div className="flex items-center justify-center gap-1.2 h-full">
-                              <Tooltip.Provider>
-                                <Tooltip.Root>
+                              <Tooltip.Provider skipDelayDuration={100}>
+                                <Tooltip.Root delayDuration={100}>
                                   <Tooltip.Trigger asChild>
                                     <button
                                       onClick={() => handleCopySuite(suite)}
@@ -271,8 +271,8 @@ const ModifySuite: React.FC<ModalProps> = ({
                                 </Tooltip.Root>
                               </Tooltip.Provider>
 
-                              <Tooltip.Provider>
-                                <Tooltip.Root>
+                              <Tooltip.Provider skipDelayDuration={100}>
+                                <Tooltip.Root delayDuration={100}>
                                   <Tooltip.Trigger asChild>
                                     <button
                                       className=" ml-3 outline-none border-none bg-transparent  disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed "

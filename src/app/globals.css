@@ -74,3 +74,19 @@
   background-color: #8e8e8d !important; /* scrollbar thumb color */
   border-radius: 4px !important; /* scrollbar thumb border radius */
 }
+
+.cl-internal-1eekank {
+  white-space: nowrap;
+  display: flex;
+  width: 100%;
+  position: absolute;
+  left: 30px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.cl-internal-u72jx4:focus {
+  box-shadow: none;
+  transition: none;
+}

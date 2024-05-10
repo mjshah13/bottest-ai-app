@@ -56,8 +56,8 @@ const TestRun = ({
                 <>
                   {lastTestRuns?.map((item, index) => (
                     <>
-                      <Tooltip.Provider>
-                        <Tooltip.Root>
+                      <Tooltip.Provider skipDelayDuration={100}>
+                        <Tooltip.Root delayDuration={100}>
                           <Tooltip.Trigger asChild>
                             <div
                               onClick={() => {
@@ -158,8 +158,8 @@ const TestRun = ({
         <Box>
           <div className="h-full flex items-center justify-center   ">
             <div className=" w-full flex justify-center gap-7">
-              <Tooltip.Provider>
-                <Tooltip.Root>
+              <Tooltip.Provider skipDelayDuration={100}>
+                <Tooltip.Root delayDuration={100}>
                   <Tooltip.Trigger asChild>
                     <button className="outline-none border-none bg-transparent">
                       <Cog6ToothIcon
@@ -177,8 +177,8 @@ const TestRun = ({
                 </Tooltip.Root>
               </Tooltip.Provider>
 
-              <Tooltip.Provider>
-                <Tooltip.Root>
+              <Tooltip.Provider skipDelayDuration={100}>
+                <Tooltip.Root delayDuration={100}>
                   <Tooltip.Trigger asChild>
                     <button className="outline-none border-none bg-transparent">
                       <PlayCircleIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />

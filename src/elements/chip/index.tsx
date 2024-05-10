@@ -33,11 +33,11 @@ const Chip: React.FC<Props> = ({
 
       {isCancel && (
         <button
-          className="outline-none border-none cursor-pointer disabled:cursor-not-allowed"
+          className=" outline-none border-none cursor-pointer disabled:cursor-not-allowed text-[#e0654a]"
           onClick={handleDelete}
           disabled={organization !== null && orgRole === "org:viewer"}
         >
-          <X size={16} color="red" />
+          <X size={16} className="hover:bg-dangerLight" />
         </button>
       )}
     </div>
