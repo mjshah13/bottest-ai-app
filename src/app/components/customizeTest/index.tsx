@@ -93,11 +93,10 @@ const CustomizeTest: React.FC<ModalProps> = ({
     }));
   };
 
-  const handleCheckboxChange = (isChecked: boolean | "indeterminate") => {
+  const handleCheckboxChange = (full_run_enabled: boolean) => {
     setCustomizeTestData((prevState) => ({
       ...prevState,
-      full_run_enabled:
-        isChecked === "indeterminate" ? prevState.full_run_enabled : isChecked,
+      full_run_enabled,
     }));
   };
 
@@ -321,10 +320,11 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   className="cursor-pointer"
                   variant="classic"
                   color="blue"
-                  checked={customizeTestData?.full_run_enabled}
-                  onCheckedChange={(isChecked) =>
-                    handleCheckboxChange(isChecked)
-                  }
+                  checked={!customizeTestData?.full_run_enabled}
+                  onCheckedChange={(isChecked) => {
+                    console.log({ isChecked });
+                    handleCheckboxChange(!customizeTestData?.full_run_enabled);
+                  }}
                   disabled={organization !== null && orgRole === "org:viewer"}
                 />
                 <h1 className="text-sm font-normal">

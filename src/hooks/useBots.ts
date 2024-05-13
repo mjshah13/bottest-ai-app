@@ -41,10 +41,7 @@ const useBots = (setSelectedBot: any) => {
       }));
 
       setBotLists(formattedData);
-      // if (formattedData.length === 1) {
-      // Assuming handleSelect is a function that needs to be called when there is only one bot
       setSelectedBot(formattedData[0]);
-      // }
     } catch (error: any) {
       console.error({ error });
       setError(error);
