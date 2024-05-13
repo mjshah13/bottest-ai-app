@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { Checkbox, Dialog, Flex } from "@radix-ui/themes";
+import { Dialog, Flex } from "@radix-ui/themes";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import CustomButton from "../../../elements/button";
 import Chip from "../../../elements/chip";
-import { Trash } from "lucide-react";
+import { Check, Trash } from "lucide-react";
 import {
   CustomizeTestData,
   GlobalStateType,
@@ -22,6 +22,7 @@ import DeleteModal from "../deleteModal";
 import { useApi } from "../../../hooks/useApi";
 import useUpdateTest from "../../../hooks/useUpdateTest";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import * as Checkbox from "@radix-ui/react-checkbox";
 
 interface ModalProps {
   title?: string;
@@ -127,8 +128,6 @@ const CustomizeTest: React.FC<ModalProps> = ({
       });
     }
   }, [specificTest]);
-
-  console.log(specificTest);
 
   const [isDeleteBaseline, setIsDeleteBaseline] = useState(false);
   const [selectedBaseline, setIsSelectedBaseline] = useState<any>(null);
@@ -316,20 +315,33 @@ const CustomizeTest: React.FC<ModalProps> = ({
             <div className="mt-6">
               <h1 className="text-sm mb-2">Full test runs:</h1>
               <div className="flex items-center gap-2">
-                <Checkbox
+                <Checkbox.Root
+                  onCheckedChange={() => {
+                    handleCheckboxChange(!customizeTestData?.full_run_enabled);
+                  }}
+                  className="border border-[#d9d9d9] hover:bg-violet3 flex h-[17px] w-[17px] appearance-none items-center justify-center rounded-[4px] bg-white  outline-none cursor-pointer "
+                  disabled={organization !== null && orgRole === "org:viewer"}
+                >
+                  <Checkbox.Indicator className="text-white bg-[#388aeb] w-full h-full flex items-center justify-center ">
+                    <Check size={13} />
+                  </Checkbox.Indicator>
+                </Checkbox.Root>
+                <h1 className="text-sm font-normal">
+                  {`Disable "${specificTest?.name}" from running in full test runs`}
+                </h1>
+                {/* <Checkbox
                   className="cursor-pointer"
-                  variant="classic"
+                  variant="surface"
                   color="blue"
                   checked={!customizeTestData?.full_run_enabled}
                   onCheckedChange={(isChecked) => {
-                    console.log({ isChecked });
                     handleCheckboxChange(!customizeTestData?.full_run_enabled);
                   }}
                   disabled={organization !== null && orgRole === "org:viewer"}
                 />
                 <h1 className="text-sm font-normal">
                   {`Disable "${specificTest?.name}" from running in full test runs`}
-                </h1>
+                </h1> */}
               </div>
             </div>
             <div className="mt-6">

@@ -19,6 +19,7 @@ import React, { useContext, useEffect, useState } from "react";
 import CustomSelect from "../../../elements/select";
 import {
   AccordionTriggerProps,
+  EvaluationType,
   GlobalStateType,
   Option,
 } from "../../../utils/typesInterface";
@@ -85,7 +86,9 @@ const TestResult: React.FC<ModalProps> = ({
   const [selectedVariantLetter, setSelectedVariantLetter] = useState("");
   const [selectedIteration, setSelectedIteration] = useState(0);
   const [variantLetters, setVariantLetters] = useState<string[]>([]);
-  const [isOverideDisable, setisOverideDisable] = useState<boolean>(false);
+  const [disabledEvalutions, setDisabledEvalutions] = useState<
+    EvaluationType[]
+  >([]);
 
   useEffect(() => {
     if (!specificTestRunId) return;
@@ -124,7 +127,6 @@ const TestResult: React.FC<ModalProps> = ({
     });
     setSelectedVariantLetter(variantLetter);
     setSelectedIteration(evalIndex + 1);
-    setisOverideDisable(false);
   };
 
   const downloadJson = (jsonData: any, fileName: string) => {
@@ -139,8 +141,6 @@ const TestResult: React.FC<ModalProps> = ({
     a.click();
     document.body.removeChild(a);
   };
-
-  // console.log(selectedEvaluation, "hhhh");
 
   return (
     <>
@@ -200,13 +200,13 @@ const TestResult: React.FC<ModalProps> = ({
                                          evaluation?.id && "bg-primary "
                                      }
                                     `}
-                                    onClick={() =>
+                                    onClick={() => {
                                       handleEvaluation(
                                         evaluation,
                                         variantLetter,
                                         evalIndex
-                                      )
-                                    }
+                                      );
+                                    }}
                                   >
                                     {evaluation?.status === "Fail" ? (
                                       <X color="#E1654A" size={19} />
@@ -291,7 +291,7 @@ const TestResult: React.FC<ModalProps> = ({
                         }}
                         disabled={
                           (organization !== null && orgRole === "org:viewer") ||
-                          isOverideDisable
+                          disabledEvalutions?.includes(selectedEvaluation?.id)
                         }
                       >
                         Override fail and set replayed conversation as an
@@ -328,8 +328,8 @@ const TestResult: React.FC<ModalProps> = ({
                           (baseline) => baseline?.id == selectedBaseline?.id
                         )}
                         options={baselines?.map((baseline) => ({
-                          id: baseline.id,
-                          name: baseline.name,
+                          id: baseline?.id,
+                          name: baseline?.name,
                         }))}
                         onSelectChange={(selectedOption) => {
                           setSelectedBaseline(selectedOption);
@@ -446,10 +446,10 @@ const TestResult: React.FC<ModalProps> = ({
         {isLoading && <Loader />}
 
         <SaveBaselineModal
+          disabledEvalutions={disabledEvalutions}
+          setDisabledEvalutions={setDisabledEvalutions}
           selectedEvaluation={selectedEvaluation}
           testName={testName}
-          isOverideDisable={isOverideDisable}
-          setisOverideDisable={setisOverideDisable}
           testId={testId}
           htmlBlob={selectedEvaluation?.html_blob}
           isOpenSaveBaselineModal={isOpenSaveBaselineModal}

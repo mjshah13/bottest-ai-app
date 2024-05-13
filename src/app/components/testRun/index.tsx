@@ -41,7 +41,7 @@ const TestRun = ({
               )}
             </h1>
             {isDisabled ? (
-              <div className=" bg-[#fafafa] flex font-poppin justify-center rounded-md border border-[#dcdcdc] max-w-[200px] w-full py-0.5  ">
+              <div className=" border border-[#d5d5d5] text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[190px] w-full py-0.5  ">
                 Disabled in full test runs
               </div>
             ) : null}

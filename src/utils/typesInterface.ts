@@ -153,3 +153,7 @@ export interface AccordionTriggerProps {
   children: React.ReactNode;
   className?: string;
 }
+
+export interface EvaluationType {
+  id: string;
+}

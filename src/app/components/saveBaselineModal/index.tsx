@@ -1,10 +1,14 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useContext, useState } from "react";
+import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import CustomButton from "../../../elements/button";
 import CustomInput from "../../../elements/input";
 import useAddBaseline from "../../../hooks/useAddBaseline";
 import { GlobalStateContext } from "../../../globalState";
-import { GlobalStateType, TestRuns } from "../../../utils/typesInterface";
+import {
+  EvaluationType,
+  GlobalStateType,
+  TestRuns,
+} from "../../../utils/typesInterface";
 
 interface ModalProps {
   title?: string;
@@ -12,10 +16,10 @@ interface ModalProps {
   setisOpenSaveBaselineModal: (isOpenSaveBaselineModal: boolean) => void;
   htmlBlob: string;
   testId?: string;
-  isOverideDisable: boolean;
-  setisOverideDisable: (isOverideDisable: boolean) => void;
   testName: string;
   selectedEvaluation: any;
+  setDisabledEvalutions: Dispatch<SetStateAction<EvaluationType[]>>;
+  disabledEvalutions: EvaluationType[];
 }
 
 const SaveBaselineModal: React.FC<ModalProps> = ({
@@ -24,15 +28,18 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
   setisOpenSaveBaselineModal,
   htmlBlob,
   testId,
-  isOverideDisable,
-  setisOverideDisable,
   selectedEvaluation,
   testName,
+  disabledEvalutions,
+  setDisabledEvalutions,
 }: ModalProps) => {
   const { baselines } = useContext(GlobalStateContext) as GlobalStateType;
   const [name, setName] = useState<string>("");
 
-  const { addBaseline } = useAddBaseline();
+  const { addBaseline } = useAddBaseline(
+    setDisabledEvalutions,
+    selectedEvaluation?.id
+  );
 
   const handleChange = (value: string) => {
     setName(value);
@@ -95,9 +102,6 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
                     testId as string,
                     baselines
                   );
-                  if (selectedEvaluation?.id) {
-                    setisOverideDisable(true);
-                  }
                 }}
                 color="blue"
                 variant="solid"

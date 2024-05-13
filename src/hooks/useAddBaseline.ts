@@ -4,9 +4,16 @@ import { useState, useCallback, useContext } from "react";
 import { useApi } from "./useApi";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { GlobalStateContext } from "../globalState";
-import { BaselineType, GlobalStateType } from "../utils/typesInterface";
+import {
+  BaselineType,
+  EvaluationType,
+  GlobalStateType,
+} from "../utils/typesInterface";
 
-const useAddBaseline = () => {
+const useAddBaseline = (
+  setDisabledEvalutions: React.Dispatch<React.SetStateAction<EvaluationType[]>>,
+  evaluationId: EvaluationType
+) => {
   const { organization } = useOrganization();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,12 +40,18 @@ const useAddBaseline = () => {
           },
         });
 
+        if (data) {
+          setDisabledEvalutions((prevDisabledEvalutions) => [
+            ...prevDisabledEvalutions,
+            evaluationId,
+          ]);
+        }
         addNewBaseline(data, baselines);
       } catch (error: any) {
         console.error({ error });
       }
     },
-    [user, organization]
+    [evaluationId, user, organization]
   );
 
   return { addBaseline, isLoading };
