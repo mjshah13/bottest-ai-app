@@ -62,7 +62,7 @@ const CustomButton: React.FC<Props> = ({
           ? "text-disabledGray cursor-not-allowed"
           : "text-black cursor-pointer"
       }
-      text-black py-4 font-poppin  font-normal flex items-center gap-2 min-w-[143px] rounded-md`}
+      text-black py-4 font-poppin  font-normal  flex items-center gap-2 min-w-[143px] rounded-md dark:text-white`}
       color={color}
       variant={variant}
       disabled={disabled}

@@ -7,18 +7,22 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative lg:flex w-full h-screen ">
       <Sidenav />
-      <main className=" w-full  bg-[#fdfcfa]">
+      <main className=" w-full  bg-[#fdfcfa] dark:bg-[#2a2d30]">
         <div className="">
           <div className="fixed w-full">
             <div
-              className="w-full bg-white h-[72px]  flex items-center"
+              className="w-full bg-white dark:bg-[#212427] h-[72px]  flex items-center"
               style={{ boxShadow: "0px 1px 1px 0px rgba(102, 106, 110, 0.08)" }}
             >
               <div className="absolute right-72">
                 <OrganizationSwitcher
                   appearance={{
                     elements: {
-                      organizationSwitcherTrigger: "p-2",
+                      organizationSwitcherTrigger: "p-2 ",
+                      // organizationPreviewMainIdentifier:
+                      //   "text-black dark:text-white",
+                      // organizationSwitcherTriggerIcon:
+                      //   "text-black dark:text-white",
                     },
                   }}
                 />

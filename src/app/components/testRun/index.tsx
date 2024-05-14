@@ -29,11 +29,11 @@ const TestRun = ({
   const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
 
   return (
-    <div className="w-full h-[110px] border border-[#dcdcdc] rounded-lg">
+    <div className="w-full h-[110px] border border-[#dcdcdc] dark:border dark:border-[#434447] rounded-lg">
       <Grid columns="7fr 8fr 5fr 4fr" gap="16px" className="h-full">
         <Box>
           <div className="h-full gap-2 flex flex-col justify-center px-5 ">
-            <h1 className="text-black font-semibold text-lg font-poppin">
+            <h1 className="text-black font-semibold text-lg font-poppin dark:text-white">
               {loading ? (
                 <Skeleton count={1} inline width={200} height={40} />
               ) : (
@@ -41,7 +41,7 @@ const TestRun = ({
               )}
             </h1>
             {isDisabled ? (
-              <div className=" border border-[#d5d5d5] text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[190px] w-full py-0.5  ">
+              <div className=" border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent  text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[190px] w-full py-0.5  ">
                 Disabled in full test runs
               </div>
             ) : null}
@@ -84,11 +84,11 @@ const TestRun = ({
                           </Tooltip.Trigger>
                           <Tooltip.Portal>
                             <Tooltip.Content
-                              className="TooltipContent"
+                              className="TooltipContent dark:bg-white dark:text-black"
                               sideOffset={5}
                             >
                               {item?.status}
-                              <Tooltip.Arrow className="TooltipArrow" />
+                              <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                             </Tooltip.Content>
                           </Tooltip.Portal>
                         </Tooltip.Root>
@@ -111,7 +111,7 @@ const TestRun = ({
                   <h3 className="text-[#909193] font-normal   font-poppin">
                     {"Older"}
                   </h3>
-                  <h1 className="font-medium  text-black  font-poppin">
+                  <h1 className="font-medium  text-black dark:text-white  font-poppin">
                     {`Last ${lastTestRuns?.length} runs`}
                   </h1>
                   <h3 className="text-[#909193] font-normal  font-poppin">
@@ -132,13 +132,13 @@ const TestRun = ({
               >
                 {icon}
                 <div className="flex flex-col justify-start">
-                  <h1 className="text-black font-normal font-poppin text-sm">
+                  <h1 className="text-black font-normal font-poppin text-sm dark:text-white">
                     {specificTest?.status}
                   </h1>
                   <h1
                     className={`text-[#909193] ${
                       text === "View full result" &&
-                      "font-semibold text-black hover:underline "
+                      "font-semibold text-black hover:underline dark:hover:underline dark:text-white "
                     }  font-poppin text-sm`}
                   >
                     <button
@@ -163,15 +163,15 @@ const TestRun = ({
                   <Tooltip.Trigger asChild>
                     <button className="outline-none border-none bg-transparent">
                       <Cog6ToothIcon
-                        className="h-9 w-9 text-black hover:text-[#388aeb]"
+                        className="h-9 w-9 text-black hover:text-[#388aeb] dark:hover:text-[#388aeb] dark:text-white"
                         onClick={() => setIsCustomizeTestModal(true)}
                       />
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
-                    <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                    <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
                       Modify Test
-                      <Tooltip.Arrow className="TooltipArrow" />
+                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                     </Tooltip.Content>
                   </Tooltip.Portal>
                 </Tooltip.Root>
@@ -181,13 +181,13 @@ const TestRun = ({
                 <Tooltip.Root delayDuration={100}>
                   <Tooltip.Trigger asChild>
                     <button className="outline-none border-none bg-transparent">
-                      <PlayCircleIcon className="h-9 w-9 text-black hover:text-[#388aeb]" />
+                      <PlayCircleIcon className="h-9 w-9 text-black hover:text-[#388aeb] dark:hover:text-[#388aeb] dark:text-white" />
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
-                    <Tooltip.Content className="TooltipContent" sideOffset={5}>
+                    <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
                       Run Test
-                      <Tooltip.Arrow className="TooltipArrow" />
+                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                     </Tooltip.Content>
                   </Tooltip.Portal>
                 </Tooltip.Root>
@@ -224,7 +224,7 @@ const getBackgroundColorClass = (status: string) => {
   switch (status) {
     case "Running":
       return {
-        backgroundColor: "bg-primary",
+        backgroundColor: "bg-primary dark:bg-[#232e3b] ",
         text: "Test in progress",
         icon: (
           <LoadingSpin
@@ -237,7 +237,7 @@ const getBackgroundColorClass = (status: string) => {
       };
     case "Pass":
       return {
-        backgroundColor: "bg-successLight",
+        backgroundColor: "bg-successLight dark:bg-[#26342e]",
         text: "View full result",
         icon: (
           <div className="bg-[#54CA6E] p-1.5 rounded-2xl flex items-center justify-center ">
@@ -247,7 +247,7 @@ const getBackgroundColorClass = (status: string) => {
       };
     case "Fail":
       return {
-        backgroundColor: "bg-dangerLight",
+        backgroundColor: "bg-dangerLight dark:bg-[#342929]",
         text: "View full result",
         icon: (
           <div className="bg-[#E1654A] p-1.5 rounded-2xl flex items-center justify-center ">
@@ -257,7 +257,7 @@ const getBackgroundColorClass = (status: string) => {
       };
     case "Error":
       return {
-        backgroundColor: "bg-dangerLight",
+        backgroundColor: "bg-dangerLight dark:bg-[#342929]",
         text: "View error",
         icon: (
           <svg
@@ -277,7 +277,7 @@ const getBackgroundColorClass = (status: string) => {
       };
     case "Mixed":
       return {
-        backgroundColor: "bg-warningLight",
+        backgroundColor: "bg-warningLight dark:bg-[#363423]",
         text: "View full result",
         icon: (
           <div className="bg-[#E7C200] p-1.5 rounded-2xl flex items-center justify-center ">
@@ -287,7 +287,7 @@ const getBackgroundColorClass = (status: string) => {
       };
     case "Skipped":
       return {
-        backgroundColor: "bg-[#f2f2f2]",
+        backgroundColor: "bg-[#f2f2f2] dark:bg-[#2e3135]",
         text: "No result",
         icon: (
           <div className="bg-[#212427] p-1.5 rounded-2xl flex items-center justify-center ">
@@ -297,7 +297,7 @@ const getBackgroundColorClass = (status: string) => {
       };
     case "Stopped":
       return {
-        backgroundColor: "bg-[#f2f2f2]",
+        backgroundColor: "bg-[#f2f2f2] dark:bg-[#2e3135]",
         text: "No result",
         icon: (
           <div className="bg-[#212427] p-1.5 rounded-2xl flex items-center justify-center ">

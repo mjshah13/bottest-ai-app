@@ -188,9 +188,13 @@ const Dashboard = (props: DashboardProps) => {
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
-      <div className=" border-2 rounded-lg border-[#f0f0f0] bg-white mt-12">
-        <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
-          <h1 className="font-semibold font-poppin text-3xl">Dashboard</h1>
+      <div className=" border-2 rounded-lg border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12">
+        {" "}
+        {/* dark:border dark:border-[#434447] */}
+        <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b  dark:border-[#434447]">
+          <h1 className="font-semibold font-poppin text-3xl dark:text-white text-dark">
+            Dashboard
+          </h1>
         </div>
         <div className="gap-7 py-6 px-4 flex justify-between items-center">
           <div className="w-full">
@@ -249,14 +253,15 @@ const Dashboard = (props: DashboardProps) => {
         className={`
         flex-1
 
-        bg-white
-        border-2 rounded-lg border-[#f0f0f0]
+        bg-white dark:bg-[#212427]
+        border-2 rounded-lg border-[#f0f0f0] dark:border-none dark:border dark:border-[#434447]
            `}
         id="flex-container"
       >
+        {/* dark:border dark:border-[#434447] */}
         {isLoading && !filteredData ? (
           <>
-            <div className=" flex flex-col py-5 px-4 border-b-2 border-[#f0f0f0]">
+            <div className=" flex flex-col py-5 px-4 border-b-2 border-[#f0f0f0] dark:border dark:border-[#434447] ">
               <Skeleton count={1} width={200} height={30} />
               <Skeleton count={1} width={350} height={30} />
             </div>
@@ -270,9 +275,9 @@ const Dashboard = (props: DashboardProps) => {
           <>
             {!selectedSuite || !selectedEnvironment ? (
               <>
-                <div className="py-7 px-4 border-b-2 border-[#f0f0f0]"></div>
+                <div className="py-7 px-4 border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447]"></div>
                 <div className=" w-full flex h-[80%] justify-center items-center flex-col gap-3">
-                  <h1 className="font-normal font-poppin text-md ">
+                  <h1 className="font-normal font-poppin text-md text-black dark:text-white ">
                     Please select the suites and environment.
                   </h1>
                 </div>
@@ -311,7 +316,7 @@ const Dashboard = (props: DashboardProps) => {
                   <>
                     {testData && (
                       <>
-                        <div className="py-5 px-4 border-b-2 border-[#f0f0f0]">
+                        <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447]">
                           <div className="flex justify-between">
                             <div>
                               <h1 className="font-semibold font-poppin text-xl">
@@ -345,26 +350,26 @@ const Dashboard = (props: DashboardProps) => {
                           </div>
                           <div>
                             {suiteTestRuns?.length > 0 && !loading && (
-                              <p className="text-black gap-2 font-poppin">
+                              <p className="text-black gap-2 font-poppin dark:text-white">
                                 Most recent Suite Run results:{" "}
                                 {generateStatusDisplayWithCommas()}
                               </p>
                             )}
                           </div>
                         </div>
-                        <div className=" py-5 px-4 border-b-2 border-[#f0f0f0]">
+                        <div className=" py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447] ">
                           <Grid
                             columns={{ lg: "3fr 1fr", md: "3fr 1fr" }}
                             gap="3"
                             width="auto"
                           >
                             <Box>
-                              <div className=" border-[#d9d9d9] border rounded-lg w-max ">
+                              <div className=" border-[#d9d9d9] border dark:border dark:border-[#434447] rounded-lg w-max ">
                                 {filterOptions &&
                                   filterOptions?.map((item, i) => (
                                     <button
                                       key={item.key}
-                                      className={`px-3.5 lg:py-1.5  text-black font-light text-base font-poppin border-r border-[#f0f0f0] ${
+                                      className={`px-3.5 lg:py-1.5  text-black dark:text-white font-light text-base font-poppin border-r border-[#f0f0f0] dark:border-r dark:border-[#434447] ${
                                         i === 0 ? "rounded-l-lg" : ""
                                       } ${
                                         i === filterOptions.length - 1
@@ -372,7 +377,7 @@ const Dashboard = (props: DashboardProps) => {
                                           : ""
                                       } ${
                                         filters.tab === item.status
-                                          ? "bg-[#f5f5f5] text-black "
+                                          ? "bg-[#f5f5f5] text-black dark:bg-[#2A2D30] dark:text-white "
                                           : ""
                                       }`}
                                       onClick={() => {
@@ -386,6 +391,7 @@ const Dashboard = (props: DashboardProps) => {
                             </Box>
                             <Box>
                               <CustomInput
+                                className={"dark:bg-transparent"}
                                 onChange={(value) => {
                                   handleFilteredData(value);
                                 }}

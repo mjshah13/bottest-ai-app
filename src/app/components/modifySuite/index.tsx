@@ -142,8 +142,8 @@ const ModifySuite: React.FC<ModalProps> = ({
     <Dialog.Root open={isSuiteModalOpen} onOpenChange={setIsSuiteModalOpen}>
       <Dialog.Content maxWidth={"870px"}>
         <Dialog.Title>
-          <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className="font-poppin text-black text-base font-semibold ">
+          <div className="border-b border-[#f5f5f5] dark:border-b  dark:border-[#434447] py-5 px-6 ">
+            <p className="font-poppin text-black text-base font-semibold dark:text-white ">
               {title}
             </p>
           </div>
@@ -155,29 +155,29 @@ const ModifySuite: React.FC<ModalProps> = ({
                 <Table.Row>
                   <Table.ColumnHeaderCell
                     style={{ width: "180px" }}
-                    className="border-r border-[#d2cdcd] text-sm font-semibold"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"
                   >
                     Name
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
                     style={{ width: "285px" }}
-                    className="border-r border-[#d2cdcd] text-sm font-semibold"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"
                   >
                     Default Success Criteria
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
                     style={{ width: "150px" }}
-                    className="border-r border-[#d2cdcd] text-sm font-semibold"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"
                   >
                     Default Variants
                   </Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell
                     style={{ width: "155px" }}
-                    className="border-r border-[#d2cdcd] text-sm font-semibold"
+                    className="border-r border-[#d2cdcd] text-sm font-semibold dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"
                   >
                     Default Iterations
                   </Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell className="dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"></Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -186,11 +186,11 @@ const ModifySuite: React.FC<ModalProps> = ({
                   ?.filter((suite) => !suite?.isDelete)
                   .map((suite) => (
                     <Table.Row key={suite.id}>
-                      <Table.Cell className="border-r border-[#d2cdcd]">
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                         {" "}
                         <input
                           placeholder="Enter name"
-                          className=" py-2 w-[90%] outline-none "
+                          className=" py-2 w-[90%] outline-none dark:bg-transparent "
                           type="text"
                           name="name"
                           value={`${suite.name}` || ""}
@@ -200,10 +200,10 @@ const ModifySuite: React.FC<ModalProps> = ({
                           }
                         />
                       </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd] ">
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] ">
                         <textarea
                           placeholder="Enter success criteria"
-                          className=" w-[100%] h-full outline-none resize-none"
+                          className=" w-[100%] h-full outline-none resize-none dark:bg-transparent"
                           // type="text"
                           name="default_success_criteria"
                           value={`${suite.default_success_criteria}` || ""}
@@ -213,10 +213,10 @@ const ModifySuite: React.FC<ModalProps> = ({
                           }
                         />
                       </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd]">
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                         <input
                           placeholder="Enter variant count"
-                          className=" py-2  w-[90%] outline-none  "
+                          className=" py-2  w-[90%] outline-none dark:bg-transparent "
                           type="number"
                           name="default_variant_count"
                           value={`${suite.default_variant_count}` || ""}
@@ -226,9 +226,9 @@ const ModifySuite: React.FC<ModalProps> = ({
                           }
                         />
                       </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd]">
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                         <input
-                          className=" py-2  w-[90%] outline-none  "
+                          className=" py-2  w-[90%] outline-none dark:bg-transparent "
                           type="number"
                           placeholder="Enter iteration count"
                           name="default_iteration_count"
@@ -261,11 +261,11 @@ const ModifySuite: React.FC<ModalProps> = ({
                                   </Tooltip.Trigger>
                                   <Tooltip.Portal>
                                     <Tooltip.Content
-                                      className="TooltipContent"
+                                      className="TooltipContent dark:bg-white dark:text-black"
                                       sideOffset={5}
                                     >
                                       Create a copy of Suite
-                                      <Tooltip.Arrow className="TooltipArrow" />
+                                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                                     </Tooltip.Content>
                                   </Tooltip.Portal>
                                 </Tooltip.Root>
@@ -290,11 +290,11 @@ const ModifySuite: React.FC<ModalProps> = ({
                                   </Tooltip.Trigger>
                                   <Tooltip.Portal>
                                     <Tooltip.Content
-                                      className="TooltipContent"
+                                      className="TooltipContent dark:bg-white dark:text-black"
                                       sideOffset={5}
                                     >
                                       Delete Suite
-                                      <Tooltip.Arrow className="TooltipArrow" />
+                                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                                     </Tooltip.Content>
                                   </Tooltip.Portal>
                                 </Tooltip.Root>
@@ -306,7 +306,10 @@ const ModifySuite: React.FC<ModalProps> = ({
                   ))}
 
                 <Table.Row>
-                  <Table.Cell colSpan={5} className="bg-[#FDFCFA] ">
+                  <Table.Cell
+                    colSpan={5}
+                    className="bg-[#FDFCFA] dark:bg-[#2a2d30] "
+                  >
                     <button
                       className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium disabled:cursor-not-allowed `}
                       disabled={
@@ -323,7 +326,7 @@ const ModifySuite: React.FC<ModalProps> = ({
           </div>
         </div>
 
-        <div className="border-t border-[#f5f5f5]">
+        <div className="border-t border-[#f5f5f5] dark:border-t  dark:border-[#434447]">
           <Flex gap="3" py={"3"} px={"3"} justify="end">
             <Dialog.Close>
               <CustomButton

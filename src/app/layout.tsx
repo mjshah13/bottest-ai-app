@@ -10,6 +10,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Theme } from "@radix-ui/themes";
 import { Poppins } from "next/font/google";
 import { GlobalStateProvider } from "../globalStateProvider";
+import { ThemeProvider } from "../ themeProvider";
+import { dark } from "@clerk/themes";
+import { useEffect, useState } from "react";
 
 const poppins = Poppins({
   weight: "400",
@@ -22,8 +25,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
+    console.log("Stored theme from localStorage:", storedTheme);
+
+    // Assuming theme is initially set to "light" if not found in localStorage
+    const theme = storedTheme || "light";
+
+    console.log("Selected theme:", theme);
+  }, []);
+
   return (
-    <ClerkProvider>
+    <ClerkProvider
+    // appearance={{
+    //   baseTheme: storedTheme === "light" ? dark : undefined,
+    // }}
+    >
       <html lang="en">
         <body>
           <link
@@ -33,7 +50,13 @@ export default function RootLayout({
 
           <div>
             <GlobalStateProvider>
-              <Theme className={poppins.variable}>{children}</Theme>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                // enableSystem
+              >
+                <Theme className={poppins.variable}>{children}</Theme>
+              </ThemeProvider>
             </GlobalStateProvider>
 
             <ToastContainer
