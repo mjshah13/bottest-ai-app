@@ -89,7 +89,7 @@ export default function Home() {
               <h1 className="text-[#8f9090] font-medium text-lg font-poppin ">
                 Copyright © bottest.ai 2024
               </h1>
-              <ThemeSwitcher />
+              {/* <ThemeSwitcher /> */}
             </div>
           </div>
         </div>
