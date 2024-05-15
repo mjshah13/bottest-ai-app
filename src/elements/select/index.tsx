@@ -31,7 +31,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 }) => {
   return (
     <div className="flex flex-col justify-start gap-1">
-      <label className="font-poppin text-sm text-black">{Label}</label>
+      <label className="font-poppin text-sm text-black dark:text-white">
+        {Label}
+      </label>
       <Select.Root
         key={selectedValue?.id}
         disabled={disabled}
@@ -47,20 +49,23 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       >
         <Select.Trigger
           placeholder={placeholder}
-          className="font-poppin cursor-pointer"
+          className="font-poppin cursor-pointer text-black dark:text-white"
         >
           {selectedValue?.name}
         </Select.Trigger>
-        <Select.Content position="popper" className="font-poppin">
+        <Select.Content
+          position="popper"
+          className="font-poppin bg-white dark:bg-black "
+        >
           {options?.map((option) => (
             <Select.Item
               className={`
-              font-poppin cursor-pointer
+              font-poppin cursor-pointer text-black dark:text-white dark:bg-black 
                 ${
                   option.id === selectedValue?.id
-                    ? "bg-primary text-black font-semibold"
-                    : "bg-white text-black px-1.5 "
-                } mb-1.5 hover:bg-primary hover:text-black`}
+                    ? "bg-primary text-black font-semibold dark:bg-secondary dark:text-white"
+                    : "bg-white  text-black px-1.5 "
+                } mb-1.5 hover:bg-primary hover:text-black dark:hover:bg-secondary dark:hover:text-white `}
               key={option.id}
               value={option.id || ""}
             >

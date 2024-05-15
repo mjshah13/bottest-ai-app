@@ -211,7 +211,7 @@ const Sidenav = () => {
 
       <div className="hidden h-full lg:z-50 lg:flex lg:w-64 lg:flex-col ">
         <div
-          className="flex grow flex-col gap-y-5  bg-white   px-4"
+          className="flex grow flex-col gap-y-5  bg-white dark:bg-[#212427]   px-4"
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
         >
           <div className="flex h-16 shrink-0 items-center">
@@ -234,10 +234,10 @@ const Sidenav = () => {
                       onClick={() => handleNavigationClick(item)}
                       className={classNames(
                         item?.href === active
-                          ? "text-secondary bg-primary font-normal "
+                          ? "text-secondary bg-primary font-normal dark:bg-secondary dark:text-white "
                           : item?.isDisabled
                           ? "text-[#b6b8b7]  hover:bg-lightgray"
-                          : "text-black hover:text-black  hover:bg-lightgray ",
+                          : "text-black hover:text-black  hover:bg-lightgray dark:hover:bg-[#2e3135]  dark:text-white",
                         "group  flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 w-full font-poppin"
                       )}
                       type="button"
@@ -257,7 +257,7 @@ const Sidenav = () => {
               <div className="">
                 <ul
                   role="list"
-                  className=" py-4 space-y-1 border-b-2 border-[#f0f0f0]"
+                  className=" py-4 space-y-1 border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447]"
                 >
                   {services.map((item, i) => (
                     <button
@@ -267,7 +267,7 @@ const Sidenav = () => {
                       className={classNames(
                         item?.isDisabled
                           ? "text-[#b6b8b7]  hover:bg-lightgray"
-                          : "text-black hover:text-black hover:bg-lightgray",
+                          : "text-black hover:text-black hover:bg-lightgray dark:hover:bg-[#2e3135]  dark:text-white",
                         "group items-center flex gap-x-3 rounded-md p-2 text-sm w-full  font-poppin"
                       )}
                     >
@@ -284,7 +284,15 @@ const Sidenav = () => {
                 </ul>
 
                 <div className="my-4 pl-1 flex items-center gap-4">
-                  <UserButton afterSignOutUrl="/sign-in" showName={true} />
+                  <UserButton
+                    afterSignOutUrl="/sign-in"
+                    showName={true}
+                    // appearance={{
+                    //   elements: {
+                    //     userButtonOuterIdentifier: "text-black dark:text-white",
+                    //   },
+                    // }}
+                  />
                   {/* <h3 className="font-normal text-black font-poppin">
                     {session?.user?.fullName
                       ? session?.user?.fullName

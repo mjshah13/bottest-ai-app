@@ -90,3 +90,6 @@
   box-shadow: none;
   transition: none;
 }
+.rt-SelectTrigger:where(.rt-variant-surface) {
+  background-color: transparent !important;
+}

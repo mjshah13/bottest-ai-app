@@ -128,8 +128,8 @@ const ModifyBot: React.FC<ModalProps> = ({
     <Dialog.Root open={isBotsModalOpen} onOpenChange={setIsBotsModalOpen}>
       <Dialog.Content maxWidth={"870px"}>
         <Dialog.Title>
-          <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-            <p className="font-poppin text-black text-base font-semibold ">
+          <div className="border-b border-[#f5f5f5] dark:border-b  dark:border-[#434447] py-5 px-6 ">
+            <p className="font-poppin text-black text-base font-semibold dark:text-white ">
               {title}
             </p>
           </div>
@@ -141,12 +141,12 @@ const ModifyBot: React.FC<ModalProps> = ({
                 <Table.Row>
                   <Table.ColumnHeaderCell
                     style={{ width: "720px" }}
-                    className="border-r border-[#d2cdcd] text-sm font-semibold"
+                    className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold"
                   >
                     Name
                   </Table.ColumnHeaderCell>
 
-                  <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell className="dark:bg-[#2a2d30]"></Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -155,11 +155,11 @@ const ModifyBot: React.FC<ModalProps> = ({
                   ?.filter((item) => !item?.isDelete)
                   .map((bot) => (
                     <Table.Row key={bot.id}>
-                      <Table.Cell className="border-r border-[#d2cdcd]">
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                         {" "}
                         <input
                           placeholder="Enter name"
-                          className=" py-2  w-full outline-none  "
+                          className=" py-2  w-full outline-none dark:bg-transparent"
                           type="text"
                           value={`${bot.name}` || ""}
                           onChange={(e) => handleChange(e, bot?.id)}
@@ -190,11 +190,11 @@ const ModifyBot: React.FC<ModalProps> = ({
                                   </Tooltip.Trigger>
                                   <Tooltip.Portal>
                                     <Tooltip.Content
-                                      className="TooltipContent"
+                                      className="TooltipContent dark:bg-white dark:text-black"
                                       sideOffset={5}
                                     >
                                       Create a copy of Bot
-                                      <Tooltip.Arrow className="TooltipArrow" />
+                                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                                     </Tooltip.Content>
                                   </Tooltip.Portal>
                                 </Tooltip.Root>
@@ -219,11 +219,11 @@ const ModifyBot: React.FC<ModalProps> = ({
                                   </Tooltip.Trigger>
                                   <Tooltip.Portal>
                                     <Tooltip.Content
-                                      className="TooltipContent"
+                                      className="TooltipContent dark:bg-white dark:text-black"
                                       sideOffset={5}
                                     >
                                       Delete Bot
-                                      <Tooltip.Arrow className="TooltipArrow" />
+                                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
                                     </Tooltip.Content>
                                   </Tooltip.Portal>
                                 </Tooltip.Root>
@@ -235,7 +235,10 @@ const ModifyBot: React.FC<ModalProps> = ({
                   ))}
 
                 <Table.Row>
-                  <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
+                  <Table.Cell
+                    colSpan={4}
+                    className="bg-[#FDFCFA] dark:bg-[#2a2d30] "
+                  >
                     <button
                       className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium disabled:cursor-not-allowed   `}
                       onClick={addBlankBot}
@@ -252,7 +255,7 @@ const ModifyBot: React.FC<ModalProps> = ({
           </div>
         </div>
 
-        <div className="border-t border-[#f5f5f5]">
+        <div className="border-t border-[#f5f5f5] dark:border-t  dark:border-[#434447]">
           <Flex gap="3" py={"3"} px={"3"} justify="end">
             <Dialog.Close>
               <CustomButton

@@ -141,8 +141,8 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
       >
         <Dialog.Content maxWidth={"860px"}>
           <Dialog.Title>
-            <div className="border-b border-[#f5f5f5] py-5 px-6 ">
-              <p className="font-poppin text-black text-base font-semibold ">
+            <div className="border-b border-[#f5f5f5] py-5 px-6 dark:border-b  dark:border-[#434447] ">
+              <p className="font-poppin text-black text-base font-semibold dark:text-white  ">
                 {title}
               </p>
             </div>
@@ -150,13 +150,15 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
           <div>
             <>
               <div className="px-5 pt-4 pb-7">
-                <div className="border border-warning bg-warningLight px-4 py-3 rounded-lg mb-5 flex gap-2">
+                <div className="border border-warning dark:border dark:border-[#726943] dark:bg-[#363423] bg-warningLight  px-4 py-3 rounded-lg mb-5 flex gap-2">
                   <div>
                     <CircleAlert fill="#E7C200" color="white" />
                   </div>
                   <div className="flex flex-col ">
-                    <h1 className="text-black text-normal font-poppin">Note</h1>
-                    <p className="text-black text-sm font-poppin w-[80%]">
+                    <h1 className="text-black text-normal font-poppin dark:text-white">
+                      Note
+                    </h1>
+                    <p className="text-black text-sm font-poppin w-[80%] dark:text-white">
                       The UI of a different environment should match the UI of
                       original recorded tests. Attempting to run tests on
                       environments where the UI does not match may result in
@@ -171,17 +173,17 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                     <Table.Row>
                       <Table.ColumnHeaderCell
                         style={{ width: "250px" }}
-                        className="border-r border-[#d2cdcd] text-sm font-semibold"
+                        className="border-r border-[#d2cdcd] text-sm font-semibold dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"
                       >
                         Name
                       </Table.ColumnHeaderCell>
                       <Table.ColumnHeaderCell
                         style={{ width: "500px" }}
-                        className="border-r border-[#d2cdcd] text-sm font-semibold"
+                        className="border-r border-[#d2cdcd] text-sm font-semibold dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"
                       >
                         Url
                       </Table.ColumnHeaderCell>
-                      <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell className="dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30]"></Table.ColumnHeaderCell>
                     </Table.Row>
                   </Table.Header>
 
@@ -190,10 +192,10 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                       ?.filter((environment) => !environment?.isDelete)
                       .map((environment) => (
                         <Table.Row key={environment.id}>
-                          <Table.Cell className="border-r border-[#d2cdcd]">
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                             {" "}
                             <input
-                              className=" py-2  w-[90%] outline-none  "
+                              className=" py-2  w-[90%] outline-none dark:bg-transparent  "
                               type="text"
                               name="name"
                               value={`${environment.name}` || ""}
@@ -204,11 +206,11 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                               }
                             />
                           </Table.Cell>
-                          <Table.Cell className="border-r border-[#d2cdcd]">
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                             <div className="flex items-center h-full">
                               {/* {environment.url} */}
                               <input
-                                className=" py-2  w-[100%] outline-none  "
+                                className=" py-2  w-[100%] outline-none dark:bg-transparent "
                                 type="text"
                                 name="url"
                                 value={`${environment.url}` || ""}
@@ -245,7 +247,10 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
                       ))}
 
                     <Table.Row>
-                      <Table.Cell colSpan={4} className="bg-[#FDFCFA] ">
+                      <Table.Cell
+                        colSpan={4}
+                        className="bg-[#FDFCFA] dark:bg-[#2a2d30] "
+                      >
                         <button
                           className={`w-full py-1.5 flex items-center justify-center text-[#388aeb] ] disabled:text-[#adb1bd] disabled:font-medium disabled:cursor-not-allowed `}
                           disabled={
@@ -263,7 +268,7 @@ const ModifyEnvironment: React.FC<ModalProps> = ({
             </>
           </div>
 
-          <div className="border-t border-[#f5f5f5]">
+          <div className="border-t border-[#f5f5f5] dark:border-t  dark:border-[#434447]">
             <Flex gap="3" py={"3"} px={"3"} justify="end">
               <Dialog.Close>
                 <CustomButton
