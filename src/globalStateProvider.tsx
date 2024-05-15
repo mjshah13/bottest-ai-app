@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import {
   BaselineType,
   BotType,
+  Conversation,
   EnvironmentType,
   GlobalStateType,
   SuiteType,
@@ -32,9 +33,6 @@ export const GlobalStateProvider = ({
         bot?.id === updatedBot?.id ? updatedBot : bot
       );
     });
-    // setBotLists(
-    //   botList.map((bot) => (bot.id === updatedBot.id ? updatedBot : bot))
-    // );
   };
   const addBotRow = (addedBot: BotType, botList: BotType[]) => {
     setBotLists((prevBot) => [...prevBot, addedBot]);
@@ -82,14 +80,6 @@ export const GlobalStateProvider = ({
           : environment
       );
     });
-
-    // setEnvironmentLists(
-    //   environmentLists.map((environment) =>
-    //     environment.id === updatedEnvironment.id
-    //       ? updatedEnvironment
-    //       : environment
-    //   )
-    // );
   };
   const addEnvironmentRow = (
     addedEnvironment: EnvironmentType,
@@ -132,9 +122,6 @@ export const GlobalStateProvider = ({
   };
 
   const updateTestdata = (updateTest: TestType, testData: TestType[]) => {
-    // setTestData(
-    //   testData?.map((test) => (test?.id === updateTest?.id ? updateTest : test))
-    // );
     setTestData(
       testData?.map((test) =>
         test.id === updateTest.id

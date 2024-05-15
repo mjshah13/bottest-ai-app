@@ -14,10 +14,10 @@ interface ModalProps {
   title?: string;
   isOpenSaveBaselineModal?: boolean;
   setisOpenSaveBaselineModal: (isOpenSaveBaselineModal: boolean) => void;
-  htmlBlob: string;
   testId?: string;
   testName: string;
   selectedEvaluation: any;
+  htmlBlob: string;
   setDisabledEvalutions: Dispatch<SetStateAction<EvaluationType[]>>;
   disabledEvalutions: EvaluationType[];
 }
@@ -36,9 +36,9 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
   const { baselines } = useContext(GlobalStateContext) as GlobalStateType;
   const [name, setName] = useState<string>("");
 
-  const { addBaseline } = useAddBaseline(
+  const { addBaseline, isLoading } = useAddBaseline(
     setDisabledEvalutions,
-    selectedEvaluation?.id
+    selectedEvaluation
   );
 
   const handleChange = (value: string) => {
@@ -106,6 +106,7 @@ const SaveBaselineModal: React.FC<ModalProps> = ({
                 color="blue"
                 variant="solid"
                 isPrimary
+                disabled={isLoading}
               >
                 Save Baseline
               </CustomButton>

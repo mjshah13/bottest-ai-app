@@ -12,7 +12,8 @@ import {
 
 const useAddBaseline = (
   setDisabledEvalutions: React.Dispatch<React.SetStateAction<EvaluationType[]>>,
-  evaluationId: EvaluationType
+  // evaluationId: EvaluationType,
+  selectedEvaluation: any
 ) => {
   const { organization } = useOrganization();
   const { user } = useUser();
@@ -29,6 +30,7 @@ const useAddBaseline = (
       test_id: string,
       baselines: BaselineType[]
     ) => {
+      setIsLoading(true);
       try {
         const data = await request({
           url: `/v1/baselines`,
@@ -37,21 +39,25 @@ const useAddBaseline = (
             name,
             html_blob,
             test_id,
+            conversation_json: selectedEvaluation?.conversation_json,
           },
         });
 
         if (data) {
           setDisabledEvalutions((prevDisabledEvalutions) => [
             ...prevDisabledEvalutions,
-            evaluationId,
+            selectedEvaluation?.id,
           ]);
         }
         addNewBaseline(data, baselines);
       } catch (error: any) {
+        setIsLoading(false);
         console.error({ error });
+      } finally {
+        setIsLoading(false);
       }
     },
-    [evaluationId, user, organization]
+    [user, organization]
   );
 
   return { addBaseline, isLoading };

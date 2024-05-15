@@ -329,19 +329,6 @@ const CustomizeTest: React.FC<ModalProps> = ({
                 <h1 className="text-sm font-normal">
                   {`Disable "${specificTest?.name}" from running in full test runs`}
                 </h1>
-                {/* <Checkbox
-                  className="cursor-pointer"
-                  variant="surface"
-                  color="blue"
-                  checked={!customizeTestData?.full_run_enabled}
-                  onCheckedChange={(isChecked) => {
-                    handleCheckboxChange(!customizeTestData?.full_run_enabled);
-                  }}
-                  disabled={organization !== null && orgRole === "org:viewer"}
-                />
-                <h1 className="text-sm font-normal">
-                  {`Disable "${specificTest?.name}" from running in full test runs`}
-                </h1> */}
               </div>
             </div>
             <div className="mt-6">
@@ -409,9 +396,6 @@ const CustomizeTest: React.FC<ModalProps> = ({
               deleteBaseline(selectedBaseline?.id, baselines);
               setIsDeleteBaseline(false);
             }
-            // deleteTest(specificTest?.id, testData);
-            // setIsDeleteModal(false);
-            // setIsCustomizeTestModal(false);
           }}
           description={`Are you sure you want to delete the "${selectedBaseline?.name}" Baseline? This action can not be undone.`}
           isDeleteModal={isDeleteBaseline}

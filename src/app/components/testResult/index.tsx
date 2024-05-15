@@ -147,9 +147,10 @@ const TestResult: React.FC<ModalProps> = ({
       <Dialog.Root open={isTestResultModal} onOpenChange={setIsTestResultModal}>
         <Dialog.Content
           minWidth={"1088px"}
+          className="min-h-[740px]"
           // style={{ minHeight: "890px", height: "100%" }}
         >
-          <Grid columns="240px 1fr" className="min-h-[880px] h-full">
+          <Grid columns="240px 1fr" className="min-h-[740px] h-full ">
             <Box>
               <div
                 className="bg-[#fdfcfa] h-full "
@@ -229,8 +230,8 @@ const TestResult: React.FC<ModalProps> = ({
                 </div>
               </div>
             </Box>
-            <Box className="relative h-full right-box">
-              <Dialog.Title className="h-[6%]">
+            <Box className="relative h-[740px] right-box">
+              <Dialog.Title className="h-[6%] ">
                 <div className="border-b border-[#e9e5e5] py-4 px-4 ">
                   <p className=" text-black font-semibold text-lg m-0">
                     {title}
@@ -239,9 +240,9 @@ const TestResult: React.FC<ModalProps> = ({
               </Dialog.Title>
 
               {selectedEvaluation ? (
-                <div className="px-5 py-3 h-[85%] flex flex-col">
+                <div className="px-5 py-5 h-[85%]  flex flex-col">
                   {selectedEvaluation?.status === "Fail" ? (
-                    <div className=" bg-dangerLight px-6 py-7  rounded-lg mb-5 flex items-start   gap-4">
+                    <div className=" bg-dangerLight px-6 py-5  rounded-lg mb-5 flex items-start   gap-4">
                       <div className="mt-0.5">
                         <div className="bg-[#E1654A] p-1 rounded-2xl flex items-center justify-center ">
                           <X color="#ffffff" size={14} />
@@ -279,7 +280,7 @@ const TestResult: React.FC<ModalProps> = ({
                     </div>
                   )}
                   {selectedEvaluation?.status === "Fail" && (
-                    <div className="w-full h-[7%]">
+                    <div className="w-full h-[8.5%]">
                       <CustomButton
                         color="red"
                         variant="outline"
@@ -352,7 +353,7 @@ const TestResult: React.FC<ModalProps> = ({
                       <Download size={19} />
                     </button>
                   </div>{" "}
-                  <div className="flex-1 px-4 py-2 bg-[#fdfcfa] border-2 border-[#f0eeef] rounded mt-5 overflow-auto">
+                  <div className="flex-1 px-4 pt-1 pb-4 bg-[#fdfcfa] border-2 border-[#f0eeef] rounded mt-5 overflow-auto">
                     <div className="flex flex-col">
                       {getFormattedJson(
                         selectedEvaluation?.conversation_json
@@ -369,7 +370,7 @@ const TestResult: React.FC<ModalProps> = ({
                           <>
                             {item?.author === "user" && (
                               <div
-                                className="flex gap-4 items-end"
+                                className="flex gap-4 items-end mt-1"
                                 key={item.id}
                               >
                                 <div className="w-[40px] h-[38px] mb-1 bg-[#f6f5f3] flex items-center justify-center  rounded-full">
@@ -387,7 +388,7 @@ const TestResult: React.FC<ModalProps> = ({
                             )}
                             {item?.author === "bot" && (
                               <div className="flex gap-4 items-end ">
-                                <div className="w-[40px] h-[38px] bg-[#388aeb] rounded-full  flex items-center justify-center">
+                                <div className="w-[40px] h-[38px] bg-[#388aeb] rounded-full   flex items-center justify-center">
                                   <Bot size={23} color="#ffff" />
                                 </div>
                                 <div className="w-full flex items-center gap-3">

@@ -24,11 +24,6 @@ const useAddEnvironment = () => {
           url: `/v1/environments`,
           method: "POST",
           data,
-          // data: {
-          //   name,
-          //   url: "http://www.dev.example.com/my/chatbot",
-          //   bot_id: botId,
-          // },
         });
         addEnvironmentRow({ id, name, url }, environmentLists);
       } catch (error: any) {

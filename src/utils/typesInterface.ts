@@ -106,6 +106,7 @@ export interface BaselineType {
   id: string;
   name: string;
   conversation_json?: Conversation[];
+  test_id: string;
 }
 
 export interface GlobalStateType {
