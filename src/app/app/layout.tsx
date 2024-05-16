@@ -19,10 +19,6 @@ function Layout({ children }: { children: React.ReactNode }) {
                   appearance={{
                     elements: {
                       organizationSwitcherTrigger: "p-2 ",
-                      // organizationPreviewMainIdentifier:
-                      //   "text-black dark:text-white",
-                      // organizationSwitcherTriggerIcon:
-                      //   "text-black dark:text-white",
                     },
                   }}
                 />

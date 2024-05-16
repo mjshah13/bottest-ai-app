@@ -190,7 +190,6 @@ const Dashboard = (props: DashboardProps) => {
     <div className=" h-[92vh] gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12">
         {" "}
-        {/* dark:border dark:border-[#434447] */}
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b  dark:border-[#434447]">
           <h1 className="font-semibold font-poppin text-3xl dark:text-white text-dark">
             Dashboard
@@ -364,12 +363,12 @@ const Dashboard = (props: DashboardProps) => {
                             width="auto"
                           >
                             <Box>
-                              <div className=" border-[#d9d9d9] border dark:border dark:border-[#434447] rounded-lg w-max ">
+                              <div className=" border-[#d9d9d9] border dark:border dark:border-[#434447] rounded-lg w-max  ">
                                 {filterOptions &&
                                   filterOptions?.map((item, i) => (
                                     <button
                                       key={item.key}
-                                      className={`px-3.5 lg:py-1.5  text-black dark:text-white font-light text-base font-poppin border-r border-[#f0f0f0] dark:border-r dark:border-[#434447] ${
+                                      className={`px-3.5 lg:py-1.5  text-black dark:text-white font-light text-base font-poppin border-r  border-[#f0f0f0] dark:border-r dark:border-[#434447] ${
                                         i === 0 ? "rounded-l-lg" : ""
                                       } ${
                                         i === filterOptions.length - 1
@@ -391,7 +390,8 @@ const Dashboard = (props: DashboardProps) => {
                             </Box>
                             <Box>
                               <CustomInput
-                                className={"dark:bg-transparent"}
+                                // size="3"
+                                className={"dark:bg-transparent h-[38px] "}
                                 onChange={(value) => {
                                   handleFilteredData(value);
                                 }}

@@ -180,7 +180,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
                   className={`${
                     isSuccessCriteriaTextDisabled &&
                     "text-[#b8b8b8] bg-[#f5f5f5]"
-                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded-md font-normal text-sm h-[70px]`}
+                  } mt-2.5 w-full px-2 py-1.5 border border-[#d0d0d0] rounded-md font-normal text-sm h-[70px] `}
                   placeholder="Enter your custom success criteria here..."
                 />
               )}

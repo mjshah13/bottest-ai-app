@@ -93,3 +93,11 @@
 .rt-SelectTrigger:where(.rt-variant-surface) {
   background-color: transparent !important;
 }
+
+.cl-navbar {
+  font-family: "Poppins", sans-serif;
+}
+
+.cl-scrollBox {
+  font-family: "Poppins", sans-serif;
+}

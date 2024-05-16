@@ -32,13 +32,13 @@ const CustomInput: React.FC<InputProps> = ({
         </label>
       )}
       <TextField.Root
-        className={className}
+        className={`${className && className} font-poppin`}
         size={size}
         type={type === "password" ? inputType : type}
         onChange={(e) => onChange && onChange(e.target.value)}
         placeholder={placeholder}
       >
-        <TextField.Slot></TextField.Slot>
+        <TextField.Slot className="font-poppins"></TextField.Slot>
       </TextField.Root>
     </div>
   );

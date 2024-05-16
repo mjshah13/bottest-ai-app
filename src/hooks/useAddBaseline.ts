@@ -57,7 +57,7 @@ const useAddBaseline = (
         setIsLoading(false);
       }
     },
-    [user, organization]
+    [selectedEvaluation, user, organization]
   );
 
   return { addBaseline, isLoading };
