@@ -381,7 +381,7 @@ const TestResult: React.FC<ModalProps> = ({
                                     value={item.message}
                                     disabled={true}
                                     className={`
-                                     mt-2.5 w-full px-2 py-2 text-sm font-normal border border-[#d0d0d0] rounded resize-none disabled:bg-[#fefefd]  disabled:text-[#8e8e8d] overflow-y-scroll  `}
+                                     mt-2.5 w-full px-2 py-2 text-sm font-normal border border-[#d0d0d0] rounded resize-none disabled:bg-[#fefefd]  disabled:text-[#8e8e8d] overflow-y-scroll bot_textarea `}
                                   />
                                 </div>
                               </div>
