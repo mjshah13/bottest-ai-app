@@ -101,3 +101,14 @@
 .cl-scrollBox {
   font-family: "Poppins", sans-serif;
 }
+/* .apexcharts-canvas {
+  height: 100% !important;
+} */
+
+.apexcharts-boxPlot-series.apexcharts-plot-series .apexcharts-series path {
+  stroke: #46c4fa !important;
+}
+
+.apexcharts-marker {
+  stroke: #46c4fa !important;
+}
