@@ -13,6 +13,7 @@ import {
   CircleHelp,
   X,
   Menu,
+  FileBarChart2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -28,6 +29,13 @@ const navigation: NavigationItem[] = [
     name: "Analytics",
     href: "/app/analytics",
     icon: <BarChartBig />,
+    current: false,
+    isDisabled: false,
+  },
+  {
+    name: "Reports",
+    href: "/app/reports",
+    icon: <FileBarChart2 />,
     current: false,
     isDisabled: false,
   },
@@ -78,8 +86,6 @@ const Sidenav = () => {
     // setActive(item.href);
     window.open(item.href, "_blank");
   };
-
-  const { session } = useSession();
 
   return (
     <div>
@@ -284,15 +290,7 @@ const Sidenav = () => {
                 </ul>
 
                 <div className="my-4 pl-1 flex items-center gap-4">
-                  <UserButton
-                    afterSignOutUrl="/sign-in"
-                    showName={true}
-                    // appearance={{
-                    //   elements: {
-                    //     userButtonOuterIdentifier: "text-black dark:text-white",
-                    //   },
-                    // }}
-                  />
+                  <UserButton afterSignOutUrl="/sign-in" showName={true} />
                   {/* <h3 className="font-normal text-black font-poppin">
                     {session?.user?.fullName
                       ? session?.user?.fullName

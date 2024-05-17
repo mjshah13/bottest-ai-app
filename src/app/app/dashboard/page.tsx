@@ -187,7 +187,7 @@ const Dashboard = (props: DashboardProps) => {
   };
 
   return (
-    <div className=" h-[92vh] gap-5 flex flex-col">
+    <div className="h-[92vh] gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12">
         {" "}
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b  dark:border-[#434447]">
