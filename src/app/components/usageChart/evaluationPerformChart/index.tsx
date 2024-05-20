@@ -120,13 +120,14 @@ const UsageEvaluationPerformedChart: React.FC<
         height: 11,
         radius: 11,
       },
+      fontFamily: "Poppins",
     },
   });
 
   return (
     <div className="w-full ">
       <div className="chart">
-        <Chart options={options} series={series} type="bar" height={260} />
+        <Chart options={options} series={series} type="bar" height={220} />
       </div>
     </div>
   );

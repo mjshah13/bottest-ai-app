@@ -86,6 +86,14 @@ const TestResultChart: React.FC<TestResultChartProps> = ({}) => {
         },
       },
     },
+    dataLabels: {
+      style: {
+        colors: ["text-black"], // Change this to your desired color
+        fontSize: "8px", // Change this to your desired font size
+        fontFamily: "Poppins", // Change this to your desired font family
+        fontWeight: "500",
+      },
+    },
     legend: {
       position: "bottom",
       show: true,
@@ -94,6 +102,7 @@ const TestResultChart: React.FC<TestResultChartProps> = ({}) => {
         height: 11,
         radius: 11,
       },
+      fontFamily: "Poppins",
     },
     fill: {
       opacity: 1,

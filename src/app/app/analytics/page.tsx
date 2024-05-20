@@ -13,6 +13,9 @@ import useBots from "../../../hooks/useBots";
 import useSuites from "../../../hooks/useSuites";
 import useEnvironment from "../../../hooks/useEnvironment";
 import UsageEvaluationPerformedChart from "../../components/usageChart/evaluationPerformChart";
+import * as Progress from "@radix-ui/react-progress";
+import CustomButton from "../../../elements/button";
+import { useApi } from "../../../hooks/useApi";
 
 const Analytics = () => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -51,6 +54,41 @@ const Analytics = () => {
       window.removeEventListener("resize", updateContainerHeight);
     };
   }, []);
+
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(80), 500); // Adjusted to represent 6.66% of 10,000
+    return () => clearTimeout(timer);
+  }, []);
+
+  const { request } = useApi();
+
+  const fetchAnalyticsSuccess = async (
+    suite_id: string,
+    environment_id: string
+  ) => {
+    try {
+      const data = await request({
+        url: `/v1/analytics/trending/success`,
+        method: "POST",
+        data: {
+          suite_id,
+          environment_id,
+        },
+      });
+
+      console.log(data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedSuite?.id && selectedEnvironment?.id) {
+      fetchAnalyticsSuccess(selectedSuite?.id, selectedEnvironment?.id);
+    }
+  }, [selectedSuite, selectedEnvironment]);
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
@@ -170,8 +208,72 @@ const Analytics = () => {
                     with the number of evaluations performed each day.
                   </p>
                 </header>
-                <div className="px-4 py-4  ">
+                <div className="px-4 py-4">
                   <UsageEvaluationPerformedChart />
+                  <div className="border-2 rounded-lg border-[#f0f0f0] h-[240px]">
+                    <div className="p-4">
+                      <div className="flex justify-between">
+                        <h3 className="font-poppin font-semibold text-base">
+                          Plan: Tier 1
+                        </h3>
+                        <div className=" border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent  text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[89px] w-full py-0.5  ">
+                          $20 Monthly
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <ul className="list-disc pl-5 font-poppin text-md font-normal">
+                          <li>1,000 Evaluations per month</li>
+                          <li>4 additional team members</li>
+                          <li>Unlimited Tests</li>
+                        </ul>
+                      </div>
+                      <div className="flex justify-between items-center mt-3">
+                        <Progress.Root
+                          className="bg-[#f0f0f0] relative overflow-hidden  rounded-full w-[300px] h-[8px]"
+                          style={{
+                            // Fix overflow clipping in Safari
+                            transform: "translateZ(0)",
+                          }}
+                          value={progress}
+                        >
+                          <Progress.Indicator
+                            className="bg-[#388aeb]  h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                            style={{
+                              transform: `translateX(-${100 - progress}%)`,
+                            }}
+                          />
+                        </Progress.Root>
+                        <div className="text-black font-poppin text-sm font-normal">
+                          {progress} of 10,000 Evaluations
+                        </div>
+                      </div>
+                    </div>
+                    <div className="border-t-2 border-[#f0f0f0] h-[59px] flex items-center">
+                      <div className="flex gap-2  w-full justify-end px-2 ">
+                        <CustomButton
+                          variant="outline"
+                          color="red"
+                          isDanger
+                          // disabled={
+                          //   organization !== null && orgRole === "org:viewer"
+                          // }
+                          // disabled={true}
+                        >
+                          Cancel subscription
+                        </CustomButton>
+                        <CustomButton
+                          color="blue"
+                          variant="solid"
+                          isPrimary
+                          // disabled={
+                          //   organization !== null && orgRole === "org:viewer"
+                          // }
+                        >
+                          Upgrade plan
+                        </CustomButton>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Box>

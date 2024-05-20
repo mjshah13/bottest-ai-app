@@ -129,6 +129,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({}) => {
         height: 11,
         radius: 11,
       },
+      fontFamily: "Poppins",
     },
   });
 

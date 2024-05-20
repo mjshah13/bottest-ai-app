@@ -157,11 +157,6 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({}) => {
         },
       },
     },
-
-    // tooltip: {
-    //   shared: false,
-    //   intersect: true,
-    // },
     legend: {
       show: false,
     },
