@@ -62,33 +62,32 @@ const Analytics = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const { request } = useApi();
+  // const { request } = useApi();
 
-  const fetchAnalyticsSuccess = async (
-    suite_id: string,
-    environment_id: string
-  ) => {
-    try {
-      const data = await request({
-        url: `/v1/analytics/trending/success`,
-        method: "POST",
-        data: {
-          suite_id,
-          environment_id,
-        },
-      });
+  // const fetchAnalyticsSuccess = async (
+  //   suite_id: string,
+  //   environment_id: string
+  // ) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/analytics/trending/success`,
+  //       method: "GET",
+  //       data: {
+  //         suite_id,
+  //         environment_id,
+  //       },
+  //     });
 
-      console.log(data?.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     console.log(data?.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (selectedSuite?.id && selectedEnvironment?.id) {
-      fetchAnalyticsSuccess(selectedSuite?.id, selectedEnvironment?.id);
-    }
-  }, [selectedSuite, selectedEnvironment]);
+  // useEffect(() => {
+  //   if (!selectedSuite?.id || !selectedEnvironment?.id) return;
+  //   fetchAnalyticsSuccess(selectedSuite?.id, selectedEnvironment?.id);
+  // }, [selectedSuite, selectedEnvironment]);
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
@@ -105,7 +104,6 @@ const Analytics = () => {
         <div className="gap-7 py-5 px-4 flex justify-between items-center">
           <div className="w-full">
             <CustomSelect
-              Btntext="Add / Modify Bots"
               Label={"Select Bot"}
               options={botLists || []}
               selectedValue={botLists?.find(
@@ -121,7 +119,6 @@ const Analytics = () => {
           <div className="w-full">
             <CustomSelect
               Label={"Select Suites"}
-              Btntext="Add / Modify Suites"
               selectedValue={suiteLists?.find(
                 (suite) => suite?.id === selectedSuite?.id
               )}
@@ -137,7 +134,6 @@ const Analytics = () => {
             <CustomSelect
               Label={"Select Environment"}
               placeholder="Select Environment"
-              Btntext="Add / Modify Environments"
               selectedValue={environmentLists?.find(
                 (env) => env?.id === selectedEnvironment?.id
               )}

@@ -4,7 +4,7 @@ import { SignIn } from "@clerk/nextjs";
 const Login = () => {
   return (
     <div className="h-screen w-full flex justify-center items-center">
-      <SignIn />
+      <SignIn routing="hash" />
     </div>
   );
 };
