@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-interface EvaluationPerformProps {}
+interface EvaluationPerformProps {
+  suiteRunNames: string[];
+  evaluationsPerformed: number[];
+  suiteRun: string[];
+}
 
-const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({}) => {
+const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({
+  suiteRunNames,
+  evaluationsPerformed,
+  suiteRun,
+}) => {
   const [series, setSeries] = useState<
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([
@@ -19,6 +27,32 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({}) => {
       color: "",
     },
   ]);
+
+  useEffect(() => {
+    setSeries((prev) =>
+      prev?.map((item: any) =>
+        item.name
+          ? {
+              ...item,
+              data: evaluationsPerformed,
+            }
+          : item
+      )
+    );
+  }, [evaluationsPerformed]);
+
+  useEffect(() => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      xaxis: {
+        ...prevOptions.xaxis,
+        categories: suiteRunNames,
+      },
+      title: {
+        text: `Evaluation performed - last ${suiteRun?.length} runs`,
+      },
+    }));
+  }, [suiteRunNames]);
 
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
@@ -60,7 +94,7 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({}) => {
       colors: ["transparent"],
     },
     title: {
-      text: "Evaluation performed - last 10 runs",
+      text: `Evaluation performed - last 0 runs`,
       align: "center",
       style: {
         fontSize: "14px",
@@ -70,18 +104,8 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({}) => {
       },
     },
     xaxis: {
-      categories: [
-        "11-30",
-        "12-1 run 2",
-        "12-2 run 2",
-        "12-2",
-        "12-3",
-        "12-4 bot V2",
-        "12-4",
-        "12-5 run 1",
-        "12-5 run 2",
-        "12-6",
-      ],
+      categories: suiteRunNames,
+
       labels: {
         style: {
           fontSize: "11px", // Adjust the font size here
@@ -102,11 +126,7 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({}) => {
         },
       },
     },
-    // grid: {
-    //   show: true, // Show the grid lines
-    //   borderColor: "#D0D0DA", // Customize the color of the grid lines
-    //   strokeDashArray: 5, // Customize the dash pattern of the grid lines
-    // },
+
     fill: {
       opacity: 1,
     },

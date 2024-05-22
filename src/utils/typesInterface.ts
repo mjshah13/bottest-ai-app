@@ -158,3 +158,32 @@ export interface AccordionTriggerProps {
 export interface EvaluationType {
   id: string;
 }
+
+export interface TestStatus {
+  name: string;
+  data: number[];
+  color: string;
+}
+export interface SuccessChartDataType {
+  suite_id: string;
+  suite_name: string;
+  environment_id: string;
+  environment_name: string;
+  suite_run_ids: string[];
+  suite_run_names: string[];
+  timestamps: string[];
+  evaluations_performed: number[];
+  test_statuses: TestStatus[];
+  evaluation_pass_rates: number[];
+}
+
+export interface BoxDataType {
+  suite_run_id: string;
+  suite_run_name: string;
+  values: number[];
+  outliers: any[];
+}
+
+export interface PerformanceChartDataType {
+  boxes: BoxDataType[];
+}

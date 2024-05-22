@@ -16,6 +16,9 @@ import UsageEvaluationPerformedChart from "../../components/usageChart/evaluatio
 import * as Progress from "@radix-ui/react-progress";
 import CustomButton from "../../../elements/button";
 import { useApi } from "../../../hooks/useApi";
+import useSuccessChart from "../../../hooks/useSuccessChart";
+import usePerformanceChart from "../../../hooks/usePerformanceChart";
+import useUsageChart from "../../../hooks/useUsageChart";
 
 const Analytics = () => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -31,6 +34,10 @@ const Analytics = () => {
   useBots(setSelectedBot);
   const { fetchSuites } = useSuites(setSelectedSuite);
   const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
+  const { fetchAnalyticsSuccess, successChartdata } = useSuccessChart();
+  const { fetchAnalyticsPerformance, performanceChartData } =
+    usePerformanceChart();
+  const { fetchAnalyticsUsage } = useUsageChart();
 
   useEffect(() => {
     if (!selectedBot) return;
@@ -62,7 +69,8 @@ const Analytics = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // const { request } = useApi();
+  // const [performanceChartData, setPerformanceChartData] =
+  //   useState<PerformanceChartDataType | null>(null);
 
   // const fetchAnalyticsSuccess = async (
   //   suite_id: string,
@@ -70,24 +78,54 @@ const Analytics = () => {
   // ) => {
   //   try {
   //     const data = await request({
-  //       url: `/v1/analytics/trending/success`,
+  //       url: `/v1/analytics/trending/success?suite_id=${suite_id}&environment_id=${environment_id}`,
   //       method: "GET",
-  //       data: {
-  //         suite_id,
-  //         environment_id,
-  //       },
   //     });
 
-  //     console.log(data?.data);
+  //     setSuccessChartdata(data);
   //   } catch (error) {
   //     console.log(error);
   //   }
   // };
 
-  // useEffect(() => {
-  //   if (!selectedSuite?.id || !selectedEnvironment?.id) return;
-  //   fetchAnalyticsSuccess(selectedSuite?.id, selectedEnvironment?.id);
-  // }, [selectedSuite, selectedEnvironment]);
+  // const fetchAnalyticsPerformance = async (
+  //   suite_id: string,
+  //   environment_id: string
+  // ) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/analytics/trending/performance?suite_id=${suite_id}&environment_id=${environment_id}`,
+  //       method: "GET",
+  //     });
+
+  //     setPerformanceChartData(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const fetchAnalyticsUsage = async (
+  //   suite_id: string,
+  //   environment_id: string
+  // ) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/analytics/trending/usage?suite_id=${suite_id}&environment_id=${environment_id}`,
+  //       method: "GET",
+  //     });
+
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (!selectedSuite?.id || !selectedEnvironment?.id) return;
+    fetchAnalyticsSuccess(selectedSuite?.id, selectedEnvironment?.id);
+    fetchAnalyticsPerformance(selectedSuite?.id, selectedEnvironment?.id);
+    fetchAnalyticsUsage(selectedSuite?.id, selectedEnvironment?.id);
+  }, [selectedSuite, selectedEnvironment]);
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
@@ -174,9 +212,24 @@ const Analytics = () => {
                 </p>
               </header>
               <div className="px-4 py-5">
-                <EvaluationPerformedChart />
-                <TestResultChart />
-                <EvaluationPassChart />
+                <EvaluationPerformedChart
+                  suiteRun={successChartdata?.suite_run_ids || []}
+                  evaluationsPerformed={
+                    successChartdata?.evaluations_performed || []
+                  }
+                  suiteRunNames={successChartdata?.suite_run_names || []}
+                />
+                <TestResultChart
+                  suiteRunNames={successChartdata?.suite_run_names || []}
+                  testStatuses={successChartdata?.test_statuses || []}
+                />
+                <EvaluationPassChart
+                  suiteRun={successChartdata?.suite_run_ids || []}
+                  evaluationPassRates={
+                    successChartdata?.evaluation_pass_rates || []
+                  }
+                  suiteRunNames={successChartdata?.suite_run_names || []}
+                />
               </div>
             </Box>
             <Box className="flex flex-col gap-7">
@@ -191,7 +244,9 @@ const Analytics = () => {
                   </p>
                 </header>
                 <div className="px-4 mt-1.5 ">
-                  <HighBoxPlotChart />
+                  <HighBoxPlotChart
+                    highBoxPlotData={performanceChartData?.boxes || []}
+                  />
                 </div>
               </div>
               <div className="h-[630px] bg-white border-2 rounded-lg border-[#f0f0f0]">
@@ -212,7 +267,7 @@ const Analytics = () => {
                         <h3 className="font-poppin font-semibold text-base">
                           Plan: Tier 1
                         </h3>
-                        <div className=" border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent  text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[89px] w-full py-0.5  ">
+                        <div className=" border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent  text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[95px] w-full  py-0.5  ">
                           $20 Monthly
                         </div>
                       </div>

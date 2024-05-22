@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-interface EvaluationPassProps {}
+interface EvaluationPassProps {
+  suiteRunNames: string[];
+  evaluationPassRates: number[];
+  suiteRun: string[];
+}
 
-const EvaluationPassChart: React.FC<EvaluationPassProps> = ({}) => {
+const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
+  suiteRunNames,
+  evaluationPassRates,
+  suiteRun,
+}) => {
   const [series, setSeries] = useState<
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([
     {
       name: "Regression Test Suite Success Rate for MyBot",
-      data: [30, 56, 55, 97, 121, 121, 324, 345, 345, 390].map((value) =>
-        parseFloat(((value / 411) * 100).toFixed(0))
-      ),
+      data: [],
       color: "#388AEB",
     },
     {
@@ -21,6 +27,34 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({}) => {
       color: "",
     },
   ]);
+
+  useEffect(() => {
+    setSeries((prevData) =>
+      prevData?.map((item: any) =>
+        item?.name
+          ? {
+              ...item,
+              data: evaluationPassRates?.map((value) =>
+                Number(value.toFixed(0))
+              ),
+            }
+          : item
+      )
+    );
+  }, [evaluationPassRates]);
+
+  useEffect(() => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      xaxis: {
+        ...prevOptions.xaxis,
+        categories: suiteRunNames,
+      },
+      title: {
+        text: `Evaluation performed - last ${suiteRun?.length} runs`,
+      },
+    }));
+  }, [suiteRunNames]);
 
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
@@ -62,7 +96,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({}) => {
       colors: ["transparent"],
     },
     title: {
-      text: "Evaluation performed - last 11 runs",
+      text: "Evaluation performed - last 0 runs",
       align: "center",
       style: {
         fontSize: "14px",
@@ -72,18 +106,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({}) => {
       },
     },
     xaxis: {
-      categories: [
-        "11-30",
-        "12-1 run 2",
-        "12-2 run 2",
-        "12-2",
-        "12-3",
-        "12-4 bot V2",
-        "12-4",
-        "12-5 run 1",
-        "12-5 run 2",
-        "12-6",
-      ],
+      categories: suiteRunNames,
       labels: {
         style: {
           fontSize: "11px", // Adjust the font size here
@@ -113,11 +136,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({}) => {
         },
       },
     },
-    // grid: {
-    //   show: true, // Show the grid lines
-    //   borderColor: "#D0D0DA", // Customize the color of the grid lines
-    //   strokeDashArray: 5, // Customize the dash pattern of the grid lines
-    // },
+
     fill: {
       opacity: 1,
     },

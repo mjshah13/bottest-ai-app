@@ -1,112 +1,122 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import { BoxDataType } from "../../../../utils/typesInterface";
 
-interface HighBoxPlotChartProps {}
+interface HighBoxPlotChartProps {
+  highBoxPlotData: BoxDataType[];
+}
 
-const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({}) => {
+const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
+  highBoxPlotData,
+}) => {
   const [series, setSeries] = useState<
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([
-    {
-      type: "boxPlot",
-      data: [
-        {
-          x: "11-31 Bot V2",
-          y: [700, 760, 801, 848, 900],
-        },
-        {
-          x: "11-30 run 1",
-          y: [710, 770, 810, 850, 910],
-        },
-        {
-          x: "11-30 run 2",
-          y: [680, 740, 800, 830, 870],
-        },
-        {
-          x: "12-15 Bot V3",
-          y: [690, 750, 790, 820, 870],
-        },
-        {
-          x: "12-16",
-          y: [720, 780, 810, 860, 900],
-        },
-        {
-          x: "12-17",
-          y: [700, 760, 800, 850, 890],
-        },
-        {
-          x: "12-18 run 1",
-          y: [710, 770, 810, 850, 910],
-        },
-        {
-          x: "12-18 run 2",
-          y: [720, 780, 820, 860, 920],
-        },
-        {
-          x: "12-19 run 1",
-          y: [680, 740, 780, 830, 880],
-        },
-        {
-          x: "12-19 run 2",
-          y: [690, 750, 790, 830, 880],
-        },
-        {
-          x: "12-19 run 3",
-          y: [700, 760, 800, 850, 890],
-        },
-      ],
-    },
-    {
-      type: "scatter",
-      data: [
-        {
-          x: "11-31 Bot V2",
-          y: 635,
-        },
-        {
-          x: "11-30 run 1",
-          y: "",
-        },
-        {
-          x: "11-30 run 2",
-          y: "",
-        },
-        {
-          x: "12-15 Bot V3",
-          y: "",
-        },
-        {
-          x: "12-16",
-          y: "1000", // Three scatter plots at "12-16"
-        },
-        {
-          x: "12-17",
-          y: "",
-        },
-        {
-          x: "12-18 run 1",
-          y: "",
-        },
-        {
-          x: "12-18 run 2",
-          y: "",
-        },
-        {
-          x: "12-19 run 1",
-          y: "",
-        },
-        {
-          x: "12-19 run 2",
-          y: "",
-        },
-        {
-          x: "12-19 run 3",
-          y: "",
-        },
-      ],
-    },
+    // {
+    //   type: "boxPlot",
+    //   data: [
+    //     {
+    //       x: "11-31 Bot V2",
+    //       y: [700, 760, 801, 848, 900],
+    //     },
+    //     {
+    //       x: "11-30 run 1",
+    //       y: [710, 770, 810, 850, 910],
+    //     },
+    //     {
+    //       x: "11-30 run 2",
+    //       y: [680, 740, 800, 830, 870],
+    //     },
+    //   ],
+    // },
+    // {
+    //   type: "scatter",
+    //   data: [
+    //     {
+    //       x: "11-31 Bot V2",
+    //       y: 635,
+    //     },
+    //     {
+    //       x: "11-30 run 1",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "11-30 run 2",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-15 Bot V3",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-16",
+    //       y: "1000", // Three scatter plots at "12-16"
+    //     },
+    //     {
+    //       x: "12-17",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-18 run 1",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-18 run 2",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-19 run 1",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-19 run 2",
+    //       y: "",
+    //     },
+    //     {
+    //       x: "12-19 run 3",
+    //       y: "",
+    //     },
+    //   ],
+    // },
   ]);
+
+  useEffect(() => {
+    if (highBoxPlotData) {
+      const boxPlotSeries = {
+        type: "boxPlot",
+        group: "apexcharts-axis-0",
+        data: highBoxPlotData.map((item, i) => ({
+          x: `${item.suite_run_name}-${i + 1}`,
+          y: item.values.map((value: number) => Math.round(value)),
+        })),
+      };
+
+      const scatterSeries = {
+        type: "scatter",
+        group: "apexcharts-axis-0",
+        data: highBoxPlotData.flatMap((item) =>
+          item.outliers.map((outlier) => ({
+            x: item.suite_run_name,
+            y: outlier,
+          }))
+        ),
+      };
+
+      setSeries([boxPlotSeries, scatterSeries]);
+    }
+  }, [highBoxPlotData]);
+
+  useEffect(() => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      xaxis: {
+        categories: highBoxPlotData?.map(
+          (item, i) => `${item?.suite_run_name} - ${i + 1}`
+        ),
+      },
+    }));
+  }, []);
 
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
@@ -117,19 +127,8 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({}) => {
     },
     colors: ["transparent", "transparent"],
     xaxis: {
-      categories: [
-        "11-31 Bot V2",
-        "11-30 run 1",
-        "11-30 run 2",
-        "12-15 Bot V3",
-        "12-16",
-        "12-17",
-        "12-18 run 1",
-        "12-18 run 2",
-        "12-19 run 1",
-        "12-19 run 2",
-        "12-19 run 3",
-      ],
+      type: "numeric",
+      categories: [],
       labels: {
         style: {
           fontSize: "11px",
@@ -146,8 +145,17 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({}) => {
           fontFamily: "Poppins",
         },
       },
-      min: 600,
-      max: 1200,
+      min: 1,
+      max: 520,
+      labels: {
+        formatter: function (val: number) {
+          return Math.round(val).toString();
+        },
+        style: {
+          fontSize: "11px",
+          fontFamily: "Poppins",
+        },
+      },
     },
     plotOptions: {
       boxPlot: {
