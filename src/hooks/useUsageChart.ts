@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useCallback, useContext } from "react";
-import { GlobalStateType } from "../utils/typesInterface";
+import { GlobalStateType, UsageChartDataType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 
@@ -9,8 +9,8 @@ const useUsageChart = () => {
   const { request } = useApi();
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  //   const [performanceChartData, setPerformanceChartData] =
-  //     useState<PerformanceChartDataType | null>(null);
+  const [usageChartData, setUsageChartData] =
+    useState<UsageChartDataType | null>(null);
   const { user } = useUser();
   const { organization } = useOrganization();
 
@@ -27,7 +27,7 @@ const useUsageChart = () => {
           method: "GET",
         });
 
-        console.log(data);
+        setUsageChartData(data);
       } catch (error: any) {
         setIsLoading(false);
         console.error({ error });
@@ -38,7 +38,7 @@ const useUsageChart = () => {
     [user, organization]
   );
 
-  return { fetchAnalyticsUsage, error, isLoading };
+  return { fetchAnalyticsUsage, usageChartData, error, isLoading };
 };
 
 export default useUsageChart;

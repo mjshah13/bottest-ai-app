@@ -187,3 +187,20 @@ export interface BoxDataType {
 export interface PerformanceChartDataType {
   boxes: BoxDataType[];
 }
+
+export interface UsageChartDataType {
+  suite_id: string;
+  suite_name: string;
+  environment_id: string;
+  environment_name: string;
+  suite_run_ids: string[];
+  suite_run_names: string[];
+  evaluations_performed: number[];
+  timestamps: string[];
+  total_used: number;
+  total_available: number;
+  billing_tier: {
+    name: string;
+    price: number;
+  };
+}

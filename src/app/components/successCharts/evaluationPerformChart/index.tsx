@@ -18,7 +18,7 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({
   >([
     {
       name: "Regression Test Suite Success Rate for MyBot",
-      data: [30, 56, 55, 97, 121, 121, 324, 345, 345, 411],
+      data: [],
       color: "#ffe7bc",
     },
     {

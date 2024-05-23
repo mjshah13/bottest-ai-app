@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-interface UsageEvaluationPerformProps {}
+interface UsageEvaluationPerformProps {
+  usageChartData: number[];
+  suiteRunNames: string[];
+}
 
-const UsageEvaluationPerformedChart: React.FC<
-  UsageEvaluationPerformProps
-> = ({}) => {
+const UsageEvaluationPerformedChart: React.FC<UsageEvaluationPerformProps> = ({
+  usageChartData,
+  suiteRunNames,
+}) => {
+  console.log(suiteRunNames);
   const [series, setSeries] = useState<
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([
     {
       name: "Evaluation Performed",
-      data: [30, 56, 55, 97, 121, 121, 324, 345, 345, 411],
+      data: [],
       color: "#ffe7bc",
     },
     {
@@ -21,6 +26,29 @@ const UsageEvaluationPerformedChart: React.FC<
       color: "",
     },
   ]);
+
+  useEffect(() => {
+    setSeries((prev) =>
+      prev?.map((item: any) =>
+        item.name
+          ? {
+              ...item,
+              data: usageChartData,
+            }
+          : item
+      )
+    );
+  }, [usageChartData]);
+
+  useEffect(() => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      xaxis: {
+        ...prevOptions.xaxis,
+        categories: suiteRunNames,
+      },
+    }));
+  }, [suiteRunNames]);
 
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
@@ -72,18 +100,6 @@ const UsageEvaluationPerformedChart: React.FC<
       },
     },
     xaxis: {
-      categories: [
-        "12-1",
-        "12-2",
-        "12-3 ",
-        "12-4",
-        "12-5",
-        "12-6",
-        "12-7",
-        "12-8",
-        "12-9",
-        "12-10",
-      ],
       labels: {
         style: {
           fontSize: "11px", // Adjust the font size here

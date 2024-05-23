@@ -37,7 +37,7 @@ const Analytics = () => {
   const { fetchAnalyticsSuccess, successChartdata } = useSuccessChart();
   const { fetchAnalyticsPerformance, performanceChartData } =
     usePerformanceChart();
-  const { fetchAnalyticsUsage } = useUsageChart();
+  const { fetchAnalyticsUsage, usageChartData } = useUsageChart();
 
   useEffect(() => {
     if (!selectedBot) return;
@@ -65,9 +65,11 @@ const Analytics = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setProgress(80), 500); // Adjusted to represent 6.66% of 10,000
-    return () => clearTimeout(timer);
-  }, []);
+    const totalUsed = usageChartData?.total_used || 0;
+    const totalAvailable = usageChartData?.total_available || 1;
+    const progressPercentage = (totalUsed / totalAvailable) * 100;
+    setProgress(progressPercentage);
+  }, [usageChartData]);
 
   // const [performanceChartData, setPerformanceChartData] =
   //   useState<PerformanceChartDataType | null>(null);
@@ -260,15 +262,22 @@ const Analytics = () => {
                   </p>
                 </header>
                 <div className="px-4 py-4">
-                  <UsageEvaluationPerformedChart />
+                  <UsageEvaluationPerformedChart
+                    suiteRunNames={usageChartData?.suite_run_names || []}
+                    usageChartData={usageChartData?.evaluations_performed || []}
+                  />
                   <div className="border-2 rounded-lg border-[#f0f0f0] h-[240px]">
                     <div className="p-4">
                       <div className="flex justify-between">
                         <h3 className="font-poppin font-semibold text-base">
-                          Plan: Tier 1
+                          {` Plan: ${
+                            usageChartData?.billing_tier?.name || ""
+                          } `}
                         </h3>
-                        <div className=" border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent  text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md  max-w-[95px] w-full  py-0.5  ">
-                          $20 Monthly
+                        <div className="border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md max-w-[95px] w-full py-0.5">
+                          {`$${
+                            usageChartData?.billing_tier?.price || 0
+                          } Monthly`}
                         </div>
                       </div>
                       <div className="mt-3">
@@ -288,14 +297,15 @@ const Analytics = () => {
                           value={progress}
                         >
                           <Progress.Indicator
-                            className="bg-[#388aeb]  h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                            className="bg-[#388aeb] h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
                             style={{
                               transform: `translateX(-${100 - progress}%)`,
                             }}
                           />
                         </Progress.Root>
                         <div className="text-black font-poppin text-sm font-normal">
-                          {progress} of 10,000 Evaluations
+                          {usageChartData?.total_used} of{" "}
+                          {usageChartData?.total_available}
                         </div>
                       </div>
                     </div>
