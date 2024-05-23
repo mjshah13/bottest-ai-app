@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface CookieFunctions {
   getCookie: (key: string) => string | null;
   setCookie: (key: string, value: string) => void;
@@ -90,7 +92,12 @@ export interface PageConfig {
 }
 
 export interface TestRunType {
+  environment_id: ReactNode;
+  id: ReactNode;
+  created_by: ReactNode;
+  completed_at: ReactNode;
   status?: string;
+  suite_run_id: string;
 }
 
 export interface Conversation {

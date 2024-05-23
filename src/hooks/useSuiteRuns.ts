@@ -8,6 +8,7 @@ import { useUser } from "@clerk/nextjs";
 const useSuiteRuns = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [suiteTestRuns, setSuiteTestRuns] = useState<TestRunType[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const { user } = useUser();
 
   const { request } = useApi();
@@ -29,6 +30,7 @@ const useSuiteRuns = () => {
           method: "GET",
         });
 
+        setTotalPages(data?.pagination?.total_pages);
         setSuiteTestRuns(data?.data?.[0]?.test_runs || []);
       } catch (error: any) {
         console.error({ error });
@@ -40,7 +42,7 @@ const useSuiteRuns = () => {
     [user]
   );
 
-  return { suiteTestRuns, fetchSuiteRuns, isLoading };
+  return { suiteTestRuns, fetchSuiteRuns, totalPages, isLoading };
 };
 
 export default useSuiteRuns;
