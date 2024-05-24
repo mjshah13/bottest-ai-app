@@ -15,16 +15,11 @@ const usePerformanceChart = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [performanceChartData, setPerformanceChartData] =
     useState<PerformanceChartDataType | null>(null);
-
   const { user } = useUser();
   const { organization } = useOrganization();
 
   const fetchAnalyticsPerformance = useCallback(
     async (suite_id: string, environment_id: string) => {
-      //   let query = "";
-      //   if (environmentId) {
-      //     query = `?environment_id=${environmentId}`;
-      //   }
       try {
         setIsLoading(true);
         const data = await request({

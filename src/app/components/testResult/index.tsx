@@ -29,6 +29,8 @@ import Loader from "../loader";
 import Image from "next/image";
 import { GlobalStateContext } from "../../../globalState";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
+import { NextRequest, NextResponse } from "next/server";
 
 interface ModalProps {
   title?: string;

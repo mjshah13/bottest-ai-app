@@ -28,6 +28,8 @@ import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
 
+import { useSearchParams } from "next/navigation";
+
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
@@ -185,6 +187,8 @@ const Dashboard = (props: DashboardProps) => {
 
     return displayWithCommas;
   };
+
+  // Now you can access the parameters like this:
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">

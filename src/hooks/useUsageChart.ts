@@ -16,10 +16,6 @@ const useUsageChart = () => {
 
   const fetchAnalyticsUsage = useCallback(
     async (suite_id: string, environment_id: string) => {
-      //   let query = "";
-      //   if (environmentId) {
-      //     query = `?environment_id=${environmentId}`;
-      //   }
       try {
         setIsLoading(true);
         const data = await request({
