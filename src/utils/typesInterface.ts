@@ -95,9 +95,10 @@ export interface TestRunType {
   environment_id: ReactNode;
   id: ReactNode;
   created_by: ReactNode;
-  completed_at: ReactNode;
+  completed_at: ReactNode | string;
   status?: string;
   suite_run_id: string;
+  initiation_type?: string;
 }
 
 export interface Conversation {

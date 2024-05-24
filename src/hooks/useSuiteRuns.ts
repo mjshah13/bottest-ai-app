@@ -14,14 +14,19 @@ const useSuiteRuns = () => {
   const { request } = useApi();
 
   const fetchSuiteRuns = useCallback(
-    async (suite: string | null, environmentId: string | null) => {
+    async (
+      suite: string | null,
+      environmentId: string | null,
+      page: number = 1,
+      limit: number = 1
+    ) => {
       setIsLoading(true);
       if (!user?.id) {
         return;
       }
       let query = "";
       if (environmentId) {
-        query = `?environment_id=${environmentId}&limit=1`;
+        query = `?environment_id=${environmentId}&limit=${limit}&page=${page}`;
       }
 
       try {

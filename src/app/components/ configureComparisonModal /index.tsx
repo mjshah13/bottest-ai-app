@@ -7,9 +7,9 @@ import CustomSelect from "../../../elements/select";
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
-import { useApi } from "../../../hooks/useApi";
 import _ from "lodash";
 import useSpecificSuiteRun from "../../../hooks/useSpecificSuiteRuns";
+import { useApi } from "../../../hooks/useApi";
 
 interface ModalProps {
   title: string;
@@ -75,24 +75,6 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
     }
   };
 
-  //   const { request } = useApi();
-
-  //   const [Error, setError] = useState(false);
-
-  //   const fetchSpecificSuiteRuns = async (suite_run_id: string) => {
-  //     try {
-  //       const data = await request({
-  //         url: `/v1/suite_runs/${suite_run_id}`,
-  //         method: "GET",
-  //       });
-  //       setError(false);
-  //       console.log("Error state in try block:", Error);
-  //     } catch (error) {
-  //       setError(true);
-  //     } finally {
-  //     }
-  //   };
-
   const handleChange = useCallback(
     _.debounce((val: string) => {
       if (val === "") {
@@ -108,6 +90,26 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
     setInputValue(val);
     handleChange(val);
   };
+
+  // const { request } = useApi();
+
+  // const fetchSpecificSuites = async (suite_run_id: string) => {
+  //   try {
+  //     const data = await request({
+  //       url: `/v1/suites/${suite_run_id}`,
+  //       method: "GET",
+  //     });
+  //     console.log(data);
+  //   } catch (error) {
+  //     setError(true);
+  //   } finally {
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchSpecificSuites(selectedSuite?.id as string);
+  // }, [selectedSuite]);
+
   return (
     <Dialog.Root
       open={isComparisonModalOpen}
