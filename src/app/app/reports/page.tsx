@@ -21,6 +21,8 @@ import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import ConfigureComparisonModal from "../../components/ configureComparisonModal ";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import moment from "moment";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Reports = () => {
   const maxPagesToShow = 5;
@@ -54,26 +56,8 @@ const Reports = () => {
 
   useEffect(() => {
     if (!selectedBot || !selectedSuite || !selectedEnvironment) return;
-
     fetchSuiteRuns(selectedSuite?.id, selectedEnvironment?.id, currentPage, 10);
   }, [selectedBot, selectedEnvironment, selectedSuite, currentPage]);
-
-  useEffect(() => {
-    const updateContainerHeight = () => {
-      const container = document.getElementById("flex-container");
-      if (container) {
-        const height = container.offsetHeight;
-        setContainerHeight(height);
-      }
-    };
-
-    updateContainerHeight();
-    window.addEventListener("resize", updateContainerHeight);
-
-    return () => {
-      window.removeEventListener("resize", updateContainerHeight);
-    };
-  }, []);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {});
@@ -104,6 +88,23 @@ const Reports = () => {
       (_, index) => startPage + index
     );
   };
+
+  useEffect(() => {
+    const updateContainerHeight = () => {
+      const container = document.getElementById("flex-container");
+      if (container) {
+        const height = container.offsetHeight;
+        setContainerHeight(height);
+      }
+    };
+
+    updateContainerHeight();
+    window.addEventListener("resize", updateContainerHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateContainerHeight);
+    };
+  }, []);
 
   return (
     <div className="h-[92vh]  flex flex-col">
@@ -149,7 +150,7 @@ const Reports = () => {
             <h3 className="text-black text-sm font-poppin font-normal">
               Comparison Suite Run:{" "}
             </h3>
-            <div className="flex gap-2 items-center mt-1.5">
+            <div className="flex gap-2 items-center  mt-1.5">
               <p className="text-black font-poppin text-sm font-semibold">
                 Most Recent on Same Environment (default)
               </p>
@@ -201,89 +202,121 @@ const Reports = () => {
                 <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
                   <div className="w-[205px]">Link</div>{" "}
                 </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
-                  <div className="w-[45px]">PDF</div>{" "}
+                <Table.ColumnHeaderCell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold ">
+                  <div className="w-[45px] flex justify-center">PDF</div>{" "}
                 </Table.ColumnHeaderCell>
               </Table.Row>
             </Table.Header>
-
-            <Table.Body>
-              {suiteTestRuns.map((suiteTestRun, i) => (
-                <Table.Row key={i} className="h-[47px] align-middle">
-                  <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                    <div className="w-[150px] ">
-                      <p className=" overflow-hidden text-ellipsis whitespace-nowrap">
-                        {typeof suiteTestRun?.completed_at === "string"
-                          ? moment(suiteTestRun.completed_at).format(
-                              "M/D/YY h:mm:ss A"
-                            )
-                          : ""}
-                      </p>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                    <div className="flex items-center w-[160px]">
-                      <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
-                        {suiteTestRun?.suite_run_id}
-                      </p>
-                      <Tooltip.Provider skipDelayDuration={100}>
-                        <Tooltip.Root delayDuration={100}>
-                          <Tooltip.Trigger asChild>
-                            <button
-                              onClick={() =>
-                                copyToClipboard(suiteTestRun?.suite_run_id)
-                              }
-                              className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
-                            >
-                              <Copy size={16} className="ms-2" />
-                            </button>
-                          </Tooltip.Trigger>
-                          <Tooltip.Portal>
-                            <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
-                              Copy suite id
-                              <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
-                            </Tooltip.Content>
-                          </Tooltip.Portal>
-                        </Tooltip.Root>
-                      </Tooltip.Provider>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                    <div className=" w-[150px]">
-                      <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
-                        {
-                          environmentLists?.find(
-                            (item) => item?.id === suiteTestRun?.environment_id
-                          )?.name
-                        }
-                      </p>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                    <div className=" w-[150px]">
-                      <p className=" flex gap-2 items-center">
-                        {suiteTestRun.initiation_type &&
-                          renderInitiationIcon(suiteTestRun.initiation_type)}
-                        {suiteTestRun?.initiation_type}
-                      </p>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                    <div className=" min-w-[205px] w-full">
-                      <button className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full ">
-                        <FileBarChart2 size={16} />
-                        Interactive Report
-                      </button>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                    <div className="flex justify-center w-[48px]">
-                      <Download size={16} className="ms-1" />
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
+            {loading ? (
+              <Table.Body>
+                {Array(5)
+                  .fill(5)
+                  .map((_, i) => (
+                    <Table.Row key={i} className="align-middle">
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                        <Skeleton count={1} width={150} height={25} />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                        <Skeleton count={1} width={150} height={25} />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                        <Skeleton count={1} width={150} height={25} />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                        <Skeleton count={1} width={150} height={25} />
+                      </Table.Cell>
+                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                        <Skeleton count={1} width={150} height={25} />
+                      </Table.Cell>
+                      <Table.Cell className=" dark:border-[#373a3b]">
+                        <Skeleton count={1} width={45} height={25} />
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+              </Table.Body>
+            ) : (
+              <Table.Body>
+                {suiteTestRuns.map((suiteTestRun, i) => (
+                  <Table.Row key={i} className="h-[47px] align-middle">
+                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                      <div className="w-[150px] ">
+                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap">
+                          {typeof suiteTestRun?.completed_at === "string"
+                            ? moment(suiteTestRun.completed_at).format(
+                                "M/D/YY h:mm:ss A"
+                              )
+                            : ""}
+                        </p>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                      <div className="flex items-center w-[160px]">
+                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
+                          {suiteTestRun?.suite_run_id}
+                        </p>
+                        <Tooltip.Provider skipDelayDuration={100}>
+                          <Tooltip.Root delayDuration={100}>
+                            <Tooltip.Trigger asChild>
+                              <button
+                                onClick={() =>
+                                  copyToClipboard(suiteTestRun?.suite_run_id)
+                                }
+                                className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
+                              >
+                                <Copy size={16} className="ms-2" />
+                              </button>
+                            </Tooltip.Trigger>
+                            <Tooltip.Portal>
+                              <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
+                                Copy suite id
+                                <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
+                              </Tooltip.Content>
+                            </Tooltip.Portal>
+                          </Tooltip.Root>
+                        </Tooltip.Provider>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                      <div className=" w-[150px]">
+                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
+                          {
+                            environmentLists?.find(
+                              (item) =>
+                                item?.id === suiteTestRun?.environment_id
+                            )?.name
+                          }
+                        </p>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                      <div className=" w-[150px]">
+                        <p className=" flex gap-2 items-center">
+                          {suiteTestRun.initiation_type &&
+                            renderInitiationIcon(suiteTestRun.initiation_type)}
+                          {suiteTestRun?.initiation_type}
+                        </p>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                      <div className=" min-w-[205px] w-full">
+                        <button className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full ">
+                          <FileBarChart2 size={16} />
+                          Interactive Report
+                        </button>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                      <div className="flex justify-center w-[48px]">
+                        <Download
+                          size={16}
+                          className="ms-1 hover:text-[#adb1bd]"
+                        />
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            )}
           </Table.Root>
         </div>
 

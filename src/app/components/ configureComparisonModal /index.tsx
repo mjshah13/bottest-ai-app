@@ -9,7 +9,6 @@ import { GlobalStateContext } from "../../../globalState";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
 import _ from "lodash";
 import useSpecificSuiteRun from "../../../hooks/useSpecificSuiteRuns";
-import { useApi } from "../../../hooks/useApi";
 
 interface ModalProps {
   title: string;
@@ -52,26 +51,24 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
   };
 
   const handleSave = () => {
-    if (radioButtonValue === "most_recent_same_environment") {
-      updateSuite(
-        selectedSuite?.id as string,
-        { most_recent_same_environment: radioButtonValue },
-        suiteLists
-      );
+    let updateData = {};
+
+    switch (radioButtonValue) {
+      case "most_recent_same_environment":
+        updateData = { most_recent_same_environment: radioButtonValue };
+        break;
+      case "most_recent_different_environment":
+        updateData = {
+          most_recent_different_environment: selectedEnvironment?.id,
+        };
+        break;
+      case "specific_suite_run":
+        updateData = { specific_suite_run: inputValue };
+        break;
     }
-    if (radioButtonValue === "most_recent_different_environment") {
-      updateSuite(
-        selectedSuite?.id as string,
-        { most_recent_different_environment: selectedEnvironment?.id },
-        suiteLists
-      );
-    }
-    if (radioButtonValue === "specific_suite_run") {
-      updateSuite(
-        selectedSuite?.id as string,
-        { specific_suite_run: inputValue },
-        suiteLists
-      );
+
+    if (selectedSuite?.id) {
+      updateSuite(selectedSuite.id, updateData, suiteLists);
     }
   };
 
@@ -90,25 +87,6 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
     setInputValue(val);
     handleChange(val);
   };
-
-  // const { request } = useApi();
-
-  // const fetchSpecificSuites = async (suite_run_id: string) => {
-  //   try {
-  //     const data = await request({
-  //       url: `/v1/suites/${suite_run_id}`,
-  //       method: "GET",
-  //     });
-  //     console.log(data);
-  //   } catch (error) {
-  //     setError(true);
-  //   } finally {
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchSpecificSuites(selectedSuite?.id as string);
-  // }, [selectedSuite]);
 
   return (
     <Dialog.Root

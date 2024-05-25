@@ -29,6 +29,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   placeholder,
   isAddedBtn = true,
 }) => {
+  //f3f3f5
   return (
     <div className="flex flex-col justify-start gap-1">
       <label className="font-poppin text-sm text-black dark:text-white">
@@ -49,7 +50,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       >
         <Select.Trigger
           placeholder={placeholder}
-          className="font-poppin cursor-pointer text-black dark:text-white"
+          className="font-poppin cursor-pointer text-black dark:text-white disabled:bg-[#f3f3f5] disabled:text-[#aeb1b6] disabled:cursor-not-allowed "
         >
           {selectedValue?.name}
         </Select.Trigger>
