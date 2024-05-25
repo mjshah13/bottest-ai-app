@@ -23,6 +23,7 @@ import { useApi } from "../../../hooks/useApi";
 import useUpdateTest from "../../../hooks/useUpdateTest";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import * as Checkbox from "@radix-ui/react-checkbox";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   title?: string;
@@ -42,7 +43,10 @@ const CustomizeTest: React.FC<ModalProps> = ({
   ) as GlobalStateType;
 
   const { fetchBaseline, isLoading } = useBaseline();
+  const router = useRouter();
   const [successCriteriaTab, setSuccessCriteriaTab] = useState(0);
+  const [isDeleteBaseline, setIsDeleteBaseline] = useState(false);
+  const [selectedBaseline, setIsSelectedBaseline] = useState<any>(null);
   const [numberOfVariantsTab, setNumberOfVariantsTab] = useState(0);
   const [numberOfIterationTab, setNumberOfIterationTab] = useState(0);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -129,8 +133,9 @@ const CustomizeTest: React.FC<ModalProps> = ({
     }
   }, [specificTest]);
 
-  const [isDeleteBaseline, setIsDeleteBaseline] = useState(false);
-  const [selectedBaseline, setIsSelectedBaseline] = useState<any>(null);
+  const handleClear = () => {
+    router.push("/app/dashboard");
+  };
 
   return (
     <Dialog.Root
@@ -352,7 +357,11 @@ const CustomizeTest: React.FC<ModalProps> = ({
         <div className="border-t border-[#f5f5f5]">
           <Flex gap="3" py={"3"} px={"3"} justify="end">
             <Dialog.Close>
-              <CustomButton onClick={() => {}} variant="outline" color="gray">
+              <CustomButton
+                onClick={handleClear}
+                variant="outline"
+                color="gray"
+              >
                 Discard
               </CustomButton>
             </Dialog.Close>
