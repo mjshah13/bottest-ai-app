@@ -166,3 +166,74 @@ export interface AccordionTriggerProps {
 export interface EvaluationType {
   id: string;
 }
+
+export interface AnalyticsReportType {
+  suite_run_id: string;
+  suite_run_timestamp: string;
+  comparison_run_id: string;
+  comparison_run_timestamp: string;
+  suite_name: string;
+  tests: Test[];
+  overview: OverviewData;
+  improvements: {
+    test_improvements: {
+      test_id: string;
+      test_name: string;
+      pass_rate: number;
+      comparison_pass_rate: number;
+    }[];
+  };
+  failures: {
+    test_failures: {
+      test_id: string;
+      test_name: string;
+      pass_rate: number;
+      failure_summary: string;
+      test_run_id: string;
+    }[];
+  };
+  performance: {
+    average_run_time: number;
+    comparison_average_run_time: number;
+    improvement_rate: number;
+    buckets: string[];
+    values: number[];
+    comparison_values: number[];
+    test_performances: {
+      test_id: string;
+      test_name: string;
+      average_run_time: number;
+      comparison_average_run_time: number;
+      percent_slower: number;
+      min_run_time: number;
+      max_run_time: number;
+    }[];
+  };
+}
+
+interface Test {
+  test_id: string;
+  test_name: string;
+  use_default_success_criteria: boolean;
+  baseline_count: number;
+  variant_count: number;
+  iteration_count: number;
+  evaluation_count: number;
+}
+
+interface OverviewData {
+  total_test_count: number;
+  total_variant_count: number;
+  total_evaluation_count: number;
+  test_pass_rate?: number | undefined;
+  comparison_test_pass_rate: number;
+  delta_test_pass_rate: number;
+  evaluation_pass_rate: number;
+  comparison_evaluation_pass_rate: number;
+  delta_evaluation_pass_rate: number;
+  run_statuses: string[];
+  test_status_counts: number[];
+  comparison_test_status_counts: number[];
+  evaluation_status_counts: number[];
+  comparison_evaluation_status_counts: number[];
+}
