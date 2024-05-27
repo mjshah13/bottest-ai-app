@@ -4,28 +4,26 @@
 import { Box, Grid, Table } from "@radix-ui/themes";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import CustomButton from "../../Elements/button";
 import PerformanceDistributionChart from "../components/PerformanceDistributionChart";
 import OverViewResultChart from "../components/overViewResultChart";
 import Link from "next/link";
-import Loader from "../components/loader";
 import Skeleton from "react-loading-skeleton";
 import { AnalyticsReportType } from "../../utils/typesInterface";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
-
+import { useSearchParams } from "next/navigation";
 
 const AnalyticsReports = () => {
+  const searchParams = useSearchParams();
+  const suiteRunID = searchParams.get("suite_run_id");
+
   const { user } = useUser();
-  
-  const {fetchAnalyticsReport,data,loading} = useAnalyticsReport();
+
+  const { fetchAnalyticsReport, data, loading } = useAnalyticsReport();
 
   useEffect(() => {
-    fetchAnalyticsReport("srn_tpozdSE3jwJSmfGIYTunXfh5zynQd");
+    fetchAnalyticsReport(suiteRunID as string);
   }, [user]);
-
-  
-
 
   return (
     <div

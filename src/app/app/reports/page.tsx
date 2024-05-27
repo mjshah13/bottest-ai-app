@@ -1,5 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import CustomSelect from "../../../elements/select";
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
@@ -25,6 +26,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const Reports = () => {
+  const router = useRouter();
   const maxPagesToShow = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
@@ -42,9 +44,9 @@ const Reports = () => {
   const { fetchSuites } = useSuites(setSelectedSuite);
   const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
   const {
-    suiteTestRuns,
     fetchSuiteRuns,
     totalPages,
+    suitesData,
     isLoading: loading,
   } = useSuiteRuns();
 
@@ -105,6 +107,14 @@ const Reports = () => {
       window.removeEventListener("resize", updateContainerHeight);
     };
   }, []);
+
+  // const handleButtonClick = () => {
+  //   if (selectedSuite) {
+  //     router.push(
+  //       `/app/dashboard?test_run_id=${"trn_6UBTkOZKRJKycFGGtYGgPvTQ1CG8d"}`
+  //     );
+  //   }
+  // };
 
   return (
     <div className="h-[92vh]  flex flex-col">
@@ -236,13 +246,13 @@ const Reports = () => {
               </Table.Body>
             ) : (
               <Table.Body>
-                {suiteTestRuns.map((suiteTestRun, i) => (
+                {suitesData.map((data, i) => (
                   <Table.Row key={i} className="h-[47px] align-middle">
                     <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                       <div className="w-[150px] ">
                         <p className=" overflow-hidden text-ellipsis whitespace-nowrap">
-                          {typeof suiteTestRun?.completed_at === "string"
-                            ? moment(suiteTestRun.completed_at).format(
+                          {typeof data?.completed_at === "string"
+                            ? moment(data.completed_at).format(
                                 "M/D/YY h:mm:ss A"
                               )
                             : ""}
@@ -252,15 +262,13 @@ const Reports = () => {
                     <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                       <div className="flex items-center w-[160px]">
                         <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
-                          {suiteTestRun?.suite_run_id}
+                          {data?.id}
                         </p>
                         <Tooltip.Provider skipDelayDuration={100}>
                           <Tooltip.Root delayDuration={100}>
                             <Tooltip.Trigger asChild>
                               <button
-                                onClick={() =>
-                                  copyToClipboard(suiteTestRun?.suite_run_id)
-                                }
+                                onClick={() => copyToClipboard(data?.id)}
                                 className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
                               >
                                 <Copy size={16} className="ms-2" />
@@ -281,8 +289,7 @@ const Reports = () => {
                         <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
                           {
                             environmentLists?.find(
-                              (item) =>
-                                item?.id === suiteTestRun?.environment_id
+                              (item) => item?.id === data?.environment_id
                             )?.name
                           }
                         </p>
@@ -291,15 +298,22 @@ const Reports = () => {
                     <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                       <div className=" w-[150px]">
                         <p className=" flex gap-2 items-center">
-                          {suiteTestRun.initiation_type &&
-                            renderInitiationIcon(suiteTestRun.initiation_type)}
-                          {suiteTestRun?.initiation_type}
+                          {data.initiation_type &&
+                            renderInitiationIcon(data.initiation_type)}
+                          {data?.initiation_type}
                         </p>
                       </div>
                     </Table.Cell>
                     <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                       <div className=" min-w-[205px] w-full">
-                        <button className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full ">
+                        <button
+                          className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full"
+                          onClick={() =>
+                            router.push(
+                              `/analyticsReports?suite_run_id=${data?.id}`
+                            )
+                          }
+                        >
                           <FileBarChart2 size={16} />
                           Interactive Report
                         </button>
@@ -321,7 +335,7 @@ const Reports = () => {
         </div>
 
         <div className="w-full flex justify-end items-center">
-          {suiteTestRuns?.length !== 0 && (
+          {suitesData?.length !== 0 && (
             <nav className="flex items-center justify-end px-3 h-[64px] w-[292px]">
               <div className=" ">
                 <button
