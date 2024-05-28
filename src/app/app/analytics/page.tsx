@@ -1,18 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-
 import React, { useContext, useEffect, useState } from "react";
 import CustomSelect from "../../../elements/select";
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
 import { Box, Grid } from "@radix-ui/themes";
-import EvaluationPerformedChart from "../../components/successCharts/evaluationPerformChart";
-import TestResultChart from "../../components/successCharts/testResultChart";
-import EvaluationPassChart from "../../components/successCharts/evaluationPassChart";
-import HighBoxPlotChart from "../../components/performanceChart/highBoxPlotChart";
 import useBots from "../../../hooks/useBots";
 import useSuites from "../../../hooks/useSuites";
 import useEnvironment from "../../../hooks/useEnvironment";
-import UsageEvaluationPerformedChart from "../../components/usageChart/evaluationPerformChart";
 import * as Progress from "@radix-ui/react-progress";
 import CustomButton from "../../../elements/button";
 import Skeleton from "react-loading-skeleton";
@@ -21,6 +17,30 @@ import useSuccessChart from "../../../hooks/useSuccessChart";
 import usePerformanceChart from "../../../hooks/usePerformanceChart";
 import useUsageChart from "../../../hooks/useUsageChart";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import dynamic from "next/dynamic";
+
+const EvaluationPerformedChart = dynamic(
+  () => import("../../components/successCharts/evaluationPerformChart"),
+  { ssr: false }
+);
+const TestResultChart = dynamic(
+  () => import("../../components/successCharts/testResultChart"),
+  { ssr: false }
+);
+const EvaluationPassChart = dynamic(
+  () => import("../../components/successCharts/evaluationPassChart"),
+  { ssr: false }
+);
+
+const HighBoxPlotChart = dynamic(
+  () => import("../../components/performanceChart/highBoxPlotChart"),
+  { ssr: false }
+);
+
+const UsageEvaluationPerformedChart = dynamic(
+  () => import("../../components/usageChart/evaluationPerformChart"),
+  { ssr: false }
+);
 
 const Analytics = () => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -60,18 +80,18 @@ const Analytics = () => {
 
   useEffect(() => {
     const updateContainerHeight = () => {
-      const container = document.getElementById("flex-container");
+      const container = document?.getElementById("flex-container");
       if (container) {
-        const height = container.offsetHeight;
+        const height = container?.offsetHeight;
         setContainerHeight(height);
       }
     };
 
     updateContainerHeight();
-    window.addEventListener("resize", updateContainerHeight);
+    window && window?.addEventListener("resize", updateContainerHeight);
 
     return () => {
-      window.removeEventListener("resize", updateContainerHeight);
+      window && window?.removeEventListener("resize", updateContainerHeight);
     };
   }, []);
 
@@ -90,11 +110,6 @@ const Analytics = () => {
     fetchAnalyticsPerformance(selectedSuite?.id, selectedEnvironment?.id);
     fetchAnalyticsUsage(selectedSuite?.id, selectedEnvironment?.id);
   }, [selectedSuite, selectedEnvironment]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-    }
-  }, []);
 
   // const router = useRouter();
 
@@ -166,8 +181,8 @@ const Analytics = () => {
 
       <div
         className={`
-      
-      flex-1 
+
+      flex-1
       dark:bg-[#212427]
     rounded-lg dark:border-none dark:border dark:border-[#434447]
          `}
@@ -198,24 +213,30 @@ const Analytics = () => {
                 </div>
               ) : (
                 <div className="px-4 py-5">
-                  <EvaluationPerformedChart
-                    suiteRun={successChartdata?.suite_run_ids || []}
-                    evaluationsPerformed={
-                      successChartdata?.evaluations_performed || []
-                    }
-                    suiteRunNames={successChartdata?.suite_run_names || []}
-                  />
-                  <TestResultChart
-                    suiteRunNames={successChartdata?.suite_run_names || []}
-                    testStatuses={successChartdata?.test_statuses || []}
-                  />
-                  <EvaluationPassChart
-                    suiteRun={successChartdata?.suite_run_ids || []}
-                    evaluationPassRates={
-                      successChartdata?.evaluation_pass_rates || []
-                    }
-                    suiteRunNames={successChartdata?.suite_run_names || []}
-                  />
+                  {successChartdata && (
+                    <>
+                      <EvaluationPerformedChart
+                        suiteRun={successChartdata?.suite_run_ids}
+                        evaluationsPerformed={
+                          successChartdata?.evaluations_performed
+                        }
+                        suiteRunNames={successChartdata?.suite_run_names}
+                      />
+
+                      <TestResultChart
+                        suiteRunNames={successChartdata?.suite_run_names}
+                        testStatuses={successChartdata?.test_statuses}
+                      />
+
+                      <EvaluationPassChart
+                        suiteRun={successChartdata?.suite_run_ids}
+                        evaluationPassRates={
+                          successChartdata?.evaluation_pass_rates
+                        }
+                        suiteRunNames={successChartdata?.suite_run_names}
+                      />
+                    </>
+                  )}
 
                   {/* <CustomButton onClick={handleButtonClick}>hello</CustomButton> */}
                 </div>
@@ -237,9 +258,11 @@ const Analytics = () => {
                   {performanceLoading ? (
                     <Skeleton count={1} height={260} />
                   ) : (
-                    <HighBoxPlotChart
-                      highBoxPlotData={performanceChartData?.boxes || []}
-                    />
+                    performanceChartData && (
+                      <HighBoxPlotChart
+                        highBoxPlotData={performanceChartData?.boxes}
+                      />
+                    )
                   )}
                 </div>
               </div>
@@ -260,12 +283,12 @@ const Analytics = () => {
                       <Skeleton count={1} height={210} />
                     </div>
                   ) : (
-                    <UsageEvaluationPerformedChart
-                      suiteRunNames={usageChartData?.suite_run_names || []}
-                      usageChartData={
-                        usageChartData?.evaluations_performed || []
-                      }
-                    />
+                    usageChartData && (
+                      <UsageEvaluationPerformedChart
+                        suiteRunNames={usageChartData?.suite_run_names}
+                        usageChartData={usageChartData?.evaluations_performed}
+                      />
+                    )
                   )}
 
                   <div className="border-2 rounded-lg border-[#f0f0f0] h-[240px]">
@@ -337,8 +360,8 @@ const Analytics = () => {
                           usageChartData && (
                             <div className="text-black font-poppin text-sm font-normal">
                               <>
-                                {usageChartData.total_used} of{" "}
-                                {usageChartData.total_available}
+                                {usageChartData?.total_used} of{" "}
+                                {usageChartData?.total_available}
                               </>
                             </div>
                           )
@@ -382,3 +405,12 @@ const Analytics = () => {
 };
 
 export default Analytics;
+
+// "use client";
+// import React from "react";
+
+// const Analytics = () => {
+//   return <div>Analytics</div>;
+// };
+
+// export default Analytics;

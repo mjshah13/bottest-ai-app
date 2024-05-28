@@ -123,18 +123,18 @@ const Dashboard = (props: DashboardProps) => {
 
   useEffect(() => {
     const updateContainerHeight = () => {
-      const container = document.getElementById("flex-container");
+      const container = document?.getElementById("flex-container");
       if (container) {
-        const height = container.offsetHeight;
+        const height = container?.offsetHeight;
         setContainerHeight(height);
       }
     };
 
     updateContainerHeight();
-    window.addEventListener("resize", updateContainerHeight);
+    window?.addEventListener("resize", updateContainerHeight);
 
     return () => {
-      window.removeEventListener("resize", updateContainerHeight);
+      window?.removeEventListener("resize", updateContainerHeight);
     };
   }, []);
 

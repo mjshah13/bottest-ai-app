@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
@@ -70,9 +72,9 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
         borderRadiusWhenStacked: "last",
         horizontal: false,
         columnWidth: "60%",
-        // endingShape: "rounded",
+
         dataLabels: {
-          position: "top", // top, center, bottom
+          position: "top",
         },
       },
     },
@@ -109,15 +111,15 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
       categories: suiteRunNames,
       labels: {
         style: {
-          fontSize: "11px", // Adjust the font size here
+          fontSize: "11px",
           fontFamily: "Poppins",
         },
       },
     },
     yaxis: {
       min: 0,
-      max: 100, // Set the maximum value to 500
-      tickAmount: 4, // Number of ticks including the max value
+      max: 100,
+      tickAmount: 4,
       labels: {
         formatter: function (value) {
           return value.toFixed(0) + "%";

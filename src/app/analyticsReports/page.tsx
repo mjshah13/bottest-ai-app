@@ -1,90 +1,44 @@
 "use client";
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
+
 import { Box, Grid, Table } from "@radix-ui/themes";
 import Image from "next/image";
 import React, { useEffect } from "react";
-import PerformanceDistributionChart from "../components/PerformanceDistributionChart";
-import OverViewResultChart from "../components/overViewResultChart";
 import Skeleton from "react-loading-skeleton";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
-// import generatePDF, { Resolution, Margin, Options, usePDF } from "react-to-pdf";
+import dynamic from "next/dynamic";
 
-// const options: Options = {
-//   filename: "advanced-example.pdf",
-//   // default is `save`
-//   method: "save",
-//   // default is Resolution.MEDIUM = 3, which should be enough, higher values
-//   // increases the image quality but also the size of the PDF, so be careful
-//   // using values higher than 10 when having multiple pages generated, it
-//   // might cause the page to crash or hang.
-//   resolution: Resolution.MEDIUM,
-//   page: {
-//     // margin is in MM, default is Margin.NONE = 0
-//     margin: Margin.NONE,
-//     // default is 'A4'
-//     format: "letter",
-//     // default is 'portrait'
-//     orientation: "portrait",
-//   },
-//   overrides: {
-//     // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
-//     pdf: {
-//       compress: false,
-//     },
-//     // see https://html2canvas.hertzen.com/configuration for more options
-//     canvas: {
-//       useCORS: false,
-//       scale: 2, // Adjust scale for better resolution
-//     },
-//   },
-// };
+const PerformanceDistributionChart = dynamic(
+  () => import("../components/PerformanceDistributionChart"),
+  { ssr: false }
+);
+
+const OverViewResultChart = dynamic(
+  () => import("../components/overViewResultChart"),
+  { ssr: false }
+);
 
 const AnalyticsReports = () => {
-  // const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
-  // const openPDF = () => {
-  //   toPDF();
-
-  // };
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const suiteRunID = searchParams.get("suite_run_id");
-  const isPdf = searchParams.get("isPdf");
+  // const isPdf = searchParams.get("isPdf");
   const { user } = useUser();
   const { fetchAnalyticsReport, data, loading } = useAnalyticsReport();
 
   useEffect(() => {
     if (data) return;
     fetchAnalyticsReport(suiteRunID as string);
-  }, [user]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-    }
-  }, []);
-  // console.log(isPdf);
-
-  // useEffect(() => {
-  //   if (isPdf !== "true") return;
-  //   if (loading && !data) return;
-  //   if (!loading && data) {
-  //     generatePDF();
-  //   }
-  // }, [data, loading]);
+  }, [user, data]);
 
   return (
     <>
-      {/* <button onClick={() => openPDF()}>download</button> */}
-
       <div
         className="w-[100%] h-[100%] p-[80px] font-poppin max-w-[1440px]   "
         style={{
           margin: "0 auto",
         }}
-        // ref={targetRef}
       >
         <div className=" ">
           <div className="flex h-16 shrink-0 items-center mb-3">
@@ -112,7 +66,6 @@ const AnalyticsReports = () => {
 
             <Table.Root
               style={{
-                // border: "1px solid #f0f0f0",
                 borderLeft: "1px solid #f0f0f0",
                 borderRight: "1px solid #f0f0f0",
                 borderTop: "1px solid #f0f0f0",
@@ -166,7 +119,7 @@ const AnalyticsReports = () => {
               {loading ? (
                 <Table.Body>
                   {Array(5)
-                    .fill(5)
+                    ?.fill(5)
                     .map((_, i) => (
                       <Table.Row key={i} className="align-middle">
                         <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
@@ -273,11 +226,13 @@ const AnalyticsReports = () => {
                     {loading ? (
                       <Skeleton count={1} width={350} height={350} circle />
                     ) : (
-                      <OverViewResultChart
-                        list={data?.overview?.test_status_counts}
-                        labelData={data?.overview?.run_statuses}
-                        name="Tests"
-                      />
+                      data && (
+                        <OverViewResultChart
+                          list={data?.overview?.test_status_counts}
+                          labelData={data?.overview?.run_statuses}
+                          name="Tests"
+                        />
+                      )
                     )}
                   </div>
                 </Box>
@@ -330,11 +285,13 @@ const AnalyticsReports = () => {
                     {loading ? (
                       <Skeleton count={1} width={350} height={350} circle />
                     ) : (
-                      <OverViewResultChart
-                        list={data?.overview?.evaluation_status_counts}
-                        labelData={data?.overview?.run_statuses}
-                        name="Evaluations"
-                      />
+                      data && (
+                        <OverViewResultChart
+                          list={data?.overview?.evaluation_status_counts}
+                          labelData={data?.overview?.run_statuses}
+                          name="Evaluations"
+                        />
+                      )
                     )}
                   </div>
                 </Box>
@@ -379,7 +336,6 @@ const AnalyticsReports = () => {
               <div className="pt-8">
                 <Table.Root
                   style={{
-                    // border: "1px solid #f0f0f0",
                     borderLeft: "1px solid #f0f0f0",
                     borderRight: "1px solid #f0f0f0",
                     borderTop: "1px solid #f0f0f0",
@@ -472,7 +428,6 @@ const AnalyticsReports = () => {
               <div className="pt-8">
                 <Table.Root
                   style={{
-                    // border: "1px solid #f0f0f0",
                     borderLeft: "1px solid #f0f0f0",
                     borderRight: "1px solid #f0f0f0",
                     borderTop: "1px solid #f0f0f0",
@@ -588,10 +543,12 @@ const AnalyticsReports = () => {
                       {loading ? (
                         <Skeleton count={1} width={400} height={400} />
                       ) : (
-                        <PerformanceDistributionChart
-                          categories={data?.performance?.buckets || []}
-                          list={data?.performance?.values || []}
-                        />
+                        data && (
+                          <PerformanceDistributionChart
+                            categories={data?.performance?.buckets}
+                            list={data?.performance?.values}
+                          />
+                        )
                       )}
                     </div>
                   </Box>
@@ -603,10 +560,12 @@ const AnalyticsReports = () => {
                       {loading ? (
                         <Skeleton count={1} width={400} height={400} />
                       ) : (
-                        <PerformanceDistributionChart
-                          categories={data?.performance?.buckets || []}
-                          list={data?.performance?.comparison_values || []}
-                        />
+                        data && (
+                          <PerformanceDistributionChart
+                            categories={data?.performance?.buckets || []}
+                            list={data?.performance?.comparison_values || []}
+                          />
+                        )
                       )}
                     </div>
                   </Box>
@@ -741,124 +700,6 @@ const AnalyticsReports = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="main">
-        <div className="sub1">
-          <div className="sub">
-            <div className="item-1">
-            
-              <Image
-                width={148}
-                height={32}
-                className="h-8 w-auto"
-                src="/Assets/Logo.svg"
-                alt="Your Company"
-              />
-            </div>
-            <div className="item-2">
-              
-            </div>
-          </div>
-          <div className="end">
-            <div className="left">
-              <p>2021</p>
-              <h2>Toyota RAV4</h2>
-              <p>TRD Off Road SUV</p>
-            </div>
-            <div className="right">
-              <div className="amount">
-                <h3>$34,399</h3>
-                <p>est $633/mo</p>
-              </div>
-              <div className="btn">
-                <button type="submit">Get Started</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="main">
-        <div className="sub1">
-          <div className="sub">
-            <div className="item-1">
-              
-              <Image
-                width={148}
-                height={32}
-                className="h-8 w-auto"
-                src="/Assets/Logo.svg"
-                alt="Your Company"
-              />
-            </div>
-            <div className="item-2">
-             
-            </div>
-          </div>
-          <div className="end">
-            <div className="left">
-              <p>2021</p>
-              <h2>Toyota RAV4</h2>
-              <p>TRD Off Road SUV</p>
-            </div>
-            <div className="right">
-              <div className="amount">
-                <h3>$34,399</h3>
-                <p>est $633/mo</p>
-              </div>
-              <div className="btn">
-                <button type="submit">Get Started</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="main">
-        <div className="sub1">
-          <div className="sub">
-            <div className="item-1">
-              
-              <Image
-                width={148}
-                height={32}
-                className="h-8 w-auto"
-                src="/Assets/Logo.svg"
-                alt="Your Company"
-              />
-            </div>
-            <div className="item-2">
-              
-            </div>
-          </div>
-          <div className="end">
-            <div className="left">
-              <p>2021</p>
-              <h2>Toyota RAV4</h2>
-              <p>TRD Off Road SUV</p>
-            </div>
-            <div className="right">
-              <div className="amount">
-                <h3>$34,399</h3>
-                <p>est $633/mo</p>
-              </div>
-              <div className="btn">
-                <button type="submit">Get Started</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-      {/* <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "red",
-            width: "100%",
-            height: "100px",
-          }}
-        >
-          <p>hello maaz</p>
-        </div> */}
     </>
   );
 };
