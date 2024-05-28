@@ -4,15 +4,17 @@ import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
 interface UsageEvaluationPerformProps {
-  list: number[] | undefined;
-  categories: string[] | undefined;
+  list: number[];
+  categories: string[];
 }
 
-const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({list= [], categories= []  }) => {
-
+const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
+  list = [],
+  categories = [],
+}) => {
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
-      type: 'bar',
+      type: "bar",
       height: 350,
       toolbar: {
         show: false, // Disable the menu icon
@@ -21,24 +23,35 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({li
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: '40%', // Adjust the bar height as needed
+        barHeight: "40%", // Adjust the bar height as needed
         borderRadius: 10, // Add border radius to the bars
-        borderRadiusApplication: 'end',
+        borderRadiusApplication: "end",
       },
     },
     dataLabels: {
       enabled: false,
     },
     xaxis: {
-      categories: ['<46', '46 - 93', '93 - 140', '140 - 187', '187 - 234', '234 - 281', '281 - 328', '328 - 375', '375 - 422', '422+'],
+      categories: [
+        "<46",
+        "46 - 93",
+        "93 - 140",
+        "140 - 187",
+        "187 - 234",
+        "234 - 281",
+        "281 - 328",
+        "328 - 375",
+        "375 - 422",
+        "422+",
+      ],
       title: {
-        text: 'Number of Executions',
+        text: "Number of Executions",
         offsetY: 10,
         style: {
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "poppins",
         },
       },
       labels: {
@@ -53,13 +66,13 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({li
     },
     yaxis: {
       title: {
-        text: 'Executions Time (Seconds)',
+        text: "Executions Time (Seconds)",
         offsetX: 15,
         style: {
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "poppins",
         },
       },
       labels: {
@@ -89,36 +102,32 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({li
     },
   });
 
-  
+  const [series, setSeries] = useState<
+    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
+  >([
+    {
+      data: [],
+    },
+  ]);
 
-    const [series, setSeries] = useState<
-      ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
-    >([
-      {    
-        data: [], 
+  useEffect(() => {
+    setSeries((prevData) =>
+      prevData?.map((item: any) => ({
+        ...item,
+        data: list,
+      }))
+    );
+  }, [list]);
+
+  useEffect(() => {
+    setOptions((prevOptions) => ({
+      ...prevOptions,
+      xaxis: {
+        ...prevOptions.xaxis,
+        categories: categories,
       },
-    
-    ]);
-  
-    useEffect(() => {
-      setSeries((prevData) =>
-        prevData?.map((item: any) => ({
-          ...item,
-          data: list,
-        }))
-      );
-    }, [list]);
-  
-    useEffect(() => {
-      setOptions((prevOptions) => ({
-        ...prevOptions,
-        xaxis: {
-          ...prevOptions.xaxis,
-          categories: categories,
-        },
-       
-      }));
-    }, [categories]);
+    }));
+  }, [categories]);
 
   return (
     <div className="bg-white rounded-lg shadow-md w-full h-full">

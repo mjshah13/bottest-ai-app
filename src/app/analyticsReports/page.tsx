@@ -585,8 +585,8 @@ const AnalyticsReports = () => {
                         <Skeleton count={1} width={400} height={400} />
                       ) : (
                         <PerformanceDistributionChart
-                          categories={data?.performance?.buckets}
-                          list={data?.performance?.values}
+                          categories={data?.performance?.buckets || []}
+                          list={data?.performance?.values || []}
                         />
                       )}
                     </div>
@@ -600,8 +600,8 @@ const AnalyticsReports = () => {
                         <Skeleton count={1} width={400} height={400} />
                       ) : (
                         <PerformanceDistributionChart
-                          categories={data?.performance?.buckets}
-                          list={data?.performance?.comparison_values}
+                          categories={data?.performance?.buckets || []}
+                          list={data?.performance?.comparison_values || []}
                         />
                       )}
                     </div>

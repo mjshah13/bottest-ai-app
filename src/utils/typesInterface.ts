@@ -243,7 +243,7 @@ export interface AnalyticsReportType {
   failures: {
     test_failures: TestFailure[];
   };
-  performance: PerformanceType[];
+  performance: PerformanceType;
 }
 
 // export interface AnalyticsReportType {
