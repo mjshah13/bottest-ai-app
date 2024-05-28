@@ -91,6 +91,11 @@ const Analytics = () => {
     fetchAnalyticsUsage(selectedSuite?.id, selectedEnvironment?.id);
   }, [selectedSuite, selectedEnvironment]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+    }
+  }, []);
+
   // const router = useRouter();
 
   // const handleButtonClick = () => {

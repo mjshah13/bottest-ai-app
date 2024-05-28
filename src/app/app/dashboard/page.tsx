@@ -28,8 +28,6 @@ import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
 
-import { useSearchParams } from "next/navigation";
-
 interface DashboardProps {}
 
 const Dashboard = (props: DashboardProps) => {
@@ -371,7 +369,7 @@ const Dashboard = (props: DashboardProps) => {
                                 {filterOptions &&
                                   filterOptions?.map((item, i) => (
                                     <button
-                                      key={item.key}
+                                      key={i}
                                       className={`px-3.5 lg:py-1.5  text-black dark:text-white font-light text-base font-poppin border-r  border-[#f0f0f0] dark:border-r dark:border-[#434447] ${
                                         i === 0 ? "rounded-l-lg" : ""
                                       } ${
@@ -416,7 +414,7 @@ const Dashboard = (props: DashboardProps) => {
                           {filteredData &&
                             filteredData?.map(
                               ({ recent_test_runs, ...item }: TestType) => (
-                                <div className="mb-5" key={item?.title}>
+                                <div className="mb-5" key={item?.name}>
                                   <TestRun
                                     specificTest={item}
                                     isDisabled={!item?.full_run_enabled}

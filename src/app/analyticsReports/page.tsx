@@ -3,14 +3,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Box, Grid, Table } from "@radix-ui/themes";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PerformanceDistributionChart from "../components/PerformanceDistributionChart";
 import OverViewResultChart from "../components/overViewResultChart";
 import Skeleton from "react-loading-skeleton";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
-import generatePDF, { Resolution, Margin, Options, usePDF } from "react-to-pdf";
+// import generatePDF, { Resolution, Margin, Options, usePDF } from "react-to-pdf";
 
 // const options: Options = {
 //   filename: "advanced-example.pdf",
@@ -43,11 +43,11 @@ import generatePDF, { Resolution, Margin, Options, usePDF } from "react-to-pdf";
 // };
 
 const AnalyticsReports = () => {
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
-  const openPDF = () => {
-    toPDF();
-    // generatePDF(() => document.getElementById("wrapper"), options);
-  };
+  // const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  // const openPDF = () => {
+  //   toPDF();
+
+  // };
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -61,6 +61,10 @@ const AnalyticsReports = () => {
     fetchAnalyticsReport(suiteRunID as string);
   }, [user]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+    }
+  }, []);
   // console.log(isPdf);
 
   // useEffect(() => {
@@ -80,7 +84,7 @@ const AnalyticsReports = () => {
         style={{
           margin: "0 auto",
         }}
-        ref={targetRef}
+        // ref={targetRef}
       >
         <div className=" ">
           <div className="flex h-16 shrink-0 items-center mb-3">

@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 
-"use client";
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,8 +10,6 @@ import { Theme } from "@radix-ui/themes";
 import { Poppins } from "next/font/google";
 import { GlobalStateProvider } from "../globalStateProvider";
 import { ThemeProvider } from "../ themeProvider";
-import { dark } from "@clerk/themes";
-import { useEffect, useState } from "react";
 
 const poppins = Poppins({
   weight: "400",
@@ -25,22 +22,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    console.log("Stored theme from localStorage:", storedTheme);
-
-    // Assuming theme is initially set to "light" if not found in localStorage
-    const theme = storedTheme || "light";
-
-    console.log("Selected theme:", theme);
-  }, []);
-
   return (
-    <ClerkProvider
-    // appearance={{
-    //   baseTheme: storedTheme === "light" ? dark : undefined,
-    // }}
-    >
+    <ClerkProvider>
       <html lang="en">
         <body>
           <link
