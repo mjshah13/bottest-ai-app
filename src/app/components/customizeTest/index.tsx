@@ -43,7 +43,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
   ) as GlobalStateType;
 
   const { fetchBaseline, isLoading } = useBaseline();
-  const router = useRouter();
+
   const [successCriteriaTab, setSuccessCriteriaTab] = useState(0);
   const [isDeleteBaseline, setIsDeleteBaseline] = useState(false);
   const [selectedBaseline, setIsSelectedBaseline] = useState<any>(null);
@@ -132,10 +132,6 @@ const CustomizeTest: React.FC<ModalProps> = ({
       });
     }
   }, [specificTest]);
-
-  const handleClear = () => {
-    router.push("/app/dashboard");
-  };
 
   return (
     <Dialog.Root
@@ -357,11 +353,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
         <div className="border-t border-[#f5f5f5]">
           <Flex gap="3" py={"3"} px={"3"} justify="end">
             <Dialog.Close>
-              <CustomButton
-                onClick={handleClear}
-                variant="outline"
-                color="gray"
-              >
+              <CustomButton variant="outline" color="gray">
                 Discard
               </CustomButton>
             </Dialog.Close>

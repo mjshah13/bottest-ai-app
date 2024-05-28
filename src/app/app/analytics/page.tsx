@@ -21,7 +21,6 @@ import useSuccessChart from "../../../hooks/useSuccessChart";
 import usePerformanceChart from "../../../hooks/usePerformanceChart";
 import useUsageChart from "../../../hooks/useUsageChart";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { useRouter } from "next/navigation";
 
 const Analytics = () => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -92,15 +91,15 @@ const Analytics = () => {
     fetchAnalyticsUsage(selectedSuite?.id, selectedEnvironment?.id);
   }, [selectedSuite, selectedEnvironment]);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleButtonClick = () => {
-    if (selectedSuite) {
-      router.push(
-        `/app/dashboard?test_run_id=${"trn_6UBTkOZKRJKycFGGtYGgPvTQ1CG8d"}`
-      );
-    }
-  };
+  // const handleButtonClick = () => {
+  //   if (selectedSuite) {
+  //     router.push(
+  //       `/app/dashboard?test_run_id=${"trn_6UBTkOZKRJKycFGGtYGgPvTQ1CG8d"}`
+  //     );
+  //   }
+  // };
 
   return (
     <div className=" h-[92vh] gap-5 flex flex-col">
@@ -213,7 +212,7 @@ const Analytics = () => {
                     suiteRunNames={successChartdata?.suite_run_names || []}
                   />
 
-                  <CustomButton onClick={handleButtonClick}>hello</CustomButton>
+                  {/* <CustomButton onClick={handleButtonClick}>hello</CustomButton> */}
                 </div>
               )}
             </Box>

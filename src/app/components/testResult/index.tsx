@@ -78,7 +78,6 @@ const TestResult: React.FC<ModalProps> = ({
   testId,
   testName,
 }: ModalProps) => {
-  const router = useRouter();
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
   const [isOpenSaveBaselineModal, setisOpenSaveBaselineModal] = useState(false);
@@ -144,10 +143,6 @@ const TestResult: React.FC<ModalProps> = ({
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  };
-
-  const handleClear = () => {
-    router.push("/app/dashboard");
   };
 
   return (
@@ -442,11 +437,7 @@ const TestResult: React.FC<ModalProps> = ({
                 <Flex gap="3" justify="end">
                   <div className="py-2">
                     <Dialog.Close>
-                      <CustomButton
-                        variant="outline"
-                        color="gray"
-                        onClick={handleClear}
-                      >
+                      <CustomButton variant="outline" color="gray">
                         Done
                       </CustomButton>
                     </Dialog.Close>

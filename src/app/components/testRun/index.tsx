@@ -30,29 +30,6 @@ const TestRun = ({
   const [isTestResultModal, setIsTestResultModal] = useState<boolean>(false);
   const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
 
-  const searchParams = useSearchParams();
-  const testRunId = searchParams?.get("test_run_id");
-  const testId = searchParams?.get("test_id");
-
-  useEffect(() => {
-    if (!testRunId) return;
-
-    const foundTestRun = lastTestRuns?.find((item) => item?.id === testRunId);
-    if (foundTestRun) {
-      setId(foundTestRun.id);
-      setIsTestResultModal(true);
-    }
-  }, [testRunId]);
-
-  useEffect(() => {
-    if (!testId) return;
-
-    const foundTestRun = specificTest?.id.includes(testId);
-    if (foundTestRun) {
-      setIsCustomizeTestModal(true);
-    }
-  }, [testId]);
-
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] dark:border dark:border-[#434447] rounded-lg ">
       <Grid columns="7fr 8fr 5fr 4fr" gap="16px" className="h-full">
