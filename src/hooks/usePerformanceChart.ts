@@ -1,11 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useCallback, useContext } from "react";
-import {
-  GlobalStateType,
-  PerformanceChartDataType,
-  SuccessChartDataType,
-} from "../utils/typesInterface";
+import { PerformanceChartDataType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 
@@ -18,7 +14,7 @@ const usePerformanceChart = () => {
   const { user } = useUser();
   const { organization } = useOrganization();
 
-  const fetchAnalyticsPerformance = useCallback(
+  const fetchPerformanceChart = useCallback(
     async (suite_id: string, environment_id: string) => {
       try {
         setIsLoading(true);
@@ -38,7 +34,7 @@ const usePerformanceChart = () => {
     [user, organization]
   );
 
-  return { performanceChartData, fetchAnalyticsPerformance, error, isLoading };
+  return { performanceChartData, fetchPerformanceChart, error, isLoading };
 };
 
 export default usePerformanceChart;

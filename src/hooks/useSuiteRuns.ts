@@ -34,9 +34,9 @@ const useSuiteRuns = () => {
       if (!user?.id) {
         return;
       }
-      let query = "";
+      let query = `?limit=${limit}&page=${page}`;
       if (environmentId) {
-        query = `?environment_id=${environmentId}&limit=${limit}&page=${page}`;
+        query = `${query}&environment_id=${environmentId}`;
       }
 
       try {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useCallback, useContext } from "react";
-import { GlobalStateType, SuccessChartDataType } from "../utils/typesInterface";
+import { useState, useCallback } from "react";
+import { SuccessChartDataType } from "../utils/typesInterface";
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useApi } from "./useApi";
 
@@ -9,12 +9,12 @@ const useSuccessChart = () => {
   const { request } = useApi();
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [successChartdata, setSuccessChartdata] =
+  const [successChartData, setSuccessChartdata] =
     useState<SuccessChartDataType | null>(null);
   const { user } = useUser();
   const { organization } = useOrganization();
 
-  const fetchAnalyticsSuccess = useCallback(
+  const fetchSuccessChart = useCallback(
     async (suite_id: string, environment_id: string) => {
       try {
         setIsLoading(true);
@@ -34,7 +34,7 @@ const useSuccessChart = () => {
     [user, organization]
   );
 
-  return { successChartdata, fetchAnalyticsSuccess, error, isLoading };
+  return { successChartData, fetchSuccessChart, error, isLoading };
 };
 
 export default useSuccessChart;

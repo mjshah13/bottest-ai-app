@@ -24,9 +24,13 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import moment from "moment";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useOrganization } from "@clerk/nextjs";
+import Image from "next/image";
 
 const Reports = () => {
+  const { organization } = useOrganization();
   const router = useRouter();
+  const [containerHeight, setContainerHeight] = useState(0);
   const maxPagesToShow = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
@@ -34,7 +38,7 @@ const Reports = () => {
   const [selectedEnvironment, setSelectedEnvironment] = useState<Option | null>(
     null
   );
-  const [containerHeight, setContainerHeight] = useState(0);
+
   const [selectedBot, setSelectedBot] = useState<Option | null>(null);
   const { botLists, suiteLists, environmentLists } = useContext(
     GlobalStateContext
@@ -57,9 +61,9 @@ const Reports = () => {
   }, [selectedBot]);
 
   useEffect(() => {
-    if (!selectedBot || !selectedSuite || !selectedEnvironment) return;
-    fetchSuiteRuns(selectedSuite?.id, selectedEnvironment?.id, currentPage, 10);
-  }, [selectedBot, selectedEnvironment, selectedSuite, currentPage]);
+    if (!selectedBot || !selectedSuite) return;
+    fetchSuiteRuns(selectedSuite?.id, null, currentPage, 10);
+  }, [selectedBot, selectedSuite, currentPage]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {});
@@ -108,13 +112,11 @@ const Reports = () => {
     };
   }, []);
 
-  // const handleButtonClick = () => {
-  //   if (selectedSuite) {
-  //     router.push(
-  //       `/app/dashboard?test_run_id=${"trn_6UBTkOZKRJKycFGGtYGgPvTQ1CG8d"}`
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    setSelectedBot(null);
+    setSelectedSuite(null);
+    setSelectedEnvironment(null);
+  }, [organization?.id]);
 
   return (
     <div className="h-[92vh]  flex flex-col">
@@ -179,6 +181,7 @@ const Reports = () => {
           </div>
         </div>
       </div>
+
       <div
         className={`
       flex-1
@@ -187,208 +190,218 @@ const Reports = () => {
          `}
         id="flex-container"
       >
-        <div
-          className="px-5 py-2  "
-          style={{
-            maxHeight: `${containerHeight - 50}px`,
-            overflowY: "auto",
-          }}
-        >
-          <Table.Root variant="surface" size={"2"}>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
-                  <div className="w-[150px]">Timestamp</div>{" "}
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
-                  <div className="w-[160px]">Suite Run ID</div>{" "}
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
-                  <div className="w-[150px]">Environment</div>{" "}
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
-                  <div className="w-[150px]">Initiated By</div>{" "}
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
-                  <div className="w-[205px]">Link</div>{" "}
-                </Table.ColumnHeaderCell>
-                <Table.ColumnHeaderCell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold ">
-                  <div className="w-[45px] flex justify-center">PDF</div>{" "}
-                </Table.ColumnHeaderCell>
-              </Table.Row>
-            </Table.Header>
-            {loading ? (
-              <Table.Body>
-                {Array(5)
-                  .fill(5)
-                  .map((_, i) => (
-                    <Table.Row key={i} className="align-middle">
-                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                        <Skeleton count={1} width={150} height={25} />
-                      </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                        <Skeleton count={1} width={150} height={25} />
-                      </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                        <Skeleton count={1} width={150} height={25} />
-                      </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                        <Skeleton count={1} width={150} height={25} />
-                      </Table.Cell>
-                      <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                        <Skeleton count={1} width={150} height={25} />
-                      </Table.Cell>
-                      <Table.Cell className=" dark:border-[#373a3b]">
-                        <Skeleton count={1} width={45} height={25} />
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-              </Table.Body>
-            ) : (
-              <Table.Body>
-                {suitesData.map((data, i) => (
-                  <Table.Row key={i} className="h-[47px] align-middle">
-                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                      <div className="w-[150px] ">
-                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap">
-                          {typeof data?.completed_at === "string"
-                            ? moment(data.completed_at).format(
-                                "M/D/YY h:mm:ss A"
-                              )
-                            : ""}
-                        </p>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                      <div className="flex items-center w-[160px]">
-                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
-                          {data?.id}
-                        </p>
-                        <Tooltip.Provider skipDelayDuration={100}>
-                          <Tooltip.Root delayDuration={100}>
-                            <Tooltip.Trigger asChild>
-                              <button
-                                onClick={() => copyToClipboard(data?.id)}
-                                className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
-                              >
-                                <Copy size={16} className="ms-2" />
-                              </button>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                              <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
-                                Copy suite id
-                                <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
-                              </Tooltip.Content>
-                            </Tooltip.Portal>
-                          </Tooltip.Root>
-                        </Tooltip.Provider>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                      <div className=" w-[150px]">
-                        <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
-                          {
-                            environmentLists?.find(
-                              (item) => item?.id === data?.environment_id
-                            )?.name
-                          }
-                        </p>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                      <div className=" w-[150px]">
-                        <p className=" flex gap-2 items-center">
-                          {data.initiation_type &&
-                            renderInitiationIcon(data.initiation_type)}
-                          {data?.initiation_type}
-                        </p>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                      <div className=" min-w-[205px] w-full">
-                        <button
-                          className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full"
-                          onClick={() =>
-                            router.push(
-                              `/analyticsReports?suite_run_id=${data?.id}`
-                            )
-                          }
-                        >
-                          <FileBarChart2 size={16} />
-                          Interactive Report
-                        </button>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
-                      <div className="flex justify-center w-[48px]">
-                        <button
-                          onClick={() =>
-                            router.push(
-                              `/analyticsReports?suite_run_id=${
-                                data?.id
-                              }&isPdf=${true}`
-                            )
-                          }
-                        >
-                          <Download
-                            size={16}
-                            className="ms-1 hover:text-[#adb1bd]"
-                          />
-                        </button>
-                      </div>
-                    </Table.Cell>
+        {!selectedSuite ? (
+          <div className=" h-full flex items-center justify-center flex-col">
+            <Image width={184} height={152} src="/Assets/noData.svg" alt="" />
+            <h1 className="text-black font-semibold text-lg mt-2 ">
+              Please select the suites to see the suite runs.{" "}
+            </h1>
+          </div>
+        ) : (
+          <>
+            <div
+              className="px-5 py-2  "
+              style={{
+                maxHeight: `${containerHeight - 50}px`,
+                overflowY: "auto",
+              }}
+            >
+              <Table.Root variant="surface" size={"2"}>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
+                      <div className="w-[150px]">Timestamp</div>{" "}
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
+                      <div className="w-[160px]">Suite Run ID</div>{" "}
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
+                      <div className="w-[150px]">Environment</div>{" "}
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
+                      <div className="w-[150px]">Initiated By</div>{" "}
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold">
+                      <div className="w-[205px]">Link</div>{" "}
+                    </Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b] dark:bg-[#2a2d30] text-sm font-semibold ">
+                      <div className="w-[45px] flex justify-center">PDF</div>{" "}
+                    </Table.ColumnHeaderCell>
                   </Table.Row>
-                ))}
-              </Table.Body>
-            )}
-          </Table.Root>
-        </div>
-
-        <div className="w-full flex justify-end items-center">
-          {suitesData?.length !== 0 && (
-            <nav className="flex items-center justify-end px-3 h-[64px] w-[292px]">
-              <div className=" ">
-                <button
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1}
-                  className="flex items-center  border-transparent pr-1 disabled:text-[#bfbfbf] text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  <ChevronLeft
-                    className="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </button>
-              </div>
-              <div className="hidden md:flex gap-2 mx-1.5">
-                {getVisiblePages().map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`flex justify-center items-center border-2 px-4 w-[32px] h-[34px] rounded-md text-sm font-normal font-poppin ${
-                      currentPage === page
-                        ? "text-[#388AEB] font-semibold border-1 border-[#388AEB]"
-                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-              <div className="">
-                <button
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                  className="flex items-center  border-transparent pl-1 disabled:text-[#bfbfbf] text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  <ChevronRight
-                    className="h-5 w-5 text-gray-400"
-                    aria-hidden="true"
-                  />
-                </button>
-              </div>
-            </nav>
-          )}
-        </div>
+                </Table.Header>
+                {loading ? (
+                  <Table.Body>
+                    {Array(5)
+                      .fill(5)
+                      .map((_, i) => (
+                        <Table.Row key={i} className="align-middle">
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                            <Skeleton count={1} width={150} height={25} />
+                          </Table.Cell>
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                            <Skeleton count={1} width={150} height={25} />
+                          </Table.Cell>
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                            <Skeleton count={1} width={150} height={25} />
+                          </Table.Cell>
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                            <Skeleton count={1} width={150} height={25} />
+                          </Table.Cell>
+                          <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                            <Skeleton count={1} width={150} height={25} />
+                          </Table.Cell>
+                          <Table.Cell className=" dark:border-[#373a3b]">
+                            <Skeleton count={1} width={45} height={25} />
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                  </Table.Body>
+                ) : (
+                  <Table.Body>
+                    {suitesData.map((data, i) => (
+                      <Table.Row key={i} className="h-[47px] align-middle">
+                        <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                          <div className="w-[150px] ">
+                            <p className=" overflow-hidden text-ellipsis whitespace-nowrap">
+                              {typeof data?.completed_at === "string"
+                                ? moment(data.completed_at).format(
+                                    "M/D/YY h:mm:ss A"
+                                  )
+                                : ""}
+                            </p>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                          <div className="flex items-center w-[160px]">
+                            <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
+                              {data?.id}
+                            </p>
+                            <Tooltip.Provider skipDelayDuration={100}>
+                              <Tooltip.Root delayDuration={100}>
+                                <Tooltip.Trigger asChild>
+                                  <button
+                                    onClick={() => copyToClipboard(data?.id)}
+                                    className="outline-none border-none bg-transparent hover:text-[#388aeb] disabled:hover:text-[#adb1bd] disabled:cursor-not-allowed"
+                                  >
+                                    <Copy size={16} className="ms-2" />
+                                  </button>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                  <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
+                                    Copy suite id
+                                    <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
+                                  </Tooltip.Content>
+                                </Tooltip.Portal>
+                              </Tooltip.Root>
+                            </Tooltip.Provider>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                          <div className=" w-[150px]">
+                            <p className=" overflow-hidden text-ellipsis whitespace-nowrap ">
+                              {
+                                environmentLists?.find(
+                                  (item) => item?.id === data?.environment_id
+                                )?.name
+                              }
+                            </p>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                          <div className=" w-[150px]">
+                            <p className=" flex gap-2 items-center">
+                              {data.initiation_type &&
+                                renderInitiationIcon(data.initiation_type)}
+                              {data?.initiation_type}
+                            </p>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                          <div className=" min-w-[205px] w-full">
+                            <button
+                              className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full"
+                              onClick={() =>
+                                router.push(
+                                  `/analyticsReports?suite_run_id=${data?.id}`
+                                )
+                              }
+                            >
+                              <FileBarChart2 size={16} />
+                              Interactive Report
+                            </button>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
+                          <div className="flex justify-center w-[48px]">
+                            <button
+                              onClick={() =>
+                                router.push(
+                                  `/analyticsReports?suite_run_id=${
+                                    data?.id
+                                  }&isPdf=${true}`
+                                )
+                              }
+                            >
+                              <Download
+                                size={16}
+                                className="ms-1 hover:text-[#adb1bd]"
+                              />
+                            </button>
+                          </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                )}
+              </Table.Root>
+            </div>
+            <div className="w-full flex justify-end items-center">
+              {suitesData?.length !== 0 && (
+                <nav className="flex items-center justify-end px-3 h-[64px] w-[292px]">
+                  <div className=" ">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className="flex items-center  border-transparent pr-1 disabled:text-[#bfbfbf] text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      <ChevronLeft
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                  <div className="hidden md:flex gap-2 mx-1.5">
+                    {getVisiblePages().map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`flex justify-center items-center border-2 px-4 w-[32px] h-[34px] rounded-md text-sm font-normal font-poppin ${
+                          currentPage === page
+                            ? "text-[#388AEB] font-semibold border-1 border-[#388AEB]"
+                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="">
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                      className="flex items-center  border-transparent pl-1 disabled:text-[#bfbfbf] text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    >
+                      <ChevronRight
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                </nav>
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {isComparisonModalOpen && (
