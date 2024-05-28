@@ -101,3 +101,8 @@
 .cl-scrollBox {
   font-family: "Poppins", sans-serif;
 }
+
+#wrapper {
+  margin: 0;
+  padding: 0;
+}

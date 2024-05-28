@@ -1,5 +1,5 @@
 "use client";
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import { Cog6ToothIcon, PlayCircleIcon } from "@heroicons/react/24/outline";
 import { BottestReportProps } from "../../../utils/typesInterface";
 import Skeleton from "react-loading-skeleton";
@@ -10,6 +10,7 @@ import LoadingSpin from "react-loading-spin";
 import { Ban, Check, ChevronsRight, Shuffle, X } from "lucide-react";
 import TestResult from "../testResult";
 import CustomizeTest from "../customizeTest";
+import { useSearchParams } from "next/navigation";
 
 const TestRun = ({
   isDisabled = false,
@@ -27,6 +28,29 @@ const TestRun = ({
   const [id, setId] = useState<string | undefined>(undefined);
   const [isTestResultModal, setIsTestResultModal] = useState(false);
   const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
+
+  const searchParams = useSearchParams();
+  const testRunId = searchParams?.get("test_run_id");
+  const testId = searchParams?.get("test_id");
+
+  useEffect(() => {
+    if (!testRunId) return;
+
+    const foundTestRun = lastTestRuns?.find((item) => item?.id === testRunId);
+    if (foundTestRun) {
+      setId(foundTestRun.id);
+      setIsTestResultModal(true);
+    }
+  }, [testRunId]);
+
+  useEffect(() => {
+    if (!testId) return;
+
+    const foundTestRun = specificTest?.id.includes(testId);
+    if (foundTestRun) {
+      setIsCustomizeTestModal(true);
+    }
+  }, [testId]);
 
   return (
     <div className="w-full h-[110px] border border-[#dcdcdc] dark:border dark:border-[#434447] rounded-lg">

@@ -29,6 +29,7 @@ import Loader from "../loader";
 import Image from "next/image";
 import { GlobalStateContext } from "../../../globalState";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   title?: string;
@@ -75,6 +76,7 @@ const TestResult: React.FC<ModalProps> = ({
   testId,
   testName,
 }: ModalProps) => {
+  const router = useRouter();
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
   const [isOpenSaveBaselineModal, setisOpenSaveBaselineModal] = useState(false);
@@ -434,7 +436,11 @@ const TestResult: React.FC<ModalProps> = ({
                 <Flex gap="3" justify="end">
                   <div className="py-2">
                     <Dialog.Close>
-                      <CustomButton variant="outline" color="gray">
+                      <CustomButton
+                        variant="outline"
+                        color="gray"
+                        onClick={() => router.push(`/app/dashboard`)}
+                      >
                         Done
                       </CustomButton>
                     </Dialog.Close>

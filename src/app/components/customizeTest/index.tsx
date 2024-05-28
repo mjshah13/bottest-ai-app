@@ -3,7 +3,7 @@
 
 import { Dialog, Flex } from "@radix-ui/themes";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
 import Chip from "../../../elements/chip";
 import { Check, Trash } from "lucide-react";
 import {
@@ -19,11 +19,10 @@ import useDeleteBaseline from "../../../hooks/useDeleteBaseline";
 import useDeleteTest from "../../../hooks/useDeleteTest";
 import { GlobalStateContext } from "../../../globalState";
 import DeleteModal from "../deleteModal";
-import { useApi } from "../../../hooks/useApi";
 import useUpdateTest from "../../../hooks/useUpdateTest";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import CustomButton from "../../../Elements/button";
+import CustomButton from "../../../elements/button";
 
 interface ModalProps {
   title?: string;
@@ -52,6 +51,7 @@ const CustomizeTest: React.FC<ModalProps> = ({
   const { updateTest } = useUpdateTest();
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
+  const router = useRouter();
 
   const [isSuccessCriteriaTextDisabled, setIsSuccessCriteriaTextDisabled] =
     useState(true);
@@ -353,7 +353,11 @@ const CustomizeTest: React.FC<ModalProps> = ({
         <div className="border-t border-[#f5f5f5]">
           <Flex gap="3" py={"3"} px={"3"} justify="end">
             <Dialog.Close>
-              <CustomButton onClick={() => {}} variant="outline" color="gray">
+              <CustomButton
+                onClick={() => router.push(`/app/dashboard`)}
+                variant="outline"
+                color="gray"
+              >
                 Discard
               </CustomButton>
             </Dialog.Close>

@@ -321,10 +321,20 @@ const Reports = () => {
                     </Table.Cell>
                     <Table.Cell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                       <div className="flex justify-center w-[48px]">
-                        <Download
-                          size={16}
-                          className="ms-1 hover:text-[#adb1bd]"
-                        />
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/analyticsReports?suite_run_id=${
+                                data?.id
+                              }&isPdf=${true}`
+                            )
+                          }
+                        >
+                          <Download
+                            size={16}
+                            className="ms-1 hover:text-[#adb1bd]"
+                          />
+                        </button>
                       </div>
                     </Table.Cell>
                   </Table.Row>
