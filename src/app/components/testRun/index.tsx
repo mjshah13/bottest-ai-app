@@ -26,7 +26,8 @@ const TestRun = ({
     return <span style={{ marginRight: "0.5rem" }}>{children}</span>;
   }
   const [id, setId] = useState<string | undefined>(undefined);
-  const [isTestResultModal, setIsTestResultModal] = useState(false);
+
+  const [isTestResultModal, setIsTestResultModal] = useState<boolean>(false);
   const [isCustomizeTestModal, setIsCustomizeTestModal] = useState(false);
 
   const searchParams = useSearchParams();
@@ -53,7 +54,7 @@ const TestRun = ({
   }, [testId]);
 
   return (
-    <div className="w-full h-[110px] border border-[#dcdcdc] dark:border dark:border-[#434447] rounded-lg">
+    <div className="w-full h-[110px] border border-[#dcdcdc] dark:border dark:border-[#434447] rounded-lg ">
       <Grid columns="7fr 8fr 5fr 4fr" gap="16px" className="h-full">
         <Box>
           <div className="h-full gap-2 flex flex-col justify-center px-5 ">

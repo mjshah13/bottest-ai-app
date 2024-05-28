@@ -237,3 +237,48 @@ interface OverviewData {
   evaluation_status_counts: number[];
   comparison_evaluation_status_counts: number[];
 }
+export interface TestStatus {
+  name: string;
+  data: number[];
+  color: string;
+}
+export interface SuccessChartDataType {
+  suite_id: string;
+  suite_name: string;
+  environment_id: string;
+  environment_name: string;
+  suite_run_ids: string[];
+  suite_run_names: string[];
+  timestamps: string[];
+  evaluations_performed: number[];
+  test_statuses: TestStatus[];
+  evaluation_pass_rates: number[];
+}
+
+export interface BoxDataType {
+  suite_run_id: string;
+  suite_run_name: string;
+  values: number[];
+  outliers: any[];
+}
+
+export interface PerformanceChartDataType {
+  boxes: BoxDataType[];
+}
+
+export interface UsageChartDataType {
+  suite_id: string;
+  suite_name: string;
+  environment_id: string;
+  environment_name: string;
+  suite_run_ids: string[];
+  suite_run_names: string[];
+  evaluations_performed: number[];
+  timestamps: string[];
+  total_used: number;
+  total_available: number;
+  billing_tier: {
+    name: string;
+    price: number;
+  };
+}

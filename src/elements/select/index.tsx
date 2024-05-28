@@ -56,7 +56,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         </Select.Trigger>
         <Select.Content
           position="popper"
-          className="font-poppin bg-white dark:bg-black "
+          className="font-poppin bg-white dark:bg-black  "
         >
           {options?.map((option) => (
             <Select.Item
