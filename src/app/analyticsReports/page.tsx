@@ -10,56 +10,44 @@ import Skeleton from "react-loading-skeleton";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
-// import { jsPDF } from "jspdf";
-// import { usePDF } from "react-to-pdf";
-import generatePDF, { Resolution, Margin, Options } from "react-to-pdf";
+import generatePDF, { Resolution, Margin, Options, usePDF } from "react-to-pdf";
 
-const options: Options = {
-  filename: "advanced-example.pdf",
-  // default is `save`
-  method: "save",
-  // default is Resolution.MEDIUM = 3, which should be enough, higher values
-  // increases the image quality but also the size of the PDF, so be careful
-  // using values higher than 10 when having multiple pages generated, it
-  // might cause the page to crash or hang.
-  resolution: Resolution.MEDIUM,
-  page: {
-    // margin is in MM, default is Margin.NONE = 0
-    margin: Margin.NONE,
-    // default is 'A4'
-    format: "letter",
-    // default is 'portrait'
-    orientation: "portrait",
-  },
-  overrides: {
-    // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
-    pdf: {
-      compress: false,
-    },
-    // see https://html2canvas.hertzen.com/configuration for more options
-    canvas: {
-      useCORS: false,
-    },
-  },
-};
+// const options: Options = {
+//   filename: "advanced-example.pdf",
+//   // default is `save`
+//   method: "save",
+//   // default is Resolution.MEDIUM = 3, which should be enough, higher values
+//   // increases the image quality but also the size of the PDF, so be careful
+//   // using values higher than 10 when having multiple pages generated, it
+//   // might cause the page to crash or hang.
+//   resolution: Resolution.MEDIUM,
+//   page: {
+//     // margin is in MM, default is Margin.NONE = 0
+//     margin: Margin.NONE,
+//     // default is 'A4'
+//     format: "letter",
+//     // default is 'portrait'
+//     orientation: "portrait",
+//   },
+//   overrides: {
+//     // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
+//     pdf: {
+//       compress: false,
+//     },
+//     // see https://html2canvas.hertzen.com/configuration for more options
+//     canvas: {
+//       useCORS: false,
+//       scale: 2, // Adjust scale for better resolution
+//     },
+//   },
+// };
 
 const AnalyticsReports = () => {
-  // const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const openPDF = () => {
-    generatePDF(() => document.getElementById("wrapper"), options);
+    toPDF();
+    // generatePDF(() => document.getElementById("wrapper"), options);
   };
-
-  // const generatePDF = () => {
-  //   const doc = new jsPDF();
-
-  //   const wrapper = document.querySelector("#wrapper") as HTMLElement;
-  //   doc.html(wrapper, {
-  //     callback: function (doc) {
-  //       // Save the PDF
-  //       doc.save("example.pdf");
-  //     },
-  //   });
-  // };
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -85,17 +73,17 @@ const AnalyticsReports = () => {
 
   return (
     <>
-      <button onClick={() => openPDF()}>download</button>
+      {/* <button onClick={() => openPDF()}>download</button> */}
 
       <div
         className="w-[100%] h-[100%] p-[80px] font-poppin max-w-[1440px]   "
         style={{
           margin: "0 auto",
         }}
-        id={"wrapper"}
+        ref={targetRef}
       >
         <div className=" ">
-          <div className="flex h-16 shrink-0 items-center">
+          <div className="flex h-16 shrink-0 items-center mb-3">
             <Image
               width={148}
               height={32}
@@ -111,15 +99,27 @@ const AnalyticsReports = () => {
                 (Executed on 2 Feb 2024, 10:32 AM PST)
               </span>
             </h1>
-            <h2 className="text-[24px] text-black  font-poppins font-black pb-8">
+            <h2 className="text-[24px] text-[#909193] font-semibold  font-poppins pb-8">
               Comparison Suite Run: 21 Jan 2024, 12:46 PM PST
             </h2>
-            <p className="text-[16px] text-black font-poppin font-bold pb-6">
+            <p className="text-[16px] text-black font-semibold font-poppin  pb-6">
               The following Tests were executed and evaluated in the Suite Run:
             </p>
 
-            <Table.Root style={{ border: "1px solid" }} size={"2"}>
-              <Table.Header>
+            <Table.Root
+              style={{
+                // border: "1px solid #f0f0f0",
+                borderLeft: "1px solid #f0f0f0",
+                borderRight: "1px solid #f0f0f0",
+                borderTop: "1px solid #f0f0f0",
+              }}
+              size={"2"}
+            >
+              <Table.Header
+                style={{
+                  backgroundColor: "#fdfcfa",
+                }}
+              >
                 <Table.Row>
                   <Table.ColumnHeaderCell
                     style={{ width: "420px" }}
@@ -203,15 +203,13 @@ const AnalyticsReports = () => {
                       </Table.Cell>
                       <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
                         {item?.use_default_success_criteria === false ? (
-                          // <button className="w-[75px] rounded py-1 px-3  bg-primary text-[12px] flex items-center justify-center">
-                          <p className="bg-primary h-[22px] w-[75px] ">
+                          <button className="w-[75px] rounded py-1 px-3  bg-primary text-[12px] flex items-center justify-center">
                             Default
-                          </p>
+                          </button>
                         ) : (
-                          // </button>
-                          // <button className="w-[75px] rounded py-1 px-3 bg-intermediate text-white text-[12px] flex items-center justify-center">
-                          <p>Custom</p>
-                          // </button>
+                          <button className="w-[75px] rounded py-1 px-3 bg-intermediate text-white text-[12px] flex items-center justify-center">
+                            Custom
+                          </button>
                         )}
                       </Table.Cell>
                       <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
@@ -233,8 +231,8 @@ const AnalyticsReports = () => {
             </Table.Root>
           </div>
           <div className="">
-            <div className="bg-primary h-[78px]  ps-4 rounded check">
-              <h1 className="text-secondary font-poppin font-bold text-[30px] m-0 p-0">
+            <div className="bg-primary h-[78px] flex items-center  ps-4 rounded ">
+              <h1 className="text-secondary font-poppin font-bold text-3xl ">
                 Overview of Results
               </h1>
             </div>
@@ -253,8 +251,10 @@ const AnalyticsReports = () => {
                     % of Tests passed
                   </span>{" "}
                   fully (with no failures),
-                  <span className="text-success">up 4%</span> the 26 Jan 2024
-                  Production Run.
+                  <span className="text-success"> up 4%</span> the{" "}
+                  <span className="text-secondary">
+                    26 Jan 2024 Production Run.
+                  </span>
                 </li>
               </ul>
             </div>
@@ -355,7 +355,7 @@ const AnalyticsReports = () => {
               </Grid>
             </div>
             <div className="pt-20">
-              <div className="bg-primary h-[78px] ps-4 rounded">
+              <div className="bg-primary h-[78px] ps-4 flex items-center  rounded">
                 <h1 className="text-secondary font-poppin font-bold text-[30px]">
                   Improvements
                 </h1>
@@ -373,66 +373,80 @@ const AnalyticsReports = () => {
                 </ul>
               </div>
               <div className="pt-8">
-                {/* <Table.Root variant="surface" size={"2"}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "420px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Test
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "420px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Pass Rate
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "420px" }}
-                      className=" border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Comparison Pass Rate
-                    </Table.ColumnHeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                {loading ? (
-                  <Table.Body>
-                    {Array(2)
-                      ?.fill(2)
-                      .map((_, i) => (
+                <Table.Root
+                  style={{
+                    // border: "1px solid #f0f0f0",
+                    borderLeft: "1px solid #f0f0f0",
+                    borderRight: "1px solid #f0f0f0",
+                    borderTop: "1px solid #f0f0f0",
+                  }}
+                  size={"2"}
+                >
+                  <Table.Header
+                    style={{
+                      backgroundColor: "#fdfcfa",
+                    }}
+                  >
+                    <Table.Row>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "420px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Test
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "420px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Pass Rate
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "420px" }}
+                        className=" border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Comparison Pass Rate
+                      </Table.ColumnHeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  {loading ? (
+                    <Table.Body>
+                      {Array(2)
+                        ?.fill(2)
+                        .map((_, i) => (
+                          <Table.Row key={i} className="align-middle">
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                    </Table.Body>
+                  ) : (
+                    <Table.Body>
+                      {data?.improvements?.test_improvements?.map((item, i) => (
                         <Table.Row key={i} className="align-middle">
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {item.test_name}
                           </Table.Cell>
+
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {(Math.round(item.pass_rate) * 100) / 100}%
                           </Table.Cell>
                           <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {(Math.round(item.comparison_pass_rate) * 100) /
+                              100}
+                            %
                           </Table.Cell>
                         </Table.Row>
                       ))}
-                  </Table.Body>
-                ) : (
-                  <Table.Body>
-                    {data?.improvements?.test_improvements?.map((item, i) => (
-                      <Table.Row key={i} className="align-middle">
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item.test_name}
-                        </Table.Cell>
-
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {(Math.round(item.pass_rate) * 100) / 100}%
-                        </Table.Cell>
-                        <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {(Math.round(item.comparison_pass_rate) * 100) / 100}%
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                )}
-              </Table.Root> */}
+                    </Table.Body>
+                  )}
+                </Table.Root>
               </div>
             </div>
             <div className="pt-20">
@@ -452,83 +466,95 @@ const AnalyticsReports = () => {
                 </ul>
               </div>
               <div className="pt-8">
-                {/* <Table.Root variant="surface" size={"2"}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "420px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Test
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "200px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Pass Rate
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "660px" }}
-                      className=" border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Failure Summary
-                    </Table.ColumnHeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                {loading ? (
-                  <Table.Body>
-                    {Array(2)
-                      ?.fill(2)
-                      .map((_, i) => (
+                <Table.Root
+                  style={{
+                    // border: "1px solid #f0f0f0",
+                    borderLeft: "1px solid #f0f0f0",
+                    borderRight: "1px solid #f0f0f0",
+                    borderTop: "1px solid #f0f0f0",
+                  }}
+                  size={"2"}
+                >
+                  <Table.Header
+                    style={{
+                      backgroundColor: "#fdfcfa",
+                    }}
+                  >
+                    <Table.Row>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "420px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Test
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "200px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Pass Rate
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "660px" }}
+                        className=" border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Failure Summary
+                      </Table.ColumnHeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  {loading ? (
+                    <Table.Body>
+                      {Array(2)
+                        ?.fill(2)
+                        .map((_, i) => (
+                          <Table.Row key={i} className="align-middle">
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                    </Table.Body>
+                  ) : (
+                    <Table.Body>
+                      {data?.failures?.test_failures.map((item, i) => (
                         <Table.Row key={i} className="align-middle">
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            <button
+                              onClick={() =>
+                                router.push(
+                                  `/app/dashboard?test_id=${item?.test_id}`
+                                )
+                              }
+                            >
+                              {item?.test_name}
+                            </button>
                           </Table.Cell>
+
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {Math.round((item?.pass_rate * 100) / 100)}%
                           </Table.Cell>
                           <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {item?.failure_summary}{" "}
+                            <button
+                              onClick={() =>
+                                router.push(
+                                  `/app/dashboard?test_run_id=${item?.test_run_id}`
+                                )
+                              }
+                            >
+                              (See Test Run)
+                            </button>
                           </Table.Cell>
                         </Table.Row>
                       ))}
-                  </Table.Body>
-                ) : (
-                  <Table.Body>
-                    {data?.failures?.test_failures.map((item, i) => (
-                      <Table.Row key={i} className="align-middle">
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          <button
-                            onClick={() =>
-                              router.push(
-                                `/app/dashboard?test_id=${item?.test_id}`
-                              )
-                            }
-                          >
-                            {item?.test_name}
-                          </button>
-                        </Table.Cell>
-
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {Math.round((item?.pass_rate * 100) / 100)}%
-                        </Table.Cell>
-                        <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item?.failure_summary}{" "}
-                          <button
-                            onClick={() =>
-                              router.push(
-                                `/app/dashboard?test_run_id=${item?.test_run_id}`
-                              )
-                            }
-                          >
-                            (See Test Run)
-                          </button>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                )}
-              </Table.Root> */}
+                    </Table.Body>
+                  )}
+                </Table.Root>
               </div>
             </div>
             <div className="pt-20">
@@ -585,7 +611,7 @@ const AnalyticsReports = () => {
               <div className="pt-6">
                 <ul className="list-disc ps-6">
                   <li className="text-[16px] text-black font-normal leading-6 font-poppin">
-                    The following Tests had an average run time that was
+                    The following Tests had an average run time that was{" "}
                     <span className="text-danger font-bold">
                       {">10% slower"}
                     </span>{" "}
@@ -597,108 +623,238 @@ const AnalyticsReports = () => {
                 </ul>
               </div>
               <div className="pt-8">
-                {/* <Table.Root variant="surface" size={"2"}>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "480px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark no-wrap"
-                    >
-                      Test
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "218px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark no-wrap"
-                    >
-                      Average Run Time
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "280px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark "
-                    >
-                      Comparison Average Run Time
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "100px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      % Slower
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "150px" }}
-                      className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Min Run Time
-                    </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell
-                      style={{ width: "150px" }}
-                      className="border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
-                    >
-                      Max Run Time
-                    </Table.ColumnHeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                {loading ? (
-                  <Table.Body>
-                    {Array(3)
-                      ?.fill(3)
-                      .map((item, i) => (
+                <Table.Root
+                  style={{
+                    // border: "1px solid #f0f0f0",
+                    borderLeft: "1px solid #f0f0f0",
+                    borderRight: "1px solid #f0f0f0",
+                    borderTop: "1px solid #f0f0f0",
+                  }}
+                  size={"2"}
+                >
+                  <Table.Header
+                    style={{
+                      backgroundColor: "#fdfcfa",
+                    }}
+                  >
+                    <Table.Row>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "480px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark no-wrap"
+                      >
+                        Test
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "218px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark no-wrap"
+                      >
+                        Average Run Time
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "280px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark "
+                      >
+                        Comparison Average Run Time
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "100px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        % Slower
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "150px" }}
+                        className="border-r border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Min Run Time
+                      </Table.ColumnHeaderCell>
+                      <Table.ColumnHeaderCell
+                        style={{ width: "150px" }}
+                        className="border-tableCellBorder text-sm font-semibold dark:border-r dark:border-tableCellBorderDark dark:bg-tableCellBackgroundDark"
+                      >
+                        Max Run Time
+                      </Table.ColumnHeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  {loading ? (
+                    <Table.Body>
+                      {Array(3)
+                        ?.fill(3)
+                        .map((item, i) => (
+                          <Table.Row key={i} className="align-middle">
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={200} height={30} />
+                            </Table.Cell>
+                            <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                              <Skeleton count={1} width={100} height={30} />
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                    </Table.Body>
+                  ) : (
+                    <Table.Body>
+                      {data?.performance?.test_performances?.map((item, i) => (
                         <Table.Row key={i} className="align-middle">
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {item?.test_name}
                           </Table.Cell>
 
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {item?.average_run_time?.toFixed(1)} sec
                           </Table.Cell>
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {item?.comparison_average_run_time?.toFixed(1)} sec
                           </Table.Cell>
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {(Math.round(item?.percent_slower) * 100) / 100}%
                           </Table.Cell>
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={200} height={30} />
+                            {item?.min_run_time?.toFixed(1)} sec
                           </Table.Cell>
                           <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            <Skeleton count={1} width={100} height={30} />
+                            {item?.max_run_time?.toFixed(1)} sec
                           </Table.Cell>
                         </Table.Row>
                       ))}
-                  </Table.Body>
-                ) : (
-                  <Table.Body>
-                    {data?.performance?.test_performances?.map((item, i) => (
-                      <Table.Row key={i} className="align-middle">
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item?.test_name}
-                        </Table.Cell>
-
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item?.average_run_time?.toFixed(1)} sec
-                        </Table.Cell>
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item?.comparison_average_run_time?.toFixed(1)} sec
-                        </Table.Cell>
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {(Math.round(item?.percent_slower) * 100) / 100}%
-                        </Table.Cell>
-                        <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item?.min_run_time?.toFixed(1)} sec
-                        </Table.Cell>
-                        <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                          {item?.max_run_time?.toFixed(1)} sec
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                )}
-              </Table.Root> */}
+                    </Table.Body>
+                  )}
+                </Table.Root>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* <div className="main">
+        <div className="sub1">
+          <div className="sub">
+            <div className="item-1">
+            
+              <Image
+                width={148}
+                height={32}
+                className="h-8 w-auto"
+                src="/Assets/Logo.svg"
+                alt="Your Company"
+              />
+            </div>
+            <div className="item-2">
+              
+            </div>
+          </div>
+          <div className="end">
+            <div className="left">
+              <p>2021</p>
+              <h2>Toyota RAV4</h2>
+              <p>TRD Off Road SUV</p>
+            </div>
+            <div className="right">
+              <div className="amount">
+                <h3>$34,399</h3>
+                <p>est $633/mo</p>
+              </div>
+              <div className="btn">
+                <button type="submit">Get Started</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="main">
+        <div className="sub1">
+          <div className="sub">
+            <div className="item-1">
+              
+              <Image
+                width={148}
+                height={32}
+                className="h-8 w-auto"
+                src="/Assets/Logo.svg"
+                alt="Your Company"
+              />
+            </div>
+            <div className="item-2">
+             
+            </div>
+          </div>
+          <div className="end">
+            <div className="left">
+              <p>2021</p>
+              <h2>Toyota RAV4</h2>
+              <p>TRD Off Road SUV</p>
+            </div>
+            <div className="right">
+              <div className="amount">
+                <h3>$34,399</h3>
+                <p>est $633/mo</p>
+              </div>
+              <div className="btn">
+                <button type="submit">Get Started</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="main">
+        <div className="sub1">
+          <div className="sub">
+            <div className="item-1">
+              
+              <Image
+                width={148}
+                height={32}
+                className="h-8 w-auto"
+                src="/Assets/Logo.svg"
+                alt="Your Company"
+              />
+            </div>
+            <div className="item-2">
+              
+            </div>
+          </div>
+          <div className="end">
+            <div className="left">
+              <p>2021</p>
+              <h2>Toyota RAV4</h2>
+              <p>TRD Off Road SUV</p>
+            </div>
+            <div className="right">
+              <div className="amount">
+                <h3>$34,399</h3>
+                <p>est $633/mo</p>
+              </div>
+              <div className="btn">
+                <button type="submit">Get Started</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
+      {/* <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "red",
+            width: "100%",
+            height: "100px",
+          }}
+        >
+          <p>hello maaz</p>
+        </div> */}
     </>
   );
 };

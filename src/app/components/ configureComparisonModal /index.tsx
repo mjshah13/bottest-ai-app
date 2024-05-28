@@ -93,7 +93,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
       open={isComparisonModalOpen}
       onOpenChange={setIsComparisonModalOpen}
     >
-      <Dialog.Content maxWidth={"480px"} className="min-h-[510px]">
+      <Dialog.Content maxWidth={"480px"} className="max-h-[525px]">
         <Dialog.Title>
           <div className="border-b border-[#f5f5f5] dark:border-b  dark:border-[#434447] py-5 px-6 ">
             <p className="font-poppin text-black text-base font-semibold dark:text-white ">
@@ -208,6 +208,9 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                     disabled={isDisabled?.input}
                     placeholder="Enter Suite Run ID"
                   />
+                  <span className={`text-xs mt-0.5  ${error && "text-danger"}`}>
+                    {error && "Suite Run ID is not valid"}
+                  </span>
                 </div>
               </div>
             </RadioGroup.Root>
@@ -215,7 +218,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
         </div>
 
         <div className="border-t border-[#f5f5f5] dark:border-t  dark:border-[#434447]">
-          <Flex gap="3" pt={"3"} px={"3"} pb={"0"} justify="end">
+          <Flex gap="3" py={"3"} px={"3"} justify="end">
             <Dialog.Close>
               <CustomButton variant="outline" color="gray">
                 Discard
