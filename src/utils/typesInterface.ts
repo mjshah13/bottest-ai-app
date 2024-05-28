@@ -167,51 +167,7 @@ export interface EvaluationType {
   id: string;
 }
 
-export interface AnalyticsReportType {
-  suite_run_id: string;
-  suite_run_timestamp: string;
-  comparison_run_id: string;
-  comparison_run_timestamp: string;
-  suite_name: string;
-  tests: Test[];
-  overview: OverviewData;
-  improvements: {
-    test_improvements: {
-      test_id: string;
-      test_name: string;
-      pass_rate: number;
-      comparison_pass_rate: number;
-    }[];
-  };
-  failures: {
-    test_failures: {
-      test_id: string;
-      test_name: string;
-      pass_rate: number;
-      failure_summary: string;
-      test_run_id: string;
-    }[];
-  };
-  performance: {
-    average_run_time: number;
-    comparison_average_run_time: number;
-    improvement_rate: number;
-    buckets: string[];
-    values: number[];
-    comparison_values: number[];
-    test_performances: {
-      test_id: string;
-      test_name: string;
-      average_run_time: number;
-      comparison_average_run_time: number;
-      percent_slower: number;
-      min_run_time: number;
-      max_run_time: number;
-    }[];
-  };
-}
-
-interface Test {
+export interface Test {
   test_id: string;
   test_name: string;
   use_default_success_criteria: boolean;
@@ -221,7 +177,7 @@ interface Test {
   evaluation_count: number;
 }
 
-interface OverviewData {
+export interface OverviewData {
   total_test_count: number;
   total_variant_count: number;
   total_evaluation_count: number;
@@ -237,6 +193,103 @@ interface OverviewData {
   evaluation_status_counts: number[];
   comparison_evaluation_status_counts: number[];
 }
+
+export interface TestImprovement {
+  test_id: string;
+  test_name: string;
+  pass_rate: number;
+  comparison_pass_rate: number;
+}
+
+export interface TestFailure {
+  test_id: string;
+  test_name: string;
+  pass_rate: number;
+  failure_summary: string;
+  test_run_id: string;
+}
+
+export interface TestPerformance {
+  test_id: string;
+  test_name: string;
+  average_run_time: number;
+  comparison_average_run_time: number;
+  percent_slower: number;
+  min_run_time: number;
+  max_run_time: number;
+}
+
+export interface PerformanceType {
+  average_run_time: number;
+  comparison_average_run_time: number;
+  improvement_rate: number;
+  buckets: string[];
+  values: number[];
+  comparison_values: number[];
+  test_performances: TestPerformance[];
+}
+
+export interface AnalyticsReportType {
+  suite_run_id: string;
+  suite_run_timestamp: string;
+  comparison_run_id: string;
+  comparison_run_timestamp: string;
+  suite_name: string;
+  tests: Test[];
+  overview: OverviewData;
+  improvements: {
+    test_improvements: TestImprovement[];
+  };
+  failures: {
+    test_failures: TestFailure[];
+  };
+  performance: PerformanceType[];
+}
+
+// export interface AnalyticsReportType {
+//   suite_run_id: string;
+//   suite_run_timestamp: string;
+//   comparison_run_id: string;
+//   comparison_run_timestamp: string;
+//   suite_name: string;
+//   tests: Test[];
+//   overview: OverviewData;
+//   improvements: {
+//     test_improvements: {
+//       test_id: string;
+//       test_name: string;
+//       pass_rate: number;
+//       comparison_pass_rate: number;
+//     }[];
+//   };
+//   failures: {
+//     test_failures: {
+//       test_id: string;
+//       test_name: string;
+//       pass_rate: number;
+//       failure_summary: string;
+//       test_run_id: string;
+//     }[];
+//   };
+//   performance: {
+//     average_run_time: number;
+//     comparison_average_run_time: number;
+//     improvement_rate: number;
+//     buckets: string[];
+//     values: number[];
+//     comparison_values: number[];
+//     test_performances: {
+//       test_id: string;
+//       test_name: string;
+//       average_run_time: number;
+//       comparison_average_run_time: number;
+//       percent_slower: number;
+//       min_run_time: number;
+//       max_run_time: number;
+//     }[];
+//   };
+// }
+
 export interface TestStatus {
   name: string;
   data: number[];
@@ -265,6 +318,10 @@ export interface BoxDataType {
 export interface PerformanceChartDataType {
   boxes: BoxDataType[];
 }
+interface BillingTier {
+  name: string;
+  price: number;
+}
 
 export interface UsageChartDataType {
   suite_id: string;
@@ -277,8 +334,5 @@ export interface UsageChartDataType {
   timestamps: string[];
   total_used: number;
   total_available: number;
-  billing_tier: {
-    name: string;
-    price: number;
-  };
+  billing_tier: BillingTier;
 }

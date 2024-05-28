@@ -23,7 +23,6 @@ import useUpdateTest from "../../../hooks/useUpdateTest";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import CustomButton from "../../../elements/button";
-import { useRouter } from "next/navigation";
 
 interface ModalProps {
   title?: string;
