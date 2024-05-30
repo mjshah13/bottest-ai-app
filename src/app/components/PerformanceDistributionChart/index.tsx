@@ -2,29 +2,28 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import { UsageEvaluationPerformProps } from "../../../utils/typesInterface";
 
-interface UsageEvaluationPerformProps {
-  list: number[];
-  categories: string[];
-}
 
 const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
   list = [],
   categories = [],
 }) => {
+  console.log(categories);
+
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
       type: "bar",
       height: 350,
       toolbar: {
-        show: false, // Disable the menu icon
+        show: false,
       },
     },
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "40%", // Adjust the bar height as needed
-        borderRadius: 10, // Add border radius to the bars
+        barHeight: "40%", 
+        borderRadius: 10,
         borderRadiusApplication: "end",
       },
     },
@@ -32,20 +31,9 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
       enabled: false,
     },
     xaxis: {
-      categories: [
-        "<46",
-        "46 - 93",
-        "93 - 140",
-        "140 - 187",
-        "187 - 234",
-        "234 - 281",
-        "281 - 328",
-        "328 - 375",
-        "375 - 422",
-        "422+",
-      ],
+      categories:categories,
       title: {
-        text: "Number of Executions",
+        text: "Number of Tests",
         offsetY: 10,
         style: {
           fontWeight: 400,
@@ -57,13 +45,13 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
 
       labels: {
         style: {
-          colors: "#212427", // Change the color of the category labels
-          fontSize: "12px", // Adjust the font size
-          fontFamily: "Poppins", // Change the font family
-          fontWeight: 600, // Adjust the font weight
+          colors: "#212427",
+          fontSize: "12px",
+          fontFamily: "Poppins",
+          fontWeight: 600,
         },
       },
-      tickAmount: 3, // Ensure only 0, 10, 20, 30 are shown
+      tickAmount: 3,
     },
     tooltip: {
       enabled: true,
@@ -75,9 +63,6 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
       style: {
         fontFamily: "poppins",
       },
-
-      // custom: (opts: any) => {},
-      // custom: (opts: any) => {
     },
     yaxis: {
       title: {
@@ -92,10 +77,10 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
       },
       labels: {
         style: {
-          colors: "#212427", // Change the color of the category labels
-          fontSize: "12px", // Adjust the font size
-          fontFamily: "Poppins", // Change the font family
-          fontWeight: 600, // Adjust the font weight
+          colors: "#212427",
+          fontSize: "12px",
+          fontFamily: "Poppins",
+          fontWeight: 600,
         },
       },
       reversed: false,
@@ -145,7 +130,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
   }, [categories]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md w-full h-full">
+    <div className="bg-white rounded-lg shadow-md w-full h-full barchart">
       <Chart options={options} series={series} type="bar" height={450} />
     </div>
   );

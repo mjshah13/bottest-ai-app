@@ -1,7 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import CustomSelect from "../../../elements/select";
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
 import { Grid, Table } from "@radix-ui/themes";
@@ -26,6 +25,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useOrganization } from "@clerk/nextjs";
 import Image from "next/image";
+import CustomSelect from "../../../Elements/select";
 
 const Reports = () => {
   const { organization } = useOrganization();
@@ -323,7 +323,7 @@ const Reports = () => {
                               className="text-[#388AEB] font-normal text-sm flex items-center gap-3  w-full"
                               onClick={() =>
                                 router.push(
-                                  `/analyticsReports?suite_run_id=${data?.id}`
+                                  `/analytics-reports?suite_run_id=${data?.id}`
                                 )
                               }
                             >
@@ -337,7 +337,7 @@ const Reports = () => {
                             <button
                               onClick={() =>
                                 router.push(
-                                  `/analyticsReports?suite_run_id=${
+                                  `/analytics-reports?suite_run_id=${
                                     data?.id
                                   }&isPdf=${true}`
                                 )

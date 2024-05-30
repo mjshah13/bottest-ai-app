@@ -245,6 +245,18 @@ export interface AnalyticsReportType {
   };
   performance: PerformanceType;
 }
+export interface OverViewResultChartProps {
+  list: number[] | undefined;
+  labelData: string[] | undefined;
+  name: string | undefined;
+  id: string | undefined;
+  onHover?: (index: number | null) => void;
+  highlightIndex: number | null;
+}
+export interface UsageEvaluationPerformProps {
+  list: number[];
+  categories: string[];
+}
 
 // export interface AnalyticsReportType {
 //   suite_run_id: string;

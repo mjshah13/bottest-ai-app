@@ -1,25 +1,37 @@
+
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+import { OverViewResultChartProps } from "../../../utils/typesInterface";
 
-interface OverViewResultChartProps {
-  list: number[] | undefined;
-  labelData: string[] | undefined;
-  name: string | undefined;
-}
 
 const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
   list,
   labelData,
   name,
+  id,
+  onHover,
+  highlightIndex,
 }) => {
+  const chartRef = useRef<any>(null);
   const [series, setSeries] = useState<ApexNonAxisChartSeries>([]);
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
+      
+      id:id,
       type: "donut",
       height: 350,
+      events: {
+        dataPointMouseEnter: function (event, chartContext, config) {
+          
+          onHover?.(config.dataPointIndex);
+        },
+        dataPointMouseLeave: function () {
+          onHover?.(null);
+        },
+      },
     },
     labels: [],
     colors: [
@@ -60,24 +72,29 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
         },
       },
     },
+   
     tooltip: {
+    
       enabled: true,
+      
       style: {
         fontFamily: "Poppins",
+        
       },
+     
+   
     },
     legend: {
+      
       position: "right",
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
       fontFamily: "Poppins",
-
       labels: {
         colors: "#212427",
         useSeriesColors: false,
       },
-
       markers: {
         width: 10,
         height: 10,
@@ -94,6 +111,7 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
       },
     },
   });
+
   useEffect(() => {
     if (list === undefined) return;
     setSeries(list);
@@ -128,11 +146,80 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
     });
   }, [series, labelData]);
 
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = chartRef.current.chart;
+
+      if (highlightIndex !== null) {
+        const colors = options?.colors?.map((color, index) =>
+          index === highlightIndex ? "#f00" : color
+        );
+        console.log(colors)
+        const color = options?.colors?.filter((color, index) =>
+          index === highlightIndex && color
+        );
+        const labels = options.labels?.map((label, index) =>
+          index === highlightIndex ? updateLabelText(label,color) : label
+        );
+        chart.updateOptions({
+          colors
+        }); 
+      } else {
+        chart.updateOptions({
+          colors: [
+            "#388AEB",
+            "#54CA6E",
+            "#E7C200",
+            "#E1654A",
+            "#212427",
+            "#E1654A",
+            "#212427",
+          ],
+        });
+       
+       
+      }
+    }
+  }, [highlightIndex]);
+
+  const updateLabelText = (index: string,color:any) => {
+    console.log(color)
+    if (chartRef?.current) {
+      const chart = chartRef?.current?.chart;
+      const newDataLabel = index; 
+      chart.updateOptions({
+        
+        plotOptions: {
+         
+          pie: {
+            donut: {
+              labels: {
+                total: {
+                  label: newDataLabel,
+                  color:color?.[0]
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-md w-full h-full p-4">
-      <Chart options={options} series={series} type="donut" height={450} />
+    <div id={id} className="bg-white rounded-lg shadow-md w-full h-full p-4">
+      <Chart
+        // ref={chartRef}
+        options={options}
+        series={series}
+        type="donut"
+        height={450}
+      />
+      
     </div>
   );
 };
 
 export default OverViewResultChart;
+
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Grid, Table } from "@radix-ui/themes";
-import React, { RefObject, useEffect, useRef } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
@@ -20,6 +20,8 @@ const OverViewResultChart = dynamic(
 );
 
 const AnalyticsReports = () => {
+  const [highlightTests, sethighlightTests] = useState<number | null>(null);
+  const [highlightEvaluation, setHighlightEvaluation] = useState<number | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const suiteRunID = searchParams.get("suite_run_id");
@@ -234,6 +236,9 @@ const AnalyticsReports = () => {
                           list={data?.overview?.test_status_counts}
                           labelData={data?.overview?.run_statuses}
                           name="Tests"
+                          id="test-chart"
+                          onHover={(index)=> sethighlightTests(index)}
+                          highlightIndex={highlightTests}
                         />
                       )
                     )}
@@ -251,11 +256,15 @@ const AnalyticsReports = () => {
                         list={data?.overview?.comparison_test_status_counts}
                         labelData={data?.overview?.run_statuses}
                         name="Tests"
+                        id="test-chart"
+                        onHover={(index)=> sethighlightTests(index)}
+                        highlightIndex={highlightTests}
                       />
                     )}
                   </div>
                 </Box>
               </Grid>
+             
               <div className="pt-14 pb-8">
                 <ul className="list-disc ps-6">
                   <li className="text-[16px] text-black font-normal leading-6 font-poppin">
@@ -293,6 +302,9 @@ const AnalyticsReports = () => {
                           list={data?.overview?.evaluation_status_counts}
                           labelData={data?.overview?.run_statuses}
                           name="Evaluations"
+                          id="synced-charts"
+                          onHover={(index)=> setHighlightEvaluation(index)}
+                          highlightIndex={highlightEvaluation}
                         />
                       )
                     )}
@@ -312,6 +324,9 @@ const AnalyticsReports = () => {
                         }
                         labelData={data?.overview?.run_statuses}
                         name="Evaluations"
+                        id="synced-charts"
+                        onHover={(index)=> setHighlightEvaluation(index)}
+                        highlightIndex={highlightEvaluation}
                       />
                     )}
                   </div>
@@ -561,6 +576,7 @@ const AnalyticsReports = () => {
                           <PerformanceDistributionChart
                             categories={data?.performance?.buckets}
                             list={data?.performance?.values}
+                            
                           />
                         )
                       )}
@@ -578,12 +594,15 @@ const AnalyticsReports = () => {
                           <PerformanceDistributionChart
                             categories={data?.performance?.buckets || []}
                             list={data?.performance?.comparison_values || []}
+                           
                           />
                         )
                       )}
                     </div>
                   </Box>
                 </Grid>
+                
+
               </div>
               <div className="pt-6">
                 <ul className="list-disc ps-6">

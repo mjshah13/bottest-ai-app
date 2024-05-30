@@ -129,6 +129,9 @@
     width: 100%;
   }
 }
-.apexcharts-tooltip-text-y-label {
-  display: none;
+.barchart .apexcharts-tooltip-text-y-label {
+  display: none !important;
 }
+/* .apexcharts-active{
+  opacity: 1;
+} */
