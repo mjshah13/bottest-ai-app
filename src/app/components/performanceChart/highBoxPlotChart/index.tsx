@@ -51,7 +51,7 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     //     },
     //     {
     //       x: "12-16",
-    //       y: "1000", // Three scatter plots at "12-16"
+    //       y: 635, // Three scatter plots at "12-16"
     //     },
     //     {
     //       x: "12-17",
@@ -86,9 +86,9 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
       const boxPlotSeries = {
         type: "boxPlot",
         group: "apexcharts-axis-0",
-        data: highBoxPlotData.map((item, i) => ({
-          x: `${item.suite_run_name}-${i + 1}`,
-          y: item.values.map((value: number) => Math.round(value)),
+        data: highBoxPlotData.map((item) => ({
+          x: item.suite_run_name,
+          y: item.values.map((value) => Math.round(value)),
         })),
       };
 
@@ -107,12 +107,14 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     }
   }, [highBoxPlotData]);
 
+  // console.log(series);
+
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,
       xaxis: {
         categories: highBoxPlotData?.map(
-          (item, i) => `${item?.suite_run_name} - ${i + 1}`
+          (item, i) => `${item?.suite_run_name}`
         ),
       },
     }));
@@ -164,6 +166,10 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
           lower: "transparent",
         },
       },
+    },
+    tooltip: {
+      shared: false,
+      intersect: true,
     },
     legend: {
       show: false,

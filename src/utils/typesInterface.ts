@@ -348,3 +348,9 @@ export interface UsageChartDataType {
   total_available: number;
   billing_tier: BillingTier;
 }
+
+export interface SpecificSuiteDataType {
+  reporting_comparison_suite_run_id: string;
+  reporting_comparison_environment_id: string;
+  reporting_comparison_configuration: string;
+}

@@ -132,6 +132,9 @@
 .barchart .apexcharts-tooltip-text-y-label {
   display: none !important;
 }
+.mainContainer {
+  height: calc(100vh - 2.5rem) !important;
+}
 /* .apexcharts-active{
   opacity: 1;
 } */

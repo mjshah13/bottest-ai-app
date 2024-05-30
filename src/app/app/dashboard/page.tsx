@@ -186,10 +186,8 @@ const Dashboard = (props: DashboardProps) => {
     return displayWithCommas;
   };
 
-  // Now you can access the parameters like this:
-
   return (
-    <div className="h-[95vh] gap-5 flex flex-col">
+    <div className="mainContainer gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12">
         {" "}
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b  dark:border-[#434447]">

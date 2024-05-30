@@ -13,6 +13,8 @@ interface InputProps {
   size?: ResponsiveSize;
   className?: any;
   disabled?: boolean;
+  value?: string;
+  name?: string;
 }
 
 const CustomInput: React.FC<InputProps> = ({
@@ -23,6 +25,8 @@ const CustomInput: React.FC<InputProps> = ({
   size = "2",
   className,
   disabled,
+  value,
+  name,
 }) => {
   const [inputType, setInputType] = useState<InputType>(type);
 
@@ -40,6 +44,8 @@ const CustomInput: React.FC<InputProps> = ({
         onChange={(e) => onChange && onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
+        value={value}
+        name={name}
       >
         <TextField.Slot className="font-poppins"></TextField.Slot>
       </TextField.Root>

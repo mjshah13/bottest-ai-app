@@ -1,5 +1,11 @@
 import { Dialog, Flex } from "@radix-ui/themes";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import CustomButton from "../../../elements/button";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import CustomInput from "../../../elements/input";
@@ -9,7 +15,9 @@ import { GlobalStateContext } from "../../../globalState";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
 import _ from "lodash";
 import useSpecificSuiteRun from "../../../hooks/useSpecificSuiteRuns";
-import { useApi } from "../../../hooks/useApi";
+
+import useSpecificSuite from "../../../hooks/useSpecificSuite";
+import { configOption } from "../../../utils/common";
 
 interface ModalProps {
   title: string;
@@ -35,36 +43,38 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
   ) as GlobalStateType;
   const { updateSuite } = useUpdateSuite();
   const { fetchSpecificSuiteRuns, error, setError } = useSpecificSuiteRun();
-  const [radioButtonValue, setRadioButtonValue] = useState("");
-  const [inputValue, setInputValue] = useState<string>("");
-
-  const [isDisabled, setIsDisabled] = useState({
-    select: true,
-    input: true,
-  });
+  const { fetchSpecificSuite, setSpecificSuiteData, specificSuiteData } =
+    useSpecificSuite();
 
   const handleRadioButton = (value: string) => {
-    setRadioButtonValue(value);
-    setIsDisabled({
-      select: value !== "most_recent_different_environment",
-      input: value !== "specific_suite_run",
-    });
+    setSpecificSuiteData((prevState) => ({
+      ...prevState,
+      reporting_comparison_configuration: value,
+    }));
   };
 
   const handleSave = () => {
     let updateData = {};
-
-    switch (radioButtonValue) {
+    switch (specificSuiteData?.reporting_comparison_configuration) {
       case "most_recent_same_environment":
-        updateData = { most_recent_same_environment: radioButtonValue };
+        updateData = {
+          reporting_comparison_configuration:
+            specificSuiteData?.reporting_comparison_configuration,
+        };
         break;
       case "most_recent_different_environment":
         updateData = {
-          most_recent_different_environment: selectedEnvironment?.id,
+          reporting_comparison_environment_id: selectedEnvironment?.id,
+          reporting_comparison_configuration:
+            "most_recent_different_environment",
         };
         break;
       case "specific_suite_run":
-        updateData = { specific_suite_run: inputValue };
+        updateData = {
+          reporting_comparison_suite_run_id:
+            specificSuiteData?.reporting_comparison_suite_run_id,
+          reporting_comparison_configuration: "specific_suite_run",
+        };
         break;
     }
 
@@ -84,32 +94,27 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
     []
   );
 
+  useEffect(() => {
+    if (!selectedSuite?.id) return;
+    fetchSpecificSuite(selectedSuite?.id);
+  }, [selectedSuite]);
+
   const handleInputChange = (val: string) => {
-    setInputValue(val);
     handleChange(val);
-  };
-
-  const { request } = useApi();
-
-  const getSpecificSuites = async (suiteId: string) => {
-    try {
-      const data = await request({
-        url: `/v1/suites/${suiteId}`,
-        method: "GET",
-      });
-
-      console.log({ data });
-    } catch (error) {
-      console.error("Error fetching test suites:", error);
-    } finally {
-      // Optional: Any cleanup logic if needed
-    }
+    setSpecificSuiteData((prevState) => ({
+      ...prevState,
+      reporting_comparison_suite_run_id: val,
+    }));
   };
 
   useEffect(() => {
-    if (!selectedSuite?.id) return;
-    getSpecificSuites(selectedSuite?.id);
-  }, [selectedSuite]);
+    setSelectedEnvironment(
+      environmentLists.find(
+        (env) =>
+          env.id === specificSuiteData?.reporting_comparison_environment_id
+      ) || null
+    );
+  }, [specificSuiteData]);
 
   return (
     <Dialog.Root
@@ -129,12 +134,13 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
             <RadioGroup.Root
               className="flex flex-col gap-5"
               onValueChange={(value) => handleRadioButton(value)}
+              value={specificSuiteData?.reporting_comparison_configuration}
             >
               <div className="flex gap-3">
                 <div className="flex mt-0.5 items-start">
                   <RadioGroup.Item
                     className="bg-white w-[16px] h-[16px] border border-[#d9d9d9] rounded-full  hover:bg-[#f0f0f0]  focus:border-[#388aeb] outline-none cursor-default"
-                    value="most_recent_same_environment"
+                    value={configOption?.most_recent_same_environment}
                     id="r1"
                   >
                     <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative  after:w-[8px] after:h-[8px] after:rounded-full after:bg-[#388aeb]" />
@@ -160,7 +166,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                 <div className="flex items-start  mt-0.5">
                   <RadioGroup.Item
                     className="bg-white w-[16px] h-[16px] border border-[#d9d9d9] rounded-full  hover:bg-violet3  focus:border focus:border-[#388aeb] outline-none cursor-default"
-                    value="most_recent_different_environment"
+                    value={configOption?.most_recent_different_environment}
                     id="r2"
                   >
                     <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-['']  after:w-[8px] after:h-[8px] after:rounded-full after:bg-[#388aeb]" />
@@ -181,8 +187,10 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                   </p>
                   <CustomSelect
                     isAddedBtn={false}
-                    disabled={isDisabled?.select}
-                    // disabled={environmentLists?.length === 1 || !environmentLists}
+                    disabled={
+                      specificSuiteData?.reporting_comparison_configuration !==
+                      "most_recent_different_environment"
+                    }
                     placeholder="Select Environment"
                     selectedValue={environmentLists?.find(
                       (env) => env?.id === selectedEnvironment?.id
@@ -199,7 +207,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                 <div className="flex items-start  mt-0.5">
                   <RadioGroup.Item
                     className="bg-white w-[16px] h-[16px] border border-[#d9d9d9] rounded-full  hover:bg-violet3  focus:border focus:border-[#388aeb] outline-none cursor-default"
-                    value="specific_suite_run"
+                    value={configOption?.specific_suite_run}
                     id="r3"
                   >
                     <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-['']  after:w-[8px] after:h-[8px] after:rounded-full after:bg-[#388aeb]" />
@@ -219,16 +227,20 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                   </p>
 
                   <CustomInput
+                    value={specificSuiteData?.reporting_comparison_suite_run_id}
                     className={`dark:bg-transparent h-[32px] ${
                       error
                         ? " outline-none focus:border-none border border-danger text-danger"
                         : null
                     }  `}
-                    onChange={(value) => {
-                      handleInputChange(value);
+                    onChange={(val) => {
+                      handleInputChange(val);
                     }}
                     type="text"
-                    disabled={isDisabled?.input}
+                    disabled={
+                      specificSuiteData?.reporting_comparison_configuration !==
+                      "specific_suite_run"
+                    }
                     placeholder="Enter Suite Run ID"
                   />
                   <span className={`text-xs mt-0.5  ${error && "text-danger"}`}>
@@ -252,7 +264,6 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                 onClick={handleSave}
                 color="blue"
                 variant="solid"
-                // disabled={organization !== null && orgRole === "org:viewer"}
                 isPrimary
                 disabled={error}
               >

@@ -59,3 +59,9 @@ export const getStatuses = filterOptions
   ?.map((status) => status?.status);
 
 export const TabBtn = ["Suite’s default", "Custom"];
+
+export const configOption = {
+  most_recent_same_environment: "most_recent_same_environment",
+  most_recent_different_environment: "most_recent_different_environment",
+  specific_suite_run: "specific_suite_run",
+};

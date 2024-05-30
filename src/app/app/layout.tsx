@@ -9,7 +9,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <div className="w-[260px] ">
         <Sidenav />
       </div>
-      <main className="main-content h-full bg-[#fdfcfa] dark:bg-[#2a2d30]">
+      <main className="main-content h-full  bg-[#fdfcfa] dark:bg-[#2a2d30]">
         <div className="flex flex-col">
           <div className="fixed  w-full z-50">
             <div
