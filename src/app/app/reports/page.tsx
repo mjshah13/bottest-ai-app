@@ -119,7 +119,7 @@ const Reports = () => {
   }, [organization?.id]);
 
   return (
-    <div className="h-[92vh]  flex flex-col">
+    <div className="h-[95vh] flex flex-col">
       <div className=" border-2 border-b-0  rounded-lg rounded-bl-none rounded-br-none border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12 ">
         <div className="py-5 px-4 border-b border-[#f0f0f0] dark:border-b  dark:border-[#434447]">
           <h1 className="font-semibold font-poppin text-3xl dark:text-white text-dark">
@@ -168,7 +168,7 @@ const Reports = () => {
               </p>
               <button
                 onClick={() => setIsComparisonModalOpen(true)}
-                className="outline-none text-sm border-none text-[#388AEB] font-semibold cursor-pointer"
+                className="outline-none text-sm border-none text-[#388AEB] font-semibold cursor-pointer font-poppin"
               >
                 Configure
               </button>
@@ -185,6 +185,7 @@ const Reports = () => {
       <div
         className={`
       flex-1
+      mb-4
       bg-white dark:bg-[#212427] border-t-0
       border-2 rounded-lg rounded-tl-none rounded-tr-none border-[#f0f0f0] dark:border-none dark:border dark:border-[#434447]
          `}
@@ -319,7 +320,7 @@ const Reports = () => {
                         <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                           <div className=" min-w-[205px] w-full">
                             <button
-                              className="text-[#388AEB] font-normal text-sm flex items-center gap-3 justify-center w-full"
+                              className="text-[#388AEB] font-normal text-sm flex items-center gap-3  w-full"
                               onClick={() =>
                                 router.push(
                                   `/analyticsReports?suite_run_id=${data?.id}`

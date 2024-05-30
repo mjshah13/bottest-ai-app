@@ -189,7 +189,7 @@ const Dashboard = (props: DashboardProps) => {
   // Now you can access the parameters like this:
 
   return (
-    <div className="h-[92vh] gap-5 flex flex-col">
+    <div className="h-[95vh] gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12">
         {" "}
         <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b  dark:border-[#434447]">
@@ -253,9 +253,8 @@ const Dashboard = (props: DashboardProps) => {
       <div
         className={`
         flex-1
-
         bg-white dark:bg-[#212427]
-        border-2 rounded-lg border-[#f0f0f0] dark:border-none dark:border dark:border-[#434447]
+        border-2 rounded-lg border-[#f0f0f0] dark:border-none dark:border dark:border-[#434447] mb-4
            `}
         id="flex-container"
       >
@@ -317,7 +316,7 @@ const Dashboard = (props: DashboardProps) => {
                   <>
                     {testData && (
                       <>
-                        <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447]">
+                        <div className="py-5 px-4 border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447] ">
                           <div className="flex justify-between">
                             <div>
                               <h1 className="font-semibold font-poppin text-xl">

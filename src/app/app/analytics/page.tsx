@@ -121,7 +121,7 @@ const Analytics = () => {
   }, [organization?.id]);
 
   return (
-    <div className=" h-[92vh] gap-5 flex flex-col">
+    <div className=" z-0 h-full gap-5 flex flex-col">
       <div className=" border-2 rounded-lg border-[#f0f0f0] dark:bg-[#212427] dark:border-none   bg-white mt-12">
         <div className="py-4 px-4 border-b-2  border-[#f0f0f0] dark:border-b  dark:border-[#434447]">
           <h1 className="font-semibold font-poppin text-3xl dark:text-white text-dark">
@@ -132,7 +132,7 @@ const Analytics = () => {
             Individual runs of a singular tests will not be included.
           </p>
         </div>
-        <div className="gap-7 py-5 px-4 flex justify-between items-center">
+        <div className="gap-7 py-5 px-4 flex justify-between items-center -z-0">
           <div className="w-full">
             <CustomSelect
               Label={"Select Bot"}
@@ -181,20 +181,23 @@ const Analytics = () => {
       <div
         className={`
 
-      flex-1
+      flex-1 mb-4
       dark:bg-[#212427]
     rounded-lg dark:border-none dark:border dark:border-[#434447]
          `}
-        id="flex-container"
+        // id="flex-container"
       >
         <div
-          className=" pr-1.5 "
-          style={{
-            maxHeight: `${containerHeight}px`,
-            overflowY: "auto",
-          }}
+        // className=" pr-1.5 "
+        // style={{
+        //   maxHeight: `${containerHeight}px`,
+        //   overflowY: "auto",
+        // }}
         >
-          <Grid columns="1fr 1fr" gap="25px">
+          <Grid
+            columns={{ initial: "2", md: "1", lg: "2", sm: "1" }}
+            gap="22px"
+          >
             <Box className="border-2 rounded-lg h-full bg-white border-[#f0f0f0] ">
               <header className="px-4 h-[96px] rounded-t-lg flex flex-col justify-center bg-white  border-b-2 border-[#f0f0f0] dark:border-b dark:border-[#434447]">
                 <h1 className="font-semibold font-poppin text-xl dark:text-white text-dark">
@@ -344,108 +347,109 @@ const Analytics = () => {
                           usageChartData?.evaluations_performed || []
                         }
                       />
-
-                      <div className="border-2 rounded-lg border-[#f0f0f0] h-[240px]">
-                        <div className="p-4 ">
-                          {/* {usageLoading ? (
+                      <div className="w-full flex justify-center">
+                        <div className="border-2 rounded-lg border-[#f0f0f0] min-h-[245px] h-full max-w-[540px]">
+                          <div className="p-4 ">
+                            {/* {usageLoading ? (
                           <div className="flex justify-between">
                             <Skeleton count={1} width={100} height={30} />
                             <Skeleton count={1} width={100} height={30} />
                           </div>
                         ) : ( */}
-                          <div className="flex justify-between">
-                            <h3 className="font-poppin font-semibold text-base">
-                              {` Plan: ${
-                                usageChartData?.billing_tier?.name || ""
-                              } `}
-                            </h3>
-                            <div className="border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md max-w-[95px] w-full py-0.5">
-                              {`$${
-                                usageChartData?.billing_tier?.price || 0
-                              } Monthly`}
-                            </div>
-                          </div>
-                          {/* )} */}
-
-                          <div className="mt-3">
-                            {/* {usageLoading ? (
-                            <Skeleton count={3} width={300} height={20} />
-                          ) : ( */}
-                            <ul className="list-disc pl-5 font-poppin text-md font-normal">
-                              <li>
-                                {usageChartData?.total_available} Evaluations
-                                per month
-                              </li>
-                              <li>4 additional team members</li>
-                              <li>Unlimited Tests</li>
-                            </ul>
-                            {/* )} */}
-                          </div>
-                          <div className="flex justify-between items-center mt-3">
-                            <Tooltip.Provider skipDelayDuration={100}>
-                              <Tooltip.Root delayDuration={100}>
-                                <Tooltip.Trigger asChild>
-                                  <Progress.Root
-                                    className="bg-[#f0f0f0] relative overflow-hidden  rounded-full w-[300px] h-[8px]"
-                                    style={{
-                                      // Fix overflow clipping in Safari
-                                      transform: "translateZ(0)",
-                                    }}
-                                    value={progress}
-                                  >
-                                    <Progress.Indicator
-                                      className="bg-[#388aeb] h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
-                                      style={{
-                                        transform: `translateX(-${
-                                          100 - progress
-                                        }%)`,
-                                      }}
-                                    />
-                                  </Progress.Root>
-                                </Tooltip.Trigger>
-                                <Tooltip.Portal>
-                                  <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
-                                    {`${progress}%`}
-                                    <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
-                                  </Tooltip.Content>
-                                </Tooltip.Portal>
-                              </Tooltip.Root>
-                            </Tooltip.Provider>
-                            {/* {usageLoading ? (
-                            <Skeleton count={1} width={50} height={10} />
-                          ) : ( */}
-                            <div className="text-black font-poppin text-sm font-normal">
-                              <div>
-                                {usageChartData?.total_used} of{" "}
-                                {usageChartData?.total_available}
+                            <div className="flex justify-between">
+                              <h3 className="font-poppin font-semibold text-base">
+                                {` Plan: ${
+                                  usageChartData?.billing_tier?.name || ""
+                                } `}
+                              </h3>
+                              <div className="border border-[#d5d5d5] dark:border dark:border-[#434447] dark:text-white dark:bg-transparent text-black text-sm font-normal font-poppin bg-[#fafafa] flex justify-center rounded-md max-w-[95px] w-full py-0.5">
+                                {`$${
+                                  usageChartData?.billing_tier?.price || 0
+                                } Monthly`}
                               </div>
                             </div>
                             {/* )} */}
+
+                            <div className="mt-3">
+                              {/* {usageLoading ? (
+                            <Skeleton count={3} width={300} height={20} />
+                          ) : ( */}
+                              <ul className="list-disc pl-5 font-poppin text-md font-normal">
+                                <li>
+                                  {usageChartData?.total_available} Evaluations
+                                  per month
+                                </li>
+                                <li>4 additional team members</li>
+                                <li>Unlimited Tests</li>
+                              </ul>
+                              {/* )} */}
+                            </div>
+                            <div className="flex justify-between gap-1 items-center mt-3">
+                              <Tooltip.Provider skipDelayDuration={100}>
+                                <Tooltip.Root delayDuration={100}>
+                                  <Tooltip.Trigger asChild>
+                                    <Progress.Root
+                                      className="bg-[#f0f0f0] relative overflow-hidden  rounded-full w-[300px] h-[8px]"
+                                      style={{
+                                        // Fix overflow clipping in Safari
+                                        transform: "translateZ(0)",
+                                      }}
+                                      value={progress}
+                                    >
+                                      <Progress.Indicator
+                                        className="bg-[#388aeb] h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                                        style={{
+                                          transform: `translateX(-${
+                                            100 - progress
+                                          }%)`,
+                                        }}
+                                      />
+                                    </Progress.Root>
+                                  </Tooltip.Trigger>
+                                  <Tooltip.Portal>
+                                    <Tooltip.Content className="TooltipContent dark:bg-white dark:text-black">
+                                      {`${progress}%`}
+                                      <Tooltip.Arrow className="TooltipArrow dark:fill-[#e4e5e5]" />
+                                    </Tooltip.Content>
+                                  </Tooltip.Portal>
+                                </Tooltip.Root>
+                              </Tooltip.Provider>
+                              {/* {usageLoading ? (
+                            <Skeleton count={1} width={50} height={10} />
+                          ) : ( */}
+                              <div className="text-black font-poppin text-sm font-normal">
+                                <div>
+                                  {usageChartData?.total_used} of{" "}
+                                  {usageChartData?.total_available}
+                                </div>
+                              </div>
+                              {/* )} */}
+                            </div>
                           </div>
-                        </div>
-                        <div className="border-t-2 border-[#f0f0f0] h-[59px] flex items-center">
-                          <div className="flex gap-2  w-full justify-end px-2 ">
-                            <CustomButton
-                              variant="outline"
-                              color="red"
-                              isDanger
-                              // disabled={
-                              //   organization !== null && orgRole === "org:viewer"
-                              // }
-                              // disabled={true}
-                            >
-                              Cancel subscription
-                            </CustomButton>
-                            <CustomButton
-                              color="blue"
-                              variant="solid"
-                              isPrimary
-                              // disabled={
-                              //   organization !== null && orgRole === "org:viewer"
-                              // }
-                            >
-                              Upgrade plan
-                            </CustomButton>
+                          <div className="border-t-2 border-[#f0f0f0] h-[59px] flex items-center">
+                            <div className="flex gap-2  w-full justify-end px-2 ">
+                              <CustomButton
+                                variant="outline"
+                                color="red"
+                                isDanger
+                                // disabled={
+                                //   organization !== null && orgRole === "org:viewer"
+                                // }
+                                // disabled={true}
+                              >
+                                Cancel subscription
+                              </CustomButton>
+                              <CustomButton
+                                color="blue"
+                                variant="solid"
+                                isPrimary
+                                // disabled={
+                                //   organization !== null && orgRole === "org:viewer"
+                                // }
+                              >
+                                Upgrade plan
+                              </CustomButton>
+                            </div>
                           </div>
                         </div>
                       </div>

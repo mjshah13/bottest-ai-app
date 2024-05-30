@@ -170,12 +170,7 @@ const Sidenav = () => {
                               type="button"
                             >
                               {item?.icon}
-                              {/* <item.icon
-                                disabled={item?.isDisabled}
-                                isActive={item?.href === active}
-                                className={classNames("h-6 w-6 shrink-0")}
-                                aria-hidden="true"
-                              /> */}
+
                               {item.name}
                             </button>
                           ))}
@@ -215,7 +210,7 @@ const Sidenav = () => {
       </Transition.Root>
       {/* Static sidebar for desktop */}
 
-      <div className="hidden h-full lg:z-50 lg:flex lg:w-64 lg:flex-col ">
+      <div className="hidden h-full lg:z-50 lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0   ">
         <div
           className="flex grow flex-col gap-y-5  bg-white dark:bg-[#212427]   px-4"
           style={{ boxShadow: "0px 0px 4px 0px rgba(33, 36, 39, 0.08)" }}
@@ -249,12 +244,7 @@ const Sidenav = () => {
                       type="button"
                     >
                       {item?.icon}
-                      {/* <item.icon
-                        disabled={item?.isDisabled}
-                        isActive={item?.href === active}
-                        className={classNames("h-6 w-6 shrink-0")}
-                        aria-hidden="true"
-                      /> */}
+
                       {item.name}
                     </button>
                   ))}
@@ -278,12 +268,7 @@ const Sidenav = () => {
                       )}
                     >
                       {item?.icon}
-                      {/* <item.icon
-                        disabled={item?.isDisabled}
-                        isActive={item?.href === active}
-                        className={classNames("h-6 w-6 shrink-0")}
-                        aria-hidden="true"
-                      /> */}
+
                       {item.name}
                     </button>
                   ))}
@@ -291,11 +276,6 @@ const Sidenav = () => {
 
                 <div className="my-4 pl-1 flex items-center gap-4">
                   <UserButton afterSignOutUrl="/sign-in" showName={true} />
-                  {/* <h3 className="font-normal text-black font-poppin">
-                    {session?.user?.fullName
-                      ? session?.user?.fullName
-                      : session?.user?.username}
-                  </h3> */}
                 </div>
               </div>
             </div>

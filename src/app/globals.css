@@ -120,3 +120,15 @@
 .apexcharts-marker {
   stroke: #46c4fa !important;
 }
+
+.main-content {
+  width: calc(100% - 260px);
+}
+@media (max-width: 1023px) {
+  .main-content {
+    width: 100%;
+  }
+}
+.apexcharts-tooltip-text-y-label {
+  display: none;
+}

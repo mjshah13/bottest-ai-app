@@ -9,6 +9,7 @@ import { GlobalStateContext } from "../../../globalState";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
 import _ from "lodash";
 import useSpecificSuiteRun from "../../../hooks/useSpecificSuiteRuns";
+import { useApi } from "../../../hooks/useApi";
 
 interface ModalProps {
   title: string;
@@ -88,6 +89,28 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
     handleChange(val);
   };
 
+  const { request } = useApi();
+
+  const getSpecificSuites = async (suiteId: string) => {
+    try {
+      const data = await request({
+        url: `/v1/suites/${suiteId}`,
+        method: "GET",
+      });
+
+      console.log({ data });
+    } catch (error) {
+      console.error("Error fetching test suites:", error);
+    } finally {
+      // Optional: Any cleanup logic if needed
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedSuite?.id) return;
+    getSpecificSuites(selectedSuite?.id);
+  }, [selectedSuite]);
+
   return (
     <Dialog.Root
       open={isComparisonModalOpen}
@@ -120,7 +143,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                 <div className="flex flex-col">
                   <label
                     className="text-black font-poppin  text-sm font-normal"
-                    // htmlFor="r1"
+                    htmlFor="r1"
                   >
                     Most Recent on Same Environment
                   </label>
@@ -146,7 +169,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                 <div className="flex flex-col">
                   <label
                     className="text-black font-poppin  text-sm font-normal"
-                    // htmlFor="r2"
+                    htmlFor="r2"
                   >
                     Most Recent on Specific Environment
                   </label>
@@ -185,7 +208,7 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                 <div className="flex flex-col">
                   <label
                     className="text-black font-poppin  text-sm font-normal"
-                    // htmlFor="r3"
+                    htmlFor="r3"
                   >
                     Specific Suite Run
                   </label>

@@ -19,7 +19,7 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([
     {
-      name: "Regression Test Suite Success Rate for MyBot",
+      name: "Evaluation performed ",
       data: [],
       color: "#ffe7bc",
     },
@@ -117,7 +117,7 @@ const EvaluationPerformedChart: React.FC<EvaluationPerformProps> = ({
     },
     yaxis: {
       min: 0,
-      max: 500, // Set the maximum value to 500
+      max: 100, // Set the maximum value to 500
       tickAmount: 5, // Number of ticks including the max value
       title: {
         text: "Total Evaluation performed",

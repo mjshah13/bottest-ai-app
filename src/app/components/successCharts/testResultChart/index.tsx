@@ -65,7 +65,7 @@ const TestResultChart: React.FC<TestResultChartProps> = ({
     },
     title: {
       text: "Test Result by Test Suite Runs",
-      align: "left",
+      align: "center",
       style: {
         fontSize: "14px",
         fontWeight: "500",
@@ -103,6 +103,13 @@ const TestResultChart: React.FC<TestResultChartProps> = ({
         fontWeight: "500",
       },
     },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins",
+      },
+    },
+
     legend: {
       position: "bottom",
       show: true,

@@ -54,6 +54,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
           fontFamily: "poppins",
         },
       },
+
       labels: {
         style: {
           colors: "#212427", // Change the color of the category labels
@@ -63,6 +64,20 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
         },
       },
       tickAmount: 3, // Ensure only 0, 10, 20, 30 are shown
+    },
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: (val: any, opts: any) => {
+          return `Number of test : ${val} `;
+        },
+      },
+      style: {
+        fontFamily: "poppins",
+      },
+
+      // custom: (opts: any) => {},
+      // custom: (opts: any) => {
     },
     yaxis: {
       title: {

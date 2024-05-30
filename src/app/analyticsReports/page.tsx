@@ -1,13 +1,13 @@
 "use client";
 
 import { Box, Grid, Table } from "@radix-ui/themes";
-import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const PerformanceDistributionChart = dynamic(
   () => import("../components/PerformanceDistributionChart"),
@@ -23,7 +23,7 @@ const AnalyticsReports = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const suiteRunID = searchParams.get("suite_run_id");
-  // const isPdf = searchParams.get("isPdf");
+  const isPdf = searchParams.get("isPdf");
   const { user } = useUser();
   const { fetchAnalyticsReport, data, loading } = useAnalyticsReport();
 
@@ -50,6 +50,7 @@ const AnalyticsReports = () => {
               alt="Your Company"
             />
           </div>
+
           <div className=" pb-20">
             <h1 className="text-[35px] font-poppin font-bold text-black">
               Feature Suite Run{" "}
@@ -147,8 +148,9 @@ const AnalyticsReports = () => {
                 <Table.Body>
                   {data?.tests?.map((item, i) => (
                     <Table.Row key={i} className="align-middle">
-                      <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
+                      <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark ">
                         <button
+                          className=" hover:underline"
                           onClick={() =>
                             router.push(
                               `/app/dashboard?test_id=${item?.test_id}`
@@ -187,6 +189,7 @@ const AnalyticsReports = () => {
               )}
             </Table.Root>
           </div>
+
           <div className="">
             <div className="bg-primary h-[78px] flex items-center  ps-4 rounded ">
               <h1 className="text-secondary font-poppin font-bold text-3xl ">
@@ -391,7 +394,16 @@ const AnalyticsReports = () => {
                       {data?.improvements?.test_improvements?.map((item, i) => (
                         <Table.Row key={i} className="align-middle">
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            {item.test_name}
+                            <button
+                              className=" hover:underline"
+                              onClick={() =>
+                                router.push(
+                                  `/app/dashboard?test_id=${item?.test_id}`
+                                )
+                              }
+                            >
+                              {item?.test_name}
+                            </button>
                           </Table.Cell>
 
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
@@ -484,6 +496,7 @@ const AnalyticsReports = () => {
                         <Table.Row key={i} className="align-middle">
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
                             <button
+                              className=" hover:underline"
                               onClick={() =>
                                 router.push(
                                   `/app/dashboard?test_id=${item?.test_id}`
@@ -500,6 +513,7 @@ const AnalyticsReports = () => {
                           <Table.Cell className=" border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
                             {item?.failure_summary}{" "}
                             <button
+                              className=" hover:underline"
                               onClick={() =>
                                 router.push(
                                   `/app/dashboard?test_run_id=${item?.test_run_id}`
@@ -672,7 +686,16 @@ const AnalyticsReports = () => {
                       {data?.performance?.test_performances?.map((item, i) => (
                         <Table.Row key={i} className="align-middle">
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">
-                            {item?.test_name}
+                            <button
+                              className=" hover:underline"
+                              onClick={() =>
+                                router.push(
+                                  `/app/dashboard?test_id=${item?.test_id}`
+                                )
+                              }
+                            >
+                              {item?.test_name}
+                            </button>
                           </Table.Cell>
 
                           <Table.Cell className="border-r border-tableCellBorder dark:border-r dark:border-tableCellBorderDark">

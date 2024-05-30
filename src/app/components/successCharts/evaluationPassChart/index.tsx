@@ -19,7 +19,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([
     {
-      name: "Regression Test Suite Success Rate for MyBot",
+      name: "Evaluation Passed",
       data: [],
       color: "#388AEB",
     },
@@ -53,7 +53,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
         categories: suiteRunNames,
       },
       title: {
-        text: `Evaluation performed - last ${suiteRun?.length} runs`,
+        text: `Evaluation Pass Rate - last ${suiteRun?.length} runs`,
       },
     }));
   }, [suiteRunNames]);
@@ -130,7 +130,7 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
         },
       },
       title: {
-        text: "Test Success Rate",
+        text: "Evaluation Passed",
         style: {
           color: "text-black",
           fontWeight: "font-normal",
