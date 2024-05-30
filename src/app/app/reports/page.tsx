@@ -25,7 +25,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useOrganization } from "@clerk/nextjs";
 import Image from "next/image";
-import CustomSelect from "../../../Elements/select";
+import CustomSelect from "../../../elements/select";
 
 const Reports = () => {
   const { organization } = useOrganization();
