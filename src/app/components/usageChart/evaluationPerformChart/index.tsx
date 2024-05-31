@@ -11,7 +11,6 @@ const UsageEvaluationPerformedChart: React.FC<UsageEvaluationPerformProps> = ({
   usageChartData,
   suiteRunNames,
 }) => {
-  console.log(suiteRunNames);
   const [series, setSeries] = useState<
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([

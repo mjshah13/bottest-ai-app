@@ -18,15 +18,19 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     //   data: [
     //     {
     //       x: "11-31 Bot V2",
-    //       y: [700, 760, 801, 848, 900],
+    //       y: [10, 60, 100, 320, 340],
     //     },
     //     {
     //       x: "11-30 run 1",
-    //       y: [710, 770, 810, 850, 910],
+    //       y: [10, 30, 80, 400, 410],
     //     },
     //     {
     //       x: "11-30 run 2",
-    //       y: [680, 740, 800, 830, 870],
+    //       y: [8, 25, 70, 200, 280],
+    //     },
+    //     {
+    //       x: "11-31 Bot V5",
+    //       y: [8, 25, 70, 200, 280],
     //     },
     //   ],
     // },
@@ -35,47 +39,19 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     //   data: [
     //     {
     //       x: "11-31 Bot V2",
-    //       y: 635,
+    //       y: 500,
     //     },
     //     {
     //       x: "11-30 run 1",
-    //       y: "",
+    //       y: 20,
     //     },
     //     {
     //       x: "11-30 run 2",
-    //       y: "",
+    //       y: 380,
     //     },
     //     {
-    //       x: "12-15 Bot V3",
-    //       y: "",
-    //     },
-    //     {
-    //       x: "12-16",
-    //       y: 635, // Three scatter plots at "12-16"
-    //     },
-    //     {
-    //       x: "12-17",
-    //       y: "",
-    //     },
-    //     {
-    //       x: "12-18 run 1",
-    //       y: "",
-    //     },
-    //     {
-    //       x: "12-18 run 2",
-    //       y: "",
-    //     },
-    //     {
-    //       x: "12-19 run 1",
-    //       y: "",
-    //     },
-    //     {
-    //       x: "12-19 run 2",
-    //       y: "",
-    //     },
-    //     {
-    //       x: "12-19 run 3",
-    //       y: "",
+    //       x: "11-31 Bot V5",
+    //       y: 400,
     //     },
     //   ],
     // },
@@ -85,19 +61,17 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     if (highBoxPlotData) {
       const boxPlotSeries = {
         type: "boxPlot",
-        group: "apexcharts-axis-0",
-        data: highBoxPlotData.map((item) => ({
-          x: item.suite_run_name,
+        data: highBoxPlotData.map((item, index) => ({
+          x: item?.suite_run_name,
           y: item.values.map((value) => Math.round(value)),
         })),
       };
 
       const scatterSeries = {
         type: "scatter",
-        group: "apexcharts-axis-0",
         data: highBoxPlotData.flatMap((item) =>
           item.outliers.map((outlier) => ({
-            x: item.suite_run_name,
+            x: item?.suite_run_name,
             y: outlier,
           }))
         ),
@@ -107,14 +81,12 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     }
   }, [highBoxPlotData]);
 
-  // console.log(series);
-
   useEffect(() => {
     setOptions((prevOptions) => ({
       ...prevOptions,
       xaxis: {
-        categories: highBoxPlotData?.map(
-          (item, i) => `${item?.suite_run_name}`
+        overwriteCategories: highBoxPlotData?.map(
+          (item) => `${item?.suite_run_name}`
         ),
       },
     }));
@@ -122,15 +94,13 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
 
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
-      type: "boxPlot",
       zoom: {
         enabled: false,
       },
     },
     colors: ["transparent", "transparent"],
     xaxis: {
-      type: "numeric",
-      categories: [],
+      overwriteCategories: [],
       labels: {
         style: {
           fontSize: "11px",
