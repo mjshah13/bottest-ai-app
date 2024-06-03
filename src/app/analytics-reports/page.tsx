@@ -9,7 +9,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { printForm } from "../../utils/common";
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 const PerformanceDistributionChart = dynamic(
   () => import("../components/PerformanceDistributionChart"),
   { ssr: false }
@@ -29,21 +30,22 @@ const AnalyticsReports = () => {
   const isPdf = searchParams.get("isPdf");
   const { user } = useUser();
   const { fetchAnalyticsReport, data, loading } = useAnalyticsReport();
-//  const [reportData, setreportData] = useState<string>()
+ const [reportData, setreportData] = useState<string>()
   useEffect(() => {
     if (data) return;
     fetchAnalyticsReport(suiteRunID as string);
   }, [user, data]);
 
-//   useEffect(() => {
-//     const page = printForm(data );
-//     setreportData(page )
-//   }, [data])
-  
-// console.log(reportData)
+  useEffect(() => {
+    const page = printForm(data);
+    setreportData(page)
+  }, [data])
+
+
+ console.log(reportData)
   return (
     <>
-    {/* {reportData &&  <div   dangerouslySetInnerHTML={{ __html : reportData }} />} */}
+    
       <div
         className="w-[100%] h-[100%] p-[80px] font-poppin max-w-[1440px]   "
         style={{

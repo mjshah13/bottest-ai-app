@@ -20,6 +20,7 @@
     "antd": "^5.15.4",
     "apexcharts": "^3.49.1",
     "axios": "^1.6.7",
+    "html-pdf-node": "^1.0.8",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",

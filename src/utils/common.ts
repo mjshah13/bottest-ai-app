@@ -65,11 +65,11 @@ export const configOption = {
   most_recent_different_environment: "most_recent_different_environment",
   specific_suite_run: "specific_suite_run",
 };
-export const printForm = (data: AnalyticsReportType) => `<html lang="en">
+export const printForm = (data: AnalyticsReportType | undefined) => `<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generate PDF</title>
+  <title>Bottest ai</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -267,7 +267,7 @@ export const printForm = (data: AnalyticsReportType) => `<html lang="en">
     <div class="container">
         <div class="header">
             <div>
-                <img src="./Assets/Logo.svg" alt="Logo">
+            <img src="./Assets/Logo.svg" alt="Logo">
 
             </div>
             <div>
@@ -450,6 +450,8 @@ export const printForm = (data: AnalyticsReportType) => `<html lang="en">
                 <div class="chart">
                     <div class="bg-light">
                         <h3 class="chart-heading">Performance Distribution</h3>
+                        <div id="barchart">
+                        </div>
                     </div>
                 </div>
                 <div class="chart">
@@ -507,327 +509,518 @@ export const printForm = (data: AnalyticsReportType) => `<html lang="en">
 
 
   <script>
- console.log(data)
- console.log("hello")
-
-  
   async function generatePDF() {
-   console.log("Generating PDF...");
-   const content = document.getElementById('content');
+    console.log("Generating PDF...");
+    const content = document.getElementById('content');
 
-   // Use html2canvas to convert the content to a canvas
-   const canvas = await html2canvas(content);
+    // Use html2canvas to convert the content to a canvas
+    const canvas = await html2canvas(content);
 
-   // Convert the canvas to an image (data URL)
-   const imgData = canvas.toDataURL('image/png');
-   console.log(imgData);
+    // Convert the canvas to an image (data URL)
+    const imgData = canvas.toDataURL('image/png');
+    console.log(imgData);
 
-   // Create a new jsPDF instance
-   const { jsPDF } = window.jspdf;
-   const doc = new jsPDF('p', 'pt', '');
-     const height = window.document;
-   const desiredHeight = 3631; // Adjust this value as needed (in points)
+    // Create a new jsPDF instance
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', '');
+      const height = window.document;
+    const desiredHeight = 1480; // Adjust this value as needed (in points)
 doc.internal.pageSize.setHeight(desiredHeight);
-   // Calculate the dimensions of the PDF page and adjust for content height
-   const pdfWidth = doc.internal.pageSize.getWidth();
-   console.log((canvas.height * pdfWidth) / canvas.width)
+    // Calculate the dimensions of the PDF page and adjust for content height
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    console.log((canvas.height * pdfWidth) / canvas.width)
 
-   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-   // Add the image to the PDF
-   doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    // Add the image to the PDF
+    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, desiredHeight);
 
-   // Save the generated PDF
-   doc.save('sample.pdf');
+    // Save the generated PDF
+    doc.save('sample.pdf');
 }
-   var options = {
-   
-       chart: {
-     type: "bar",
-     height: 350,
-     toolbar: {
-       show: false,
-     },
-   },
-   series: [{
-     name: 'Number of Executions',
-     data: data?.performance?.values,
-   }],
-   plotOptions: {
-     bar: {
-       horizontal: true,
-       barHeight: "40%", 
-       borderRadius: 10,
-       borderRadiusApplication: "end",
-     },
-   },
-   dataLabels: {
-     enabled: false,
-   },
-   xaxis: {
-     categories:data?.performance?.buckets,
-     title: {
-       text: "Number of Tests",
-       offsetY: 10,
-       style: {
-         fontWeight: 400,
-         color: "#909193",
-         fontSize: "16px",
-         fontFamily: "poppins",
-       },
-     },
-
-     labels: {
-       style: {
-         colors: "#212427",
-         fontSize: "12px",
-         fontFamily: "Poppins",
-         fontWeight: 600,
-       },
-     },
-     tickAmount: 3,
-   },
-   tooltip: {
-     enabled: true,
-     y: {
-      
-     },
-     style: {
-       fontFamily: "poppins",
-     },
-   },
-   yaxis: {
-     title: {
-       text: "Executions Time (Seconds)",
-       offsetX: 15,
-       style: {
-         fontWeight: 400,
-         color: "#909193",
-         fontSize: "16px",
-         fontFamily: "poppins",
-       },
-     },
-     labels: {
-       style: {
-         colors: "#212427",
-         fontSize: "12px",
-         fontFamily: "Poppins",
-         fontWeight: 600,
-       },
-     },
-     reversed: false,
-     axisTicks: {
-       show: true,
-     },
-   },
-   grid: {
-     xaxis: {
-       lines: {
-         show: true,
-       },
-     },
-     yaxis: {
-       lines: {
-         show: false,
-       },
-     },
-   },
- 
-
- }
- var updateOption = {
-   
-  chart: {
-type: "bar",
-height: 350,
-toolbar: {
-  show: false,
-},
-},
-
-series: [{
-name: 'Number of Executions',
-data: ${data?.performance?.comparison_values}
-}],
-plotOptions: {
-bar: {
-  horizontal: true,
-  barHeight: "40%", 
-  borderRadius: 10,
-  borderRadiusApplication: "end",
-},
-},
-dataLabels: {
-enabled: false,
-},
-xaxis: {
-  categories: ${data?.performance?.buckets.map(bucket => {
-    const range = bucket.split(" - ");
-    if (range.length === 1) {
-      return range[0];
-    } else {
-      return `"${range[0]} - ${range[1]}"`;
+  const data = {
+    performance: {
+      values: [10, 20, 30],
+      comparison_values: [15, 25, 35],
+      buckets: ['Test1', 'Test2', 'Test3']
+    },
+    overview: {
+      test_status_counts: [60, 20, 20],
+      run_statuses: ['Pass', 'Fail', 'Warning']
     }
-  }).join(",")},
-title: {
-  text: "Number of Tests",
-  offsetY: 10,
-  style: {
-    fontWeight: 400,
-    color: "#909193",
-    fontSize: "16px",
-    fontFamily: "poppins",
-  },
-},
+  };
 
-labels: {
-  style: {
-    colors: "#212427",
-    fontSize: "12px",
-    fontFamily: "Poppins",
-    fontWeight: 600,
-  },
-},
-tickAmount: 3,
-},
-tooltip: {
-enabled: true,
-y: {
+  const options = {
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: {
+        show: false
+      }
+    },
+    series: [{
+      name: 'Number of Executions',
+      data:${JSON.stringify( data?.performance?.values)}
+    }],
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: "40%",
+        borderRadius: 10,
+        borderRadiusApplication: "end"
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    xaxis: {
+      categories: ${JSON.stringify(data?.performance?.buckets)},
+      title: {
+        text: "Number of Tests",
+        offsetY: 10,
+        style: {
+          fontWeight: 400,
+          color: "#909193",
+          fontSize: "16px",
+          fontFamily: "poppins"
+        }
+      },
+      labels: {
+        style: {
+          colors: "#212427",
+          fontSize: "12px",
+          fontFamily: "Poppins",
+          fontWeight: 600
+        }
+      },
+      tickAmount: 3
+    },
+    tooltip: {
+      enabled: true,
+      y: {},
+      style: {
+        fontFamily: "poppins"
+      }
+    },
+    yaxis: {
+      title: {
+        text: "Executions Time (Seconds)",
+        offsetX: 15,
+        style: {
+          fontWeight: 400,
+          color: "#909193",
+          fontSize: "16px",
+          fontFamily: "poppins"
+        }
+      },
+      labels: {
+        style: {
+          colors: "#212427",
+          fontSize: "12px",
+          fontFamily: "Poppins",
+          fontWeight: 600
+        }
+      },
+      reversed: false,
+      axisTicks: {
+        show: true
+      }
+    },
+    grid: {
+      xaxis: {
+        lines: {
+          show: true
+        }
+      },
+      yaxis: {
+        lines: {
+          show: false
+        }
+      }
+    }
+  };
+  const comparisonBarOption = {
+    chart: {
+      type: "bar",
+      height: 350,
+      toolbar: {
+        show: false
+      }
+    },
+    series: [{
+      name: 'Number of Executions',
+      data: ${JSON.stringify(data?.performance?.comparison_values)}
+    }],
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: "40%",
+        borderRadius: 10,
+        borderRadiusApplication: "end"
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    xaxis: {
+      categories: ${JSON.stringify(data?.performance?.buckets)},
+      title: {
+        text: "Number of Tests",
+        offsetY: 10,
+        style: {
+          fontWeight: 400,
+          color: "#909193",
+          fontSize: "16px",
+          fontFamily: "poppins"
+        }
+      },
+      labels: {
+        style: {
+          colors: "#212427",
+          fontSize: "12px",
+          fontFamily: "Poppins",
+          fontWeight: 600
+        }
+      },
+      tickAmount: 3
+    },
+    tooltip: {
+      enabled: true,
+      y: {},
+      style: {
+        fontFamily: "poppins"
+      }
+    },
+    yaxis: {
+      title: {
+        text: "Executions Time (Seconds)",
+        offsetX: 15,
+        style: {
+          fontWeight: 400,
+          color: "#909193",
+          fontSize: "16px",
+          fontFamily: "poppins"
+        }
+      },
+      labels: {
+        style: {
+          colors: "#212427",
+          fontSize: "12px",
+          fontFamily: "Poppins",
+          fontWeight: 600
+        }
+      },
+      reversed: false,
+      axisTicks: {
+        show: true
+      }
+    },
+    grid: {
+      xaxis: {
+        lines: {
+          show: true
+        }
+      },
+      yaxis: {
+        lines: {
+          show: false
+        }
+      }
+    }
+  };
+  
  
-},
-style: {
-  fontFamily: "poppins",
-},
-},
-yaxis: {
-title: {
-  text: "Executions Time (Seconds)",
-  offsetX: 15,
-  style: {
-    fontWeight: 400,
-    color: "#909193",
-    fontSize: "16px",
-    fontFamily: "poppins",
-  },
-},
-labels: {
-  style: {
-    colors: "#212427",
-    fontSize: "12px",
-    fontFamily: "Poppins",
-    fontWeight: 600,
-  },
-},
-reversed: false,
-axisTicks: {
-  show: true,
-},
-},
-grid: {
-xaxis: {
-  lines: {
-    show: true,
-  },
-},
-yaxis: {
-  lines: {
-    show: false,
-  },
-},
-},
+  const chart = new ApexCharts(document.querySelector("#barchart"), options);
+  const chart2 = new ApexCharts(document.querySelector("#barchart2"), comparisonBarOption);
+  chart.render();
+  chart2.render();
 
+  const donutOptionOne = {
+    chart: {
+      type: "donut",
+      height: 350
+    },
+    series: ${JSON.stringify(data?.overview?.test_status_counts)},
+    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    colors: [
+      "#388AEB",
+      "#54CA6E",
+      "#E7C200",
+      "#E1654A",
+      "#212427"
+    ],
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            name: {
+              show: true,
+              fontSize: "24px",
+              fontWeight: 600,
+              offsetY: 10
+            },
+            value: {
+              show: false
+            },
+            total: {
+              show: true,
+              label:"${data?.overview?.test_status_counts?.reduce(
+                (accumulator, currentValue) => accumulator + currentValue,
+                0
+              )} Tests", 
+              fontSize: "24px",
+              fontWeight: 600,
+              fontFamily: "Poppins",
+              color: "#909193"
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins"
+      }
+    },
+    legend: {
+      position: "right",
+      offsetY: 50,
+      fontSize: "16px",
+      fontWeight: "400",
+      fontFamily: "Poppins",
+      labels: {
+        colors: "#212427",
+        useSeriesColors: false
+      },
+      markers: {
+        width: 10,
+        height: 10,
+        radius: 5
+      }
+    },
+    dataLabels: {
+      enabled: true
+    }
+  };
+  const donutOptionTwo = {
+    chart: {
+      type: "donut",
+      height: 350
+    },
+    series: ${JSON.stringify(data?.overview?.comparison_test_status_counts)},
+    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    colors: [
+      "#388AEB",
+      "#54CA6E",
+      "#E7C200",
+      "#E1654A",
+      "#212427"
+    ],
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            name: {
+              show: true,
+              fontSize: "24px",
+              fontWeight: 600,
+              offsetY: 10
+            },
+            value: {
+              show: false
+            },
+            total: {
+              show: true,
+              label: "${data?.overview?.comparison_test_status_counts?.reduce(
+                (accumulator, currentValue) => accumulator + currentValue,
+                0
+              )} Tests",
+              fontSize: "24px",
+              fontWeight: 600,
+              fontFamily: "Poppins",
+              color: "#909193"
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins"
+      }
+    },
+    legend: {
+      position: "right",
+      offsetY: 50,
+      fontSize: "16px",
+      fontWeight: "400",
+      fontFamily: "Poppins",
+      labels: {
+        colors: "#212427",
+        useSeriesColors: false
+      },
+      markers: {
+        width: 10,
+        height: 10,
+        radius: 5
+      }
+    },
+    dataLabels: {
+      enabled: true
+    }
+  };
+  const donutOptionThree = {
+    chart: {
+      type: "donut",
+      height: 350
+    },
+    series: ${JSON.stringify(data?.overview?.evaluation_status_counts)},
+    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    colors: [
+      "#388AEB",
+      "#54CA6E",
+      "#E7C200",
+      "#E1654A",
+      "#212427"
+    ],
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            name: {
+              show: true,
+              fontSize: "24px",
+              fontWeight: 600,
+              offsetY: 10
+            },
+            value: {
+              show: false
+            },
+            total: {
+              show: true,
+              label: "${data?.overview?.evaluation_status_counts?.reduce(
+                (accumulator, currentValue) => accumulator + currentValue,
+                0
+              )} Evaluations",
+              fontSize: "24px",
+              fontWeight: 600,
+              fontFamily: "Poppins",
+              color: "#909193"
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins"
+      }
+    },
+    legend: {
+      position: "right",
+      offsetY: 50,
+      fontSize: "16px",
+      fontWeight: "400",
+      fontFamily: "Poppins",
+      labels: {
+        colors: "#212427",
+        useSeriesColors: false
+      },
+      markers: {
+        width: 10,
+        height: 10,
+        radius: 5
+      }
+    },
+    dataLabels: {
+      enabled: true
+    }
+  };
+  const donutOptionFour = {
+    chart: {
+      type: "donut",
+      height: 350
+    },
+    series: ${JSON.stringify(data?.overview?.comparison_evaluation_status_counts)},
+    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    colors: [
+      "#388AEB",
+      "#54CA6E",
+      "#E7C200",
+      "#E1654A",
+      "#212427"
+    ],
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            name: {
+              show: true,
+              fontSize: "24px",
+              fontWeight: 600,
+              offsetY: 10
+            },
+            value: {
+              show: false
+            },
+            total: {
+              show: true,
+              label: "${data?.overview?.comparison_evaluation_status_counts?.reduce(
+                (accumulator, currentValue) => accumulator + currentValue,
+                0
+              )} Evaluations",
+              fontSize: "24px",
+              fontWeight: 600,
+              fontFamily: "Poppins",
+              color: "#909193"
+            }
+          }
+        }
+      }
+    },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins"
+      }
+    },
+    legend: {
+      position: "right",
+      offsetY: 50,
+      fontSize: "16px",
+      fontWeight: "400",
+      fontFamily: "Poppins",
+      labels: {
+        colors: "#212427",
+        useSeriesColors: false
+      },
+      markers: {
+        width: 10,
+        height: 10,
+        radius: 5
+      }
+    },
+    dataLabels: {
+      enabled: true
+    }
+  };
+  const chart1 = new ApexCharts(document.querySelector("#piechart1"), donutOptionOne);
+  const chart2Donut = new ApexCharts(document.querySelector("#piechart2"), donutOptionTwo);
+  const chart3 = new ApexCharts(document.querySelector("#piechart3"), donutOptionThree);
+  const chart4 = new ApexCharts(document.querySelector("#piechart4"), donutOptionFour);
 
-}
- var chart = new ApexCharts(document.querySelector("#barchart"), options);
- var chart2= new ApexCharts(document.querySelector("#barchart2"), updateOption);
- let series =  [60, 20, 20]
- 
- chart.render();
- chart2.render();
-
- const donutOption = {
- chart: {
-   type: "donut",
-   height: 350,
- },
- series: series,
- labels: ['Passed', 'Mixed Results', 'Failed'],
- colors: [
-   "#54CA6E",
-   "#E7C200",
-   "#E1654A"
- ],
- plotOptions: {
-   pie: {
-     donut: {
-       labels: {
-         show: true,
-         name: {
-           show: true,
-           fontSize: "24px",
-           fontWeight: 600,
-           offsetY: 10,
-         },
-         value: {
-           show: false,
-         },
-       total: {
-             show: true,
-             label:[60, 20, 20],
-             fontSize: "24px",
-             fontWeight: 600,
-             fontFamily: "Poppins",
-             color: "#909193",
-           },
-       },
-     },
-   },
- },
- tooltip: {
-   enabled: true,
-   style: {
-     fontFamily: "Poppins",
-   },
- },
- legend: {
-   position: "right",
-   offsetY: 50,
-   fontSize: "16px",
-   fontWeight: "400",
-   fontFamily: "Poppins",
-   labels: {
-     colors: "#212427",
-     useSeriesColors: false,
-   },
-   markers: {
-     width: 10,
-     height: 10,
-     radius: 5,
-   },
-   formatter: function (seriesName, opts) {
-   },
- },
- dataLabels: {
-   enabled: true,
-   
- },
-};
-
-var chart1 = new ApexCharts(document.querySelector("#piechart1"), donutOption);
-var chart2 = new ApexCharts(document.querySelector("#piechart2"), donutOption);
-var chart3 = new ApexCharts(document.querySelector("#piechart3"), donutOption);
-var chart4 = new ApexCharts(document.querySelector("#piechart4"), donutOption);
-
-chart1.render();
-chart2.render();
-chart3.render();
-chart4.render();
-
-
- 
-
-
- </script>
+  chart1.render();
+  chart2Donut.render();
+  chart3.render();
+  chart4.render();
+</script>
   
 </body>
 </html>
