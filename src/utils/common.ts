@@ -582,14 +582,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "'Poppins', sans-serif",
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "Poppins",
+          fontFamily: "'Poppins', sans-serif",
           fontWeight: 600
         }
       },
@@ -599,7 +599,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: "poppins"
+        fontFamily: "'Poppins', sans-serif",
+
       }
     },
     yaxis: {
@@ -610,14 +611,16 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "'Poppins', sans-serif",
+
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "Poppins",
+          fontFamily: "'Poppins', sans-serif",
+
           fontWeight: 600
         }
       },
@@ -671,14 +674,16 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "'Poppins', sans-serif",
+
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "Poppins",
+          fontFamily: "'Poppins', sans-serif",
+
           fontWeight: 600
         }
       },
@@ -688,7 +693,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: "poppins"
+        fontFamily: "'Poppins', sans-serif",
+
       }
     },
     yaxis: {
@@ -699,14 +705,16 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "'Poppins', sans-serif",
+
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "Poppins",
+          fontFamily: "'Poppins', sans-serif",
+
           fontWeight: 600
         }
       },
@@ -771,7 +779,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
               )} Tests", 
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "Poppins",
+              fontFamily: "'Poppins', sans-serif",
+
               color: "#909193"
             }
           }
@@ -781,7 +790,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "Poppins"
+        fontFamily: "'Poppins', sans-serif",
+
       }
     },
     legend: {
@@ -789,7 +799,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "Poppins",
+      fontFamily: "'Poppins', sans-serif",
+
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -840,7 +851,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
               )} Tests",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "Poppins",
+              fontFamily: "'Poppins', sans-serif",
+
               color: "#909193"
             }
           }
@@ -850,7 +862,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "Poppins"
+        fontFamily: "'Poppins', sans-serif",
+
       }
     },
     legend: {
@@ -858,7 +871,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "Poppins",
+      fontFamily: "'Poppins', sans-serif",
+
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -909,7 +923,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
               )} Evaluations",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "Poppins",
+              fontFamily: "'Poppins', sans-serif",
+
               color: "#909193"
             }
           }
@@ -919,7 +934,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "Poppins"
+        fontFamily: "'Poppins', sans-serif",
+
       }
     },
     legend: {
@@ -927,7 +943,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "Poppins",
+      fontFamily: "'Poppins', sans-serif",
+
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -978,7 +995,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
               )} Evaluations",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "Poppins",
+              fontFamily: "'Poppins', sans-serif",
               color: "#909193"
             }
           }
@@ -988,7 +1005,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "Poppins"
+        fontFamily: "'Poppins', sans-serif",
       }
     },
     legend: {
@@ -996,7 +1013,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "Poppins",
+      fontFamily: "'Poppins', sans-serif",
       labels: {
         colors: "#212427",
         useSeriesColors: false
