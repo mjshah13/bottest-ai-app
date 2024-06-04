@@ -274,7 +274,7 @@ export const printReport = (
     <div class="container">
         <div class="header">
             <div>
-            <img src="./Assets/Logo.svg" alt="Logo">
+            <img src="/Assets/Logo.svg" alt="Logo">
 
             </div>
             <div>
