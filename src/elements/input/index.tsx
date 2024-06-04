@@ -2,6 +2,7 @@
 
 import { TextField } from "@radix-ui/themes";
 import React, { useState } from "react";
+import LoadingSpin from "react-loading-spin";
 
 type InputType = "text" | "password" | "email" | "number";
 type ResponsiveSize = "1" | "2" | "3";
@@ -15,6 +16,7 @@ interface InputProps {
   disabled?: boolean;
   value?: string;
   name?: string;
+  isLoader?: boolean;
 }
 
 const CustomInput: React.FC<InputProps> = ({
@@ -27,6 +29,7 @@ const CustomInput: React.FC<InputProps> = ({
   disabled,
   value,
   name,
+  isLoader = false,
 }) => {
   const [inputType, setInputType] = useState<InputType>(type);
 
@@ -38,7 +41,7 @@ const CustomInput: React.FC<InputProps> = ({
         </label>
       )}
       <TextField.Root
-        className={`${className && className} font-poppin`}
+        className={`${className && className} font-poppin  `}
         size={size}
         type={type === "password" ? inputType : type}
         onChange={(e) => onChange && onChange(e.target.value)}
@@ -47,7 +50,17 @@ const CustomInput: React.FC<InputProps> = ({
         value={value}
         name={name}
       >
-        <TextField.Slot className="font-poppins"></TextField.Slot>
+        <TextField.Slot className="font-poppins "></TextField.Slot>
+        {isLoader && (
+          <div className="flex items-center pr-1">
+            <LoadingSpin
+              size="19px"
+              primaryColor="#388aeb"
+              secondaryColor="#dde4ee"
+              width={"3px"}
+            />
+          </div>
+        )}
       </TextField.Root>
     </div>
   );

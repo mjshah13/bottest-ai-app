@@ -1,5 +1,6 @@
 import { filter } from "lodash";
 import { AnalyticsReportType, Test, TestType } from "./typesInterface";
+import moment from "moment";
 
 export const ROOT_API_URL = `https://kkhcslhnef.execute-api.us-east-1.amazonaws.com/`;
 
@@ -252,6 +253,9 @@ export const printReport = (
      margin-bottom: 2rem;
      background-color: red;
    }
+   .font-bold{
+    font-weight: 600;
+   }
    .list-pt{
     padding: 0;
     padding-left: 1rem !important; 
@@ -276,12 +280,12 @@ export const printReport = (
             <div>
                 <h1 class="title">${
                   data?.suite_name
-                } Suite Run <span class="small-text">(Executed on ${
+                } Suite Run <span class="small-text">(Executed on ${moment(
   data?.suite_run_timestamp
-})</span></h1>  
-                <h2 class="subtitle">Comparison Suite Run: ${
-                  data?.comparison_run_timestamp
-                }</h2>
+).format("D MMM YYYY, h:mm A")} PST)</span></h1>  
+                <h2 class="subtitle">Comparison Suite Run: ${moment(
+                  data?.suite_run_timestamp
+                ).format("D MMM YYYY, h:mm A")} PST</h2>
             </div>
         </div>
 
@@ -332,13 +336,15 @@ export const printReport = (
                     ${data?.overview?.total_variant_count} Variants, and
                     ${data?.overview?.total_evaluation_count} Evaluations were
                     included in this Suite run.</li>
-                    <li class="list-item"><span class="highlight">${
-                      data?.overview?.test_pass_rate !== undefined &&
-                      data?.overview?.test_pass_rate.toFixed(1)
-                    }%
+                    <li class="list-item"><span class="highlight">${data?.overview?.test_pass_rate?.toFixed(
+                      2
+                    )}%
                     of Tests passed</span>  fully (with no failures), <span class="highlight">up ${data?.overview?.delta_test_pass_rate.toFixed(
                       1
-                    )}%</span> the <span class="highlight-blue">26 Jan 2024 Production Run.</span> </li>
+                    )}%</span> the <span class="highlight-blue">26 ${
+  data?.comparison_run_name ? data?.comparison_run_name : data?.suite_name
+}
+                    Run.</span> </li>
 
                 </ul>
             </p>
@@ -366,14 +372,17 @@ export const printReport = (
                 <ul class="list-pt">
                     <li class="list-item">Out of the <span class="highlight-dark">${
                       data?.overview?.total_evaluation_count
-                    }</span> Evaluations performed, <span class="highlight">${data?.overview?.evaluation_pass_rate.toFixed(
+                    }</span> Evaluations performed, <span class="highlight">${(
+  (data?.overview?.total_evaluation_count || 0) *
+  (data?.overview?.evaluation_pass_rate || 0)
+).toFixed(1)} Evaluations (${data?.overview?.evaluation_pass_rate.toFixed(
   1
-)} Evaluations (${(
-  ((data?.overview?.evaluation_pass_rate ?? 0) * 100) /
-  (data?.overview?.total_evaluation_count ?? 1)
-).toFixed(
-  1
-)}%) passed, up 1%</span> from the <span class="highlight-blue">26 Jan 2024 Production Run.</span> </li>
+)}%) passed, up ${data?.overview?.delta_evaluation_pass_rate.toFixed(
+  0
+)}%</span> from the <span class="highlight-blue font-bold">${
+  data?.comparison_run_name ? data?.comparison_run_name : data?.suite_name
+}
+Run.</span> </li>
 
                 </ul>
               
@@ -402,7 +411,11 @@ export const printReport = (
             <h2>Improvements</h2>
             <p class="content">
                 <ul class="list">
-                    <li class="list-item">The following Tests saw a <span class="highlight">higher pass rate</span> as compared to the <span class="highlight-blue">26 Jan 2024 Production Run:</span> </li>
+                    <li class="list-item">The following Tests saw a <span class="highlight">higher pass rate</span> as compared to the <span class="highlight-blue">${
+                      data?.comparison_run_name
+                        ? data?.comparison_run_name
+                        : data?.suite_name
+                    } Run:</span> </li>
 
                 </ul>
                 
@@ -477,7 +490,11 @@ export const printReport = (
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
-                The average Test completion time was <span class="highlight-dark">50.6</span>  seconds, which is <span class="highlight">13% faster</span> as compared to the <span class="highlight-blue">26 Jan 2024 Production Run.</span> 
+                The average Test completion time was <span class="highlight-dark">${data?.performance?.average_run_time.toFixed(
+                  1
+                )}</span>  seconds, which is <span class="highlight">13% faster</span> as compared to the <span class="highlight-blue font-bold">${
+  data?.comparison_run_name ? data?.comparison_run_name : data?.suite_name
+} Run</span> 
                     </li>
 
                 </ul>
@@ -505,7 +522,11 @@ export const printReport = (
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
-                The following Tests had an average run time that was <span class="highlight-red">>10% slower</span> compared to the <span class="highlight-blue">26 Jan 2024 Production Run:</span> 
+                The following Tests had an average run time that was <span class="highlight-red">>10% slower</span> compared to the <span class="highlight-blue font-bold">${
+                  data?.comparison_run_name
+                    ? data?.comparison_run_name
+                    : data?.suite_name
+                } Run:</span> 
 
                     </li>
 
@@ -621,7 +642,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "Poppins",
         }
       },
       labels: {
@@ -638,7 +659,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: "poppins"
+        fontFamily: "Poppins",
       }
     },
     yaxis: {
@@ -649,7 +670,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "Poppins",
         }
       },
       labels: {
@@ -710,7 +731,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "Poppins",
         }
       },
       labels: {
@@ -727,7 +748,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: "poppins"
+        fontFamily: "Poppins",
       }
     },
     yaxis: {
@@ -738,7 +759,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins"
+          fontFamily: "Poppins",
         }
       },
       labels: {

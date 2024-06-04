@@ -34,7 +34,7 @@ const useAnalyticsReport = () => {
         setLoading(false);
       }
     },
-    [user, organization]
+    [user?.id, organization?.id]
   );
 
   return { error, fetchAnalyticsReport, loading, data };

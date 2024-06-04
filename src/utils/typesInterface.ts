@@ -233,6 +233,7 @@ export interface AnalyticsReportType {
   suite_run_id: string;
   suite_run_timestamp: string;
   comparison_run_id: string;
+  comparison_run_name: string;
   comparison_run_timestamp: string;
   suite_name: string;
   tests: Test[];
@@ -329,6 +330,7 @@ export interface BoxDataType {
 
 export interface PerformanceChartDataType {
   boxes: BoxDataType[];
+  timestamps: string[];
 }
 interface BillingTier {
   name: string;

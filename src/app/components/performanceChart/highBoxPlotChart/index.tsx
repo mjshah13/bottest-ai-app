@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import { BoxDataType } from "../../../../utils/typesInterface";
+import {
+  BoxDataType,
+  PerformanceChartDataType,
+} from "../../../../utils/typesInterface";
+import moment from "moment";
 
 interface HighBoxPlotChartProps {
-  highBoxPlotData: BoxDataType[];
+  highBoxPlotData: PerformanceChartDataType | null;
 }
 
 const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
@@ -61,17 +65,19 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     if (highBoxPlotData) {
       const boxPlotSeries = {
         type: "boxPlot",
-        data: highBoxPlotData.map((item, index) => ({
-          x: item?.suite_run_name,
+
+        data: highBoxPlotData.boxes.map((item, index) => ({
+          x: new Date(highBoxPlotData.timestamps[index]).getTime(),
           y: item.values.map((value) => Math.round(value)),
         })),
       };
 
       const scatterSeries = {
         type: "scatter",
-        data: highBoxPlotData.flatMap((item) =>
-          item.outliers.map((outlier) => ({
-            x: item?.suite_run_name,
+        name: "outlier",
+        data: highBoxPlotData?.boxes?.flatMap((item) =>
+          item.outliers.map((outlier, index) => ({
+            x: new Date(highBoxPlotData.timestamps[index]).getTime(),
             y: outlier,
           }))
         ),
@@ -85,12 +91,12 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     setOptions((prevOptions) => ({
       ...prevOptions,
       xaxis: {
-        overwriteCategories: highBoxPlotData?.map(
-          (item) => `${item?.suite_run_name}`
-        ),
+        overwriteCategories: highBoxPlotData?.timestamps.map((timestamp) => {
+          return moment(timestamp).format("DD MMM");
+        }),
       },
     }));
-  }, []);
+  }, [highBoxPlotData]);
 
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
@@ -100,8 +106,12 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     },
     colors: ["transparent", "transparent"],
     xaxis: {
+      type: "datetime",
       overwriteCategories: [],
       labels: {
+        formatter: function (value: string): string {
+          return moment(value).format("DD MMM");
+        },
         style: {
           fontSize: "11px",
           fontFamily: "Poppins",
@@ -118,7 +128,7 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
         },
       },
       min: 1,
-      max: 520,
+      max: 550,
       labels: {
         formatter: function (val: number) {
           return Math.round(val).toString();
@@ -140,6 +150,11 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     tooltip: {
       shared: false,
       intersect: true,
+      x: {
+        formatter: function (val: number) {
+          return moment(val).format("DD MMM YYYY");
+        },
+      },
     },
     legend: {
       show: false,

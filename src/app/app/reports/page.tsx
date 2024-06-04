@@ -23,11 +23,20 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import moment from "moment";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useOrganization } from "@clerk/nextjs";
+import { useOrganization, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import CustomSelect from "../../../elements/select";
+import useAnalyticsReport from "../../../hooks/useAnalyticsReport";
+import usePDF from "../../../hooks/usePdF";
 
 const Reports = () => {
+  const { user } = useUser();
+  const { generatePDF } = usePDF();
+  const {
+    fetchAnalyticsReport,
+    data,
+    loading: isLoading,
+  } = useAnalyticsReport();
   const { organization } = useOrganization();
   const router = useRouter();
   const [containerHeight, setContainerHeight] = useState(0);
@@ -117,6 +126,16 @@ const Reports = () => {
     setSelectedSuite(null);
     setSelectedEnvironment(null);
   }, [organization?.id]);
+
+  useEffect(() => {
+    if (!data) return;
+    generatePDF(data);
+  }, [data]);
+
+  // useEffect(() => {
+  //   if (!suitesData) return;
+  //   fetchAnalyticsReport(suiteRunID as string);
+  // }, [user?.id, suiteRunID]);
 
   return (
     <div className="h-[95vh] flex flex-col">
@@ -335,13 +354,15 @@ const Reports = () => {
                         <Table.Cell className="border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                           <div className="flex justify-center w-[48px]">
                             <button
-                              onClick={() =>
-                                router.push(
-                                  `/analytics-reports?suite_run_id=${
-                                    data?.id
-                                  }&isPdf=${true}`
-                                )
-                              }
+                              disabled={isLoading}
+                              onClick={() => {
+                                fetchAnalyticsReport(data?.id);
+                                // router.push(
+                                //   `/analytics-reports?suite_run_id=${
+                                //     data?.id
+                                //   }&isPdf=${true}`
+                                // );
+                              }}
                             >
                               <Download
                                 size={16}

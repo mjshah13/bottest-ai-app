@@ -1,14 +1,16 @@
 "use client";
 
 import { Box, Grid, Table } from "@radix-ui/themes";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import useAnalyticsReport from "../../hooks/useAnalyticsReport";
 import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import usePDF from "../../hooks/usePDF";
+
+import moment from "moment";
+
 const PerformanceDistributionChart = dynamic(
   () => import("../components/PerformanceDistributionChart"),
   { ssr: false }
@@ -20,28 +22,21 @@ const OverViewResultChart = dynamic(
 );
 
 const AnalyticsReports = () => {
+  const { user } = useUser();
   const [highlightTests, sethighlightTests] = useState<number | null>(null);
   const [highlightEvaluation, setHighlightEvaluation] = useState<number | null>(
     null
   );
   const router = useRouter();
   const { fetchAnalyticsReport, data, loading } = useAnalyticsReport();
-  const { generatePDF } = usePDF();
   const searchParams = useSearchParams();
   const suiteRunID = searchParams && searchParams.get("suite_run_id");
-  const isPdf = searchParams && searchParams.get("isPdf");
-  const { user } = useUser();
+
   useEffect(() => {
     if (!suiteRunID) return;
     fetchAnalyticsReport(suiteRunID as string);
   }, [user?.id, suiteRunID]);
 
-  useEffect(() => {
-    if (isPdf) {
-      if (!data) return;
-      generatePDF(data);
-    }
-  }, [data]);
   return (
     <>
       <div
@@ -65,24 +60,21 @@ const AnalyticsReports = () => {
             <h1 className="text-[35px] font-poppin font-bold text-black">
               {`${data?.suite_name} Suite Run`} {""}
               <span className="text-intermediate font-bold text-[20px]">
-                {`Executed on ${data?.suite_run_timestamp}`}
+                {`Executed on ${moment(data?.suite_run_timestamp).format(
+                  "D MMM YYYY, h:mm A"
+                )} PST`}
               </span>
             </h1>
             <h2 className="text-[24px] text-[#909193] font-semibold  font-poppins pb-8">
-              {`Comparison Suite Run: ${data?.comparison_run_timestamp}`}
+              {`Comparison Suite Run: ${moment(
+                data?.comparison_run_timestamp
+              ).format("D MMM YYYY, h:mm A")} PST`}
             </h2>
             <p className="text-[16px] text-black font-semibold font-poppin  pb-6">
               The following Tests were executed and evaluated in the Suite Run:
             </p>
 
-            <Table.Root
-              style={{
-                borderLeft: "1px solid #f0f0f0",
-                borderRight: "1px solid #f0f0f0",
-                borderTop: "1px solid #f0f0f0",
-              }}
-              size={"2"}
-            >
+            <Table.Root variant="surface" size={"2"}>
               <Table.Header
                 style={{
                   backgroundColor: "#fdfcfa",
@@ -216,14 +208,20 @@ const AnalyticsReports = () => {
                 </li>
                 <li className="text-[16px] text-black font-normal leading-6 font-poppin">
                   <span className="text-success">
-                    {data?.overview?.test_pass_rate !== undefined &&
-                      (Math.round(data?.overview?.test_pass_rate) * 100) / 100}
-                    % of Tests passed
+                    {data?.overview?.test_pass_rate?.toFixed(2)}% of Tests
+                    passed
                   </span>{" "}
                   fully (with no failures),
-                  <span className="text-success"> up 4%</span> the{" "}
+                  <span className="text-success">
+                    {" "}
+                    up {data?.overview?.delta_test_pass_rate.toFixed(1)}%
+                  </span>{" "}
+                  the{" "}
                   <span className="text-secondary">
-                    26 Jan 2024 Production Run.
+                    {data?.comparison_run_name
+                      ? data?.comparison_run_name
+                      : data?.suite_name}{" "}
+                    Run.
                   </span>
                 </li>
               </ul>
@@ -276,22 +274,28 @@ const AnalyticsReports = () => {
               <div className="pt-14 pb-8">
                 <ul className="list-disc ps-6">
                   <li className="text-[16px] text-black font-normal leading-6 font-poppin">
-                    Out of the <span className="font-bold">110</span>{" "}
+                    Out of the{" "}
+                    <span className="font-bold">
+                      {data?.overview?.total_evaluation_count}
+                    </span>{" "}
                     Evaluations performed,
                     <span className="text-success font-bold">
                       {" "}
-                      {data?.overview?.total_evaluation_count} Evaluations{" "}
-                      {`(${
-                        data?.overview?.evaluation_pass_rate !== undefined &&
-                        (Math.round(data?.overview?.evaluation_pass_rate) *
-                          100) /
-                          100
-                      }%)`}{" "}
-                      passed, up 1%{" "}
+                      {(
+                        (data?.overview?.total_evaluation_count || 0) *
+                        (data?.overview?.evaluation_pass_rate || 0)
+                      ).toFixed(1)}{" "}
+                      Evaluations{" "}
+                      {`(${data?.overview?.evaluation_pass_rate.toFixed(1)}%)`}{" "}
+                      passed, up{" "}
+                      {data?.overview?.delta_evaluation_pass_rate.toFixed(0)}%{" "}
                     </span>
                     from the{" "}
                     <span className="text-secondary font-bold">
-                      26 Jan 2024 Production Run.
+                      {data?.comparison_run_name
+                        ? data?.comparison_run_name
+                        : data?.suite_name}{" "}
+                      Run.
                     </span>
                   </li>
                 </ul>
@@ -354,18 +358,22 @@ const AnalyticsReports = () => {
                     <span className="text-success"> higher pass rate</span> as
                     compared to the{" "}
                     <span className="text-secondary">
-                      26 Jan 2024 Production Run:
+                      {data?.comparison_run_name
+                        ? data?.comparison_run_name
+                        : data?.suite_name}{" "}
+                      Run:
                     </span>
                   </li>
                 </ul>
               </div>
               <div className="pt-8">
                 <Table.Root
-                  style={{
-                    borderLeft: "1px solid #f0f0f0",
-                    borderRight: "1px solid #f0f0f0",
-                    borderTop: "1px solid #f0f0f0",
-                  }}
+                  variant="surface"
+                  // style={{
+                  //   borderLeft: "1px solid #f0f0f0",
+                  //   borderRight: "1px solid #f0f0f0",
+                  //   borderTop: "1px solid #f0f0f0",
+                  // }}
                   size={"2"}
                 >
                   <Table.Header
@@ -462,11 +470,12 @@ const AnalyticsReports = () => {
               </div>
               <div className="pt-8">
                 <Table.Root
-                  style={{
-                    borderLeft: "1px solid #f0f0f0",
-                    borderRight: "1px solid #f0f0f0",
-                    borderTop: "1px solid #f0f0f0",
-                  }}
+                  variant="surface"
+                  // style={{
+                  //   borderLeft: "1px solid #f0f0f0",
+                  //   borderRight: "1px solid #f0f0f0",
+                  //   borderTop: "1px solid #f0f0f0",
+                  // }}
                   size={"2"}
                 >
                   <Table.Header
@@ -563,9 +572,19 @@ const AnalyticsReports = () => {
                 <ul className="list-disc ps-6">
                   <li className="text-[16px] text-black font-normal leading-6 font-poppin">
                     The average Test completion time was{" "}
-                    <span className="font-black"> 50.6</span> seconds, which is
+                    <span className="font-black">
+                      {" "}
+                      {data?.performance?.average_run_time.toFixed(1)}
+                    </span>{" "}
+                    seconds, which is
                     <span className="text-success"> 13% faster</span> as
-                    compared to the 26 Jan 2024 Production Run
+                    compared to the{" "}
+                    <span className="text-secondary font-bold">
+                      {data?.comparison_run_name
+                        ? data?.comparison_run_name
+                        : data?.suite_name}{" "}
+                      Run
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -617,19 +636,23 @@ const AnalyticsReports = () => {
                     </span>{" "}
                     compared to the{" "}
                     <span className="text-secondary font-bold">
-                      26 Jan 2024 Production Run
+                      {data?.comparison_run_name
+                        ? data?.comparison_run_name
+                        : data?.suite_name}{" "}
+                      Run:
                     </span>
                   </li>
                 </ul>
               </div>
               <div className="pt-8">
                 <Table.Root
-                  style={{
-                    // border: "1px solid #f0f0f0",
-                    borderLeft: "1px solid #f0f0f0",
-                    borderRight: "1px solid #f0f0f0",
-                    borderTop: "1px solid #f0f0f0",
-                  }}
+                  // style={{
+                  //   // border: "1px solid #f0f0f0",
+                  //   borderLeft: "1px solid #f0f0f0",
+                  //   borderRight: "1px solid #f0f0f0",
+                  //   borderTop: "1px solid #f0f0f0",
+                  // }}
+                  variant="surface"
                   size={"2"}
                 >
                   <Table.Header

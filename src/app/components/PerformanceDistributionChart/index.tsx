@@ -36,7 +36,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins",
+          fontFamily: "Poppins",
         },
       },
 
@@ -58,7 +58,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
         },
       },
       style: {
-        fontFamily: "poppins",
+        fontFamily: "Poppins",
       },
     },
     yaxis: {
@@ -69,7 +69,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "poppins",
+          fontFamily: "Poppins",
         },
       },
       labels: {

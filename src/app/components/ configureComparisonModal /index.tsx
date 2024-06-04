@@ -42,7 +42,8 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
     GlobalStateContext
   ) as GlobalStateType;
   const { updateSuite } = useUpdateSuite();
-  const { fetchSpecificSuiteRuns, error, setError } = useSpecificSuiteRun();
+  const { fetchSpecificSuiteRuns, error, setError, isLoading, success } =
+    useSpecificSuiteRun();
   const { fetchSpecificSuite, setSpecificSuiteData, specificSuiteData } =
     useSpecificSuite();
 
@@ -227,12 +228,17 @@ const ConfigureComparisonModal: React.FC<ModalProps> = ({
                   </p>
 
                   <CustomInput
+                    isLoader={isLoading}
                     value={specificSuiteData?.reporting_comparison_suite_run_id}
                     className={`dark:bg-transparent h-[32px] ${
                       error
                         ? " outline-none focus:border-none border border-danger text-danger"
                         : null
-                    }  `}
+                    } ${
+                      success
+                        ? " outline-none border border-success focus:border-none  "
+                        : null
+                    } `}
                     onChange={(val) => {
                       handleInputChange(val);
                     }}
