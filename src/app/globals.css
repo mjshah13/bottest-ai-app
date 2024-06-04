@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 .rt-SelectTrigger:where(.rt-variant-surface):where(:disabled) {
   background-color: #fff !important;
 }
@@ -73,6 +81,143 @@
 .bot_textarea::-webkit-scrollbar-thumb {
   background-color: #8e8e8d !important; /* scrollbar thumb color */
   border-radius: 4px !important; /* scrollbar thumb border radius */
+}
+
+#app-header {
+  /* transition: background-color 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    box-shadow 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    max-width 1s cubic-bezier(0.6, 0.6, 0, 1),
+    top 1s cubic-bezier(0.6, 0.6, 0, 1), padding 1s cubic-bezier(0.6, 0.6, 0, 1); */
+  transition: all 500ms ease-in-out;
+}
+
+#app-header.scrolled {
+  top: 10px !important;
+  max-width: 996px !important;
+  box-shadow: 0 0 2px #5f4a2e14, 0 3px 3px #5f4a2e0a, 0 5px 6px #5f4a2e0a,
+    0 20px 32px -12px #5f4a2e14;
+  border-radius: 10px;
+  padding: 15px 24px !important;
+}
+
+#app-header.scrolled .mobile-divider {
+  width: 0;
+}
+
+.mobile-divider {
+  width: 0;
+}
+
+#app-header.scrolled .logo-img {
+  position: relative;
+  width: 32px !important;
+}
+#app-header.scrolled .nav-wrapper::after {
+  content: "";
+  position: absolute;
+  left: -33px;
+  height: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  background: #00000050;
+}
+
+@media (max-width: 1024px) {
+  #app-header.scrolled .nav-wrapper::after {
+    left: -20px;
+  }
+}
+
+.header-signup-btn {
+  background: linear-gradient(93.32deg, #4596f5 0%, #176fd6 101.05%);
+}
+
+.mobile-nav-footer > a,
+.mobile-nav-footer > button {
+  box-shadow: 0 1px 2px #d1cdc780, 0 3px 3px #d1cdc74d, 0 -2px #f0f0ef inset,
+    0 0 0 1px #f0f0ef;
+  transition: background-color 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    box-shadow 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    transform 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    opacity 0.45s cubic-bezier(0.6, 0.6, 0, 1);
+}
+
+.mobile-nav-footer > a.signup {
+  box-shadow: 0 1px 1px #388aeb1f, 0 1.50259px 3px #388aeb3d,
+    0 4px 8px #388aeb52, 0 12px 24px -6px #388aeb66, 0 -2px #388aeb inset;
+}
+
+.item-wrapper {
+  transition: background-color 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    transform 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    opacity 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    filter 0.45s cubic-bezier(0.6, 0.6, 0, 1);
+}
+
+.mobile-header-item.opened:nth-child(1) > .item-wrapper {
+  transition-delay: 0.25s;
+}
+
+.mobile-header-item.opened:nth-child(2) > .item-wrapper {
+  transition-delay: 0.3s;
+}
+
+.mobile-header-item.opened:nth-child(3) > .item-wrapper {
+  transition-delay: 0.35s;
+}
+
+.mobile-header-item.opened:nth-child(4) > .item-wrapper {
+  transition-delay: 0.4s;
+}
+
+.mobile-header-item.opened:nth-child(5) > .item-wrapper {
+  transition-delay: 0.45s;
+}
+
+.lottie-wrapper > div {
+  cursor: default !important;
+}
+
+.howitwork-card {
+  box-shadow: 18px 14px 29.7px 0px #5683b81a;
+}
+
+.btn-gradient {
+  background: linear-gradient(93.32deg, #4596f5 0%, #176fd6 101.05%);
+}
+
+.learn-more-card {
+  background: linear-gradient(180deg, #f3f8fc 0%, #cbe3f8 100%);
+}
+
+.contact-card {
+  box-shadow: 18px 14px 29.7px 0px #5683b81a;
+}
+
+.bg-pricing-card {
+  background: linear-gradient(180deg, #f3f8fc 0%, #cbe3f8 100%);
+}
+
+.vertical-rl {
+  writing-mode: unset;
+  transform: rotate(0deg);
+}
+
+@media screen and (max-width: 768px) {
+  .vertical-rl {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #app-header.scrolled {
+    padding: 8px 24px;
+  }
+  #app-header.scrolled .mobile-divider {
+    width: 2px;
+  }
 }
 
 .cl-internal-1eekank {

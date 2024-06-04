@@ -38,6 +38,7 @@ export interface BottestReportProps {
   lastTestRuns?: TestType[];
   loading?: boolean;
   specificTest: TestType;
+  stubbed: boolean;
 }
 
 export interface BotType {

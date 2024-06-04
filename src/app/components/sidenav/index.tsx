@@ -146,7 +146,7 @@ const Sidenav = () => {
                       width={148}
                       height={32}
                       className="h-8 w-auto"
-                      src="/Assets/Logo.svg"
+                      src="/assets/Logo.svg"
                       alt="Your Company"
                     />
                   </div>
@@ -220,7 +220,7 @@ const Sidenav = () => {
               width={148}
               height={32}
               className="h-8 w-auto"
-              src="/Assets/Logo.svg"
+              src="/assets/Logo.svg"
               alt="Your Company"
             />
           </div>

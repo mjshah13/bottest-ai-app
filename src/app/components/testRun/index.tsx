@@ -17,6 +17,7 @@ const TestRun = ({
   lastTestRuns,
   loading,
   specificTest,
+  stubbed = false,
 }: BottestReportProps) => {
   const { backgroundColor, text, icon } = getBackgroundColorClass(
     specificTest?.status
@@ -80,31 +81,31 @@ const TestRun = ({
               ) : (
                 <>
                   {lastTestRuns?.map((item, index) => (
-                    <>
+                    <div key={item.id}>
                       <Tooltip.Provider skipDelayDuration={100}>
                         <Tooltip.Root delayDuration={100}>
                           <Tooltip.Trigger asChild>
                             <div
                               onClick={() => {
+                                if (stubbed) { return; }
                                 setId(item?.id), setIsTestResultModal(true);
                               }}
                               key={index}
                               className={`w-4 h-4 lg:w-3 lg:h-3 xl:h-4 xl:w-4 rounded-full font-poppin cursor-pointer hover:border hover:border-[#388aeb]
-                      ${
-                        item?.status === "Pass"
-                          ? "bg-success"
-                          : item?.status === "Mixed"
-                          ? "bg-[#E7C200]"
-                          : item?.status === "Fail" || item?.status === "Error"
-                          ? "bg-danger"
-                          : item?.status === "Running"
-                          ? "bg-[#388aeb]"
-                          : item?.status === "Skipped"
-                          ? "bg-[#212427]"
-                          : item?.status === "Stopped"
-                          ? "bg-[#212427]"
-                          : ""
-                      }`}
+                      ${item?.status === "Pass"
+                                  ? "bg-success"
+                                  : item?.status === "Mixed"
+                                    ? "bg-[#E7C200]"
+                                    : item?.status === "Fail" || item?.status === "Error"
+                                      ? "bg-danger"
+                                      : item?.status === "Running"
+                                        ? "bg-[#388aeb]"
+                                        : item?.status === "Skipped"
+                                          ? "bg-[#212427]"
+                                          : item?.status === "Stopped"
+                                            ? "bg-[#212427]"
+                                            : ""
+                                }`}
                             />
                           </Tooltip.Trigger>
                           <Tooltip.Portal>
@@ -118,7 +119,7 @@ const TestRun = ({
                           </Tooltip.Portal>
                         </Tooltip.Root>
                       </Tooltip.Provider>
-                    </>
+                    </div>
                   ))}
                 </>
               )}
@@ -161,13 +162,13 @@ const TestRun = ({
                     {specificTest?.status}
                   </h1>
                   <h1
-                    className={`text-[#909193] ${
-                      text === "View full result" &&
+                    className={`text-[#909193] ${text === "View full result" &&
                       "font-semibold text-black hover:underline dark:hover:underline dark:text-white "
-                    }  font-poppin text-sm`}
+                      }  font-poppin text-sm`}
                   >
                     <button
                       onClick={() => {
+                        if (stubbed) { return; }
                         setId(specificTest?.testRunId),
                           setIsTestResultModal(true);
                       }}
@@ -189,7 +190,7 @@ const TestRun = ({
                     <button className="outline-none border-none bg-transparent">
                       <Cog6ToothIcon
                         className="h-9 w-9 text-black hover:text-[#388aeb] dark:hover:text-[#388aeb] dark:text-white"
-                        onClick={() => setIsCustomizeTestModal(true)}
+                        onClick={() => { if (stubbed) { return; } setIsCustomizeTestModal(true) }}
                       />
                     </button>
                   </Tooltip.Trigger>

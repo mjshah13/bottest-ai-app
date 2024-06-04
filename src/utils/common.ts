@@ -1,6 +1,7 @@
 import { filter } from "lodash";
 import { AnalyticsReportType, Test, TestType } from "./typesInterface";
 import moment from "moment";
+import { Wrench, Map, KeyRound, Database } from "lucide-react";
 
 export const ROOT_API_URL = `https://kkhcslhnef.execute-api.us-east-1.amazonaws.com/`;
 
@@ -1082,3 +1083,374 @@ doc.internal.pageSize.setHeight(desiredHeight);
 </body>
 </html>
 			`;
+export const homeNavData = [
+  {
+    label: "Product",
+    sub: [
+      {
+        label: "How it works",
+        link: "/product/how-it-works",
+      },
+      {
+        label: "Architecture",
+        link: "/product/architecture",
+      },
+      {
+        label: "Key Concepts",
+        link: "/product/concepts",
+      },
+      {
+        label: "Deployment Options",
+        link: "/product/deployment",
+      },
+    ],
+  },
+  {
+    label: "Solutions",
+    sub: [
+      {
+        label: "Regression Testing",
+        link: "/solutions/regression",
+      },
+      {
+        label: "Performance Testing",
+        link: "/solutions/performance",
+      },
+      {
+        label: "Adversarial Testing",
+        link: "/solutions/adversarial",
+      },
+      {
+        label: "Multi-Language Testing",
+        link: "/solutions/multi-language",
+      },
+      {
+        label: "AI-Powered Coverage",
+        link: "/solutions/ai-powered",
+      },
+    ],
+  },
+  {
+    label: "Pricing",
+    link: "/pricing",
+  },
+  {
+    label: "Resources",
+    sub: [
+      {
+        label: "Demos",
+        link: "#",
+      },
+      {
+        label: "Q&A",
+        link: "/resources/faq",
+      },
+      {
+        label: "Documentation",
+        link: "#",
+      },
+    ],
+  },
+  {
+    label: "Company",
+    sub: [
+      {
+        label: "About us",
+        link: "/company/about",
+      },
+      {
+        label: "Contact us",
+        link: "/company/contact",
+      },
+      {
+        label: "Blog",
+        link: "/blog",
+      },
+      {
+        label: "Careers",
+        link: "https://www.linkedin.com/company/bottest-ai/jobs/",
+        target: "_blank",
+      },
+    ],
+  },
+];
+
+export const homeFooterNavData = [
+  {
+    title: "Product",
+    links: [
+      {
+        label: "How it works",
+        href: "/product/how-it-works",
+      },
+      {
+        label: "Architecture",
+        href: "/product/architecture",
+      },
+      {
+        label: "Key Concepts",
+        href: "/product/concepts",
+      },
+      {
+        label: "Deployment Options",
+        href: "/product/deployment",
+      },
+    ],
+  },
+  {
+    title: "SOLUTIONS",
+    links: [
+      {
+        label: "Regression Testing",
+        href: "/solutions/regression",
+      },
+      {
+        label: "Performance Testing",
+        href: "/solutions/performance",
+      },
+      {
+        label: "Adversarial Testing",
+        href: "/solutions/adversarial",
+      },
+      {
+        label: "Multi-Language Testing",
+        href: "/solutions/multi-language",
+      },
+      {
+        label: "AI-Powered Coverage",
+        href: "/solutions/ai-powered",
+      },
+    ],
+  },
+  {
+    title: "pricing",
+    links: [
+      {
+        label: "Comparison",
+        href: "/pricing",
+      },
+    ],
+  },
+  {
+    title: "resources",
+    links: [
+      {
+        label: "Demos",
+        href: "#",
+      },
+      {
+        label: "Q&A",
+        href: "/resources/faq",
+      },
+      {
+        label: "Documentation",
+        href: "#",
+      },
+    ],
+  },
+  {
+    title: "company",
+    links: [
+      {
+        label: "About us",
+        href: "/company/about",
+      },
+      {
+        label: "Contact us",
+        href: "/company/contact",
+      },
+      {
+        label: "Careers",
+        href: "https://www.linkedin.com/company/bottest-ai/jobs/",
+        target: "_blank",
+      },
+      {
+        label: "Blog",
+        href: "/blog",
+      },
+    ],
+  },
+];
+
+export const homeStepsData = [
+  {
+    title: "1. Record",
+    description:
+      "With just a few clicks, record Tests and set up Baselines for your conversation.",
+    img: "/assets/home/record.svg",
+  },
+  {
+    title: "2. Evaluate",
+    description:
+      "When testing, responses are evaluated against the established Baseline.",
+    img: "/assets/home/evaluate.svg",
+  },
+  {
+    title: "3. Improve",
+    description:
+      "Analytics highlight key areas for improvement in your chatbot.",
+    img: "/assets/home/improve.svg",
+  },
+];
+
+export const architectureHeroData = [
+  {
+    title: "Chrome Extension",
+    description:
+      "Record new Tests and run them straight from your browser. Smart recording technology tracks complex UI interactions.",
+    link: "#chrome-extension",
+  },
+  {
+    title: "Test Repository",
+    description:
+      "Manage your full Suite of Tests, Baselines, and Test Run results all in one central place. Share and collaborate across your team.",
+    link: "#test-repository",
+  },
+  {
+    title: "Analytics Platform",
+    description:
+      "Track Test Run data to understand performance over time. Receive emailed reports highlighting changes key metrics.",
+    link: "#analytics-platform",
+  },
+  {
+    title: "Test Evaluator",
+    description:
+      "Have confidence in your chatbot’s performance with the bottest.ai LLM-powered evaluation engine.",
+    link: "#test-evaluator",
+  },
+  {
+    title: "bottest.ai Database",
+    description:
+      "Store all your testing data with built-in security, privacy, reliability, and SOC2 compliance. ",
+    link: "#bottestai-database",
+  },
+  {
+    title: "Execution Engine",
+    description:
+      "Run Tests in the cloud on an automated schedule or hook into existing CI/CD pipelines with secure APIs. ",
+    link: "#execution-engine",
+  },
+];
+
+export const pricingData = [
+  {
+    title: "Starter",
+    description: "For getting started and small scale testing.",
+    benefits: [
+      "First 100 test runs",
+      "1 user",
+      "1 bot",
+      "1 suite",
+      "1 environment",
+      "10 tests",
+      "1 baseline / test",
+    ],
+    price: 0,
+    button: "Start for free",
+  },
+  {
+    title: "Individual",
+    description: "For solo testers, simple projects, or those on a budget.",
+    benefits: [
+      "1,000/mo test runs",
+      "1 user",
+      "1 bot",
+      "3 suites",
+      "2 environments",
+      "100 tests",
+      "2 baselines / tests",
+    ],
+    price: 25,
+    button: "Get Individual",
+  },
+  {
+    title: "Professional",
+    description:
+      "For teams and businesses who want full test coverage or have multiple product.",
+    benefits: [
+      "10,000/mo test runs",
+      "5 users",
+      "2 bots",
+      "8 suites",
+      "1 environment",
+      "Unlimited tests",
+      "5 baselines / tests",
+    ],
+    price: 500,
+    button: "Get Professional",
+  },
+  {
+    title: "Enterprise",
+    description:
+      "For those needing an enterprise-grade solution, with custom pricing.",
+    benefits: [
+      "test runs",
+      "users",
+      "bots",
+      "suites",
+      "environments",
+      "tests",
+      "baselines / tests",
+    ],
+    price: "Let's talk",
+    button: "Contact us",
+  },
+];
+
+export const pricingTable = [
+  ["Trending Analytics Dashboard", true, true, true, true],
+  ["Suite Run Reports", false, false, true, true],
+  ["On-premise Deployment", false, false, false, true],
+  ["Webhook Integrations", false, false, false, true],
+  ["SSO Integrations", false, false, false, true],
+  ["Adversarial Testing", false, false, true, true],
+  ["Variant Test Coverage", false, false, true, true],
+  ["Multi-language Test Coverage", false, false, true, true],
+];
+
+export const faqTitles = [
+  {
+    title: "What is chatbot testing?",
+    index: "what_is_chatbot_testing",
+  },
+  {
+    title: "How do I test a chatbot?",
+    index: "how_do_i_test_a_chatbot",
+  },
+  {
+    title: "What are the best practices for chatbot testing?",
+    index: "what_are_the_best_practices_for_chatbot_testing",
+  },
+  {
+    title: "How should chatbot test cases be defined?",
+    index: "how_should_chatbot_test_cases_be_defined",
+  },
+  {
+    title: "Why is automation essential to software testing for chatbots?",
+    index: "why_is_automation_essential_to_software_testing_for_chatbots",
+  },
+  {
+    title:
+      "How do traditional automation testing tools fall short when testing AI chatbots?",
+    index:
+      "how_do_traditional_automation_testing_tools_fall_short_when_testing_ai_chatbots",
+  },
+  {
+    title:
+      "How is chatbot testing different from traditional application testing or traditional automation testing?",
+    index:
+      "how_is_chatbot_testing_different_from_traditional_application_testing_or_traditional_automation_testing",
+  },
+  {
+    title:
+      "What are the metrics that measure the success of the chatbot testing process?",
+    index:
+      "what_are_the_metrics_that_measure_the_success_of_the_chatbot_testing_process",
+  },
+  {
+    title:
+      "What are the metrics that measure the success of the chatbot testing process?",
+    index:
+      "what_are_the_metrics_that_measure_the_success_of_the_chatbot_testing_process1",
+  },
+];

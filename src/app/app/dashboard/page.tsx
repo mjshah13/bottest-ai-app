@@ -42,10 +42,6 @@ const Dashboard = (props: DashboardProps) => {
     TestType[] | null | undefined
   >(null);
 
-  const [filters, setFilters] = useState({
-    tab: "View all",
-  });
-
   const { orgRole } = useAuth();
   const { organization } = useOrganization();
   const { botLists, suiteLists, environmentLists } = useContext(
@@ -58,6 +54,10 @@ const Dashboard = (props: DashboardProps) => {
   const { fetchTests, isLoading } = useTests();
   const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
   const { testData } = useContext(GlobalStateContext) as GlobalStateType;
+
+  const [filters, setFilters] = useState({
+    tab: "View all",
+  });
 
   const filterData = (status: string) => {
     if (status === "View all") {
@@ -389,8 +389,10 @@ const Dashboard = (props: DashboardProps) => {
                             </Box>
                             <Box>
                               <CustomInput
-                                // size="3"
-                                className={"dark:bg-transparent h-[38px] "}
+                                size="2"
+                                className={
+                                  "dark:bg-transparent h-[38px] rounded-lg"
+                                }
                                 onChange={(value) => {
                                   handleFilteredData(value);
                                 }}
@@ -417,6 +419,7 @@ const Dashboard = (props: DashboardProps) => {
                                     isDisabled={!item?.full_run_enabled}
                                     lastTestRuns={recent_test_runs}
                                     loading={isLoading}
+                                    stubbed={false}
                                   />
                                 </div>
                               )

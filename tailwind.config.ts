@@ -8,6 +8,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/elements/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/content/**/*.{md,mdx}",
   ],
   theme: {
     fontFamily: {
@@ -35,7 +36,10 @@ const config: Config = {
     },
     boxShadow: {
       card: "0px 1px 3px rgba(0, 0, 0, 0.12)",
-      // default:"0px 0px 4px 0px #c0c",
+      DEFAULT: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+      md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+      lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+      xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
     },
 
     extend: {
@@ -60,9 +64,20 @@ const config: Config = {
         slideDown: "slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)",
         slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
       },
+      backgroundImage: {
+        "home-hero-bg-d": "url('/assets/home/hero-bg-d.svg')",
+        "home-hero-bg-m": "url('/assets/home/hero-bg-m.svg')",
+        "home-ready-bg-d": "url('/assets/home/ready-bg-d.svg')",
+        "home-ready-bg-m": "url('/assets/home/ready-bg-m.svg')",
+        "product-howitworks-m": "url('/assets/products/howitwork-m.svg')",
+        "product-howitworks-d": "url('/assets/products/howitwork-d.svg')",
+      },
+      backgroundSize: {
+        full: "100%",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
   darkMode: "class",
 };
 export default config;
