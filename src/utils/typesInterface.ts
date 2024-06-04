@@ -354,3 +354,9 @@ export interface SpecificSuiteDataType {
   reporting_comparison_environment_id: string;
   reporting_comparison_configuration: string;
 }
+
+export interface UsePDFHook {
+  generatePDF: (data: AnalyticsReportType) => Promise<void>;
+  loading: boolean;
+  error: string | null;
+}

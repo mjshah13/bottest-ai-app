@@ -1,13 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { printReport } from "../utils/common";
-import { AnalyticsReportType } from "../utils/typesInterface";
-
-interface UsePDFHook {
-  generatePDF: (data: AnalyticsReportType) => Promise<void>;
-  loading: boolean;
-  error: string | null;
-}
+import { AnalyticsReportType, UsePDFHook } from "../utils/typesInterface";
 
 const usePDF = (): UsePDFHook => {
   const [loading, setLoading] = useState(false);

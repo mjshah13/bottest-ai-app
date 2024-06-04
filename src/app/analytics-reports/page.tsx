@@ -32,9 +32,9 @@ const AnalyticsReports = () => {
   const isPdf = searchParams && searchParams.get("isPdf");
   const { user } = useUser();
   useEffect(() => {
-    if (data) return;
+    if (!suiteRunID) return;
     fetchAnalyticsReport(suiteRunID as string);
-  }, [user, data]);
+  }, [user?.id, suiteRunID]);
 
   useEffect(() => {
     if (isPdf) {
