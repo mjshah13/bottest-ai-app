@@ -27,7 +27,7 @@ import { useOrganization, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import CustomSelect from "../../../elements/select";
 import useAnalyticsReport from "../../../hooks/useAnalyticsReport";
-import usePDF from "../../../hooks/usePdF";
+import usePDF from "../../../hooks/usePDF";
 
 const Reports = () => {
   const { user } = useUser();
@@ -193,9 +193,9 @@ const Reports = () => {
               </button>
             </div>
             <p className="text-[#909193] text-sm font-poppin font-normal mt-1.5 w-[704px] leading-[22px] ">
-              Configure the Comparison Suite Run for all “Test suite 3” reports.
-              Note that updating this configuration will update each interactive
-              report for this Suite.
+              Configure the Comparison Suite Run for all “ {selectedSuite?.name}{" "}
+              ” reports. Note that updating this configuration will update each
+              interactive report for this Suite.
             </p>
           </div>
         </div>

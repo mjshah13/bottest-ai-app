@@ -642,7 +642,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "Poppins",
+          fontFamily: 'Poppins', sans-serif,
         }
       },
       labels: {
