@@ -4,13 +4,10 @@ import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { UsageEvaluationPerformProps } from "../../../utils/typesInterface";
 
-
 const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
   list = [],
   categories = [],
 }) => {
-  console.log(categories);
-
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
       type: "bar",
@@ -22,7 +19,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: "40%", 
+        barHeight: "40%",
         borderRadius: 10,
         borderRadiusApplication: "end",
       },
@@ -31,7 +28,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
       enabled: false,
     },
     xaxis: {
-      categories:categories,
+      categories: categories,
       title: {
         text: "Number of Tests",
         offsetY: 10,

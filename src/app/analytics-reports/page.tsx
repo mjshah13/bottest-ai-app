@@ -8,9 +8,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { printForm } from "../../utils/common";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import usePDF from "../../hooks/usePDF";
 const PerformanceDistributionChart = dynamic(
   () => import("../components/PerformanceDistributionChart"),
   { ssr: false }
@@ -23,29 +21,29 @@ const OverViewResultChart = dynamic(
 
 const AnalyticsReports = () => {
   const [highlightTests, sethighlightTests] = useState<number | null>(null);
-  const [highlightEvaluation, setHighlightEvaluation] = useState<number | null>(null);
+  const [highlightEvaluation, setHighlightEvaluation] = useState<number | null>(
+    null
+  );
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const suiteRunID = searchParams.get("suite_run_id");
-  const isPdf = searchParams.get("isPdf");
-  const { user } = useUser();
   const { fetchAnalyticsReport, data, loading } = useAnalyticsReport();
- const [reportData, setreportData] = useState<string>()
+  const { generatePDF } = usePDF();
+  const searchParams = useSearchParams();
+  const suiteRunID = searchParams && searchParams.get("suite_run_id");
+  const isPdf = searchParams && searchParams.get("isPdf");
+  const { user } = useUser();
   useEffect(() => {
     if (data) return;
     fetchAnalyticsReport(suiteRunID as string);
   }, [user, data]);
 
   useEffect(() => {
-    const page = printForm(data);
-    setreportData(page)
-  }, [data])
-
-
- console.log(reportData)
+    if (isPdf) {
+      if (!data) return;
+      generatePDF(data);
+    }
+  }, [data]);
   return (
     <>
-    
       <div
         className="w-[100%] h-[100%] p-[80px] font-poppin max-w-[1440px]   "
         style={{
@@ -65,13 +63,13 @@ const AnalyticsReports = () => {
 
           <div className=" pb-20">
             <h1 className="text-[35px] font-poppin font-bold text-black">
-              Feature Suite Run{" "}
+              {`${data?.suite_name} Suite Run`} {""}
               <span className="text-intermediate font-bold text-[20px]">
-                (Executed on 2 Feb 2024, 10:32 AM PST)
+                {`Executed on ${data?.suite_run_timestamp}`}
               </span>
             </h1>
             <h2 className="text-[24px] text-[#909193] font-semibold  font-poppins pb-8">
-              Comparison Suite Run: 21 Jan 2024, 12:46 PM PST
+              {`Comparison Suite Run: ${data?.comparison_run_timestamp}`}
             </h2>
             <p className="text-[16px] text-black font-semibold font-poppin  pb-6">
               The following Tests were executed and evaluated in the Suite Run:
@@ -247,7 +245,7 @@ const AnalyticsReports = () => {
                           labelData={data?.overview?.run_statuses}
                           name="Tests"
                           id="test-chart"
-                          onHover={(index)=> sethighlightTests(index)}
+                          onHover={(index) => sethighlightTests(index)}
                           highlightIndex={highlightTests}
                         />
                       )
@@ -267,14 +265,14 @@ const AnalyticsReports = () => {
                         labelData={data?.overview?.run_statuses}
                         name="Tests"
                         id="test-chart"
-                        onHover={(index)=> sethighlightTests(index)}
+                        onHover={(index) => sethighlightTests(index)}
                         highlightIndex={highlightTests}
                       />
                     )}
                   </div>
                 </Box>
               </Grid>
-             
+
               <div className="pt-14 pb-8">
                 <ul className="list-disc ps-6">
                   <li className="text-[16px] text-black font-normal leading-6 font-poppin">
@@ -313,7 +311,7 @@ const AnalyticsReports = () => {
                           labelData={data?.overview?.run_statuses}
                           name="Evaluations"
                           id="synced-charts"
-                          onHover={(index)=> setHighlightEvaluation(index)}
+                          onHover={(index) => setHighlightEvaluation(index)}
                           highlightIndex={highlightEvaluation}
                         />
                       )
@@ -335,7 +333,7 @@ const AnalyticsReports = () => {
                         labelData={data?.overview?.run_statuses}
                         name="Evaluations"
                         id="synced-charts"
-                        onHover={(index)=> setHighlightEvaluation(index)}
+                        onHover={(index) => setHighlightEvaluation(index)}
                         highlightIndex={highlightEvaluation}
                       />
                     )}
@@ -586,7 +584,6 @@ const AnalyticsReports = () => {
                           <PerformanceDistributionChart
                             categories={data?.performance?.buckets}
                             list={data?.performance?.values}
-                            
                           />
                         )
                       )}
@@ -604,15 +601,12 @@ const AnalyticsReports = () => {
                           <PerformanceDistributionChart
                             categories={data?.performance?.buckets || []}
                             list={data?.performance?.comparison_values || []}
-                           
                           />
                         )
                       )}
                     </div>
                   </Box>
                 </Grid>
-                
-
               </div>
               <div className="pt-6">
                 <ul className="list-disc ps-6">

@@ -65,14 +65,15 @@ export const configOption = {
   most_recent_different_environment: "most_recent_different_environment",
   specific_suite_run: "specific_suite_run",
 };
-export const printForm = (data: AnalyticsReportType | undefined) => `<html lang="en">
+export const printReport = (
+  data: AnalyticsReportType | undefined
+) => `<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bottest ai</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Press+Start+2P&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -260,6 +261,8 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
     
    }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 </head>
 <body>
 
@@ -271,8 +274,14 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
 
             </div>
             <div>
-                <h1 class="title">Feature Suite Run <span class="small-text">(Executed on 2 Feb 2024, 10:32 AM PST)</span></h1>  
-                <h2 class="subtitle">Comparison Suite Run: 21 Jan 2024, 12:46 PM PST</h2>
+                <h1 class="title">${
+                  data?.suite_name
+                } Suite Run <span class="small-text">(Executed on ${
+  data?.suite_run_timestamp
+})</span></h1>  
+                <h2 class="subtitle">Comparison Suite Run: ${
+                  data?.comparison_run_timestamp
+                }</h2>
             </div>
         </div>
 
@@ -290,18 +299,24 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
                     </tr>
                 </thead>
                 <tbody>
-                ${data?.tests?.map((test: Test) => {
-                  return `
+                ${data?.tests
+                  ?.map((test: Test) => {
+                    return `
                   <tr>
                       <td>${test?.test_name}</td>
-                      <td>${test?.use_default_success_criteria ? "Default" : "Custom"}</td>
+                      <td>${
+                        test?.use_default_success_criteria
+                          ? "Default"
+                          : "Custom"
+                      }</td>
                       <td>${test?.baseline_count}</td>
                       <td>${test?.variant_count}</td>
                       <td>${test?.iteration_count}</td>
                       <td>${test?.evaluation_count}</td>
                   </tr>
                   `;
-              }).join('')}
+                  })
+                  .join("")}
                    
                 </tbody>
             </table>
@@ -311,13 +326,19 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
             <h2>Overview of Results</h2>
             <p class="content">
                 <ul class="list">
-                    <li class="list-item">A total of ${data?.overview?.total_test_count} Tests,
+                    <li class="list-item">A total of ${
+                      data?.overview?.total_test_count
+                    } Tests,
                     ${data?.overview?.total_variant_count} Variants, and
                     ${data?.overview?.total_evaluation_count} Evaluations were
                     included in this Suite run.</li>
-                    <li class="list-item"><span class="highlight">${data?.overview?.test_pass_rate !== undefined &&
-                      data?.overview?.test_pass_rate.toFixed(1)}%
-                    of Tests passed</span>  fully (with no failures), <span class="highlight">up ${data?.overview?.delta_test_pass_rate.toFixed(1)}%</span> the <span class="highlight-blue">26 Jan 2024 Production Run.</span> </li>
+                    <li class="list-item"><span class="highlight">${
+                      data?.overview?.test_pass_rate !== undefined &&
+                      data?.overview?.test_pass_rate.toFixed(1)
+                    }%
+                    of Tests passed</span>  fully (with no failures), <span class="highlight">up ${data?.overview?.delta_test_pass_rate.toFixed(
+                      1
+                    )}%</span> the <span class="highlight-blue">26 Jan 2024 Production Run.</span> </li>
 
                 </ul>
             </p>
@@ -343,7 +364,16 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
             </div>
             
                 <ul class="list-pt">
-                    <li class="list-item">Out of the <span class="highlight-dark">${data?.overview?.total_evaluation_count}</span> Evaluations performed, <span class="highlight">${data?.overview?.evaluation_pass_rate.toFixed(1)} Evaluations (${((data?.overview?.evaluation_pass_rate ?? 0) * 100 / (data?.overview?.total_evaluation_count ?? 1)).toFixed(1)}%) passed, up 1%</span> from the <span class="highlight-blue">26 Jan 2024 Production Run.</span> </li>
+                    <li class="list-item">Out of the <span class="highlight-dark">${
+                      data?.overview?.total_evaluation_count
+                    }</span> Evaluations performed, <span class="highlight">${data?.overview?.evaluation_pass_rate.toFixed(
+  1
+)} Evaluations (${(
+  ((data?.overview?.evaluation_pass_rate ?? 0) * 100) /
+  (data?.overview?.total_evaluation_count ?? 1)
+).toFixed(
+  1
+)}%) passed, up 1%</span> from the <span class="highlight-blue">26 Jan 2024 Production Run.</span> </li>
 
                 </ul>
               
@@ -387,8 +417,9 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
                 </thead>
 
                 <tbody>
-                ${data?.improvements?.test_improvements?.map((item) => {
-                  return `
+                ${data?.improvements?.test_improvements
+                  ?.map((item) => {
+                    return `
                   <tr>
                  
                   <td>${item?.test_name}</td>
@@ -397,7 +428,8 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
               
                   </tr>
                   `;
-              }).join('')}
+                  })
+                  .join("")}
                    
                 </tbody>
             </table>
@@ -422,15 +454,19 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
                     </tr>
                 </thead>
                 <tbody>
-                ${data?.failures?.test_failures?.map((item) => {
-                  return `
+                ${data?.failures?.test_failures
+                  ?.map((item) => {
+                    return `
                   <tr>
                         <td>${item?.test_name}</td>
                         <td>${(item?.pass_rate).toFixed(1)}%</td>
-                        <td>${item?.failure_summary} <a href="#" class="link-text">(See Test Run)</a></td>
+                        <td>${
+                          item?.failure_summary
+                        } <a href="#" class="link-text">(See Test Run)</a></td>
                     </tr>
                   `;
-              }).join('')}
+                  })
+                  .join("")}
                     
                 </tbody>
             </table>
@@ -487,8 +523,9 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
                     </tr>
                 </thead>
                 <tbody>
-                ${data?.performance?.test_performances?.map((item) => {
-                  return `
+                ${data?.performance?.test_performances
+                  ?.map((item) => {
+                    return `
                   <tr>
                   <td>${item?.test_name}</td>
                   <td>${item?.average_run_time?.toFixed(1)} sec</td>
@@ -498,19 +535,19 @@ export const printForm = (data: AnalyticsReportType | undefined) => `<html lang=
                   <td>${item?.max_run_time} sec</td>
               </tr>
                   `;
-              }).join('')}
+                  })
+                  .join("")}
                   
                 </tbody>
             </table>
         </div>
     </div>
-    <button onclick="generatePDF()">Generate PDF</button>
+   
   </div>
 
 
-  <script>
+ <script>
   async function generatePDF() {
-    console.log("Generating PDF...");
     const content = document.getElementById('content');
 
     // Use html2canvas to convert the content to a canvas
@@ -536,9 +573,11 @@ doc.internal.pageSize.setHeight(desiredHeight);
     doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, desiredHeight);
 
     // Save the generated PDF
-    doc.save('sample.pdf');
+    doc.save("${data?.suite_name} Suite Run");
 }
-  const data = {
+  
+          window.addEventListener('DOMContentLoaded', function() {
+         const data = {
     performance: {
       values: [10, 20, 30],
       comparison_values: [15, 25, 35],
@@ -560,7 +599,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     },
     series: [{
       name: 'Number of Executions',
-      data:${JSON.stringify( data?.performance?.values)}
+      data:[4,2,1,6,3,2,3,0,6,0]
     }],
     plotOptions: {
       bar: {
@@ -574,7 +613,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: false
     },
     xaxis: {
-      categories: ${JSON.stringify(data?.performance?.buckets)},
+      categories: ["<69","69 - 116","116 - 162","162 - 209","209 - 256","256 - 303","303 - 350","350 - 397","397 - 443","443+"],
       title: {
         text: "Number of Tests",
         offsetY: 10,
@@ -582,14 +621,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "poppins"
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -599,8 +638,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: "'Poppins', sans-serif",
-
+        fontFamily: "poppins"
       }
     },
     yaxis: {
@@ -611,16 +649,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "'Poppins', sans-serif",
-
+          fontFamily: "poppins"
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "'Poppins', sans-serif",
-
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -652,7 +688,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     },
     series: [{
       name: 'Number of Executions',
-      data: ${JSON.stringify(data?.performance?.comparison_values)}
+      data: [3,2,6,2,3,4,1,3,3,3]
     }],
     plotOptions: {
       bar: {
@@ -666,7 +702,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: false
     },
     xaxis: {
-      categories: ${JSON.stringify(data?.performance?.buckets)},
+      categories: ["<69","69 - 116","116 - 162","162 - 209","209 - 256","256 - 303","303 - 350","350 - 397","397 - 443","443+"],
       title: {
         text: "Number of Tests",
         offsetY: 10,
@@ -674,16 +710,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "'Poppins', sans-serif",
-
+          fontFamily: "poppins"
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "'Poppins', sans-serif",
-
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -693,8 +727,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: "'Poppins', sans-serif",
-
+        fontFamily: "poppins"
       }
     },
     yaxis: {
@@ -705,16 +738,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: "'Poppins', sans-serif",
-
+          fontFamily: "poppins"
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: "'Poppins', sans-serif",
-
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -748,8 +779,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       type: "donut",
       height: 350
     },
-    series: ${JSON.stringify(data?.overview?.test_status_counts)},
-    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    series: [0,1,2,2,0,0,0],
+    labels: ["Running","Pass","Mixed","Fail","Stopped","Error","Skipped"],
     colors: [
       "#388AEB",
       "#54CA6E",
@@ -773,14 +804,10 @@ doc.internal.pageSize.setHeight(desiredHeight);
             },
             total: {
               show: true,
-              label:"${data?.overview?.test_status_counts?.reduce(
-                (accumulator, currentValue) => accumulator + currentValue,
-                0
-              )} Tests", 
+              label:"5 Tests", 
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "'Poppins', sans-serif",
-
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -790,8 +817,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "'Poppins', sans-serif",
-
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -799,8 +825,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "'Poppins', sans-serif",
-
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -820,8 +845,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       type: "donut",
       height: 350
     },
-    series: ${JSON.stringify(data?.overview?.comparison_test_status_counts)},
-    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    series: [0,1,2,2,0,0,0],
+    labels: ["Running","Pass","Mixed","Fail","Stopped","Error","Skipped"],
     colors: [
       "#388AEB",
       "#54CA6E",
@@ -845,14 +870,10 @@ doc.internal.pageSize.setHeight(desiredHeight);
             },
             total: {
               show: true,
-              label: "${data?.overview?.comparison_test_status_counts?.reduce(
-                (accumulator, currentValue) => accumulator + currentValue,
-                0
-              )} Tests",
+              label: "5 Tests",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "'Poppins', sans-serif",
-
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -862,8 +883,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "'Poppins', sans-serif",
-
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -871,8 +891,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "'Poppins', sans-serif",
-
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -892,8 +911,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       type: "donut",
       height: 350
     },
-    series: ${JSON.stringify(data?.overview?.evaluation_status_counts)},
-    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    series: [0,12,0,18,0,0,0],
+    labels: ["Running","Pass","Mixed","Fail","Stopped","Error","Skipped"],
     colors: [
       "#388AEB",
       "#54CA6E",
@@ -917,14 +936,10 @@ doc.internal.pageSize.setHeight(desiredHeight);
             },
             total: {
               show: true,
-              label: "${data?.overview?.evaluation_status_counts?.reduce(
-                (accumulator, currentValue) => accumulator + currentValue,
-                0
-              )} Evaluations",
+              label: "30 Evaluations",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "'Poppins', sans-serif",
-
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -934,8 +949,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "'Poppins', sans-serif",
-
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -943,8 +957,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "'Poppins', sans-serif",
-
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -964,8 +977,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
       type: "donut",
       height: 350
     },
-    series: ${JSON.stringify(data?.overview?.comparison_evaluation_status_counts)},
-    labels: ${JSON.stringify(data?.overview?.run_statuses)},
+    series: [0,11,0,19,0,0,0],
+    labels: ["Running","Pass","Mixed","Fail","Stopped","Error","Skipped"],
     colors: [
       "#388AEB",
       "#54CA6E",
@@ -989,13 +1002,10 @@ doc.internal.pageSize.setHeight(desiredHeight);
             },
             total: {
               show: true,
-              label: "${data?.overview?.comparison_evaluation_status_counts?.reduce(
-                (accumulator, currentValue) => accumulator + currentValue,
-                0
-              )} Evaluations",
+              label: "30 Evaluations",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -1005,7 +1015,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: "'Poppins', sans-serif",
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -1013,7 +1023,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: "'Poppins', sans-serif",
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -1037,6 +1047,15 @@ doc.internal.pageSize.setHeight(desiredHeight);
   chart2Donut.render();
   chart3.render();
   chart4.render();
+          });
+
+           window.addEventListener('load', function() {
+            setTimeout(() => {
+            generatePDF()
+                
+            }, 1500);
+           
+          });
 </script>
   
 </body>
