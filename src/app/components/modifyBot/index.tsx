@@ -1,6 +1,6 @@
 import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
-import CustomButton from "../../../elements/button";
+
 import { CopyPlus, Trash } from "lucide-react";
 import { BotType, GlobalStateType } from "../../../utils/typesInterface";
 import useAddBot from "../../../hooks/useAddBot";
@@ -12,6 +12,7 @@ import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import useDuplicateBot from "../../../hooks/useDuplicateBot";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import CustomButton from "../../../Elements/button";
 
 interface ModalProps {
   title?: string;

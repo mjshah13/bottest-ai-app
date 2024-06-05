@@ -2,7 +2,7 @@
 
 import { Box, Dialog, Flex, Grid } from "@radix-ui/themes";
 import { Ban, ChevronsRight, X } from "lucide-react";
-import CustomButton from "../../../elements/button";
+import CustomButton from "../../../Elements/button";
 import {
   Download,
   User,
@@ -16,7 +16,7 @@ import SaveBaselineModal from "../saveBaselineModal";
 import * as Accordion from "@radix-ui/react-accordion";
 import classNames from "classnames";
 import React, { useContext, useEffect, useState } from "react";
-import CustomSelect from "../../../elements/select";
+import CustomSelect from "../../../Elements/select";
 import {
   AccordionTriggerProps,
   EvaluationType,

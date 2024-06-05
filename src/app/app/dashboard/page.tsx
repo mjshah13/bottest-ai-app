@@ -8,7 +8,6 @@ import {
   TestType,
 } from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
-
 import { filterOptions, getStatuses } from "../../../utils/common";
 import _ from "lodash";
 import useBots from "../../../hooks/useBots";
@@ -22,7 +21,7 @@ import { Box, Grid } from "@radix-ui/themes";
 import ModifyBot from "../../components/modifyBot";
 import ModifySuite from "../../components/modifySuite";
 import ModifyEnvironment from "../../components/modifyEnvironment";
-import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
+import { useAuth, useOrganization } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
 import CustomSelect from "../../../Elements/select";

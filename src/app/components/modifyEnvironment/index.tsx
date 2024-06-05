@@ -1,6 +1,6 @@
 import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
-import CustomButton from "../../../elements/button";
+
 import {
   EnvironmentType,
   GlobalStateType,
@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import useDeleteEnvironment from "../../../hooks/useDeleteEnvironment";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import CustomButton from "../../../Elements/button";
 
 interface ModalProps {
   title?: string;

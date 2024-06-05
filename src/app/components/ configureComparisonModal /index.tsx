@@ -6,10 +6,9 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import CustomButton from "../../../elements/button";
+
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import CustomInput from "../../../elements/input";
-import CustomSelect from "../../../elements/select";
+
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
 import useUpdateSuite from "../../../hooks/useUpdateSuite";
@@ -18,6 +17,9 @@ import useSpecificSuiteRun from "../../../hooks/useSpecificSuiteRuns";
 
 import useSpecificSuite from "../../../hooks/useSpecificSuite";
 import { configOption } from "../../../utils/common";
+import CustomSelect from "../../../Elements/select";
+import CustomButton from "../../../Elements/button";
+import CustomInput from "../../../Elements/input";
 
 interface ModalProps {
   title: string;

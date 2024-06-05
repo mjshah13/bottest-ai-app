@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
 import { Box, Grid } from "@radix-ui/themes";
