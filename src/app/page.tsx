@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React, { useEffect, useState } from "react";
 import { homeStepsData } from "../utils/common";
@@ -10,14 +11,14 @@ import { HomeFooter } from "./components/homeFooter";
 import HomeHeader from "./components/homeHeader";
 import Link from "next/link";
 import TestRun from "./components/testRun";
-import CustomButton from "../elements/button";
-import CustomInput from "../elements/input";
 import { filterOptions } from "../utils/common";
 import _ from "lodash";
 import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
 import { filteredData } from "./stubbedData";
+import CustomButton from "../Elements/button";
+import CustomInput from "../Elements/input";
 
 const HomePage = () => {
   const [step, setStep] = useState(1);
@@ -71,6 +72,7 @@ const HomePage = () => {
                         "linear-gradient(93.32deg, #4596F5 0%, #176FD6 101.05%)"
                     }}
                   >
+                  
                     Sign Up - it's free
                   </Link>
                   <button className="rounded-xl w-full h-10 sm:h-14 flex items-center text-sm sm:text-base bg-white border border-[#388AEB] text-[#388AEB] justify-center group hover:shadow-lg duration-200">

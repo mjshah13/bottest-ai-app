@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React from "react";
 import { architectureHeroData } from "../../../utils/common";
@@ -34,18 +35,18 @@ const ArchitectPage = () => {
           </div>
         </div>
         <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
-          {architectureHeroData.map((item, key) => (
-            <a href={item.link}>
+          {architectureHeroData?.map((item, key) => (
+            <a href={item?.link} key={key}>
               <div
                 className="rounded-[20px] bg-[#FFFFFFB2] border border-[#388AEB80] px-6 py-5 group hover:shadow-lg duration-300"
-                key={key}
+                
               >
                 <h1 className="flex items-center text-lg font-medium text-[#212427]">
                   <ArrowRight color="#FF915B" size={20} className="transform group-hover:translate-x-1 duration-300" />
-                  <span className="ml-3">{item.title}</span>
+                  <span className="ml-3">{item?.title}</span>
                 </h1>
                 <p className="mt-1 text-xs text-[#616A73]">
-                  {item.description}
+                  {item?.description}
                 </p>
               </div>
             </a>

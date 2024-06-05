@@ -8,9 +8,7 @@ import {
   TestType,
 } from "../../../utils/typesInterface";
 import TestRun from "../../components/testRun";
-import CustomSelect from "../../../elements/select";
-import CustomButton from "../../../elements/button";
-import CustomInput from "../../../elements/input";
+
 import { filterOptions, getStatuses } from "../../../utils/common";
 import _ from "lodash";
 import useBots from "../../../hooks/useBots";
@@ -27,6 +25,9 @@ import ModifyEnvironment from "../../components/modifyEnvironment";
 import { useAuth, useOrganization, useUser } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
+import CustomSelect from "../../../Elements/select";
+import CustomButton from "../../../Elements/button";
+import CustomInput from "../../../Elements/input";
 
 interface DashboardProps {}
 
