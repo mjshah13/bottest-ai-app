@@ -1,6 +1,6 @@
 import { Dialog, Flex } from "@radix-ui/themes";
 import React from "react";
-import CustomButton from "../../../Elements/button";
+import CustomButton from "../../../elements/button";
 
 
 interface ModalProps {

@@ -28,7 +28,7 @@ import Image from "next/image";
 
 import useAnalyticsReport from "../../../hooks/useAnalyticsReport";
 import usePDF from "../../../hooks/usePdF";
-import CustomSelect from "../../../Elements/select";
+import CustomSelect from "../../../elements/select";
 
 const Reports = () => {
   const { user } = useUser();

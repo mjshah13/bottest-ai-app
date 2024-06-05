@@ -17,9 +17,9 @@ import useSpecificSuiteRun from "../../../hooks/useSpecificSuiteRuns";
 
 import useSpecificSuite from "../../../hooks/useSpecificSuite";
 import { configOption } from "../../../utils/common";
-import CustomSelect from "../../../Elements/select";
-import CustomButton from "../../../Elements/button";
-import CustomInput from "../../../Elements/input";
+import CustomSelect from "../../../elements/select";
+import CustomButton from "../../../elements/button";
+import CustomInput from "../../../elements/input";
 
 interface ModalProps {
   title: string;

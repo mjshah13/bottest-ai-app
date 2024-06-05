@@ -24,9 +24,9 @@ import ModifyEnvironment from "../../components/modifyEnvironment";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import useSuiteRuns from "../../../hooks/useSuiteRuns";
 import { GlobalStateContext } from "../../../globalState";
-import CustomSelect from "../../../Elements/select";
-import CustomButton from "../../../Elements/button";
-import CustomInput from "../../../Elements/input";
+import CustomSelect from "../../../elements/select";
+import CustomButton from "../../../elements/button";
+import CustomInput from "../../../elements/input";
 
 interface DashboardProps {}
 

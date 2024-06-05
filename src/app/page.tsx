@@ -17,8 +17,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { RefreshCw } from "lucide-react";
 import { Box, Grid } from "@radix-ui/themes";
 import { filteredData } from "./stubbedData";
-import CustomButton from "../Elements/button";
-import CustomInput from "../Elements/input";
+import CustomButton from "../elements/button";
+import CustomInput from "../elements/input";
 
 const HomePage = () => {
   const [step, setStep] = useState(1);

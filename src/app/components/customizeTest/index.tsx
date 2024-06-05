@@ -22,8 +22,8 @@ import DeleteModal from "../deleteModal";
 import useUpdateTest from "../../../hooks/useUpdateTest";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import Chip from "../../../Elements/chip";
-import CustomButton from "../../../Elements/button";
+import Chip from "../../../elements/chip";
+import CustomButton from "../../../elements/button";
 
 
 interface ModalProps {

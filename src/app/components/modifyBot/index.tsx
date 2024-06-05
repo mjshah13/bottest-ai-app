@@ -12,7 +12,7 @@ import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import useDuplicateBot from "../../../hooks/useDuplicateBot";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import CustomButton from "../../../Elements/button";
+import CustomButton from "../../../elements/button";
 
 interface ModalProps {
   title?: string;

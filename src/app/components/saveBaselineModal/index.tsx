@@ -1,7 +1,7 @@
 import { Dialog, Flex } from "@radix-ui/themes";
 import React, { Dispatch, SetStateAction, useContext, useState } from "react";
-import CustomButton from "../../../Elements/button";
-import CustomInput from "../../../Elements/input";
+import CustomButton from "../../../elements/button";
+import CustomInput from "../../../elements/input";
 import useAddBaseline from "../../../hooks/useAddBaseline";
 import { GlobalStateContext } from "../../../globalState";
 import {

@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import useDeleteEnvironment from "../../../hooks/useDeleteEnvironment";
 import DeleteModal from "../deleteModal";
 import { useAuth, useOrganization } from "@clerk/nextjs";
-import CustomButton from "../../../Elements/button";
+import CustomButton from "../../../elements/button";
 
 interface ModalProps {
   title?: string;

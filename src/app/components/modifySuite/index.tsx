@@ -1,6 +1,6 @@
 import { Dialog, Flex, Table } from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
-import CustomButton from "../../../Elements/button";
+import CustomButton from "../../../elements/button";
 import {
   GlobalStateType,
   Option,

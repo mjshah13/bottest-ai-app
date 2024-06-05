@@ -17,8 +17,8 @@ import useUsageChart from "../../../hooks/useUsageChart";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import dynamic from "next/dynamic";
 import { useOrganization } from "@clerk/nextjs";
-import CustomSelect from "../../../Elements/select";
-import CustomButton from "../../../Elements/button";
+import CustomSelect from "../../../elements/select";
+import CustomButton from "../../../elements/button";
 
 const EvaluationPerformedChart = dynamic(
   () => import("../../components/successCharts/evaluationPerformChart"),
