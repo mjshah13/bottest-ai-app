@@ -69,10 +69,9 @@ const HomePage = () => {
                     className="mb-2.5 flex items-center justify-center rounded-xl w-full h-10 sm:h-14 text-white text-sm sm:text-base hover:shadow-lg duration-200"
                     style={{
                       background:
-                        "linear-gradient(93.32deg, #4596F5 0%, #176FD6 101.05%)"
+                        "linear-gradient(93.32deg, #4596F5 0%, #176FD6 101.05%)",
                     }}
                   >
-                  
                     Sign Up - it's free
                   </Link>
                   <button className="rounded-xl w-full h-10 sm:h-14 flex items-center text-sm sm:text-base bg-white border border-[#388AEB] text-[#388AEB] justify-center group hover:shadow-lg duration-200">
@@ -136,17 +135,11 @@ const HomePage = () => {
                   <div>
                     <p className="text-black gap-2 font-medium font-poppin dark:text-white">
                       {"Most recent Suite Run results: "}
-                      <span className="text-danger">
-                        2 Fail
-                      </span>
+                      <span className="text-danger">2 Fail</span>
                       {", "}
-                      <span className="text-success">
-                        1 Pass
-                      </span>
+                      <span className="text-success">1 Pass</span>
                       {" and "}
-                      <span className="text-[#E7C200]">
-                        2 Mixed
-                      </span>
+                      <span className="text-[#E7C200]">2 Mixed</span>
                     </p>
                   </div>
                 </div>
@@ -162,14 +155,17 @@ const HomePage = () => {
                           filterOptions?.map((item, i) => (
                             <button
                               key={item.key}
-                              className={`px-3.5 lg:py-1.5  text-black dark:text-white font-light text-base font-poppin border-r  border-[#f0f0f0] dark:border-r dark:border-[#434447] ${i === 0 ? "rounded-l-lg" : ""
-                                } ${i === filterOptions.length - 1
+                              className={`px-3.5 lg:py-1.5  text-black dark:text-white font-light text-base font-poppin border-r  border-[#f0f0f0] dark:border-r dark:border-[#434447] ${
+                                i === 0 ? "rounded-l-lg" : ""
+                              } ${
+                                i === filterOptions.length - 1
                                   ? "border-r-0"
                                   : ""
-                                } ${item.status === "View all"
+                              } ${
+                                item.status === "View all"
                                   ? "bg-[#f5f5f5] text-black dark:bg-[#2A2D30] dark:text-white "
                                   : ""
-                                }`}
+                              }`}
                             >
                               {item.label}
                             </button>
@@ -194,19 +190,17 @@ const HomePage = () => {
                     overflowY: "auto",
                   }}
                 >
-                  {filteredData?.map(
-                    ({ recent_test_runs, ...item }: any) => (
-                      <div className="mb-5" key={item.id}>
-                        <TestRun
-                          specificTest={item}
-                          isDisabled={!item?.full_run_enabled}
-                          lastTestRuns={recent_test_runs}
-                          loading={false}
-                          stubbed={true}
-                        />
-                      </div>
-                    )
-                  )}
+                  {filteredData?.map(({ recent_test_runs, ...item }: any) => (
+                    <div className="mb-5" key={item.id}>
+                      <TestRun
+                        specificTest={item}
+                        isDisabled={!item?.full_run_enabled}
+                        lastTestRuns={recent_test_runs}
+                        loading={false}
+                        stubbed={true}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </section>
@@ -247,10 +241,11 @@ const HomePage = () => {
                     <span
                       // href="#complete"
                       onClick={() => setStep(1)}
-                      className={`${step === 1
-                        ? "text-[#4596F5] bg-[#F2F8FF] border-[#388AEB]"
-                        : "bg-white border-[#D6E6F7] text-[#212427]"
-                        } w-[200px] transition-all duration-300 cursor-pointer relative h-[170px] text-[13px] font-medium border border-dashed rounded-[20px] flex items-center justify-center`}
+                      className={`${
+                        step === 1
+                          ? "text-[#4596F5] bg-[#F2F8FF] border-[#388AEB]"
+                          : "bg-white border-[#D6E6F7] text-[#212427]"
+                      } w-[200px] transition-all duration-300 cursor-pointer relative h-[170px] text-[13px] font-medium border border-dashed rounded-[20px] flex items-center justify-center`}
                       onMouseEnter={() => setStep(1)}
                     >
                       COMPLETE TESTING
@@ -261,10 +256,11 @@ const HomePage = () => {
                     <span
                       // href="#smart"
                       onClick={() => setStep(2)}
-                      className={`${step === 2
-                        ? "text-[#4596F5] bg-[#F2F8FF] border-[#388AEB]"
-                        : "bg-white border-[#D6E6F7] text-[#212427]"
-                        } w-[200px] transition-all duration-300 cursor-pointer relative h-[170px] text-[13px] font-medium border border-dashed rounded-[20px] flex items-center justify-center`}
+                      className={`${
+                        step === 2
+                          ? "text-[#4596F5] bg-[#F2F8FF] border-[#388AEB]"
+                          : "bg-white border-[#D6E6F7] text-[#212427]"
+                      } w-[200px] transition-all duration-300 cursor-pointer relative h-[170px] text-[13px] font-medium border border-dashed rounded-[20px] flex items-center justify-center`}
                       onMouseEnter={() => setStep(2)}
                     >
                       SMART EVALUATION
@@ -275,10 +271,11 @@ const HomePage = () => {
                     <span
                       // href="#enterprise"
                       onClick={() => setStep(3)}
-                      className={`${step === 3
-                        ? "text-[#4596F5] bg-[#F2F8FF] border-[#388AEB]"
-                        : "bg-white border-[#D6E6F7] text-[#212427]"
-                        } w-[200px] transition-all duration-300 cursor-pointer relative h-[170px] text-[13px] font-medium border border-dashed rounded-[20px] flex items-center justify-center`}
+                      className={`${
+                        step === 3
+                          ? "text-[#4596F5] bg-[#F2F8FF] border-[#388AEB]"
+                          : "bg-white border-[#D6E6F7] text-[#212427]"
+                      } w-[200px] transition-all duration-300 cursor-pointer relative h-[170px] text-[13px] font-medium border border-dashed rounded-[20px] flex items-center justify-center`}
                       onMouseEnter={() => setStep(3)}
                     >
                       ENTERPRISE READINESS
@@ -311,10 +308,11 @@ const HomePage = () => {
           </div> */}
                 <div className="ml-0 md:ml-10 relative w-full overflow-hidden space-y-6 md:space-y-0">
                   <div
-                    className={`${step === 1
-                      ? "relative opacity-100 translate-y-0 md:translate-x-0 visible"
-                      : "md:absolute relative top-auto md:top-0 opacity-100 md:opacity-0 visible md:invisible md:translate-x-[100%]"
-                      } w-full transition-all duration-[600ms] border border-dashed border-[#388AEB] rounded-[20px] rounded-t-[20px] lg:p-10 p-6`}
+                    className={`${
+                      step === 1
+                        ? "relative opacity-100 translate-y-0 md:translate-x-0 visible"
+                        : "md:absolute relative top-auto md:top-0 opacity-100 md:opacity-0 visible md:invisible md:translate-x-[100%]"
+                    } w-full transition-all duration-[600ms] border border-dashed border-[#388AEB] rounded-[20px] rounded-t-[20px] lg:p-10 p-6`}
                     style={{
                       background:
                         "linear-gradient(180deg, #F3F8FC 0%, #CBE3F8 100%)",
@@ -350,7 +348,7 @@ const HomePage = () => {
                       <div className="flex items-center">
                         <div className="relative pt-[50%] w-full">
                           <Image
-                            src={"/assets/home/step1.svg"}
+                            src={"/Assets/home/step1.svg"}
                             alt="step1"
                             fill
                           />
@@ -359,10 +357,11 @@ const HomePage = () => {
                     </div>
                   </div>
                   <div
-                    className={`${step === 2
-                      ? "relative opacity-100 translate-y-0 md:translate-x-0 visible"
-                      : "md:absolute relative top-auto md:top-0 opacity-100 md:opacity-0 visible md:invisible md:translate-x-[100%]"
-                      } w-full transition-all duration-[600ms] border border-dashed border-[#388AEB] rounded-[20px] rounded-t-[20px] lg:p-10 p-6`}
+                    className={`${
+                      step === 2
+                        ? "relative opacity-100 translate-y-0 md:translate-x-0 visible"
+                        : "md:absolute relative top-auto md:top-0 opacity-100 md:opacity-0 visible md:invisible md:translate-x-[100%]"
+                    } w-full transition-all duration-[600ms] border border-dashed border-[#388AEB] rounded-[20px] rounded-t-[20px] lg:p-10 p-6`}
                     style={{
                       background:
                         "linear-gradient(180deg, #F3F8FC 0%, #CBE3F8 100%)",
@@ -400,7 +399,7 @@ const HomePage = () => {
                       <div className="flex items-center">
                         <div className="relative pt-[50%] w-full">
                           <Image
-                            src={"/assets/home/step2.svg"}
+                            src={"/Assets/home/step2.svg"}
                             alt="step2"
                             fill
                           />
@@ -409,10 +408,11 @@ const HomePage = () => {
                     </div>
                   </div>
                   <div
-                    className={`${step === 3
-                      ? "relative opacity-100 translate-y-0 md:translate-x-0 visible"
-                      : "md:absolute relative top-auto md:top-0 opacity-100 md:opacity-0 visible md:invisible md:translate-x-[100%]"
-                      } w-full transition-all duration-[600ms] border border-dashed border-[#388AEB] rounded-[20px] rounded-t-[20px] lg:p-10 p-6`}
+                    className={`${
+                      step === 3
+                        ? "relative opacity-100 translate-y-0 md:translate-x-0 visible"
+                        : "md:absolute relative top-auto md:top-0 opacity-100 md:opacity-0 visible md:invisible md:translate-x-[100%]"
+                    } w-full transition-all duration-[600ms] border border-dashed border-[#388AEB] rounded-[20px] rounded-t-[20px] lg:p-10 p-6`}
                     style={{
                       background:
                         "linear-gradient(180deg, #F3F8FC 0%, #CBE3F8 100%)",
@@ -448,7 +448,7 @@ const HomePage = () => {
                       <div className="flex items-center">
                         <div className="relative pt-[50%] w-full">
                           <Image
-                            src={"/assets/home/step3.svg"}
+                            src={"/Assets/home/step3.svg"}
                             alt="step3"
                             fill
                           />

@@ -38,7 +38,7 @@ const HowitworksPage = () => {
         </div>
         <div className="flex-1 howitwork-card overflow-hidden">
           <Image
-            src={"/assets/products/how1.svg"}
+            src={"/Assets/products/how1.svg"}
             alt="how1"
             width={0}
             height={0}
@@ -69,7 +69,7 @@ const HowitworksPage = () => {
         </div>
         <div className="flex-1 howitwork-card overflow-hidden">
           <Image
-            src={"/assets/products/how2.svg"}
+            src={"/Assets/products/how2.svg"}
             alt="how1"
             width={0}
             height={0}
@@ -98,7 +98,7 @@ const HowitworksPage = () => {
         </div>
         <div className="flex-1 howitwork-card overflow-hidden">
           <Image
-            src={"/assets/products/how3.svg"}
+            src={"/Assets/products/how3.svg"}
             alt="how1"
             width={0}
             height={0}
@@ -128,7 +128,7 @@ const HowitworksPage = () => {
         </div>
         <div className="flex-1 howitwork-card overflow-hidden">
           <Image
-            src={"/assets/products/how4.svg"}
+            src={"/Assets/products/how4.svg"}
             alt="how1"
             width={0}
             height={0}
@@ -158,7 +158,7 @@ const HowitworksPage = () => {
         </div>
         <div className="flex-1 howitwork-card overflow-hidden">
           <Image
-            src={"/assets/products/how5.svg"}
+            src={"/Assets/products/how5.svg"}
             alt="how1"
             width={0}
             height={0}

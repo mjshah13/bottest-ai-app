@@ -24,7 +24,7 @@ const MultiLanguagePage = () => {
         </div>
         <div className="w-full">
           <Image
-            src="/assets/solution/multi-language.svg"
+            src="/Assets/solution/multi-language.svg"
             alt="multi-language"
             width={0}
             height={0}
@@ -35,7 +35,7 @@ const MultiLanguagePage = () => {
       <div className="mb-3 md:mb-8 bg-[#F7F9FB] rounded-[20px] p-7 md:p-12 lg:p-[100px] flex flex-col md:flex-row">
         <div className="max-w-full h-[320px] md:h-auto md:max-w-[635px] w-full rounded-[20px] flex items-center justify-center border border-[#D6E6F7] bg-[#FFFFFF33] md:mr-12 lg:mr-[100px] mt-2 md:mt-0 order-2 md:order-1 relative">
           {/* <Image
-            src={"/assets/solution/ai-powered.svg"}
+            src={"/Assets/solution/ai-powered.svg"}
             fill
             alt=""
             objectFit="cover"
@@ -51,7 +51,9 @@ const MultiLanguagePage = () => {
             }
           </div>
           <div className="bg-white border border-[#D6E6F7] p-6 md:p-8 text-sm text-[#616A73] rounded-[20px]">
-            {"In just a few clicks, bottest.ai allows you to easily include any number of languages in your Test coverage. You can specify to include multiple languages for an entire Suite, or individual Tests."}
+            {
+              "In just a few clicks, bottest.ai allows you to easily include any number of languages in your Test coverage. You can specify to include multiple languages for an entire Suite, or individual Tests."
+            }
           </div>
         </div>
       </div>

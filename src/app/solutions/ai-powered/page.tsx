@@ -15,7 +15,11 @@ const AIPoweredPage = () => {
             {
               "Due to the intrinsically obscure nature of how LLMs are structured (often the case with any significantly large machine learning model), determining behavior when inputs are changed can be difficult and unpredictable. Recent research shows that for LLMs in particular, extremely "
             }
-            <a href="https://arxiv.org/html/2401.03729v2" target="_blank" className="text-[#388AEB] underline">
+            <a
+              href="https://arxiv.org/html/2401.03729v2"
+              target="_blank"
+              className="text-[#388AEB] underline"
+            >
               subtle changes in a prompt can result in dramatically different
               responses.
             </a>
@@ -23,7 +27,7 @@ const AIPoweredPage = () => {
         </div>
         <div className="w-full">
           <Image
-            src="/assets/solution/ai-powered.svg"
+            src="/Assets/solution/ai-powered.svg"
             alt="ai-powered"
             width={0}
             height={0}
@@ -34,7 +38,7 @@ const AIPoweredPage = () => {
       <div className="mb-3 md:mb-8 bg-[#F7F9FB] rounded-[20px] p-7 md:p-12 lg:p-[100px] flex flex-col md:flex-row">
         <div className="max-w-full h-[320px] md:h-auto md:max-w-[480px] w-full rounded-[20px] flex items-center justify-center border border-[#D6E6F7] bg-[#FFFFFF33] md:mr-4 mt-2 md:mt-0 order-2 md:order-1 relative">
           {/* <Image
-            src={"/assets/solution/ai-powered.svg"}
+            src={"/Assets/solution/ai-powered.svg"}
             fill
             alt=""
             objectFit="cover"

@@ -1277,19 +1277,19 @@ export const homeStepsData = [
     title: "1. Record",
     description:
       "With just a few clicks, record Tests and set up Baselines for your conversation.",
-    img: "/assets/home/record.svg",
+    img: "/Assets/home/record.svg",
   },
   {
     title: "2. Evaluate",
     description:
       "When testing, responses are evaluated against the established Baseline.",
-    img: "/assets/home/evaluate.svg",
+    img: "/Assets/home/evaluate.svg",
   },
   {
     title: "3. Improve",
     description:
       "Analytics highlight key areas for improvement in your chatbot.",
-    img: "/assets/home/improve.svg",
+    img: "/Assets/home/improve.svg",
   },
 ];
 
