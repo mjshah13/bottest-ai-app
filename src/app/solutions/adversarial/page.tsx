@@ -19,7 +19,11 @@ const AdversarialPage = () => {
             <br />
             <br />
             bottest.ai provides pre-made Test Suites designed after{" "}
-            <a href="https://arxiv.org/abs/2307.02483" target="_blank" className="text-[#388AEB] underline">
+            <a
+              href="https://arxiv.org/abs/2307.02483"
+              target="_blank"
+              className="text-[#388AEB] underline"
+            >
               cutting-edge LLM security research
             </a>{" "}
             to help test for vulnerabilities before you release to production.
@@ -27,7 +31,7 @@ const AdversarialPage = () => {
         </div>
         <div className="w-full">
           <Image
-            src="/assets/solution/adversarial.svg"
+            src="/Assets/solution/adversarial.svg"
             alt="adversarial"
             width={0}
             height={0}
@@ -47,7 +51,7 @@ const AdversarialPage = () => {
           </p>
           <div className="max-w-full h-[250px] md:h-full w-full rounded-[20px] flex items-center justify-center border border-[#D6E6F7] bg-[#FFFFFF33] md:mr-4 relative">
             {/* <Image
-            src={"/assets/solution/ai-powered.svg"}
+            src={"/Assets/solution/ai-powered.svg"}
             fill
             alt=""
             objectFit="cover"
@@ -117,7 +121,7 @@ const AdversarialPage = () => {
           <div className="flex-1">
             <div className="max-w-full h-[250px] md:h-full w-full rounded-[20px] flex items-center justify-center border border-[#D6E6F7] bg-[#FFFFFF33] md:mr-4 relative">
               {/* <Image
-            src={"/assets/solution/ai-powered.svg"}
+            src={"/Assets/solution/ai-powered.svg"}
             fill
             alt=""
             objectFit="cover"

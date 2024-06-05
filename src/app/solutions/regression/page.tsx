@@ -25,7 +25,7 @@ const RegressionPage = () => {
         </div>
         <div className="w-full">
           <Image
-            src="/assets/solution/regression.svg"
+            src="/Assets/solution/regression.svg"
             alt="regression"
             width={0}
             height={0}
@@ -58,7 +58,7 @@ const RegressionPage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/regression/1.png"}
+                src={"/Assets/solution/regression/1.png"}
                 fill
                 alt="regression-1"
                 objectFit="cover"
@@ -86,7 +86,7 @@ const RegressionPage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/regression/2.png"}
+                src={"/Assets/solution/regression/2.png"}
                 fill
                 alt="regression-2"
                 objectFit="cover"
@@ -102,7 +102,10 @@ const RegressionPage = () => {
             {
               "Some user inquiries with your chatbot may only have one answer that is deemed valid or correct, such as when a user is attempting to jailbreak a system (see our protection against this with "
             }
-            <a href="/solutions/adversarial" className="text-[#388AEB] underline">
+            <a
+              href="/solutions/adversarial"
+              className="text-[#388AEB] underline"
+            >
               Adversarial Testing
             </a>
             {")."}
@@ -122,7 +125,7 @@ const RegressionPage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/regression/3.png"}
+                src={"/Assets/solution/regression/3.png"}
                 fill
                 alt="regression-3"
                 objectFit="cover"
@@ -149,7 +152,7 @@ const RegressionPage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/regression/4.png"}
+                src={"/Assets/solution/regression/4.png"}
                 fill
                 alt="regression-4"
                 objectFit="cover"
@@ -178,7 +181,7 @@ const RegressionPage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/regression/1.png"}
+                    src={"/Assets/solution/regression/1.png"}
                     fill
                     alt="regression-1"
                     objectFit="cover"
@@ -201,7 +204,7 @@ const RegressionPage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/regression/2.png"}
+                    src={"/Assets/solution/regression/2.png"}
                     fill
                     alt="regression-2"
                     objectFit="cover"
@@ -224,7 +227,7 @@ const RegressionPage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/regression/3.png"}
+                    src={"/Assets/solution/regression/3.png"}
                     fill
                     alt="regression-3"
                     objectFit="cover"
@@ -247,7 +250,7 @@ const RegressionPage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/regression/4.png"}
+                    src={"/Assets/solution/regression/4.png"}
                     fill
                     alt="regression-4"
                     objectFit="cover"

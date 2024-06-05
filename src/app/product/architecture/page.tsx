@@ -26,7 +26,7 @@ const ArchitectPage = () => {
           </div>
           <div className="w-full lg:ml-[100px] lg:mt-0 mt-5">
             <Image
-              src="/assets/products/architects.svg"
+              src="/Assets/products/architects.svg"
               alt=""
               width={0}
               height={0}
@@ -37,12 +37,13 @@ const ArchitectPage = () => {
         <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 ">
           {architectureHeroData?.map((item, key) => (
             <a href={item?.link} key={key}>
-              <div
-                className="rounded-[20px] bg-[#FFFFFFB2] border border-[#388AEB80] px-6 py-5 group hover:shadow-lg duration-300"
-                
-              >
+              <div className="rounded-[20px] bg-[#FFFFFFB2] border border-[#388AEB80] px-6 py-5 group hover:shadow-lg duration-300">
                 <h1 className="flex items-center text-lg font-medium text-[#212427]">
-                  <ArrowRight color="#FF915B" size={20} className="transform group-hover:translate-x-1 duration-300" />
+                  <ArrowRight
+                    color="#FF915B"
+                    size={20}
+                    className="transform group-hover:translate-x-1 duration-300"
+                  />
                   <span className="ml-3">{item?.title}</span>
                 </h1>
                 <p className="mt-1 text-xs text-[#616A73]">
@@ -77,7 +78,7 @@ const ArchitectPage = () => {
         </div>
         <div className="lg:max-w-[580px] w-full mt-4 lg:mt-0">
           <Image
-            src="/assets/products/arch1.svg"
+            src="/Assets/products/arch1.svg"
             alt="arch1"
             width={0}
             height={0}
@@ -110,7 +111,7 @@ const ArchitectPage = () => {
         </div>
         <div className="lg:max-w-[580px] w-full mt-4 lg:mt-0">
           <Image
-            src="/assets/products/arch2.svg"
+            src="/Assets/products/arch2.svg"
             alt="arch2"
             width={0}
             height={0}
@@ -140,7 +141,7 @@ const ArchitectPage = () => {
         </div>
         <div className="lg:max-w-[580px] w-full mt-4 lg:mt-0">
           <Image
-            src="/assets/products/arch3.svg"
+            src="/Assets/products/arch3.svg"
             alt="arch3"
             width={0}
             height={0}
@@ -169,7 +170,7 @@ const ArchitectPage = () => {
         </div>
         <div className="lg:max-w-[580px] w-full mt-4 lg:mt-0">
           <Image
-            src="/assets/products/arch4.svg"
+            src="/Assets/products/arch4.svg"
             alt="arch4"
             width={0}
             height={0}
@@ -202,7 +203,7 @@ const ArchitectPage = () => {
         </div>
         <div className="lg:max-w-[580px] w-full mt-4 lg:mt-0">
           <Image
-            src="/assets/products/arch5.svg"
+            src="/Assets/products/arch5.svg"
             alt="arch5"
             width={0}
             height={0}
@@ -238,7 +239,7 @@ const ArchitectPage = () => {
         </div>
         <div className="lg:max-w-[580px] w-full mt-4 lg:mt-0">
           <Image
-            src="/assets/products/arch6.svg"
+            src="/Assets/products/arch6.svg"
             alt="arch6"
             width={0}
             height={0}

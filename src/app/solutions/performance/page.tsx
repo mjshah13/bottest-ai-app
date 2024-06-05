@@ -24,7 +24,7 @@ const PerformancePage = () => {
         </div>
         <div className="w-full">
           <Image
-            src="/assets/solution/performance.svg"
+            src="/Assets/solution/performance.svg"
             alt="performance"
             width={0}
             height={0}
@@ -57,7 +57,7 @@ const PerformancePage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/performance/1.png"}
+                src={"/Assets/solution/performance/1.png"}
                 fill
                 alt="performance-1"
                 objectFit="cover"
@@ -85,7 +85,7 @@ const PerformancePage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/performance/2.png"}
+                src={"/Assets/solution/performance/2.png"}
                 fill
                 alt="performance-2"
                 objectFit="cover"
@@ -112,7 +112,7 @@ const PerformancePage = () => {
             </div>
             <div className="h-[400px] flex-1 max-w-[480px] rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
               <Image
-                src={"/assets/solution/performance/3.png"}
+                src={"/Assets/solution/performance/3.png"}
                 fill
                 alt="performance-3"
                 objectFit="cover"
@@ -148,7 +148,7 @@ const PerformancePage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/performance/1.png"}
+                    src={"/Assets/solution/performance/1.png"}
                     fill
                     alt="performance-1"
                     objectFit="cover"
@@ -171,7 +171,7 @@ const PerformancePage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/performance/2.png"}
+                    src={"/Assets/solution/performance/2.png"}
                     fill
                     alt="performance-2"
                     objectFit="cover"
@@ -194,7 +194,7 @@ const PerformancePage = () => {
                 </div>
                 <div className="h-[280px] mx-auto mt-auto max-w-[480px] w-full rounded-[20px] border border-dashed border-[#388AEB] flex relative overflow-hidden">
                   <Image
-                    src={"/assets/solution/performance/3.png"}
+                    src={"/Assets/solution/performance/3.png"}
                     fill
                     alt="performance-3"
                     objectFit="cover"
