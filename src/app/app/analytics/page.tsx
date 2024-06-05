@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import CustomSelect from "../../../elements/select";
+
 import { GlobalStateType, Option } from "../../../utils/typesInterface";
 import { GlobalStateContext } from "../../../globalState";
 import { Box, Grid } from "@radix-ui/themes";
@@ -10,7 +10,6 @@ import useBots from "../../../hooks/useBots";
 import useSuites from "../../../hooks/useSuites";
 import useEnvironment from "../../../hooks/useEnvironment";
 import * as Progress from "@radix-ui/react-progress";
-import CustomButton from "../../../elements/button";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useSuccessChart from "../../../hooks/useSuccessChart";
@@ -19,6 +18,8 @@ import useUsageChart from "../../../hooks/useUsageChart";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import dynamic from "next/dynamic";
 import { useOrganization } from "@clerk/nextjs";
+import CustomSelect from "../../../Elements/select";
+import CustomButton from "../../../Elements/button";
 
 const EvaluationPerformedChart = dynamic(
   () => import("../../components/successCharts/evaluationPerformChart"),
