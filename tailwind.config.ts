@@ -44,7 +44,7 @@ const config: Config = {
 
     extend: {
       minHeight: {
-        "80": "80%", // Adds a `min-h-80` class with a min-height of 60%
+        "80": "80%", 
       },
       colors: {
         ...mauve,
