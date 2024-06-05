@@ -601,7 +601,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
     // Add the image to the PDF
-    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, desiredHeight);
+    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
     // Save the generated PDF
     doc.save("${data?.suite_name} Suite Run");

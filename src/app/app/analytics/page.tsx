@@ -45,21 +45,20 @@ const UsageEvaluationPerformedChart = dynamic(
 
 const Analytics = () => {
   const [progress, setProgress] = useState(0);
-
+  const [selectedBot, setSelectedBot] = useState<Option | null>(null);
   const [selectedSuite, setSelectedSuite] = useState<Option | null>(null);
   const [selectedEnvironment, setSelectedEnvironment] = useState<Option | null>(
     null
   );
-  const [selectedBot, setSelectedBot] = useState<Option | null>(null);
+  
   const { botLists, suiteLists, environmentLists } = useContext(
     GlobalStateContext
   ) as GlobalStateType;
-
-  useBots(setSelectedBot);
   const { organization } = useOrganization();
 
-  const { fetchSuites } = useSuites(setSelectedSuite);
-  const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
+  // useBots(setSelectedBot);
+  // const { fetchSuites } = useSuites(setSelectedSuite);
+  // const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
   const {
     fetchSuccessChart,
     successChartData,
@@ -76,11 +75,13 @@ const Analytics = () => {
     isLoading: usageLoading,
   } = useUsageChart();
 
-  useEffect(() => {
-    if (!selectedBot) return;
-    fetchSuites(selectedBot?.id);
-    fetchEnvironment(selectedBot.id);
-  }, [selectedBot]);
+  // useEffect(() => {
+  //   if (!selectedBot) return;
+  //   fetchSuites(selectedBot?.id);
+  //   fetchEnvironment(selectedBot.id);
+  // }, [selectedBot]);
+
+ 
 
   useEffect(() => {
     const totalUsed = usageChartData?.total_used || 0;
@@ -101,6 +102,12 @@ const Analytics = () => {
     setSelectedSuite(null);
     setSelectedEnvironment(null);
   }, [organization?.id]);
+
+  useEffect(() => {
+    setSelectedBot(botLists[0])
+    setSelectedSuite(suiteLists[0])
+    setSelectedEnvironment(environmentLists[0])
+  }, [botLists , suiteLists , environmentLists])
 
   return (
     <div

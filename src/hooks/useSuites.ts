@@ -10,7 +10,7 @@ import { GlobalStateContext } from "../globalState";
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useSuites = (setSelectedSuite: any) => {
+const useSuites = () => {
   const { organization } = useOrganization();
 
   const { setSuiteLists } = useContext(GlobalStateContext) as GlobalStateType;
@@ -46,7 +46,7 @@ const useSuites = (setSelectedSuite: any) => {
             })
           ) || [];
         setSuiteLists(selectDataItems);
-        setSelectedSuite(selectDataItems[0]);
+        // setSelectedSuite(selectDataItems[0]);
       } catch (error: any) {
         console.error({ error });
         setError(error);
