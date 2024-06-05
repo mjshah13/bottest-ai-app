@@ -230,7 +230,7 @@ const AnalyticsReports = () => {
             <div className=" pt-6">
               <Grid columns={{ initial: "1", md: "2" }} gap="7" width="auto">
                 <Box className="border rounded-2xl border-borderLightgrey">
-                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-extrabold text-black">
+                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-semibold text-black">
                     Number Of Tests
                   </h1>
                   <div className="px-4 flex justify-center items-center h-[84%]">
@@ -251,7 +251,7 @@ const AnalyticsReports = () => {
                   </div>
                 </Box>
                 <Box className="border rounded-2xl border-borderLightgrey">
-                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-extrabold text-black">
+                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-semibold text-black">
                     Comparison
                   </h1>
                   <div className="px-4 flex justify-center items-center h-[84%]">
@@ -302,7 +302,7 @@ const AnalyticsReports = () => {
               </div>
               <Grid columns={{ initial: "1", md: "2" }} gap="7" width="auto">
                 <Box className="border rounded-2xl border-borderLightgrey">
-                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-extrabold text-black">
+                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-semibold text-black">
                     Number Of Evaluations
                   </h1>
                   <div className="px-4 flex justify-center items-center h-[84%]">
@@ -323,7 +323,7 @@ const AnalyticsReports = () => {
                   </div>
                 </Box>
                 <Box className="border rounded-2xl border-borderLightgrey">
-                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-extrabold text-black">
+                  <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-semibold text-black">
                     Comparison
                   </h1>
                   <div className="px-4 flex justify-center items-center h-[84%]">
@@ -592,7 +592,7 @@ const AnalyticsReports = () => {
               <div className=" mt-6 mb-10">
                 <Grid columns={{ initial: "1", md: "2" }} gap="7" width="auto">
                   <Box className="border rounded-2xl border-borderLightgrey">
-                    <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-extrabold text-black">
+                    <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-semibold text-black">
                       Performance Distribution
                     </h1>
                     <div className="px-4 flex justify-center items-center h-[84%]">
@@ -609,7 +609,7 @@ const AnalyticsReports = () => {
                     </div>
                   </Box>
                   <Box className="border rounded-2xl border-borderLightgrey">
-                    <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-extrabold text-black">
+                    <h1 className="h-[68px] flex items-center ps-6 border-b border-borderLightgrey text-[20px] font-poppins font-semibold text-black">
                       Comparison
                     </h1>
                     <div className="px-4 flex justify-center items-center h-[84%]">
@@ -769,6 +769,8 @@ const AnalyticsReports = () => {
           </div>
         </div>
       </div>
+
+      
     </>
   );
 };

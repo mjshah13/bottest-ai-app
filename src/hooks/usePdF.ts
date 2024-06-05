@@ -8,6 +8,8 @@ const usePDF = (): UsePDFHook => {
   const [error, setError] = useState<string | null>(null);
   const generatePDF = async (data: AnalyticsReportType): Promise<void> => {
     const htmlContent = printReport(data);
+    // console.log(htmlContent , 'htmlContent')
+    
     setLoading(true);
     setError(null);
 
@@ -16,7 +18,10 @@ const usePDF = (): UsePDFHook => {
         htmlContent,
       });
 
+      
+
       const responseData = response.data;
+      // console.log(responseData , "response")
       // Open the HTML content in a new window
       const newWindow = window.open("", "_blank")!;
       newWindow.document.write(responseData);

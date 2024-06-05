@@ -127,7 +127,7 @@ const PerformanceDistributionChart: React.FC<UsageEvaluationPerformProps> = ({
   }, [categories]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md w-full h-full barchart">
+    <div className="bg-white rounded-lg  w-full h-full barchart">
       <Chart options={options} series={series} type="bar" height={450} />
     </div>
   );

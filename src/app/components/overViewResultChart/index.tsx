@@ -207,7 +207,7 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
   };
 
   return (
-    <div id={id} className="bg-white rounded-lg shadow-md w-full h-full p-4">
+    <div id={id} className="bg-white rounded-lg w-full h-full p-4">
       <Chart
         // ref={chartRef}
         options={options}

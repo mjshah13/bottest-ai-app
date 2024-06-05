@@ -1,80 +1,4 @@
-import { filter } from "lodash";
-import { AnalyticsReportType, Test, TestType } from "./typesInterface";
-import moment from "moment";
-import { Wrench, Map, KeyRound, Database } from "lucide-react";
-
-export const ROOT_API_URL = `https://kkhcslhnef.execute-api.us-east-1.amazonaws.com/`;
-
-export const filterOptions = [
-  {
-    key: 1,
-    label: "View all",
-    status: "View all",
-    include: false,
-  },
-  {
-    key: 2,
-    label: "Failed",
-    status: "Fail",
-    include: true,
-  },
-  {
-    key: 3,
-    label: "Passed",
-    status: "Pass",
-    include: true,
-  },
-  {
-    key: 4,
-    label: "Mixed",
-    status: "Mixed",
-    include: true,
-  },
-  {
-    key: 5,
-    label: "Running",
-    status: "Running",
-    include: true,
-  },
-  {
-    key: 6,
-    label: "Stopped",
-    status: "Stopped",
-    include: true,
-  },
-  {
-    key: 7,
-    label: "Skipped",
-    status: "Skipped",
-    include: true,
-  },
-  {
-    key: 1,
-    label: "Error",
-    status: "Error",
-    include: true,
-  },
-];
-
-export const getStatuses = filterOptions
-  ?.filter((status) => status?.include)
-  ?.map((status) => status?.status);
-
-export const TabBtn = ["Suite’s default", "Custom"];
-
-export const configOption = {
-  most_recent_same_environment: "most_recent_same_environment",
-  most_recent_different_environment: "most_recent_different_environment",
-  specific_suite_run: "specific_suite_run",
-};
-
-
-
-
-
-export const printReport = (
-  data: AnalyticsReportType | undefined
-) => `<html lang="en">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,9 +7,9 @@ export const printReport = (
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<style>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Arabic:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Press+Start+2P&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 
+<style>
     body {
         font-family: 'Poppins', sans-serif;
         margin: 0;
@@ -247,15 +171,12 @@ export const printReport = (
     }
     #barchart{
         padding: 1rem;
-        
     }
     #barchart2{
         padding: 1rem;
-        
     }
     #piechart1,#piechart2{
         padding:1rem;
-       
     }
    .content-text{
      padding-top: 1rem;
@@ -287,14 +208,8 @@ export const printReport = (
 
             </div>
             <div>
-                <h1 class="title">${
-                  data?.suite_name
-                } Suite Run <span class="small-text">(Executed on ${moment(
-  data?.suite_run_timestamp
-).format("D MMM YYYY, h:mm A")} PST)</span></h1>  
-                <h2 class="subtitle">Comparison Suite Run: ${moment(
-                  data?.suite_run_timestamp
-                ).format("D MMM YYYY, h:mm A")} PST</h2>
+                <h1 class="title">Feature Suite Run <span class="small-text">(Executed on 17 May 2024, 9:52 PM PST)</span></h1>  
+                <h2 class="subtitle">Comparison Suite Run: 17 May 2024, 9:52 PM PST</h2>
             </div>
         </div>
 
@@ -312,24 +227,52 @@ export const printReport = (
                     </tr>
                 </thead>
                 <tbody>
-                ${data?.tests
-                  ?.map((test: Test) => {
-                    return `
+                
                   <tr>
-                      <td>${test?.test_name}</td>
-                      <td>${
-                        test?.use_default_success_criteria
-                          ? "Default"
-                          : "Custom"
-                      }</td>
-                      <td>${test?.baseline_count}</td>
-                      <td>${test?.variant_count}</td>
-                      <td>${test?.iteration_count}</td>
-                      <td>${test?.evaluation_count}</td>
+                      <td>Environmental Impact Query</td>
+                      <td>Custom</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>6</td>
                   </tr>
-                  `;
-                  })
-                  .join("")}
+                  
+                  <tr>
+                      <td>Order Status Update</td>
+                      <td>Default</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>4</td>
+                      <td>8</td>
+                  </tr>
+                  
+                  <tr>
+                      <td>Subscription Query</td>
+                      <td>Default</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>6</td>
+                  </tr>
+                  
+                  <tr>
+                      <td>Feature Request</td>
+                      <td>Custom</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>6</td>
+                  </tr>
+                  
+                  <tr>
+                      <td>Lost Item Inquiry</td>
+                      <td>Custom</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>6</td>
+                  </tr>
+                  
                    
                 </tbody>
             </table>
@@ -339,20 +282,12 @@ export const printReport = (
             <h2>Overview of Results</h2>
             <p class="content">
                 <ul class="list">
-                    <li class="list-item">A total of ${
-                      data?.overview?.total_test_count
-                    } Tests,
-                    ${data?.overview?.total_variant_count} Variants, and
-                    ${data?.overview?.total_evaluation_count} Evaluations were
+                    <li class="list-item">A total of 5 Tests,
+                    10 Variants, and
+                    32 Evaluations were
                     included in this Suite run.</li>
-                    <li class="list-item"><span class="highlight">${data?.overview?.test_pass_rate?.toFixed(
-                      2
-                    )}%
-                    of Tests passed</span>  fully (with no failures), <span class="highlight">up ${data?.overview?.delta_test_pass_rate.toFixed(
-                      1
-                    )}%</span> the <span class="highlight-blue">26 ${
-  data?.comparison_run_name ? data?.comparison_run_name : data?.suite_name
-}
+                    <li class="list-item"><span class="highlight">0.40%
+                    of Tests passed</span>  fully (with no failures), <span class="highlight">up -0.1%</span> the <span class="highlight-blue">26 Feature
                     Run.</span> </li>
 
                 </ul>
@@ -379,18 +314,7 @@ export const printReport = (
             </div>
             
                 <ul class="list-pt">
-                    <li class="list-item">Out of the <span class="highlight-dark">${
-                      data?.overview?.total_evaluation_count
-                    }</span> Evaluations performed, <span class="highlight">${(
-  (data?.overview?.total_evaluation_count || 0) *
-  (data?.overview?.evaluation_pass_rate || 0)
-).toFixed(1)} Evaluations (${data?.overview?.evaluation_pass_rate.toFixed(
-  1
-)}%) passed, up ${data?.overview?.delta_evaluation_pass_rate.toFixed(
-  0
-)}%</span> from the <span class="highlight-blue font-bold">${
-  data?.comparison_run_name ? data?.comparison_run_name : data?.suite_name
-}
+                    <li class="list-item">Out of the <span class="highlight-dark">32</span> Evaluations performed, <span class="highlight">12.8 Evaluations (0.4%) passed, up -0%</span> from the <span class="highlight-blue font-bold">Feature
 Run.</span> </li>
 
                 </ul>
@@ -421,11 +345,7 @@ Run.</span> </li>
             <h2>Improvements</h2>
             <p class="content">
                 <ul class="list">
-                    <li class="list-item">The following Tests saw a <span class="highlight">higher pass rate</span> as compared to the <span class="highlight-blue">${
-                      data?.comparison_run_name
-                        ? data?.comparison_run_name
-                        : data?.suite_name
-                    } Run:</span> </li>
+                    <li class="list-item">The following Tests saw a <span class="highlight">higher pass rate</span> as compared to the <span class="highlight-blue">Feature Run:</span> </li>
 
                 </ul>
                 
@@ -440,19 +360,7 @@ Run.</span> </li>
                 </thead>
 
                 <tbody>
-                ${data?.improvements?.test_improvements
-                  ?.map((item) => {
-                    return `
-                  <tr>
-                 
-                  <td>${item?.test_name}</td>
-                  <td>${item?.pass_rate.toFixed(1)}%</td>
-                  <td>${item?.comparison_pass_rate.toFixed(1)}%</td>
-              
-                  </tr>
-                  `;
-                  })
-                  .join("")}
+                
                    
                 </tbody>
             </table>
@@ -477,19 +385,31 @@ Run.</span> </li>
                     </tr>
                 </thead>
                 <tbody>
-                ${data?.failures?.test_failures
-                  ?.map((item) => {
-                    return `
+                
                   <tr>
-                        <td>${item?.test_name}</td>
-                        <td>${(item?.pass_rate).toFixed(1)}%</td>
-                        <td>${
-                          item?.failure_summary
-                        } <a href="#" class="link-text">(See Test Run)</a></td>
+                        <td>Order Status Update</td>
+                        <td>0.5%</td>
+                        <td>stubbed_failure_reason <a href="#" class="link-text">(See Test Run)</a></td>
                     </tr>
-                  `;
-                  })
-                  .join("")}
+                  
+                  <tr>
+                        <td>Subscription Query</td>
+                        <td>0.5%</td>
+                        <td>stubbed_failure_reason <a href="#" class="link-text">(See Test Run)</a></td>
+                    </tr>
+                  
+                  <tr>
+                        <td>Feature Request</td>
+                        <td>0.0%</td>
+                        <td>stubbed_failure_reason <a href="#" class="link-text">(See Test Run)</a></td>
+                    </tr>
+                  
+                  <tr>
+                        <td>Lost Item Inquiry</td>
+                        <td>0.0%</td>
+                        <td>stubbed_failure_reason <a href="#" class="link-text">(See Test Run)</a></td>
+                    </tr>
+                  
                     
                 </tbody>
             </table>
@@ -500,11 +420,7 @@ Run.</span> </li>
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
-                The average Test completion time was <span class="highlight-dark">${data?.performance?.average_run_time.toFixed(
-                  1
-                )}</span>  seconds, which is <span class="highlight">13% faster</span> as compared to the <span class="highlight-blue font-bold">${
-  data?.comparison_run_name ? data?.comparison_run_name : data?.suite_name
-} Run</span> 
+                The average Test completion time was <span class="highlight-dark">213.6</span>  seconds, which is <span class="highlight">13% faster</span> as compared to the <span class="highlight-blue font-bold">Feature Run</span> 
                     </li>
 
                 </ul>
@@ -532,11 +448,7 @@ Run.</span> </li>
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
-                The following Tests had an average run time that was <span class="highlight-red">>10% slower</span> compared to the <span class="highlight-blue font-bold">${
-                  data?.comparison_run_name
-                    ? data?.comparison_run_name
-                    : data?.suite_name
-                } Run:</span> 
+                The following Tests had an average run time that was <span class="highlight-red">>10% slower</span> compared to the <span class="highlight-blue font-bold">Feature Run:</span> 
 
                     </li>
 
@@ -554,20 +466,16 @@ Run.</span> </li>
                     </tr>
                 </thead>
                 <tbody>
-                ${data?.performance?.test_performances
-                  ?.map((item) => {
-                    return `
+                
                   <tr>
-                  <td>${item?.test_name}</td>
-                  <td>${item?.average_run_time?.toFixed(1)} sec</td>
-                  <td>${item?.comparison_average_run_time?.toFixed(1)} sec</td>
-                  <td>${item?.percent_slower?.toFixed(1)}%</td>
-                  <td>${item?.min_run_time} sec</td>
-                  <td>${item?.max_run_time} sec</td>
+                  <td>Environmental Impact Query</td>
+                  <td>250.9 sec</td>
+                  <td>178.6 sec</td>
+                  <td>0.4%</td>
+                  <td>48.66 sec</td>
+                  <td>401.63 sec</td>
               </tr>
-                  `;
-                  })
-                  .join("")}
+                  
                   
                 </tbody>
             </table>
@@ -586,8 +494,7 @@ Run.</span> </li>
 
     // Convert the canvas to an image (data URL)
     const imgData = canvas.toDataURL('image/png');
-    console.log(imgData);
-
+    
     // Create a new jsPDF instance
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'pt', '');
@@ -604,7 +511,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, desiredHeight);
 
     // Save the generated PDF
-    doc.save("${data?.suite_name} Suite Run");
+    doc.save("Feature Suite Run");
 }
   
           window.addEventListener('DOMContentLoaded', function() {
@@ -652,14 +559,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "'Poppins',sans-serif",
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -669,7 +576,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: "Poppins",
       }
     },
     yaxis: {
@@ -680,14 +587,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -741,14 +648,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -758,7 +665,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       enabled: true,
       y: {},
       style: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: "Poppins",
       }
     },
     yaxis: {
@@ -769,14 +676,14 @@ doc.internal.pageSize.setHeight(desiredHeight);
           fontWeight: 400,
           color: "#909193",
           fontSize: "16px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
         }
       },
       labels: {
         style: {
           colors: "#212427",
           fontSize: "12px",
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: "Poppins",
           fontWeight: 600
         }
       },
@@ -804,6 +711,8 @@ doc.internal.pageSize.setHeight(desiredHeight);
   const chart2 = new ApexCharts(document.querySelector("#barchart2"), comparisonBarOption);
   chart.render();
   chart2.render();
+
+  
 
   const donutOptionOne = {
     chart: {
@@ -838,7 +747,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
               label:"5 Tests", 
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -848,7 +757,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -856,7 +765,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -904,7 +813,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
               label: "5 Tests",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -914,7 +823,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -922,7 +831,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -970,7 +879,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
               label: "30 Evaluations",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -980,7 +889,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -988,7 +897,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -1036,7 +945,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
               label: "30 Evaluations",
               fontSize: "24px",
               fontWeight: 600,
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: "Poppins",
               color: "#909193"
             }
           }
@@ -1046,7 +955,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
     tooltip: {
       enabled: true,
       style: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: "Poppins"
       }
     },
     legend: {
@@ -1054,7 +963,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
       offsetY: 50,
       fontSize: "16px",
       fontWeight: "400",
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: "Poppins",
       labels: {
         colors: "#212427",
         useSeriesColors: false
@@ -1091,375 +1000,4 @@ doc.internal.pageSize.setHeight(desiredHeight);
   
 </body>
 </html>
-			`;
-export const homeNavData = [
-  {
-    label: "Product",
-    sub: [
-      {
-        label: "How it works",
-        link: "/product/how-it-works",
-      },
-      {
-        label: "Architecture",
-        link: "/product/architecture",
-      },
-      {
-        label: "Key Concepts",
-        link: "/product/concepts",
-      },
-      {
-        label: "Deployment Options",
-        link: "/product/deployment",
-      },
-    ],
-  },
-  {
-    label: "Solutions",
-    sub: [
-      {
-        label: "Regression Testing",
-        link: "/solutions/regression",
-      },
-      {
-        label: "Performance Testing",
-        link: "/solutions/performance",
-      },
-      {
-        label: "Adversarial Testing",
-        link: "/solutions/adversarial",
-      },
-      {
-        label: "Multi-Language Testing",
-        link: "/solutions/multi-language",
-      },
-      {
-        label: "AI-Powered Coverage",
-        link: "/solutions/ai-powered",
-      },
-    ],
-  },
-  {
-    label: "Pricing",
-    link: "/pricing",
-  },
-  {
-    label: "Resources",
-    sub: [
-      {
-        label: "Demos",
-        link: "#",
-      },
-      {
-        label: "Q&A",
-        link: "/resources/faq",
-      },
-      {
-        label: "Documentation",
-        link: "#",
-      },
-    ],
-  },
-  {
-    label: "Company",
-    sub: [
-      {
-        label: "About us",
-        link: "/company/about",
-      },
-      {
-        label: "Contact us",
-        link: "/company/contact",
-      },
-      {
-        label: "Blog",
-        link: "/blog",
-      },
-      {
-        label: "Careers",
-        link: "https://www.linkedin.com/company/bottest-ai/jobs/",
-        target: "_blank",
-      },
-    ],
-  },
-];
-
-export const homeFooterNavData = [
-  {
-    title: "Product",
-    links: [
-      {
-        label: "How it works",
-        href: "/product/how-it-works",
-      },
-      {
-        label: "Architecture",
-        href: "/product/architecture",
-      },
-      {
-        label: "Key Concepts",
-        href: "/product/concepts",
-      },
-      {
-        label: "Deployment Options",
-        href: "/product/deployment",
-      },
-    ],
-  },
-  {
-    title: "SOLUTIONS",
-    links: [
-      {
-        label: "Regression Testing",
-        href: "/solutions/regression",
-      },
-      {
-        label: "Performance Testing",
-        href: "/solutions/performance",
-      },
-      {
-        label: "Adversarial Testing",
-        href: "/solutions/adversarial",
-      },
-      {
-        label: "Multi-Language Testing",
-        href: "/solutions/multi-language",
-      },
-      {
-        label: "AI-Powered Coverage",
-        href: "/solutions/ai-powered",
-      },
-    ],
-  },
-  {
-    title: "pricing",
-    links: [
-      {
-        label: "Comparison",
-        href: "/pricing",
-      },
-    ],
-  },
-  {
-    title: "resources",
-    links: [
-      {
-        label: "Demos",
-        href: "#",
-      },
-      {
-        label: "Q&A",
-        href: "/resources/faq",
-      },
-      {
-        label: "Documentation",
-        href: "#",
-      },
-    ],
-  },
-  {
-    title: "company",
-    links: [
-      {
-        label: "About us",
-        href: "/company/about",
-      },
-      {
-        label: "Contact us",
-        href: "/company/contact",
-      },
-      {
-        label: "Careers",
-        href: "https://www.linkedin.com/company/bottest-ai/jobs/",
-        target: "_blank",
-      },
-      {
-        label: "Blog",
-        href: "/blog",
-      },
-    ],
-  },
-];
-
-export const homeStepsData = [
-  {
-    title: "1. Record",
-    description:
-      "With just a few clicks, record Tests and set up Baselines for your conversation.",
-    img: "/Assets/home/record.svg",
-  },
-  {
-    title: "2. Evaluate",
-    description:
-      "When testing, responses are evaluated against the established Baseline.",
-    img: "/Assets/home/evaluate.svg",
-  },
-  {
-    title: "3. Improve",
-    description:
-      "Analytics highlight key areas for improvement in your chatbot.",
-    img: "/Assets/home/improve.svg",
-  },
-];
-
-export const architectureHeroData = [
-  {
-    title: "Chrome Extension",
-    description:
-      "Record new Tests and run them straight from your browser. Smart recording technology tracks complex UI interactions.",
-    link: "#chrome-extension",
-  },
-  {
-    title: "Test Repository",
-    description:
-      "Manage your full Suite of Tests, Baselines, and Test Run results all in one central place. Share and collaborate across your team.",
-    link: "#test-repository",
-  },
-  {
-    title: "Analytics Platform",
-    description:
-      "Track Test Run data to understand performance over time. Receive emailed reports highlighting changes key metrics.",
-    link: "#analytics-platform",
-  },
-  {
-    title: "Test Evaluator",
-    description:
-      "Have confidence in your chatbot’s performance with the bottest.ai LLM-powered evaluation engine.",
-    link: "#test-evaluator",
-  },
-  {
-    title: "bottest.ai Database",
-    description:
-      "Store all your testing data with built-in security, privacy, reliability, and SOC2 compliance. ",
-    link: "#bottestai-database",
-  },
-  {
-    title: "Execution Engine",
-    description:
-      "Run Tests in the cloud on an automated schedule or hook into existing CI/CD pipelines with secure APIs. ",
-    link: "#execution-engine",
-  },
-];
-
-export const pricingData = [
-  {
-    title: "Starter",
-    description: "For getting started and small scale testing.",
-    benefits: [
-      "First 100 test runs",
-      "1 user",
-      "1 bot",
-      "1 suite",
-      "1 environment",
-      "10 tests",
-      "1 baseline / test",
-    ],
-    price: 0,
-    button: "Start for free",
-  },
-  {
-    title: "Individual",
-    description: "For solo testers, simple projects, or those on a budget.",
-    benefits: [
-      "1,000/mo test runs",
-      "1 user",
-      "1 bot",
-      "3 suites",
-      "2 environments",
-      "100 tests",
-      "2 baselines / tests",
-    ],
-    price: 25,
-    button: "Get Individual",
-  },
-  {
-    title: "Professional",
-    description:
-      "For teams and businesses who want full test coverage or have multiple product.",
-    benefits: [
-      "10,000/mo test runs",
-      "5 users",
-      "2 bots",
-      "8 suites",
-      "1 environment",
-      "Unlimited tests",
-      "5 baselines / tests",
-    ],
-    price: 500,
-    button: "Get Professional",
-  },
-  {
-    title: "Enterprise",
-    description:
-      "For those needing an enterprise-grade solution, with custom pricing.",
-    benefits: [
-      "test runs",
-      "users",
-      "bots",
-      "suites",
-      "environments",
-      "tests",
-      "baselines / tests",
-    ],
-    price: "Let's talk",
-    button: "Contact us",
-  },
-];
-
-export const pricingTable = [
-  ["Trending Analytics Dashboard", true, true, true, true],
-  ["Suite Run Reports", false, false, true, true],
-  ["On-premise Deployment", false, false, false, true],
-  ["Webhook Integrations", false, false, false, true],
-  ["SSO Integrations", false, false, false, true],
-  ["Adversarial Testing", false, false, true, true],
-  ["Variant Test Coverage", false, false, true, true],
-  ["Multi-language Test Coverage", false, false, true, true],
-];
-
-export const faqTitles = [
-  {
-    title: "What is chatbot testing?",
-    index: "what_is_chatbot_testing",
-  },
-  {
-    title: "How do I test a chatbot?",
-    index: "how_do_i_test_a_chatbot",
-  },
-  {
-    title: "What are the best practices for chatbot testing?",
-    index: "what_are_the_best_practices_for_chatbot_testing",
-  },
-  {
-    title: "How should chatbot test cases be defined?",
-    index: "how_should_chatbot_test_cases_be_defined",
-  },
-  {
-    title: "Why is automation essential to software testing for chatbots?",
-    index: "why_is_automation_essential_to_software_testing_for_chatbots",
-  },
-  {
-    title:
-      "How do traditional automation testing tools fall short when testing AI chatbots?",
-    index:
-      "how_do_traditional_automation_testing_tools_fall_short_when_testing_ai_chatbots",
-  },
-  {
-    title:
-      "How is chatbot testing different from traditional application testing or traditional automation testing?",
-    index:
-      "how_is_chatbot_testing_different_from_traditional_application_testing_or_traditional_automation_testing",
-  },
-  {
-    title:
-      "What are the metrics that measure the success of the chatbot testing process?",
-    index:
-      "what_are_the_metrics_that_measure_the_success_of_the_chatbot_testing_process",
-  },
-  {
-    title:
-      "What are the metrics that measure the success of the chatbot testing process?",
-    index:
-      "what_are_the_metrics_that_measure_the_success_of_the_chatbot_testing_process1",
-  },
-];
+			
