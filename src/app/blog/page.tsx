@@ -66,7 +66,7 @@ const BlogPage = () => {
         </div>
         <div className="max-w-[588px] w-full">
           <Image
-            src="/Assets/blog-banner.svg"
+            src="/assets/blog-banner.svg"
             alt=""
             width={0}
             height={0}
@@ -76,11 +76,7 @@ const BlogPage = () => {
       </div>
       <div className="">
         {allPosts[0] && (
-          <Link
-            href={allPosts[0].slug}
-            target="_blank"
-            className="border border-[#D6E6F7] min-h-[320px] rounded-[20px] bg-white flex flex-col sm:flex-row overflow-hidden mb-8 group hover:shadow-md duration-100"
-          >
+          <Link href={allPosts[0].slug} target="_blank" className="border border-[#D6E6F7] min-h-[320px] rounded-[20px] bg-white flex flex-col sm:flex-row overflow-hidden mb-8 group hover:shadow-md duration-100">
             <div className="bg-[#D6E6F7] w-full sm:w-[45%] min-h-[228px] flex relative border-b sm:border-b-0 sm:border-r border-[#D6E6F7]">
               <Image src={allPosts[0].image} fill alt="" objectFit="cover" />
             </div>

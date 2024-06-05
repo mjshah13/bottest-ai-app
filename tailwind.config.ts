@@ -44,7 +44,7 @@ const config: Config = {
 
     extend: {
       minHeight: {
-        "80": "80%",
+        "80": "80%", 
       },
       colors: {
         ...mauve,
@@ -65,12 +65,12 @@ const config: Config = {
         slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
       },
       backgroundImage: {
-        "home-hero-bg-d": "url('/Assets/home/hero-bg-d.svg')",
-        "home-hero-bg-m": "url('/Assets/home/hero-bg-m.svg')",
-        "home-ready-bg-d": "url('/Assets/home/ready-bg-d.svg')",
-        "home-ready-bg-m": "url('/Assets/home/ready-bg-m.svg')",
-        "product-howitworks-m": "url('/Assets/products/howitwork-m.svg')",
-        "product-howitworks-d": "url('/Assets/products/howitwork-d.svg')",
+        "home-hero-bg-d": "url('/assets/home/hero-bg-d.svg')",
+        "home-hero-bg-m": "url('/assets/home/hero-bg-m.svg')",
+        "home-ready-bg-d": "url('/assets/home/ready-bg-d.svg')",
+        "home-ready-bg-m": "url('/assets/home/ready-bg-m.svg')",
+        "product-howitworks-m": "url('/assets/products/howitwork-m.svg')",
+        "product-howitworks-d": "url('/assets/products/howitwork-d.svg')",
       },
       backgroundSize: {
         full: "100%",

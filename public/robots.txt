@@ -1,5 +1,5 @@
 User-agent: *
-Disallow: /Assets/
+Disallow: /assets/
 Disallow: /app/
 Disallow: /sign-in/
 Disallow: /sign-up/

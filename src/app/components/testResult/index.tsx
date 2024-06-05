@@ -150,7 +150,7 @@ const TestResult: React.FC<ModalProps> = ({
         <Dialog.Content
           minWidth={"1088px"}
           className="min-h-[740px]"
-          // style={{ minHeight: "890px", height: "100%" }}
+        // style={{ minHeight: "890px", height: "100%" }}
         >
           <Grid columns="240px 1fr" className="min-h-[740px] h-full ">
             <Box>
@@ -198,10 +198,9 @@ const TestResult: React.FC<ModalProps> = ({
                                   <div
                                     key={evalIndex}
                                     className={`px-3 h-[40px] mb-[4px] flex  items-center gap-2.5 rounded-lg  hover:bg-primary hover:text-secondary cursor-pointer
-                                     ${
-                                       selectedEvaluation?.id ===
-                                         evaluation?.id && "bg-primary "
-                                     }
+                                     ${selectedEvaluation?.id ===
+                                      evaluation?.id && "bg-primary "
+                                      }
                                     `}
                                     onClick={() => {
                                       handleEvaluation(
@@ -312,8 +311,7 @@ const TestResult: React.FC<ModalProps> = ({
                         onClick={() =>
                           downloadJson(
                             selectedEvaluation?.conversation_json,
-                            `Variant ${selectedVariantLetter} - Iteration ${
-                              selectedIteration || "Baseline"
+                            `Variant ${selectedVariantLetter} - Iteration ${selectedIteration || "Baseline"
                             }`
                           )
                         }
@@ -423,7 +421,7 @@ const TestResult: React.FC<ModalProps> = ({
                   <Image
                     width={184}
                     height={152}
-                    src="/Assets/noData.svg"
+                    src="/assets/noData.svg"
                     alt=""
                   />
                   <h1 className="text-black font-semibold text-lg mt-2 ">

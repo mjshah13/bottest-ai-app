@@ -40,7 +40,7 @@ const HomeHeader = () => {
           href={"/"}
         >
           <Image
-            src="/Assets/Logo.svg"
+            src="/assets/Logo.svg"
             alt="logo"
             width={126}
             height={28}
@@ -65,20 +65,14 @@ const HomeHeader = () => {
                       {item.label}
                     </Link>
                   )}
-                  {item.sub && (
-                    <ChevronDown
-                      size={16}
-                      className="transform group-hover:translate-y-0.5 duration-300"
-                    />
-                  )}
+                  {item.sub && <ChevronDown size={16} className="transform group-hover:translate-y-0.5 duration-300" />}
                 </div>
                 {item.sub && (
                   <div
-                    className={`pt-7 absolute left-0 transition-all duration-300 ${
-                      activeSub === item.label
-                        ? "visible opacity-100"
-                        : "invisible opacity-0"
-                    }`}
+                    className={`pt-7 absolute left-0 transition-all duration-300 ${activeSub === item.label
+                      ? "visible opacity-100"
+                      : "invisible opacity-0"
+                      }`}
                   >
                     <div
                       className={`bg-white rounded-md shadow-card shadow-primary min-w-40 px-2 py-2`}
@@ -141,15 +135,14 @@ const HomeHeader = () => {
         </div>
       </div>
       <div
-        className={`fixed flex flex-col w-full h-full max-w-[375px] z-50 top-0 transition-all duration-700 bg-white ${
-          toggleSidebar
-            ? "left-0 opacity-100 visible"
-            : "invisible left-[-375px] opacity-0"
-        }`}
+        className={`fixed flex flex-col w-full h-full max-w-[375px] z-50 top-0 transition-all duration-700 bg-white ${toggleSidebar
+          ? "left-0 opacity-100 visible"
+          : "invisible left-[-375px] opacity-0"
+          }`}
       >
         <div className="border-b border-[#0001] pt-[18px] pb-2 px-5 flex items-center justify-between">
           <Link href={"/"}>
-            <Image src="/Assets/Logo.svg" alt="logo" width={162} height={44} />
+            <Image src="/assets/Logo.svg" alt="logo" width={162} height={44} />
           </Link>
           <X
             onClick={() => setToggleSidebar(false)}
@@ -164,15 +157,13 @@ const HomeHeader = () => {
             >
               {item.sub ? (
                 <div
-                  className={`item-wrapper flex items-center justify-between p-4 rounded-[10px] ${
-                    selectedNav === item.label
-                      ? "bg-[#70451a12]"
-                      : "bg-transparent"
-                  } mb-2 hover:bg-[#70451a12] ${
-                    toggleSidebar
+                  className={`item-wrapper flex items-center justify-between p-4 rounded-[10px] ${selectedNav === item.label
+                    ? "bg-[#70451a12]"
+                    : "bg-transparent"
+                    } mb-2 hover:bg-[#70451a12] ${toggleSidebar
                       ? "translate-x-0 translate-y-0 opacity-100 blur-0 opened"
                       : "translate-y-[-30px] translate-x-[-30px] opacity-0 blur-[2px]"
-                  }`}
+                    }`}
                   onClick={() =>
                     setSelectedNav((prev) =>
                       prev === item.label ? "" : item.label
@@ -182,19 +173,17 @@ const HomeHeader = () => {
                   <span className="mr-1">{item.label}</span>
                   <ChevronDown
                     size={16}
-                    className={`transition-all duration-300 ${
-                      selectedNav === item.label ? "rotate-180" : "rotate-0"
-                    }`}
+                    className={`transition-all duration-300 ${selectedNav === item.label ? "rotate-180" : "rotate-0"
+                      }`}
                   />
                 </div>
               ) : (
                 <Link
                   href={item.link}
-                  className={`item-wrapper flex items-center justify-between p-4 rounded-[10px] bg-transparent mb-2 hover:bg-[#70451a12] ${
-                    toggleSidebar
-                      ? "translate-x-0 translate-y-0 opacity-100 blur-0 opened"
-                      : "translate-y-[-30px] translate-x-[-30px] opacity-0 blur-[2px]"
-                  }`}
+                  className={`item-wrapper flex items-center justify-between p-4 rounded-[10px] bg-transparent mb-2 hover:bg-[#70451a12] ${toggleSidebar
+                    ? "translate-x-0 translate-y-0 opacity-100 blur-0 opened"
+                    : "translate-y-[-30px] translate-x-[-30px] opacity-0 blur-[2px]"
+                    }`}
                   onClick={() => setToggleSidebar(false)}
                 >
                   <span className="mr-1">{item.label}</span>
@@ -229,22 +218,20 @@ const HomeHeader = () => {
         {userId ? (
           <div className="mt-auto flex flex-col p-[26px] mobile-nav-footer">
             <button
-              className={`flex items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${
-                toggleSidebar
-                  ? "translate-y-0 opacity-100 blur-0 delay-500"
-                  : "translate-y-5 opacity-0 blur-[2px]"
-              }`}
+              className={`flex items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${toggleSidebar
+                ? "translate-y-0 opacity-100 blur-0 delay-500"
+                : "translate-y-5 opacity-0 blur-[2px]"
+                }`}
               onClick={() => signOut({ redirectUrl: "/sign-in" })}
             >
               Sign Out
             </button>
             <Link
               href={"/app/dashboard"}
-              className={`signup flex text-white bg-[#388aeb] items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${
-                toggleSidebar
-                  ? "translate-y-0 opacity-100 blur-0 delay-[600ms]"
-                  : "translate-y-5 opacity-0 blur-[2px]"
-              }`}
+              className={`signup flex text-white bg-[#388aeb] items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${toggleSidebar
+                ? "translate-y-0 opacity-100 blur-0 delay-[600ms]"
+                : "translate-y-5 opacity-0 blur-[2px]"
+                }`}
             >
               Dashboard
             </Link>
@@ -253,21 +240,19 @@ const HomeHeader = () => {
           <div className="mt-auto flex flex-col p-[26px] mobile-nav-footer">
             <Link
               href={"/sign-in"}
-              className={`flex items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${
-                toggleSidebar
-                  ? "translate-y-0 opacity-100 blur-0 delay-500"
-                  : "translate-y-5 opacity-0 blur-[2px]"
-              }`}
+              className={`flex items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${toggleSidebar
+                ? "translate-y-0 opacity-100 blur-0 delay-500"
+                : "translate-y-5 opacity-0 blur-[2px]"
+                }`}
             >
               Log In
             </Link>
             <Link
               href={"/sign-up"}
-              className={`signup flex text-white bg-[#388aeb] items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${
-                toggleSidebar
-                  ? "translate-y-0 opacity-100 blur-0 delay-[600ms]"
-                  : "translate-y-5 opacity-0 blur-[2px]"
-              }`}
+              className={`signup flex text-white bg-[#388aeb] items-center mt-4 p-2.5 justify-center rounded-[5px] text-sm ${toggleSidebar
+                ? "translate-y-0 opacity-100 blur-0 delay-[600ms]"
+                : "translate-y-5 opacity-0 blur-[2px]"
+                }`}
             >
               Sign Up
             </Link>
@@ -275,9 +260,8 @@ const HomeHeader = () => {
         )}
       </div>
       <div
-        className={`transition-all duration-300 fixed w-full h-full top-0 left-0 z-40 bg-[#0001] ${
-          toggleSidebar ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`transition-all duration-300 fixed w-full h-full top-0 left-0 z-40 bg-[#0001] ${toggleSidebar ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         onClick={() => setToggleSidebar(false)}
       ></div>
     </>

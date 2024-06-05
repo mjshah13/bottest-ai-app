@@ -7,7 +7,7 @@
   "h": 550,
   "nm": "Bottest",
   "ddd": 0,
-  "Assets": [
+  "assets": [
     {
       "id": "comp_0",
       "nm": "Pre-comp 3",

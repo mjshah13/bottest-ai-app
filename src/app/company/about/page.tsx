@@ -8,7 +8,9 @@ const AboutUsPage = () => {
     <>
       <div className="bg-[#F7F9FB] rounded-[20px] py-[100px] md:py-[160px] px-5 md:px-12 text-center mb-3 md:mb-8">
         <h1 className="text-[40px] md:text-[52px] text-[#212427] font-medium max-w-[900px] m-auto w-full leading-[48px] md:leading-[60px] mb-5 md:mb-8">
-          {"We’re passionate about testing, so you can stay passionate about "}
+          {
+            "We’re passionate about testing, so you can stay passionate about "
+          }
           <span className="text-[#388AEB]">your product.</span>
         </h1>
         <p className="text-base text-[#616A73] max-w-[970px] m-auto">
@@ -34,7 +36,7 @@ const AboutUsPage = () => {
         </div>
         <div className="sm:max-w-[590px] w-full px-8 sm:px-0 mt-7 sm:mt-0">
           <Image
-            src="/Assets/company/about/1.svg"
+            src="/assets/company/about/1.svg"
             alt="about1"
             width={0}
             height={0}
@@ -45,7 +47,7 @@ const AboutUsPage = () => {
       <div className="learn-more-card bg-8 flex sm:flex-row flex-col items-center min-h-[600px] py-10 mb-3 md:mb-8 rounded-[20px]">
         <div className="sm:max-w-[590px] w-full px-8 sm:px-0 mt-7 sm:mt-0 order-2 sm:order-1">
           <Image
-            src="/Assets/company/about/2.svg"
+            src="/assets/company/about/2.svg"
             alt="about1"
             width={0}
             height={0}
@@ -63,10 +65,10 @@ const AboutUsPage = () => {
             development, particularly in chatbot testing.
             <br />
             <br />
-            Recognizing the need for a streamlined, well built, no-code testing
-            solution, we set out to bridge this gap in the AI technology
-            landscape. If your team is looking for the right tool to elevate
-            your chatbot product, contact us!
+            Recognizing the need for a streamlined, well built, no-code
+            testing solution, we set out to bridge this gap in the AI
+            technology landscape. If your team is looking for the right tool
+            to elevate your chatbot product, contact us!
           </p>
           <div className="flex sm:flex-row flex-col mt-3 sm:mt-3.5">
             <Link
@@ -104,7 +106,7 @@ const AboutUsPage = () => {
         </div>
         <div className="sm:max-w-[590px] w-full px-8 sm:px-0 mt-7 sm:mt-0">
           <Image
-            src="/Assets/company/about/3.svg"
+            src="/assets/company/about/3.svg"
             alt="about3"
             width={0}
             height={0}
