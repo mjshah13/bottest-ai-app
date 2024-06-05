@@ -48,9 +48,10 @@ const Dashboard = (props: DashboardProps) => {
     GlobalStateContext
   ) as GlobalStateType;
 
-  useBots(setSelectedBot);
-  const { fetchSuites } = useSuites(setSelectedSuite);
-  const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
+  
+  // useBots(setSelectedBot);
+  // const { fetchSuites } = useSuites(setSelectedSuite);
+  // const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
   const { fetchTests, isLoading } = useTests();
   const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
   const { testData } = useContext(GlobalStateContext) as GlobalStateType;
@@ -90,10 +91,18 @@ const Dashboard = (props: DashboardProps) => {
   }, [organization?.id]);
 
   useEffect(() => {
-    if (!selectedBot) return;
-    fetchSuites(selectedBot?.id);
-    fetchEnvironment(selectedBot.id);
-  }, [selectedBot]);
+    setSelectedBot(botLists[0])
+    setSelectedSuite(suiteLists[0])
+    setSelectedEnvironment(environmentLists[0])
+  }, [botLists , suiteLists , environmentLists])
+  
+
+ 
+  // useEffect(() => {
+  //   if (!selectedBot) return;
+  //   fetchSuites(selectedBot?.id);
+  //   fetchEnvironment(selectedBot.id);
+  // }, [selectedBot]);
 
   useEffect(() => {
     if (!selectedBot || !selectedSuite || !selectedEnvironment || isLoading)

@@ -1,9 +1,30 @@
 "use client";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { OrganizationSwitcher } from "@clerk/nextjs";
 import Sidenav from "../components/sidenav";
+import useBots from "../../hooks/useBots";
+import useSuites from "../../hooks/useSuites";
+import useEnvironment from "../../hooks/useEnvironment";
+import { GlobalStateType, Option } from "../../utils/typesInterface";
+import { GlobalStateContext } from "../../globalState";
 
 function Layout({ children }: { children: React.ReactNode }) {
+  const { botLists } = useContext(
+    GlobalStateContext
+  ) as GlobalStateType;
+
+  useBots();
+  const { fetchSuites } = useSuites();
+  const { fetchEnvironment } = useEnvironment();
+
+  useEffect(() => {
+    if (!botLists) return;
+    fetchSuites(botLists[0]?.id);
+    fetchEnvironment(botLists[0]?.id);
+  }, [botLists]);
+
+  
+
   return (
     <div className="relative lg:flex w-full h-full ">
       <div className="w-[260px] ">

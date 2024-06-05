@@ -10,7 +10,7 @@ import { GlobalStateContext } from "../globalState";
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useBots = (setSelectedBot: any) => {
+const useBots = () => {
   const { setBotLists } = useContext(GlobalStateContext) as GlobalStateType;
   const { user } = useUser();
   const { request } = useApi();
@@ -41,7 +41,7 @@ const useBots = (setSelectedBot: any) => {
       }));
 
       setBotLists(formattedData);
-      setSelectedBot(formattedData[0]);
+      // setSelectedBot(formattedData[0]);
     } catch (error: any) {
       console.error({ error });
       setError(error);

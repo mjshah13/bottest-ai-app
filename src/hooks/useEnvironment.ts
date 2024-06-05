@@ -10,7 +10,7 @@ import { GlobalStateContext } from "../globalState";
 // Assuming request is a utility function you've created to make HTTP requests
 // Make sure to type it accordingly
 
-const useEnvironment = (setSelectedEnvironment: any) => {
+const useEnvironment = () => {
   const { organization } = useOrganization();
 
   const { setEnvironmentLists } = useContext(
@@ -38,7 +38,7 @@ const useEnvironment = (setSelectedEnvironment: any) => {
             url,
           })) || [];
         setEnvironmentLists(selectDataItems);
-        setSelectedEnvironment(selectDataItems[0]);
+        // setSelectedEnvironment(selectDataItems[0]);
       } catch (error: any) {
         console.error({ error });
         setError(error);

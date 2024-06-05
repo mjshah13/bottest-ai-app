@@ -53,9 +53,9 @@ const Reports = () => {
     GlobalStateContext
   ) as GlobalStateType;
 
-  useBots(setSelectedBot);
-  const { fetchSuites } = useSuites(setSelectedSuite);
-  const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
+  // useBots(setSelectedBot);
+  // const { fetchSuites } = useSuites(setSelectedSuite);
+  // const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
   const {
     fetchSuiteRuns,
     totalPages,
@@ -63,11 +63,11 @@ const Reports = () => {
     isLoading: loading,
   } = useSuiteRuns();
 
-  useEffect(() => {
-    if (!selectedBot) return;
-    fetchSuites(selectedBot?.id);
-    fetchEnvironment(selectedBot.id);
-  }, [selectedBot]);
+  // useEffect(() => {
+  //   if (!selectedBot) return;
+  //   fetchSuites(selectedBot?.id);
+  //   fetchEnvironment(selectedBot.id);
+  // }, [selectedBot]);
 
   useEffect(() => {
     if (!selectedBot || !selectedSuite) return;
@@ -131,6 +131,13 @@ const Reports = () => {
     if (!data) return;
     generatePDF(data);
   }, [data]);
+  
+
+  useEffect(() => {
+    setSelectedBot(botLists[0])
+    setSelectedSuite(suiteLists[0])
+    setSelectedEnvironment(environmentLists[0])
+  }, [botLists , suiteLists , environmentLists])
 
   // useEffect(() => {
   //   if (!suitesData) return;
