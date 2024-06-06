@@ -96,6 +96,9 @@ export const printReport = (
         margin: auto;
         padding-top: 4rem;
         padding-bottom: 3rem;
+        margin-bottom: 4rem ;
+      
+      
     }
     .header {
         flex-direction: column;
@@ -252,8 +255,9 @@ export const printReport = (
     }
     #piechart1,#piechart2{
         padding:1rem;
-       
+
     }
+   
    .content-text{
      padding-top: 1rem;
      margin-bottom: 2rem;
@@ -268,8 +272,7 @@ export const printReport = (
     padding-left: 1rem !important; 
     padding-top:2rem !important;
     padding-bottom: 1rem !important;
-    list-style-type:disc !important;
-    
+    list-style-type:disc !important; 
    }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -594,18 +597,11 @@ Run.</span> </li>
 // doc.internal.pageSize.setHeight(desiredHeight);
     
     const pdfWidth = doc.internal.pageSize.getWidth();
-
   
-
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    
-
-    const bottomMargin = 2 * 16;
-    const adjustedHeight = pdfHeight - bottomMargin;
-    
 
     // Add the image to the PDF
-    doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, adjustedHeight);
+    doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, pdfHeight);
 
     // Save the generated PDF
     doc.save("${data?.suite_name} Suite Run");
