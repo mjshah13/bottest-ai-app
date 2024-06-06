@@ -61,26 +61,31 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     // },
   ]);
 
+  console.log(series);
+
   useEffect(() => {
     if (highBoxPlotData) {
       const boxPlotSeries = {
         type: "boxPlot",
-
-        data: highBoxPlotData.boxes.map((item, index) => ({
-          x: new Date(highBoxPlotData.timestamps[index]).getTime(),
-          y: item.values.map((value) => Math.round(value)),
-        })),
+        data: highBoxPlotData.boxes
+          .map((item, index) => ({
+            x: new Date(highBoxPlotData.timestamps[index]).getTime(),
+            y: item.values.map((value) => Math.round(value)),
+          }))
+          .sort((a, b) => a.x - b.x),
       };
 
       const scatterSeries = {
         type: "scatter",
         name: "outlier",
-        data: highBoxPlotData?.boxes?.flatMap((item) =>
-          item.outliers.map((outlier, index) => ({
-            x: new Date(highBoxPlotData.timestamps[index]).getTime(),
-            y: outlier,
-          }))
-        ),
+        data: highBoxPlotData?.boxes
+          ?.flatMap((item) =>
+            item.outliers.map((outlier, index) => ({
+              x: new Date(highBoxPlotData.timestamps[index]).getTime(),
+              y: outlier,
+            }))
+          )
+          .sort((a, b) => a.x - b.x), // Sort by x values in ascending order
       };
 
       setSeries([boxPlotSeries, scatterSeries]);

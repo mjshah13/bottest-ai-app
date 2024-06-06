@@ -68,10 +68,6 @@ export const configOption = {
   specific_suite_run: "specific_suite_run",
 };
 
-
-
-
-
 export const printReport = (
   data: AnalyticsReportType | undefined
 ) => `<html lang="en">
@@ -98,6 +94,7 @@ export const printReport = (
         margin: auto;
         padding-top: 4rem;
         padding-bottom: 3rem;
+        border: 1px solid green
     }
     .header {
         flex-direction: column;
@@ -264,6 +261,9 @@ export const printReport = (
    }
    .font-bold{
     font-weight: 600;
+   }
+   .marginBottom{
+    margin-bottom: 2.5rem ; 
    }
    .list-pt{
     padding: 0;
@@ -528,7 +528,7 @@ Run.</span> </li>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section marginBottom">
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
