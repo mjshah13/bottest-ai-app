@@ -87,6 +87,8 @@ export const printReport = (
         margin: 0;
         padding: 0;
         /* background-color: #f4f6f8; */
+       
+      
     }
     .container {
         max-width: 1440px;
@@ -94,7 +96,6 @@ export const printReport = (
         margin: auto;
         padding-top: 4rem;
         padding-bottom: 3rem;
-        border: 1px solid green
     }
     .header {
         flex-direction: column;
@@ -124,7 +125,6 @@ export const printReport = (
         margin: 5px 0 0 0;
         font-size: 23px;
         font-weight: 600;
-
 
     }
     
@@ -262,9 +262,7 @@ export const printReport = (
    .font-bold{
     font-weight: 600;
    }
-   .marginBottom{
-    margin-bottom: 2.5rem ; 
-   }
+  
    .list-pt{
     padding: 0;
     padding-left: 1rem !important; 
@@ -528,7 +526,7 @@ Run.</span> </li>
             </div>
         </div>
 
-        <div class="section marginBottom">
+        <div class="section ">
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
@@ -588,20 +586,26 @@ Run.</span> </li>
     const imgData = canvas.toDataURL('image/png');
     console.log(imgData);
 
-    // Create a new jsPDF instance
+    
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'pt', '');
       const height = window.document;
     const desiredHeight = 1480; // Adjust this value as needed (in points)
-doc.internal.pageSize.setHeight(desiredHeight);
-    // Calculate the dimensions of the PDF page and adjust for content height
+// doc.internal.pageSize.setHeight(desiredHeight);
+    
     const pdfWidth = doc.internal.pageSize.getWidth();
-    console.log((canvas.height * pdfWidth) / canvas.width)
+
+  
 
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    
+
+    const bottomMargin = 2 * 16;
+    const adjustedHeight = pdfHeight - bottomMargin;
+    
 
     // Add the image to the PDF
-    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, adjustedHeight);
 
     // Save the generated PDF
     doc.save("${data?.suite_name} Suite Run");
