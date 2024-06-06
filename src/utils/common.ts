@@ -87,7 +87,8 @@ export const printReport = (
         margin: 0;
         padding: 0;
         /* background-color: #f4f6f8; */
-        border: 1px solid green;
+       
+       
       
     }
     .container {
@@ -96,8 +97,9 @@ export const printReport = (
         margin: auto;
         padding-top: 4rem;
         padding-bottom: 3rem;
-        margin-bottom: 2rem ;
         border: 1px solid green;
+       
+
       
     }
     .header {
@@ -582,7 +584,39 @@ Run.</span> </li>
 
 
  <script>
-  async function generatePDF() {
+//   async function generatePDF() {
+//     const content = document.getElementById('content');
+
+//     // Use html2canvas to convert the content to a canvas
+//     const canvas = await html2canvas(content);
+
+//     // Convert the canvas to an image (data URL)
+//     const imgData = canvas.toDataURL('image/png');
+//     console.log(imgData);
+
+//     // Create a new jsPDF instance
+//     const { jsPDF } = window.jspdf;
+//     const doc = new jsPDF('p', 'pt' , '');
+//       const height = window.document;
+//     const desiredHeight = 1280; // Adjust this value as needed (in points)
+// doc.internal.pageSize.setHeight(desiredHeight);
+    
+//     const pdfWidth = doc.internal.pageSize.getWidth();
+
+//     const pdfheight = (canvas.height * pdfWidth) / canvas.width;
+
+
+  
+    
+
+//     // Add the image to the PDF
+//     doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, desiredHeight );
+
+//     // Save the generated PDF
+//     doc.save("${data?.suite_name} Suite Run");
+// }
+
+async function generatePDF() {
     const content = document.getElementById('content');
 
     // Use html2canvas to convert the content to a canvas
@@ -590,29 +624,38 @@ Run.</span> </li>
 
     // Convert the canvas to an image (data URL)
     const imgData = canvas.toDataURL('image/png');
-    console.log(imgData);
 
     // Create a new jsPDF instance
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'pt', '');
-      const height = window.document;
-    // const desiredHeight = 1480; // Adjust this value as needed (in points)
-// doc.internal.pageSize.setHeight(desiredHeight);
-    
+    const doc = new jsPDF('p', 'pt');
+
+    // Get dimensions of the canvas
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    // Get dimensions of the PDF page
     const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = doc.internal.pageSize.getHeight();
 
-    const pdfheight = doc.internal.pageSize.getHeight();
+    // Calculate the scaling factor to fit the content within the PDF page
+    const widthRatio = pdfWidth / imgWidth;
+    const heightRatio = pdfHeight / imgHeight;
+    const scaleFactor = Math.min(widthRatio, heightRatio);
 
-console.log(height)
-  
-    
+    // Calculate the dimensions of the image in the PDF
+    const imgPdfWidth = imgWidth * scaleFactor;
+    const imgPdfHeight = imgHeight * scaleFactor;
 
-    // Add the image to the PDF
-    doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, pdfheight );
+    // Add the image to the PDF centered and scaled
+    const xPos = (pdfWidth - imgPdfWidth) / 2;
+    const yPos = (pdfHeight - imgPdfHeight) / 2;
+    doc.addImage(imgData, 'PNG', xPos, yPos, imgPdfWidth, imgPdfHeight);
 
     // Save the generated PDF
-    doc.save("${data?.suite_name} Suite Run");
+    doc.save("Generated-PDF.pdf");
 }
+
+
   
           window.addEventListener('DOMContentLoaded', function() {
          const data = {
