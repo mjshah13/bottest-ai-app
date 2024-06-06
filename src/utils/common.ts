@@ -87,7 +87,7 @@ export const printReport = (
         margin: 0;
         padding: 0;
         /* background-color: #f4f6f8; */
-       
+        border: 1px solid green;
       
     }
     .container {
@@ -96,8 +96,8 @@ export const printReport = (
         margin: auto;
         padding-top: 4rem;
         padding-bottom: 3rem;
-        margin-bottom: 4rem ;
-      
+        margin-bottom: 2rem ;
+        border: 1px solid green;
       
     }
     .header {
@@ -128,6 +128,7 @@ export const printReport = (
         margin: 5px 0 0 0;
         font-size: 23px;
         font-weight: 600;
+
 
     }
     
@@ -255,9 +256,8 @@ export const printReport = (
     }
     #piechart1,#piechart2{
         padding:1rem;
-
+       
     }
-   
    .content-text{
      padding-top: 1rem;
      margin-bottom: 2rem;
@@ -266,13 +266,16 @@ export const printReport = (
    .font-bold{
     font-weight: 600;
    }
-  
+   .marginBottom{
+    border:1px solid red
+   }
    .list-pt{
     padding: 0;
     padding-left: 1rem !important; 
     padding-top:2rem !important;
     padding-bottom: 1rem !important;
-    list-style-type:disc !important; 
+    list-style-type:disc !important;
+    
    }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -529,7 +532,7 @@ Run.</span> </li>
             </div>
         </div>
 
-        <div class="section ">
+        <div class="section marginBottom">
             <p class="content">
                 <ul class="list">
                     <li class="list-item">
@@ -589,19 +592,23 @@ Run.</span> </li>
     const imgData = canvas.toDataURL('image/png');
     console.log(imgData);
 
-    
+    // Create a new jsPDF instance
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'pt', '');
       const height = window.document;
-    const desiredHeight = 1480; // Adjust this value as needed (in points)
+    // const desiredHeight = 1480; // Adjust this value as needed (in points)
 // doc.internal.pageSize.setHeight(desiredHeight);
     
     const pdfWidth = doc.internal.pageSize.getWidth();
+
+    const pdfheight = doc.internal.pageSize.getHeight();
+
+console.log(height)
   
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    
 
     // Add the image to the PDF
-    doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, pdfHeight);
+    doc.addImage(imgData, 'PNG', 0,  0, pdfWidth, pdfheight );
 
     // Save the generated PDF
     doc.save("${data?.suite_name} Suite Run");
