@@ -31,6 +31,7 @@ export interface ServiceItem {
   icon: JSX.Element;
   current: boolean;
   isDisabled?: boolean;
+  stubbed?: boolean;
 }
 
 export interface BottestReportProps {
