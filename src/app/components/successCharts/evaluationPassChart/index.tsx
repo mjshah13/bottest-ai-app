@@ -138,9 +138,14 @@ const EvaluationPassChart: React.FC<EvaluationPassProps> = ({
         },
       },
     },
-
     fill: {
       opacity: 1,
+    },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins",
+      },
     },
     legend: {
       position: "bottom",

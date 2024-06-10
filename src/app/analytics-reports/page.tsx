@@ -769,8 +769,6 @@ const AnalyticsReports = () => {
           </div>
         </div>
       </div>
-
-      
     </>
   );
 };

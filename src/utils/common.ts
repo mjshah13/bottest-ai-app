@@ -93,16 +93,24 @@ export const printReport = (
       
     }
     .container {
-       width: 95%;
-       max-width: 1440px;
-       margin: 0 auto ;
+       width: 100%;
+      //  margin: 0 auto ;
+      
         padding-top: 4rem;
         padding-bottom: 3rem;
       
-       
+      
+    
        
 
       
+    }
+
+    #content {
+      max-width : 1440px;
+      margin: 0 auto ;
+      padding-left : 2rem; 
+      padding-right : 2rem; 
     }
     .header {
         flex-direction: column;
@@ -586,7 +594,8 @@ Run.</span> </li>
 
 
  <script>
- async function generatePDF() {
+
+async function generatePDF() {
   const content = document.getElementById('content');
 
   // Use html2canvas to convert the content to a canvas
@@ -594,27 +603,24 @@ Run.</span> </li>
 
   // Convert the canvas to an image (data URL)
   const imgData = canvas.toDataURL('image/png');
-  console.log(imgData);
 
   // Create a new jsPDF instance
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p', 'pt', '');
-    const height = window.document;
-  const desiredHeight = 1480; // Adjust this value as needed (in points)
-doc.internal.pageSize.setHeight(desiredHeight);
+
   // Calculate the dimensions of the PDF page and adjust for content height
   const pdfWidth = doc.internal.pageSize.getWidth();
-  console.log((canvas.height * pdfWidth) / canvas.width)
+  const contentHeight = (canvas.height * pdfWidth) / canvas.width;
 
-  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  console.log(pdfHeight);
+  // Set the PDF height to match the content height
+  doc.internal.pageSize.setHeight(contentHeight);
 
   // Add the image to the PDF
-  doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+  doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, contentHeight);
 
   // Save the generated PDF
   doc.save("${data?.suite_name} Suite Run");
+  window.close();
 }
 
 
@@ -816,6 +822,9 @@ doc.internal.pageSize.setHeight(desiredHeight);
   chart.render();
   chart2.render();
 
+
+  // ########################### chart-1 ###############################
+
   const donutOptionOne = {
     chart: {
       type: "donut",
@@ -879,9 +888,23 @@ doc.internal.pageSize.setHeight(desiredHeight);
       }
     },
     dataLabels: {
-      enabled: true
-    }
+      enabled: true,
+      style: {
+        fontSize: "16px",
+        colors: ["#ffffff"],
+        fontWeight: "400",
+      },
+      dropShadow: {
+        enabled: false,
+      },
+    },
   };
+
+
+  // ########################### chart-2 ###############################
+
+
+
   const donutOptionTwo = {
     chart: {
       type: "donut",
@@ -945,9 +968,21 @@ doc.internal.pageSize.setHeight(desiredHeight);
       }
     },
     dataLabels: {
-      enabled: true
-    }
+      enabled: true,
+      style: {
+        fontSize: "16px",
+        colors: ["#ffffff"],
+        fontWeight: "400",
+      },
+      dropShadow: {
+        enabled: false,
+      },
+    },
   };
+
+  // ########################### chart-3 ###############################
+
+
   const donutOptionThree = {
     chart: {
       type: "donut",
@@ -1011,9 +1046,20 @@ doc.internal.pageSize.setHeight(desiredHeight);
       }
     },
     dataLabels: {
-      enabled: true
-    }
+      enabled: true,
+      style: {
+        fontSize: "16px",
+        fontWeight: "400",
+        colors: ["#ffffff"],
+      },
+      dropShadow: {
+        enabled: false,
+      },
+    },
   };
+
+
+  // ########################### chart-4 ###############################
   const donutOptionFour = {
     chart: {
       type: "donut",
@@ -1077,8 +1123,16 @@ doc.internal.pageSize.setHeight(desiredHeight);
       }
     },
     dataLabels: {
-      enabled: true
-    }
+      enabled: true,
+      style: {
+        fontSize: "16px",
+        fontWeight: "400",
+        colors: ["#ffffff"],
+      },
+      dropShadow: {
+        enabled: false,
+      },
+    },
   };
   const chart1 = new ApexCharts(document.querySelector("#piechart1"), donutOptionOne);
   const chart2Donut = new ApexCharts(document.querySelector("#piechart2"), donutOptionTwo);
@@ -1094,7 +1148,7 @@ doc.internal.pageSize.setHeight(desiredHeight);
            window.addEventListener('load', function() {
             setTimeout(() => {
             generatePDF()
-                
+    
             }, 1500);
            
           });

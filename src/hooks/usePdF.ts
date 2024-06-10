@@ -6,10 +6,10 @@ import { AnalyticsReportType, UsePDFHook } from "../utils/typesInterface";
 const usePDF = (): UsePDFHook => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const generatePDF = async (data: AnalyticsReportType): Promise<void> => {
     const htmlContent = printReport(data);
     // console.log(htmlContent , 'htmlContent')
-    
     setLoading(true);
     setError(null);
 
@@ -17,8 +17,6 @@ const usePDF = (): UsePDFHook => {
       const response = await axios.post("/api/pdf", {
         htmlContent,
       });
-
-      
 
       const responseData = response.data;
       // console.log(responseData , "response")

@@ -85,7 +85,7 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
               y: outlier,
             }))
           )
-          .sort((a, b) => a.x - b.x), // Sort by x values in ascending order
+          .sort((a, b) => a.x - b.x),
       };
 
       setSeries([boxPlotSeries, scatterSeries]);
@@ -111,7 +111,7 @@ const HighBoxPlotChart: React.FC<HighBoxPlotChartProps> = ({
     },
     colors: ["transparent", "transparent"],
     xaxis: {
-      type: "datetime",
+      type: "numeric",
       overwriteCategories: [],
       labels: {
         formatter: function (value: string): string {

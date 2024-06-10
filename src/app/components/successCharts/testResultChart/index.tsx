@@ -109,7 +109,6 @@ const TestResultChart: React.FC<TestResultChartProps> = ({
         fontFamily: "Poppins",
       },
     },
-
     legend: {
       position: "bottom",
       show: true,

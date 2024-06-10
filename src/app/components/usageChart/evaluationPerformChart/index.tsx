@@ -127,6 +127,12 @@ const UsageEvaluationPerformedChart: React.FC<UsageEvaluationPerformProps> = ({
     fill: {
       opacity: 1,
     },
+    tooltip: {
+      enabled: true,
+      style: {
+        fontFamily: "Poppins",
+      },
+    },
     legend: {
       position: "bottom",
       show: true,

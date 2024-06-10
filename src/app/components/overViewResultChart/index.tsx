@@ -1,11 +1,9 @@
-
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { OverViewResultChartProps } from "../../../utils/typesInterface";
-
 
 const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
   list,
@@ -19,13 +17,11 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
   const [series, setSeries] = useState<ApexNonAxisChartSeries>([]);
   const [options, setOptions] = useState<ApexOptions>({
     chart: {
-      
-      id:id,
+      id: id,
       type: "donut",
       height: 350,
       events: {
         dataPointMouseEnter: function (event, chartContext, config) {
-          
           onHover?.(config.dataPointIndex);
         },
         dataPointMouseLeave: function () {
@@ -64,7 +60,7 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
                 0
               )} Test`,
               fontSize: "24px",
-              fontWeight: 600,
+              fontWeight: "600",
               fontFamily: "Poppins",
               color: "#909193",
             },
@@ -72,20 +68,14 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
         },
       },
     },
-   
+
     tooltip: {
-    
       enabled: true,
-      
       style: {
         fontFamily: "Poppins",
-        
       },
-     
-   
     },
     legend: {
-      
       position: "right",
       offsetY: 50,
       fontSize: "16px",
@@ -108,6 +98,14 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
       enabled: true,
       formatter: function (val: any) {
         return `${val.toFixed(1)}%`;
+      },
+      style: {
+        fontFamily: "Poppins",
+        fontSize: "16px",
+        colors: ["#ffffff"],
+      },
+      dropShadow: {
+        enabled: false,
       },
     },
   });
@@ -154,16 +152,16 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
         const colors = options?.colors?.map((color, index) =>
           index === highlightIndex ? "#f00" : color
         );
-        console.log(colors)
-        const color = options?.colors?.filter((color, index) =>
-          index === highlightIndex && color
+        console.log(colors);
+        const color = options?.colors?.filter(
+          (color, index) => index === highlightIndex && color
         );
         const labels = options.labels?.map((label, index) =>
-          index === highlightIndex ? updateLabelText(label,color) : label
+          index === highlightIndex ? updateLabelText(label, color) : label
         );
         chart.updateOptions({
-          colors
-        }); 
+          colors,
+        });
       } else {
         chart.updateOptions({
           colors: [
@@ -176,27 +174,23 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
             "#212427",
           ],
         });
-       
-       
       }
     }
   }, [highlightIndex]);
 
-  const updateLabelText = (index: string,color:any) => {
-    console.log(color)
+  const updateLabelText = (index: string, color: any) => {
+    console.log(color);
     if (chartRef?.current) {
       const chart = chartRef?.current?.chart;
-      const newDataLabel = index; 
+      const newDataLabel = index;
       chart.updateOptions({
-        
         plotOptions: {
-         
           pie: {
             donut: {
               labels: {
                 total: {
                   label: newDataLabel,
-                  color:color?.[0]
+                  color: color?.[0],
                 },
               },
             },
@@ -215,11 +209,8 @@ const OverViewResultChart: React.FC<OverViewResultChartProps> = ({
         type="donut"
         height={450}
       />
-      
     </div>
   );
 };
 
 export default OverViewResultChart;
-
-
