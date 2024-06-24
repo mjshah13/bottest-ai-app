@@ -6,28 +6,14 @@ import CustomInput from "../../../elements/input";
 import CustomButton from "../../../elements/button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import * as Progress from "@radix-ui/react-progress";
-import Link from "next/link";
 import CustomSelect from "../../../elements/select";
 import { Option } from "../../../utils/typesInterface";
+import EditPaymentMethodModal from "../../components/editPaymentModal";
 
 const Organization = () => {
-  // const [containerHeight, setContainerHeight] = useState(0);
-  // useEffect(() => {
-  //   const updateContainerHeight = () => {
-  //     const container = document?.getElementById("flex-container");
-  //     if (container) {
-  //       const height = container?.offsetHeight;
-  //       setContainerHeight(height);
-  //     }
-  //   };
-
-  //   updateContainerHeight();
-  //   window?.addEventListener("resize", updateContainerHeight);
-
-  //   return () => {
-  //     window?.removeEventListener("resize", updateContainerHeight);
-  //   };
-  // }, []);
+  const [isEditPaymentModalOpen, setIsEditPaymentModalOpen] = useState(false);
+  const [selectedAcccessOption, setSelectedAccessOption] =
+    useState<Option | null>(null);
 
   const data = [
     {
@@ -59,8 +45,23 @@ const Organization = () => {
     },
   ];
 
-  const [selectedAcccessOption, setSelectedAccessOption] =
-    useState<Option | null>(null);
+  // const [containerHeight, setContainerHeight] = useState(0);
+  // useEffect(() => {
+  //   const updateContainerHeight = () => {
+  //     const container = document?.getElementById("flex-container");
+  //     if (container) {
+  //       const height = container?.offsetHeight;
+  //       setContainerHeight(height);
+  //     }
+  //   };
+
+  //   updateContainerHeight();
+  //   window?.addEventListener("resize", updateContainerHeight);
+
+  //   return () => {
+  //     window?.removeEventListener("resize", updateContainerHeight);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -180,7 +181,7 @@ const Organization = () => {
 
               <Box>
                 <CustomInput
-                  className={"dark:bg-transparent h-[32px] w-full  rounded-lg"}
+                  className={"dark:bg-transparent h-[32px] w-full  rounded-sm"}
                   onChange={(value) => {}}
                   type="email"
                   placeholder="Enter email address"
@@ -190,6 +191,7 @@ const Organization = () => {
               <Box>
                 <div className="w-full ">
                   <CustomSelect
+                    isNoLabel={true}
                     placeholder="Select Options"
                     isAddedBtn={false}
                     selectedValue={accessOptions?.find(
@@ -374,7 +376,11 @@ const Organization = () => {
                   </div>
                   <div className="border-t-2 border-[#f0f0f0] h-[59px] flex items-center">
                     <div className="flex gap-2  w-full justify-end px-2 ">
-                      <CustomButton variant="outline" color="gray">
+                      <CustomButton
+                        variant="outline"
+                        color="gray"
+                        onClick={() => setIsEditPaymentModalOpen(true)}
+                      >
                         Edit payment method
                       </CustomButton>
                     </div>
@@ -385,6 +391,11 @@ const Organization = () => {
           </div>
         </div>
       </div>
+      <EditPaymentMethodModal
+        title={"Edit payment method"}
+        isEditPaymentMethodModal={isEditPaymentModalOpen}
+        setIsEditPaymentMethodModal={setIsEditPaymentModalOpen}
+      />
     </>
   );
 };

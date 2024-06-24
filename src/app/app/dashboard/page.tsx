@@ -48,7 +48,6 @@ const Dashboard = (props: DashboardProps) => {
     GlobalStateContext
   ) as GlobalStateType;
 
-  
   // useBots(setSelectedBot);
   // const { fetchSuites } = useSuites(setSelectedSuite);
   // const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
@@ -91,13 +90,11 @@ const Dashboard = (props: DashboardProps) => {
   }, [organization?.id]);
 
   useEffect(() => {
-    setSelectedBot(botLists[0])
-    setSelectedSuite(suiteLists[0])
-    setSelectedEnvironment(environmentLists[0])
-  }, [botLists , suiteLists , environmentLists])
-  
+    setSelectedBot(botLists[0]);
+    setSelectedSuite(suiteLists[0]);
+    setSelectedEnvironment(environmentLists[0]);
+  }, [botLists, suiteLists, environmentLists]);
 
- 
   // useEffect(() => {
   //   if (!selectedBot) return;
   //   fetchSuites(selectedBot?.id);
@@ -216,7 +213,6 @@ const Dashboard = (props: DashboardProps) => {
                 (bot) => bot?.id === selectedBot?.id
               )}
               placeholder="Select Bots"
-              // onChange={(value) => handleChange("bots", value)}
               onSelectChange={(selectedOption) => {
                 setSelectedBot(selectedOption);
               }}

@@ -17,6 +17,7 @@ interface CustomSelectProps {
   placeholder?: string;
   isAddedBtn?: boolean;
   isBorderless?: boolean;
+  isNoLabel?: boolean;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -30,11 +31,16 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   placeholder,
   isAddedBtn = true,
   isBorderless = false,
+  isNoLabel = false,
 }) => {
   //f3f3f5
   return (
     <div className="flex flex-col justify-start">
-      <label className="font-poppin text-sm text-black dark:text-white mb-1">
+      <label
+        className={`font-poppin text-sm text-black dark:text-white mb-1 ${
+          isNoLabel && "hidden"
+        }`}
+      >
         {Label}
       </label>
       <Select.Root
@@ -53,15 +59,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         <Select.Trigger
           variant={isBorderless ? "ghost" : undefined}
           placeholder={placeholder}
-          className={`font-poppin cursor-pointer text-black dark:text-white disabled:bg-[#f3f3f5] disabled:text-[#aeb1b6] disabled:cursor-not-allowed ${
-            isBorderless && "text-intermediate"
+          className={`font-poppin cursor-pointer text-black dark:text-white disabled:bg-[#f3f3f5] disabled:text-[#aeb1b6] disabled:cursor-not-allowed  ${
+            isBorderless && "text-intermediate  outline-none focus:none "
           } `}
         >
           {selectedValue?.name}
         </Select.Trigger>
         <Select.Content
           position="popper"
-          className="font-poppin bg-white dark:bg-black  "
+          className="font-poppin bg-white dark:bg-black "
         >
           {options?.map((option) => (
             <Select.Item
