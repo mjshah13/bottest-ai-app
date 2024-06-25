@@ -10,9 +10,6 @@ import {
 import TestRun from "../../components/testRun";
 import { filterOptions, getStatuses } from "../../../utils/common";
 import _ from "lodash";
-import useBots from "../../../hooks/useBots";
-import useSuites from "../../../hooks/useSuites";
-import useEnvironment from "../../../hooks/useEnvironment";
 import useTests from "../../../hooks/useTests";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -48,9 +45,6 @@ const Dashboard = (props: DashboardProps) => {
     GlobalStateContext
   ) as GlobalStateType;
 
-  // useBots(setSelectedBot);
-  // const { fetchSuites } = useSuites(setSelectedSuite);
-  // const { fetchEnvironment } = useEnvironment(setSelectedEnvironment);
   const { fetchTests, isLoading } = useTests();
   const { suiteTestRuns, fetchSuiteRuns, isLoading: loading } = useSuiteRuns();
   const { testData } = useContext(GlobalStateContext) as GlobalStateType;
@@ -94,12 +88,6 @@ const Dashboard = (props: DashboardProps) => {
     setSelectedSuite(suiteLists[0]);
     setSelectedEnvironment(environmentLists[0]);
   }, [botLists, suiteLists, environmentLists]);
-
-  // useEffect(() => {
-  //   if (!selectedBot) return;
-  //   fetchSuites(selectedBot?.id);
-  //   fetchEnvironment(selectedBot.id);
-  // }, [selectedBot]);
 
   useEffect(() => {
     if (!selectedBot || !selectedSuite || !selectedEnvironment || isLoading)

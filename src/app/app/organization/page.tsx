@@ -205,13 +205,7 @@ const Organization = () => {
                 </div>
               </Box>
               <Box>
-                <CustomButton
-                  color="blue"
-                  variant="solid"
-                  isPrimary
-
-                  // onClick={() => setIsDeleteModal(true)}
-                >
+                <CustomButton color="blue" variant="solid" isPrimary>
                   Send invite
                 </CustomButton>
               </Box>
@@ -391,11 +385,13 @@ const Organization = () => {
           </div>
         </div>
       </div>
-      <EditPaymentMethodModal
-        title={"Edit payment method"}
-        isEditPaymentMethodModal={isEditPaymentModalOpen}
-        setIsEditPaymentMethodModal={setIsEditPaymentModalOpen}
-      />
+      {isEditPaymentModalOpen && (
+        <EditPaymentMethodModal
+          title={"Edit payment method"}
+          isEditPaymentMethodModal={isEditPaymentModalOpen}
+          setIsEditPaymentMethodModal={setIsEditPaymentModalOpen}
+        />
+      )}
     </>
   );
 };

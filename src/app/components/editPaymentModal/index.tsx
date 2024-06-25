@@ -12,7 +12,7 @@ import {
   Elements,
 } from "@stripe/react-stripe-js";
 import CustomInput from "../../../elements/input";
-import { Option } from "../../../utils/typesInterface";
+import { Option, PaymentOptionsProps } from "../../../utils/typesInterface";
 import CustomSelect from "../../../elements/select";
 import { countries } from "../../../utils/common";
 
@@ -20,13 +20,6 @@ interface ModalProps {
   title: string;
   isEditPaymentMethodModal?: boolean;
   setIsEditPaymentMethodModal: (isEditPaymentMethodModal: boolean) => void;
-}
-
-interface PaymentOptions {
-  mode: "payment" | "subscription";
-  amount: number;
-  currency: string;
-  appearance: {};
 }
 
 const EditPaymentMethodModal: React.FC<ModalProps> = ({
@@ -37,7 +30,7 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
   const [selectedCountry, setSelectedCountry] = useState<Option | null>(null);
 
   const stripePromise = loadStripe("pk_test_6pRNASCoBOKtIshFeQd4XMUh");
-  const options: PaymentOptions = {
+  const options: PaymentOptionsProps = {
     mode: "payment",
     amount: 1099,
     currency: "usd",
@@ -48,31 +41,6 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
       // },
     },
   };
-
-  // const cardElementOptions = {
-  //   style: {
-  //     base: {
-  //       color: "#212427",
-  //       fontFamily: `"Poppins", sans-serif`,
-  //       fontSize: "14px",
-  //       fontWeight: 300,
-  //       "::placeholder": {
-  //         color: "#c7c8c9",
-  //       },
-  //     },
-  //     empty: {
-  //       "::placeholder": {
-  //         color: "#c7c8c9",
-  //         fontWeight: 400,
-  //         fontFamily: `"Poppins", sans-serif`,
-  //       },
-  //     },
-  //     invalid: {
-  //       color: "#fa755a",
-  //       iconColor: "#fa755a",
-  //     },
-  //   },
-  // };
 
   return (
     <Dialog.Root
@@ -105,11 +73,7 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                       {" "}
                       Card number
                     </label>
-                    {/* <div
-                      className={`border border-[#c6c7c9] py-1.5 pl-3 rounded-[4px]
-                        
-                       `}
-                    > */}
+
                     <CardNumberElement
                       options={{
                         classes: {
@@ -135,7 +99,6 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                         },
                       }}
                     />
-                    {/* </div> */}
                   </div>
                   <div className="w-[92px] flex flex-col ">
                     <label
@@ -145,7 +108,7 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                       {" "}
                       Expiry date
                     </label>
-                    {/* <div className="border border-[#c6c7c9] py-1.5 pl-3 rounded-[4px]"> */}
+
                     <CardExpiryElement
                       options={{
                         classes: {
@@ -172,7 +135,6 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                         },
                       }}
                     />
-                    {/* </div> */}
                   </div>
                   <div className="flex-1  flex flex-col">
                     <label
@@ -182,7 +144,7 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                       {" "}
                       CVC
                     </label>
-                    {/* <div className="border border-[#c6c7c9] py-1.5 pl-3 rounded-[4px]"> */}
+
                     <CardCvcElement
                       options={{
                         classes: {
@@ -209,7 +171,6 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                         },
                       }}
                     />
-                    {/* </div> */}
                   </div>
                 </div>
                 <div>
@@ -241,11 +202,9 @@ const EditPaymentMethodModal: React.FC<ModalProps> = ({
                     maxLength={6}
                     pattern="[0-9]*"
                     inputMode="numeric"
-                    className="border border-[#c6c7c9] w-[212px] py-0.5 pl-3 rounded-[4px] focus:outline-none focus:ring-1 ring-[#6b77f7] "
+                    className="border border-[#c6c7c9] w-[212px] py-0.5 pl-3 rounded-[4px] focus:outline-none focus:ring-1 ring-[#6b77f7] text-sm "
                     placeholder="Postal code"
                   />
-
-                  {/* <input type="text" placeholder="Postal code" maxLength={6} /> */}
                 </div>
                 <div className="flex w-full justify-between mt-3">
                   <CustomInput
