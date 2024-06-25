@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Table } from "@radix-ui/themes";
@@ -103,7 +106,7 @@ const Organization = () => {
               </Table.Header>
               <Table.Body>
                 {data?.map((item, index) => (
-                  <Table.Row className="h-[47px] align-middle">
+                  <Table.Row className="h-[47px] align-middle" key={item?.name}>
                     <Table.Cell className="border-r border-[#d2cdcd] dark:border-r dark:border-[#373a3b]">
                       <div className="w-[320px] ">
                         <div className="w-full">
