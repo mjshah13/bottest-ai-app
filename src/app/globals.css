@@ -283,3 +283,7 @@ html {
 /* .apexcharts-active{
   opacity: 1;
 } */
+
+.placeholder_color .rt-SelectTriggerInner {
+  color: #388aeb !important;
+}

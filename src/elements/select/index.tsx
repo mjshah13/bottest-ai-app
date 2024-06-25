@@ -60,7 +60,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           variant={isBorderless ? "ghost" : undefined}
           placeholder={placeholder}
           className={`font-poppin cursor-pointer text-black dark:text-white disabled:bg-[#f3f3f5] disabled:text-[#aeb1b6] disabled:cursor-not-allowed  ${
-            isBorderless && "text-intermediate  outline-none focus:none "
+            isBorderless
+              ? "text-intermediate  outline-none focus:none placeholder_color"
+              : null
           } `}
         >
           {selectedValue?.name}
